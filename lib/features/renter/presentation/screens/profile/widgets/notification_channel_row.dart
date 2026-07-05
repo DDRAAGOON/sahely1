@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+
+class NotificationChannelRow extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  const NotificationChannelRow({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          // Icon
+          Icon(
+            icon,
+            size: 20,
+            color: AppColors.navy,
+          ),
+          const SizedBox(width: 12),
+
+          // Title & Subtitle
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.dark,
+                    fontFamily: 'DM Sans',
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.secondary,
+                    fontFamily: 'DM Sans',
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Toggle Switch
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeColor: AppColors.green,
+            activeTrackColor: AppColors.green.withOpacity(0.3),
+            inactiveThumbColor: AppColors.border,
+            inactiveTrackColor: AppColors.border.withOpacity(0.3),
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+        ],
+      ),
+    );
+  }
+}
