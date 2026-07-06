@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/cream_background.dart';
+import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme.dart';
+import '../../../../../../core/widgets/kit.dart';
+import '../../../../../../core/widgets/cream_background.dart';
 
-class BrokerHistoryScreen extends StatelessWidget {
-  const BrokerHistoryScreen({super.key});
+class BrokerHistoryPage extends StatelessWidget {
+  const BrokerHistoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {

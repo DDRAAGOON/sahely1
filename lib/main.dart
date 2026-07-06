@@ -7,6 +7,11 @@ import 'features/renter/presentation/verification/presentation/bloc/verification
 import 'features/renter/presentation/screens/wishlist/data/repositories/wishlist_repository.dart';
 import 'features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 
+import 'features/broker/data/repositories/broker_wishlist_repository.dart';
+import 'features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
+import 'features/broker/data/repositories/broker_bookings_repository.dart';
+import 'features/broker/presentation/screens/bookings/bloc/broker_bookings_cubit.dart';
+
 import 'core/providers/auth_provider.dart';
 import 'core/providers/bookings_provider.dart';
 import 'core/providers/currency_provider.dart';
@@ -29,6 +34,8 @@ void main() {
         providers: [
           RepositoryProvider(create: (context) => VerificationRepository()),
           RepositoryProvider(create: (context) => WishlistRepository()),
+          RepositoryProvider(create: (context) => BrokerWishlistRepository()),
+          RepositoryProvider(create: (context) => BrokerBookingsRepository()),
         ],
         child: MultiBlocProvider(
           providers: [
@@ -40,6 +47,16 @@ void main() {
             BlocProvider(
               create: (context) => WishlistCubit(
                 context.read<WishlistRepository>(),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => BrokerWishlistCubit(
+                context.read<BrokerWishlistRepository>(),
+              ),
+            ),
+            BlocProvider(
+              create: (context) => BrokerBookingsCubit(
+                context.read<BrokerBookingsRepository>(),
               ),
             ),
           ],

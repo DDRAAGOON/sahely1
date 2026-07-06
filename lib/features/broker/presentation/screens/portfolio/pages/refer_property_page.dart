@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/ui.dart';
-import '../../../core/widgets/cream_background.dart';
+import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../core/theme/app_theme.dart';
+import '../../../../../../core/widgets/kit.dart';
+import '../../../../../../core/widgets/ui.dart';
+import '../../../../../../core/widgets/cream_background.dart';
 
-class ReferPropertyScreen extends StatefulWidget {
-  const ReferPropertyScreen({super.key});
+class ReferPropertyPage extends StatefulWidget {
+  const ReferPropertyPage({super.key});
 
   @override
-  State<ReferPropertyScreen> createState() => _ReferPropertyScreenState();
+  State<ReferPropertyPage> createState() => _ReferPropertyPageState();
 }
 
-class _ReferPropertyScreenState extends State<ReferPropertyScreen> {
+class _ReferPropertyPageState extends State<ReferPropertyPage> {
   final _ownerController = TextEditingController();
   final _phoneController = TextEditingController();
   final _propertyController = TextEditingController();

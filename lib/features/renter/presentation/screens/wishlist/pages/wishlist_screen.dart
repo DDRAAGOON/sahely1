@@ -9,7 +9,8 @@ import '../../../../../../core/widgets/floating_nav.dart';
 import 'collection_inside_shared_screen.dart';
 
 class WishlistScreen extends StatefulWidget {
-  const WishlistScreen({super.key});
+  final bool showNav;
+  const WishlistScreen({super.key, this.showNav = true});
 
   @override
   State<WishlistScreen> createState() => _WishlistScreenState();
@@ -127,7 +128,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           },
         ),
       ),
-      const FloatingNav(active: 1),
+      if (widget.showNav) const FloatingNav(active: 1),
     ],
   ),
 );

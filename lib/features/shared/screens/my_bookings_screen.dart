@@ -12,7 +12,8 @@ const _lagoon = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=
 const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
 
 class MyBookingsScreen extends StatefulWidget {
-  const MyBookingsScreen({super.key});
+  final bool showNav;
+  const MyBookingsScreen({super.key, this.showNav = true});
   @override
   State<MyBookingsScreen> createState() => _MyBookingsScreenState();
 }
@@ -157,7 +158,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   onTap: () => Navigator.pushNamed(context, '/booking-past', arguments: Sample.dunes)),
             ],
           ),
-          const FloatingNav(active: 2),
+          if (widget.showNav) const FloatingNav(active: 2),
         ],
       ),
     );

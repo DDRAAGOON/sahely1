@@ -16,6 +16,42 @@ class AppNavigation {
   }
 
   // ═══════════════════════════════════════════════════════
+  // BROKER FLOW
+  // ═══════════════════════════════════════════════════════
+
+  static void goToBrokerHome(BuildContext context) {
+    Navigator.pushNamed(context, '/broker/home');
+  }
+
+  static void goToBrokerRefer(BuildContext context) {
+    Navigator.pushNamed(context, '/broker/refer');
+  }
+
+  static void goToBrokerHistory(BuildContext context) {
+    Navigator.pushNamed(context, '/broker/history');
+  }
+
+  static void goToBrokerTier(BuildContext context) {
+    Navigator.pushNamed(context, '/broker/tier');
+  }
+
+  static void goToBrokerReferredDetail(BuildContext context) {
+    Navigator.pushNamed(context, '/broker/referred-detail');
+  }
+
+  static void goToBrokerReferralIssue(BuildContext context) {
+    Navigator.pushNamed(context, '/broker/referral-issue');
+  }
+
+  static void goToBrokerWithdraw(BuildContext context) {
+    Navigator.pushNamed(context, '/broker/withdraw');
+  }
+
+  static void goToBrokerPayout(BuildContext context) {
+    Navigator.pushNamed(context, '/broker/payout');
+  }
+
+  // ═══════════════════════════════════════════════════════
   // AUTH FLOW
   // ═══════════════════════════════════════════════════════
 

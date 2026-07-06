@@ -5,7 +5,8 @@ import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/floating_nav.dart';
 
 class ServicesScreen extends StatelessWidget {
-  const ServicesScreen({super.key});
+  final bool showNav;
+  const ServicesScreen({super.key, this.showNav = true});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class ServicesScreen extends StatelessWidget {
               ),
             ],
           ),
-          const FloatingNav(active: 3),
+          if (showNav) const FloatingNav(active: 3),
         ],
       ),
     );
