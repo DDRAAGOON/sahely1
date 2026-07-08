@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_theme.dart';
 
 class AmenitiesSection extends StatelessWidget {
   final List<String> amenities;

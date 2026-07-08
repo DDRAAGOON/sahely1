@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../data/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models.dart';
-import '../../features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
-import '../theme/app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/features/renter/wishlist/presentation/bloc/wishlist_cubit.dart';
+
 
 class SaveHeart extends StatelessWidget {
   const SaveHeart({super.key, required this.property, this.size = 32, this.padding = 0});

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:gal/gal.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 import 'buttons.dart';
 
 /// Rounded photo with a soft bottom fade.

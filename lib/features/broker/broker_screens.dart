@@ -1,23 +1,6 @@
 import 'package:flutter/material.dart';
-import '../owner/screens/payout_bank_screen.dart';
-import '../owner/screens/withdraw_amount_screen.dart';
-import '../owner/screens/withdraw_receipt_screen.dart';
-
 import 'broker_main_screen.dart';
-import 'presentation/screens/portfolio/pages/referred_property_detail_page.dart';
-import 'presentation/screens/portfolio/pages/referral_issue_page.dart';
-import 'presentation/screens/portfolio/pages/refer_property_page.dart';
-import 'presentation/screens/wallet/pages/broker_history_page.dart';
-import 'presentation/screens/dashboard/pages/tier_dashboard_page.dart';
-import 'presentation/screens/dashboard/pages/tier_upgrade_page.dart';
-
-export 'presentation/screens/main/pages/broker_main_screen.dart';
-export 'presentation/screens/portfolio/pages/referred_property_detail_page.dart';
-export 'presentation/screens/portfolio/pages/referral_issue_page.dart';
-export 'presentation/screens/portfolio/pages/refer_property_page.dart';
-export 'presentation/screens/wallet/pages/broker_history_page.dart';
-export 'presentation/screens/dashboard/pages/tier_dashboard_page.dart';
-export 'presentation/screens/dashboard/pages/tier_upgrade_page.dart';
+import 'broker_screens_stubs.dart';
 
 final Map<String, WidgetBuilder> brokerRoutes = {
   // Main Hub (Tabbed)

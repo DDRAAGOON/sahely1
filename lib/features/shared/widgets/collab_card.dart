@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/features/shared/widgets/tags.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/avatars.dart';
-import '../../../core/widgets/cards.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/ui.dart';
+import 'avatars.dart';
+import 'cards.dart';
+import 'image.dart';
+
 
 class CollabCard extends StatelessWidget {
   const CollabCard({

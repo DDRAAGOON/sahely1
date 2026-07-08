@@ -1,47 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/owner_home_screen.dart';
-import 'screens/owner_profile_screen.dart';
-import 'screens/owner_manage_screen.dart';
-import 'screens/owner_properties_screen.dart';
-import 'screens/add_property_screen.dart';
-import 'screens/listing_submitted_screen.dart';
-import 'screens/team_review_screen.dart';
-import 'screens/owner_all_trending_screen.dart';
-import 'screens/owner_bookings_screen.dart';
-import 'screens/owner_requests_screen.dart';
-import 'screens/owner_earnings_screen.dart';
-import 'screens/withdraw_amount_screen.dart';
-import 'screens/withdraw_receipt_screen.dart';
-import 'screens/payout_bank_screen.dart';
-import 'screens/owner_property_detail_screens.dart';
-import 'screens/owner_smart_lock_screen.dart';
-import 'screens/owner_history_screen.dart';
-import 'screens/owner_portfolio_screen.dart';
-import 'screens/owner_ai_chat_screen.dart';
-import 'screens/owner_notification_settings_screen.dart';
-import 'screens/owner_edit_bio_screen.dart';
-
-import 'screens/owner_upcoming_detail_screen.dart';
-import 'screens/owner_active_detail_screen.dart';
-import 'screens/owner_past_detail_screen.dart';
-
-export 'screens/owner_home_screen.dart';
-export 'screens/owner_profile_screen.dart';
-export 'screens/owner_manage_screen.dart';
-export 'screens/owner_properties_screen.dart';
-export 'screens/add_property_screen.dart';
-export 'screens/listing_submitted_screen.dart';
-export 'screens/team_review_screen.dart';
-export 'screens/owner_all_trending_screen.dart';
-export 'screens/owner_bookings_screen.dart';
-export 'screens/owner_requests_screen.dart';
-export 'screens/owner_property_detail_screens.dart';
-export 'screens/owner_smart_lock_screen.dart';
-export 'screens/owner_history_screen.dart';
-export 'screens/owner_portfolio_screen.dart';
-export 'screens/owner_ai_chat_screen.dart';
-export 'screens/owner_notification_settings_screen.dart';
-
+import 'package:sahely/features/owner/properties/presentation/pages/add_property_screen.dart';
+import 'package:sahely/features/owner/properties/presentation/pages/listing_submitted_screen.dart';
+import 'owner_screens_stubs.dart';
 import 'owner_main_screen.dart';
 
 final Map<String, WidgetBuilder> ownerRoutes = {

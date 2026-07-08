@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+
 
 /// Simple top app bar: back button + title (+ optional subtitle / trailing).
 class TopBar extends StatelessWidget {

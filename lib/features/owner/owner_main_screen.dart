@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/providers/navigation_provider.dart';
-import '../broker/presentation/widgets/broker_bottom_nav.dart'; 
 import 'dashboard/presentation/pages/owner_dashboard_page.dart';
 import 'properties/presentation/pages/owner_properties_page.dart';
 import 'bookings/presentation/pages/owner_bookings_page.dart';
 import 'earnings/presentation/pages/owner_earnings_page.dart';
 import '../shared/profile/presentation/pages/profile_page.dart';
+import '../shared/widgets/floating_nav.dart';
 
 class OwnerMainScreen extends StatefulWidget {
   const OwnerMainScreen({super.key});
@@ -28,12 +28,15 @@ class _OwnerMainScreenState extends State<OwnerMainScreen> {
         final currentTab = nav.currentTabIndex;
         return Scaffold(
           backgroundColor: AppColors.cream,
-          body: _buildBody(currentTab),
-          bottomNavigationBar: BrokerBottomNav(
-            activeIndex: currentTab,
-            onTap: _onTabChanged,
+          body: Stack(
+            children: [
+              _buildBody(currentTab),
+              FloatingNav(
+                active: currentTab,
+                onTap: (index, item) => _onTabChanged(index),
+              ),
+            ],
           ),
-          extendBody: true,
         );
       },
     );

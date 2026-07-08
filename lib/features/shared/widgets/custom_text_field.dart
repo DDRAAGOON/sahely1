@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
+import '../../../core/theme/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hint;
@@ -38,7 +38,7 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       onChanged: onChanged,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 14,
         color: AppColors.textDark,
       ),

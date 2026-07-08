@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 
 class InfoNote extends StatelessWidget {
   const InfoNote({super.key, required this.text, this.icon = Icons.info_outline, this.gold = true});

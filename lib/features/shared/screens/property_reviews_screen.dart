@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/kit.dart';
+import '../widgets/badges.dart';
+import '../widgets/cards.dart';
+import '../widgets/cream_background.dart';
+import '../widgets/top_bar.dart';
+
 
 class PropertyReviewsScreen extends StatelessWidget {
   const PropertyReviewsScreen({super.key});

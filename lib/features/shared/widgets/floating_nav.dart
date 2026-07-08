@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';

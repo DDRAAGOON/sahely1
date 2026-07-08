@@ -99,4 +99,10 @@ class AppColors {
   static const Color secondary = textSecondary;
   static const Color placeholder = textPlaceholder;
   static const Color dark = textPrimary;
+  static const Color board = Color(0xFFE8E8E8);
+  static const Color goldSoft = Color(0xFFF5E6C8);
+  static const Color goldBright = Color(0xFFE4C56A);
+  static const Color goldLight = Color(0xFFE4C56A);
+  static const Color textDark = navy;
+  static const Color textLight = textPlaceholder;
 }

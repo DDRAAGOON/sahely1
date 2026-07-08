@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import '../../../core/theme/app_colors.dart';
 
 class SuccessCheck extends StatefulWidget {
   const SuccessCheck({super.key, this.color = const Color(0xFF1B6B3A), this.size = 96, this.gold = false});
@@ -46,7 +46,7 @@ class _SuccessCheckState extends State<SuccessCheck> with SingleTickerProviderSt
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: widget.gold
-                  ? const RadialGradient(center: Alignment(0, -0.2), colors: [AppColors.goldBright, AppColors.gold])
+                  ? RadialGradient(center: const Alignment(0, -0.2), colors: [AppColors.goldBright, AppColors.gold])
                   : RadialGradient(center: const Alignment(0, -0.2), colors: [c, Color.lerp(c, Colors.black, 0.18)!]),
               boxShadow: [BoxShadow(color: c.withValues(alpha: 0.4), blurRadius: 30, offset: const Offset(0, 12))],
             ),

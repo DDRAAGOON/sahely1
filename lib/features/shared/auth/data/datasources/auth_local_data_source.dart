@@ -1,7 +1,6 @@
 import 'dart:convert';
 import '../../../../../core/storage/secure_storage.dart';
 import '../../../../../core/constants/app_constants.dart';
-import '../../../../../core/errors/exceptions.dart';
 import '../models/user_model.dart';
 
 abstract class AuthLocalDataSource {

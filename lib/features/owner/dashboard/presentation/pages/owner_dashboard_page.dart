@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../shared/widgets/buttons/sahely_button.dart';
-import '../../../../shared/widgets/inputs/sahely_text_field.dart';
 import '../../../../shared/properties/widgets/property_card.dart';
 import '../../../../shared/properties/domain/entities/property.dart';
 import '../../../../shared/widgets/cards/sahely_card.dart';

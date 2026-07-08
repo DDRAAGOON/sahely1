@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../data/models.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../data/models.dart';
 
 enum BadgeKind { navy, green, greenSoft, gray, red, redSoft, orange, gold, renterLight }
 

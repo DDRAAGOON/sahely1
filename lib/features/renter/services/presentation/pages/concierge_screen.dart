@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import '../../../../shared/widgets/floating_nav.dart';
 import '../../../verification/presentation/bloc/verification_cubit.dart';
 import '../../../verification/presentation/widgets/blocked_action_gate.dart';
 import 'concierge_booking_screen.dart';
@@ -117,65 +118,69 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
     return Scaffold(
       backgroundColor: AppColors.cream,
       extendBody: true,
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  // Coming Soon Placeholder (Centered)
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(24),
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: AppColors.border),
-                            ),
-                            child: Icon(Icons.hourglass_bottom_rounded,
-                                color: AppColors.gold.withOpacity(0.6),
-                                size: 48),
-                          ),
-                          const SizedBox(height: 24),
-                          const Text(
-                            'Coming Soon',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.navy,
-                              fontFamily: 'Cairo',
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 40),
-                            child: Text(
-                              'Our premium concierge services are currently under development to provide you with the best experience.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.secondary,
-                                fontFamily: 'Cairo',
+      body: Stack(
+        children: [
+          SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      // Coming Soon Placeholder (Centered)
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: AppColors.border),
+                                ),
+                                child: Icon(Icons.hourglass_bottom_rounded,
+                                    color: AppColors.gold.withValues(alpha: 0.6),
+                                    size: 48),
                               ),
-                            ),
+                              const SizedBox(height: 24),
+                              const Text(
+                                'Coming Soon',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.navy,
+                                  fontFamily: 'Cairo',
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 40),
+                                child: Text(
+                                  'Our premium concierge services are currently under development to provide you with the best experience.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.textSecondary,
+                                    fontFamily: 'Cairo',
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          const FloatingNav(active: 3),
+        ],
       ),
-      bottomNavigationBar: ConciergeBottomNav(activeIndex: 3),
     );
   }
 }

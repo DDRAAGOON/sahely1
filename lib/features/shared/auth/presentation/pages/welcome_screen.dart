@@ -27,8 +27,8 @@ class WelcomeScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(28, 40, 28, 44),
               child: Column(
                 children: [
-                  const Column(
-                    children: [SahelyLogo(size: 56), SizedBox(height: 2), Wordmark(size: 24)],
+                  Column(
+                    children: [const SahelyLogo(size: 56), const SizedBox(height: 2), Wordmark(size: 24)],
                   ),
                   const Spacer(),
                   Align(

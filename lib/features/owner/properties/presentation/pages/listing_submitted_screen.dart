@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/widgets/buttons.dart';
-import '../../../../../core/widgets/success_check.dart';
+import '../../../../shared/widgets/buttons.dart';
+import '../../../../shared/widgets/success_check.dart';
 
 
 class ListingSubmittedScreen extends StatelessWidget {
@@ -43,7 +43,7 @@ class ListingSubmittedScreen extends StatelessWidget {
                           style: AppTheme.dm(size: 15, color: Colors.white.withValues(alpha: 0.8), height: 1.5), 
                           children: [
                             const TextSpan(text: 'Thank you! '), 
-                            TextSpan(text: name, style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.goldBright)),
+                            TextSpan(text: name, style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.goldBright)),
                             const TextSpan(text: ' is now with our team for review.'),
                           ]
                         )

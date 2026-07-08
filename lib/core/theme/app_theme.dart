@@ -10,7 +10,9 @@ class AppTheme {
 
   /// Defines the light theme for the application.
   /// Uses Material 3 features and Sahely's brand identity.
-  static ThemeData get light => ThemeData(
+  static ThemeData get light => lightTheme;
+  
+  static ThemeData get lightTheme => ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
         scaffoldBackgroundColor: AppColors.cream,

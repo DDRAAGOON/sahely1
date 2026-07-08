@@ -5,15 +5,15 @@ import 'dart:io';
 import 'package:geolocator/geolocator.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/widgets/buttons.dart';
-import '../../../../../core/widgets/cards.dart';
-import '../../../../../core/widgets/checklist.dart';
-import '../../../../../core/widgets/cream_background.dart';
-import '../../../../../core/widgets/forms.dart';
-import '../../../../../core/widgets/notes.dart';
-import '../../../../../core/widgets/tags.dart';
 import '../../../../../data/models.dart';
 import '../../../../../data/sample_data.dart';
+import '../../../../shared/widgets/buttons.dart';
+import '../../../../shared/widgets/cards.dart';
+import '../../../../shared/widgets/checklist.dart';
+import '../../../../shared/widgets/cream_background.dart';
+import '../../../../shared/widgets/forms.dart';
+import '../../../../shared/widgets/notes.dart';
+import '../../../../shared/widgets/tags.dart';
 import 'listing_submitted_screen.dart';
 
 class AddPropertyScreen extends StatefulWidget {

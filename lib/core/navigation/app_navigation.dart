@@ -75,6 +75,18 @@ class AppNavigation {
     Navigator.pushNamed(context, '/role');
   }
 
+  static void goToPhoneVerification(BuildContext context) {
+    Navigator.pushNamed(context, '/verify-phone');
+  }
+
+  static void goToIDVerification(BuildContext context) {
+    Navigator.pushNamed(context, '/secure-id');
+  }
+
+  static void goToOnboarding(BuildContext context) {
+    Navigator.pushNamed(context, '/onboarding');
+  }
+
   // ═══════════════════════════════════════════════════════
   // UTILS
   // ═══════════════════════════════════════════════════════

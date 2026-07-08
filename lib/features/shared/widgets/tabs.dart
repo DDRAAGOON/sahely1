@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+
 
 class SegmentTabs extends StatelessWidget {
   const SegmentTabs({super.key, required this.tabs, this.active = 0, this.onTap});

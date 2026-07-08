@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/features/shared/widgets/tags.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/image.dart';
+import 'image.dart';
+
 
 class HeroPropertyCard extends StatelessWidget {
   const HeroPropertyCard({

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_theme.dart';
-import '../domain/entities/property.dart';
+import '../../../../../data/models.dart';
 
 class PropertyCard extends StatelessWidget {
   final Property property;
@@ -43,7 +42,7 @@ class PropertyCard extends StatelessWidget {
                   AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Image.network(
-                      property.imageUrl,
+                      property.image,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -77,8 +76,8 @@ class PropertyCard extends StatelessWidget {
                         height: 36,
                         decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                         child: Icon(
-                          property.isSaved ? Icons.favorite : Icons.favorite_border,
-                          color: property.isSaved ? AppColors.gold : AppColors.navy,
+                          property.saved ? Icons.favorite : Icons.favorite_border,
+                          color: property.saved ? AppColors.gold : AppColors.navy,
                           size: 20,
                         ),
                       ),
@@ -127,7 +126,7 @@ class PropertyCard extends StatelessWidget {
                         style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'Cairo'),
                       ),
                       Text(
-                        ' (${property.reviewCount})',
+                        ' (${property.reviews})',
                         style: const TextStyle(fontSize: 12, color: AppColors.textSecondary, fontFamily: 'Cairo'),
                       ),
                     ],
@@ -136,7 +135,7 @@ class PropertyCard extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'EGP ${property.pricePerNight.toInt()}',
+                          text: 'EGP ${property.price.toInt()}',
                           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.navy, fontFamily: 'Cairo'),
                         ),
                         const TextSpan(

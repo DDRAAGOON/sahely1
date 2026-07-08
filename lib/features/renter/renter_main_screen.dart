@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/providers/navigation_provider.dart';
-import '../broker/presentation/widgets/broker_bottom_nav.dart'; // We should probably rename this to SahelyBottomNav and move to shared
 import 'home/presentation/pages/renter_home_page.dart';
 import 'wishlist/presentation/pages/renter_wishlist_page.dart';
 import '../shared/screens/my_bookings_screen.dart';
 import '../shared/screens/services_screen.dart';
-import '../shared/profile/presentation/pages/profile_page.dart'; // To be created or renamed
+import '../shared/profile/presentation/pages/profile_page.dart';
+import '../shared/widgets/floating_nav.dart';
 
 class RenterMainScreen extends StatefulWidget {
   const RenterMainScreen({super.key});
@@ -28,12 +28,15 @@ class _RenterMainScreenState extends State<RenterMainScreen> {
         final currentTab = nav.currentTabIndex;
         return Scaffold(
           backgroundColor: AppColors.cream,
-          body: _buildBody(currentTab),
-          bottomNavigationBar: BrokerBottomNav( // Temporary reuse until renamed
-            activeIndex: currentTab,
-            onTap: _onTabChanged,
+          body: Stack(
+            children: [
+              _buildBody(currentTab),
+              FloatingNav(
+                active: currentTab,
+                onTap: (index, item) => _onTabChanged(index),
+              ),
+            ],
           ),
-          extendBody: true,
         );
       },
     );
