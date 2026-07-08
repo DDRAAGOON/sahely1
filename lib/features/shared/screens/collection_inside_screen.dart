@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/cream_background.dart';
+import '../../../widgets/kit.dart';
 import '../widgets/collab_card.dart';
-import '../widgets/cream_background.dart';
-import '../widgets/top_bar.dart';
-import '../widgets/wide_button.dart';
 
 const _azure = 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800&q=72&auto=format&fit=crop';
 const _lagoon = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'core/theme/app_theme.dart';
+import 'theme/app_theme.dart';
 import 'routes.dart';
-import 'features/shared/auth/presentation/pages/splash_screen.dart';
+import 'features/auth/auth_screens.dart';
 
 class SahelyApp extends StatelessWidget {
   const SahelyApp({super.key});

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../widgets/buttons.dart';
-import '../widgets/success_check.dart';
-
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/success_check.dart';
+import '../../../widgets/ui.dart';
 
 class StarsEarnedScreen extends StatelessWidget {
   const StarsEarnedScreen({super.key});

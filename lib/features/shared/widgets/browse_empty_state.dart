@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import 'buttons.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/ui.dart';
 
 class BrowseEmptyState extends StatelessWidget {
   const BrowseEmptyState({super.key});

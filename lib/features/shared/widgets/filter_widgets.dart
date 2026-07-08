@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
 
 class FilterDateBox extends StatelessWidget {
   const FilterDateBox(this.label, {super.key, this.onTap});

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../widgets/buttons.dart';
-import '../widgets/cards.dart';
-import '../widgets/cream_background.dart';
-import '../widgets/rows.dart';
-import '../widgets/success_check.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/cream_background.dart';
+import '../../../widgets/kit.dart';
+import '../../../widgets/ui.dart';
 
 class BookingConfirmedScreen extends StatelessWidget {
   const BookingConfirmedScreen({super.key});

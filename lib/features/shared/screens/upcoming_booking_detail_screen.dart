@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../widgets/badges.dart';
-import '../widgets/cards.dart';
-import '../widgets/cream_background.dart';
-import '../widgets/image.dart';
-import '../widgets/rows.dart';
-import '../widgets/tags.dart';
-import '../widgets/wide_button.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/common.dart';
+import '../../../widgets/cream_background.dart';
+import '../../../widgets/kit.dart';
+import '../../../widgets/ui.dart';
+
 const _azure = 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800&q=72&auto=format&fit=crop';
 const _lagoon = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop';
 const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';

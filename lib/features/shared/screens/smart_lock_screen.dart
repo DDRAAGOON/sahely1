@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../widgets/cards.dart';
-import '../widgets/cream_background.dart';
-import '../widgets/top_bar.dart';
-import '../widgets/wide_button.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/cream_background.dart';
+import '../../../widgets/kit.dart';
 
 class SmartLockScreen extends StatelessWidget {
   const SmartLockScreen({super.key, this.outOfRange = false});

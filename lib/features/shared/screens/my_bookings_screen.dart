@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../../data/sample_data.dart';
-import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/features/shared/widgets/kit.dart';
-import 'package:sahely/features/shared/widgets/floating_nav.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/cream_background.dart';
+import '../../../widgets/floating_nav.dart';
+import '../../../widgets/kit.dart';
+import '../../../widgets/ui.dart';
 
 const _azure = 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800&q=72&auto=format&fit=crop';
 const _lagoon = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop';
 const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
 
 class MyBookingsScreen extends StatefulWidget {
-  final bool showNav;
-  const MyBookingsScreen({super.key, this.showNav = true});
+  const MyBookingsScreen({super.key});
   @override
   State<MyBookingsScreen> createState() => _MyBookingsScreenState();
 }
@@ -39,7 +40,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
             children: [
               const SizedBox(height: 10),
-              Text('Bookings', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+              Text('My Bookings', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
               const SizedBox(height: 14),
               SegmentTabs(tabs: const ['Upcoming', 'Active', 'Past'], active: tab, onTap: (i) => setState(() => tab = i)),
               const SizedBox(height: 16),
@@ -156,7 +157,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   onTap: () => Navigator.pushNamed(context, '/booking-past', arguments: Sample.dunes)),
             ],
           ),
-          if (widget.showNav) const FloatingNav(active: 2),
+          const FloatingNav(active: 2),
         ],
       ),
     );

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../widgets/badges.dart';
-import '../widgets/cards.dart';
-import '../widgets/checklist.dart';
-import '../widgets/cream_background.dart';
-import '../widgets/image.dart';
-import '../widgets/wide_button.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/common.dart';
+import '../../../widgets/cream_background.dart';
+import '../../../widgets/kit.dart';
+import '../../../widgets/ui.dart';
 
 class ActiveBookingDetailScreen extends StatefulWidget {
   const ActiveBookingDetailScreen({super.key});

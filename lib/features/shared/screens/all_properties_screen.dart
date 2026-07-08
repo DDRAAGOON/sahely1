@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../data/sample_data.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../widgets/chips.dart';
-import '../widgets/cream_background.dart';
+import '../../../theme/app_colors.dart';
+import '../../../theme/app_theme.dart';
+import '../../../widgets/chips.dart';
+import '../../../widgets/cream_background.dart';
 import '../widgets/hero_property_card.dart';
 
 class AllPropertiesScreen extends StatefulWidget {
