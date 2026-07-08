@@ -28,7 +28,7 @@ class LevelUpScreen extends StatelessWidget {
                         gradient: const LinearGradient(colors: [Color(0xFF46B7A8), Color(0xFF226F66)]),
                         borderRadius: BorderRadius.circular(28),
                         boxShadow: [
-                          BoxShadow(color: const Color(0xFF46B7A8).withValues(alpha: 0.5), blurRadius: 30)
+                          BoxShadow(color: const Color(0xFF46B7A8).withOpacity(0.5), blurRadius: 30)
                         ]),
                     child: const Text('🌊', style: TextStyle(fontSize: 48))),
                 Positioned(

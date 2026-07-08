@@ -10,23 +10,30 @@ class RoleSelectionScreen extends StatefulWidget {
   State<RoleSelectionScreen> createState() => _RoleSelectionScreenState();
 }
 
+class _RoleOption {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  const _RoleOption(this.title, this.subtitle, this.icon);
+}
+
 class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
   int selected = 0;
 
   @override
   Widget build(BuildContext context) {
-    final roles = [
-      (
+    const roles = [
+      _RoleOption(
         'Renter',
         'Discover & book luxury properties',
         Icons.person_outline,
       ),
-      (
+      _RoleOption(
         'Property Owner',
         'List your properties',
         Icons.apartment_outlined,
       ),
-      (
+      _RoleOption(
         'Broker',
         'Earn commissions on referrals',
         Icons.handshake_outlined,
@@ -48,9 +55,9 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
             const SizedBox(height: 28),
             for (var i = 0; i < roles.length; i++) ...[
               _RoleCard(
-                title: roles[i].$1,
-                subtitle: roles[i].$2,
-                iconData: roles[i].$3,
+                title: roles[i].title,
+                subtitle: roles[i].subtitle,
+                iconData: roles[i].icon,
                 selected: i == selected,
                 onTap: () => setState(() => selected = i),
               ),
@@ -62,7 +69,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
               onTap: () => Navigator.pushNamed(
                 context,
                 '/create',
-                arguments: roles[selected].$1,
+                arguments: roles[selected].title,
               ),
             ),
           ],

@@ -252,10 +252,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   UserRole _parseRole(dynamic arg) {
     if (arg is String) {
-      switch (arg.toLowerCase()) {
-        case 'owner': return UserRole.owner;
-        case 'broker': return UserRole.broker;
-      }
+      final roleStr = arg.toLowerCase();
+      if (roleStr.contains('owner')) return UserRole.owner;
+      if (roleStr.contains('broker')) return UserRole.broker;
     }
     return UserRole.renter;
   }

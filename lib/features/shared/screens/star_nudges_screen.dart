@@ -42,7 +42,7 @@ class StarNudgesScreen extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                          color: AppColors.gold.withValues(alpha: 0.18), borderRadius: BorderRadius.circular(10)),
+                          color: AppColors.gold.withOpacity(0.18), borderRadius: BorderRadius.circular(10)),
                       child: const Icon(Icons.star, color: AppColors.gold)),
                   const SizedBox(width: 12),
                   Expanded(
@@ -69,7 +69,7 @@ class StarNudgesScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-          color: dark ? AppColors.navy : Colors.white.withValues(alpha: 0.96), borderRadius: BorderRadius.circular(16)),
+          color: dark ? AppColors.navy : Colors.white.withOpacity(0.96), borderRadius: BorderRadius.circular(16)),
       child: Row(children: [
         Container(
             width: 38,

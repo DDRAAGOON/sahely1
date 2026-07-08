@@ -15,7 +15,7 @@ class PropertyCircleBtn extends StatelessWidget {
         width: 38,
         height: 38,
         alignment: Alignment.center,
-        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.92), shape: BoxShape.circle),
+        decoration: BoxDecoration(color: Colors.white.withOpacity(0.92), shape: BoxShape.circle),
         child: Icon(icon, size: 20, color: AppColors.navy),
       ),
     );

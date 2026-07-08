@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/kit.dart';
+import 'package:sahely/features/shared/widgets/cream_background.dart';
+import 'package:sahely/features/shared/widgets/kit.dart';
 
 class SmartLockScreen extends StatelessWidget {
   const SmartLockScreen({super.key, this.outOfRange = false});
@@ -95,7 +95,7 @@ class _SmartLockActive extends StatelessWidget {
           shape: BoxShape.circle,
           color: AppColors.white,
           border: Border.all(color: AppColors.success, width: 8),
-          boxShadow: [BoxShadow(color: AppColors.success.withValues(alpha: 0.1), blurRadius: 20, spreadRadius: 5)],
+          boxShadow: [BoxShadow(color: AppColors.success.withOpacity(0.1), blurRadius: 20, spreadRadius: 5)],
         ),
         child: const Icon(Icons.lock_open, size: 64, color: AppColors.success),
       ),
@@ -119,7 +119,7 @@ class _SmartLockOutOfRange extends StatelessWidget {
           shape: BoxShape.circle,
           color: AppColors.white,
           border: Border.all(color: AppColors.danger, width: 8),
-          boxShadow: [BoxShadow(color: AppColors.danger.withValues(alpha: 0.1), blurRadius: 20, spreadRadius: 5)],
+          boxShadow: [BoxShadow(color: AppColors.danger.withOpacity(0.1), blurRadius: 20, spreadRadius: 5)],
         ),
         child: const Icon(Icons.location_off_outlined, size: 64, color: AppColors.danger),
       ),

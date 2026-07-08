@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../data/sample_data.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import '../widgets/chips.dart';
 import '../widgets/cream_background.dart';
 import '../widgets/hero_property_card.dart';

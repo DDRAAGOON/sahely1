@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
-import '../../core/widgets/brand.dart';
+import 'package:sahely/features/shared/widgets/brand.dart';
 
 // ====================================================== 40 · Lock Screen
 class NotificationsScreen extends StatelessWidget {
@@ -39,12 +39,12 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _circle(IconData icon) => Container(width: 44, height: 44, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.18), shape: BoxShape.circle), child: Icon(icon, color: Colors.white, size: 20));
+  Widget _circle(IconData icon) => Container(width: 44, height: 44, decoration: BoxDecoration(color: Colors.white.withOpacity(0.18), shape: BoxShape.circle), child: Icon(icon, color: Colors.white, size: 20));
 
   static Widget _banner({required String headline, required String body, required String time, bool frosted = false}) {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: Colors.white.withValues(alpha: frosted ? 0.92 : 0.9), borderRadius: BorderRadius.circular(18)),
+      decoration: BoxDecoration(color: Colors.white.withOpacity(frosted ? 0.92 : 0.9), borderRadius: BorderRadius.circular(18)),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(width: 38, height: 38, decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(9)), child: const Padding(padding: EdgeInsets.all(5), child: SahelyLogo(size: 28))),
         const SizedBox(width: 10),
@@ -66,7 +66,7 @@ class BannerAnatomyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.board,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
           child: Container(
@@ -139,7 +139,7 @@ class TopBannerScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.95), borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(color: Colors.white.withOpacity(0.95), borderRadius: BorderRadius.circular(20)),
                 child: Column(children: [
                   Container(width: 36, height: 4, decoration: BoxDecoration(color: const Color(0xFFD8D2C6), borderRadius: BorderRadius.circular(2))),
                   const SizedBox(height: 8),
@@ -156,7 +156,7 @@ class TopBannerScreen extends StatelessWidget {
                 ]),
               ),
               const Spacer(),
-              Text('Heads-up banners slide in from the top while the renter is browsing — same anatomy: icon, name, headline, one line.', textAlign: TextAlign.center, style: AppTheme.dm(size: 13, color: Colors.white.withValues(alpha: 0.85), height: 1.5)),
+              Text('Heads-up banners slide in from the top while the renter is browsing — same anatomy: icon, name, headline, one line.', textAlign: TextAlign.center, style: AppTheme.dm(size: 13, color: Colors.white.withOpacity(0.85), height: 1.5)),
               const SizedBox(height: 20),
             ]),
           ),

@@ -27,8 +27,6 @@ import 'screens/stars_earned_screen.dart';
 import 'screens/star_nudges_screen.dart';
 import 'screens/level_up_screen.dart';
 import 'package:sahely/features/renter/wishlist/presentation/pages/renter_wishlist_page.dart';
-import 'package:sahely/features/shared/screens/my_bookings_screen.dart';
-import 'package:sahely/features/shared/screens/services_screen.dart';
 import 'package:sahely/features/shared/profile/presentation/pages/profile_page.dart';
 import 'screens/collection_inside_screen.dart';
 import 'screens/collection_chat_screen.dart';

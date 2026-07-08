@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'app.dart';
-import 'features/broker/wishlist/data/repositories/broker_wishlist_repository.dart';
-import 'features/broker/wishlist/presentation/bloc/broker_wishlist_cubit.dart';
-import 'core/providers/auth_provider.dart';
-import 'core/providers/bookings_provider.dart';
-import 'core/providers/currency_provider.dart';
-import 'core/providers/locale_provider.dart';
-import 'core/providers/navigation_provider.dart';
-import 'core/providers/profile_provider.dart';
-import 'features/renter/verification/data/repositories/verification_repository.dart';
-import 'features/renter/verification/presentation/bloc/verification_cubit.dart';
+import 'package:sahely/app.dart';
+import 'package:sahely/injection_container.dart' as di;
+import 'package:sahely/core/providers/auth_provider.dart';
+import 'package:sahely/core/providers/bookings_provider.dart';
+import 'package:sahely/core/providers/currency_provider.dart';
+import 'package:sahely/core/providers/locale_provider.dart';
+import 'package:sahely/core/providers/navigation_provider.dart';
+import 'package:sahely/core/providers/profile_provider.dart';
+import 'package:sahely/data/wishlist_state.dart';
+import 'package:sahely/features/renter/verification/data/repositories/verification_repository.dart';
+import 'package:sahely/features/renter/verification/presentation/bloc/verification_cubit.dart';
+import 'package:sahely/features/shared/auth/domain/repositories/auth_repository.dart';
+import 'package:sahely/features/shared/auth/presentation/bloc/auth_bloc.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
+  
   runApp(
     MultiProvider(
       providers: [
@@ -23,35 +28,27 @@ void main() {
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => WishlistState()),
       ],
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider(create: (context) => VerificationRepository()),
-          RepositoryProvider(create: (context) => WishlistRepository()),
-          RepositoryProvider(create: (context) => BrokerWishlistRepository()),
-          RepositoryProvider(create: (context) => BrokerBookingsRepository()),
+          RepositoryProvider<AuthRepository>(create: (context) => di.sl<AuthRepository>()),
         ],
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
+              create: (context) => AuthBloc(
+                loginUseCase: di.sl(),
+                registerUseCase: di.sl(),
+                verifyOtpUseCase: di.sl(),
+                repository: di.sl(),
+              ),
+            ),
+            BlocProvider(
               create: (context) => VerificationCubit(
                 context.read<VerificationRepository>(),
               )..loadVerificationStatus(),
-            ),
-            BlocProvider(
-              create: (context) => WishlistCubit(
-                context.read<WishlistRepository>(),
-              ),
-            ),
-            BlocProvider(
-              create: (context) => BrokerWishlistCubit(
-                context.read<BrokerWishlistRepository>(),
-              ),
-            ),
-            BlocProvider(
-              create: (context) => BrokerBookingsCubit(
-                context.read<BrokerBookingsRepository>(),
-              ),
             ),
           ],
           child: const SahelyApp(),

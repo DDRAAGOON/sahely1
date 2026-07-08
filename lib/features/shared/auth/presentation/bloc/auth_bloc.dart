@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../domain/entities/user.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../../domain/usecases/login_usecase.dart';
-import '../../domain/usecases/register_usecase.dart';
-import '../../domain/usecases/verify_otp_usecase.dart';
+import 'package:sahely/features/shared/auth/domain/entities/user.dart';
+import 'package:sahely/features/shared/auth/domain/repositories/auth_repository.dart';
+import 'package:sahely/features/shared/auth/domain/usecases/login_usecase.dart';
+import 'package:sahely/features/shared/auth/domain/usecases/register_usecase.dart';
+import 'package:sahely/features/shared/auth/domain/usecases/verify_otp_usecase.dart';
 
 // Events
 abstract class AuthEvent extends Equatable {

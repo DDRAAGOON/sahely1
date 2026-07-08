@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class WhiteCard extends StatelessWidget {
   const WhiteCard({super.key, required this.child, this.padding = const EdgeInsets.symmetric(horizontal: 14), this.radius = 14});
@@ -34,7 +34,7 @@ class StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
       decoration: BoxDecoration(
-        color: dark ? Colors.white.withValues(alpha: 0.08) : AppColors.white,
+        color: dark ? Colors.white.withOpacity(0.08) : AppColors.white,
         borderRadius: BorderRadius.circular(14),
         boxShadow: dark ? null : const [BoxShadow(color: Color(0x0F1B2744), blurRadius: 12, offset: Offset(0, 2))],
       ),

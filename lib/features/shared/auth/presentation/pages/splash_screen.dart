@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../widgets/brand.dart';
+import 'package:sahely/features/shared/widgets/brand.dart';
+import 'package:sahely/features/shared/widgets/branding.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -55,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               bottom: 0,
               child: Container(
                 height: 3,
-                color: Colors.white.withValues(alpha: 0.12),
+                color: Colors.white.withOpacity(0.12),
                 child: AnimatedBuilder(
                   animation: _c,
                   builder: (_, __) => Align(

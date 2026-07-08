@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/ui.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'ui.dart';
 
 class BrowseEmptyState extends StatelessWidget {
   const BrowseEmptyState({super.key});
@@ -17,7 +17,7 @@ class BrowseEmptyState extends StatelessWidget {
             width: 100,
             height: 100,
             decoration: BoxDecoration(
-              color: AppColors.navy.withValues(alpha: 0.04),
+              color: AppColors.navy.withOpacity(0.04),
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.zoom_out, size: 40, color: AppColors.gold),

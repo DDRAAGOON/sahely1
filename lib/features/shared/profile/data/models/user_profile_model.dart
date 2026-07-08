@@ -1,5 +1,5 @@
+import '../../../auth/domain/entities/user.dart';
 import '../../domain/entities/user_profile.dart';
-import '../../auth/domain/entities/user.dart';
 
 class UserProfileModel extends UserProfile {
   const UserProfileModel({

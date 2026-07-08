@@ -119,7 +119,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: AppColors.navy.withValues(alpha: 0.35),
+                                      color: AppColors.navy.withOpacity(0.35),
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: Text('Skip',

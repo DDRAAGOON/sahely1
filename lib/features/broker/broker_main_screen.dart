@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/providers/navigation_provider.dart';
-import 'presentation/widgets/broker_bottom_nav.dart';
+import '../shared/widgets/floating_nav.dart';
 import 'dashboard/presentation/pages/broker_dashboard_page.dart';
 import 'clients/presentation/pages/broker_clients_page.dart';
 import 'commissions/presentation/pages/broker_commissions_page.dart';
 import 'referrals/presentation/pages/broker_referrals_page.dart';
-import 'presentation/screens/profile/pages/broker_profile_page.dart';
+import '../shared/profile/presentation/pages/profile_page.dart';
 
 class BrokerMainScreen extends StatefulWidget {
   const BrokerMainScreen({super.key});
@@ -17,7 +17,7 @@ class BrokerMainScreen extends StatefulWidget {
 }
 
 class _BrokerMainScreenState extends State<BrokerMainScreen> {
-  void _onTabChanged(int index) {
+  void _onTabChanged(int index, NavItem item) {
     context.read<NavigationProvider>().setTab(index);
   }
 
@@ -28,10 +28,14 @@ class _BrokerMainScreenState extends State<BrokerMainScreen> {
         final currentTab = nav.currentTabIndex;
         return Scaffold(
           backgroundColor: AppColors.cream,
-          body: _buildBody(currentTab),
-          bottomNavigationBar: BrokerBottomNav(
-            activeIndex: currentTab,
-            onTap: _onTabChanged,
+          body: Stack(
+            children: [
+              _buildBody(currentTab),
+              FloatingNav(
+                active: currentTab,
+                onTap: _onTabChanged,
+              ),
+            ],
           ),
           extendBody: true,
         );
@@ -50,7 +54,7 @@ class _BrokerMainScreenState extends State<BrokerMainScreen> {
       case 3:
         return const BrokerCommissionsPage();
       case 4:
-        return const BrokerProfilePage();
+        return const ProfilePage();
       default:
         return const BrokerDashboardPage();
     }

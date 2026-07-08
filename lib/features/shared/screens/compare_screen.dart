@@ -39,7 +39,7 @@ class CompareScreen extends StatelessWidget {
                         width: 28,
                         height: 28,
                         decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.12), shape: BoxShape.circle),
+                            color: Colors.white.withOpacity(0.12), shape: BoxShape.circle),
                         child: const Icon(Icons.close, size: 16, color: Colors.white))),
               ]),
             ),

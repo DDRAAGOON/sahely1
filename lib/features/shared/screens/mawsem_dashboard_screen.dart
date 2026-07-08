@@ -48,7 +48,7 @@ class MawsemDashboardScreen extends StatelessWidget {
                 Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration:
-                        BoxDecoration(color: AppColors.gold.withValues(alpha: 0.15), borderRadius: BorderRadius.circular(10)),
+                        BoxDecoration(color: AppColors.gold.withOpacity(0.15), borderRadius: BorderRadius.circular(10)),
                     child: Text('Season 2026 · Battle Pass', style: AppTheme.dm(size: 10, color: AppColors.gold))),
               ]),
               const SizedBox(height: 12),
@@ -78,7 +78,7 @@ class MawsemDashboardScreen extends StatelessWidget {
                   child: LinearProgressIndicator(
                       value: 0.58,
                       minHeight: 6, // Thinner bar
-                      backgroundColor: Colors.white.withValues(alpha: 0.15),
+                      backgroundColor: Colors.white.withOpacity(0.15),
                       valueColor: const AlwaysStoppedAnimation(AppColors.gold))),
               const SizedBox(height: 8),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -164,7 +164,7 @@ class MawsemDashboardScreen extends StatelessWidget {
 
   Widget _heroPill(IconData icon, String label) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(999)),
+        decoration: BoxDecoration(color: Colors.white.withOpacity(0.08), borderRadius: BorderRadius.circular(999)),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           Icon(icon, size: 13, color: const Color(0xFF9FB0CF)),
           const SizedBox(width: 6),

@@ -1,12 +1,11 @@
-import 'package:dartz/dart_z.dart';
-import '../../../../../core/errors/failures.dart';
-import '../../../../../core/errors/exceptions.dart';
-import '../../../../../core/network/network_info.dart';
-import '../../domain/entities/user.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../datasources/auth_local_data_source.dart';
-import '../datasources/auth_remote_data_source.dart';
-import '../models/user_model.dart';
+import 'package:dartz/dartz.dart';
+import 'package:sahely/core/errors/failures.dart';
+import 'package:sahely/core/errors/exceptions.dart';
+import 'package:sahely/core/network/network_info.dart';
+import 'package:sahely/features/shared/auth/domain/entities/user.dart';
+import 'package:sahely/features/shared/auth/domain/repositories/auth_repository.dart';
+import 'package:sahely/features/shared/auth/data/datasources/auth_local_data_source.dart';
+import 'package:sahely/features/shared/auth/data/datasources/auth_remote_data_source.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;

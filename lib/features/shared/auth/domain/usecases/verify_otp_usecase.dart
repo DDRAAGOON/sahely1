@@ -1,6 +1,6 @@
-import 'package:dartz/dart_z.dart';
-import '../../../../../core/errors/failures.dart';
-import '../repositories/auth_repository.dart';
+import 'package:dartz/dartz.dart';
+import 'package:sahely/core/errors/failures.dart';
+import 'package:sahely/features/shared/auth/domain/repositories/auth_repository.dart';
 
 class VerifyOtpUseCase {
   final AuthRepository repository;

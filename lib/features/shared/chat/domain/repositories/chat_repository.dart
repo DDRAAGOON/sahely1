@@ -1,4 +1,4 @@
-import 'package:dartz/dart_z.dart';
+import 'package:dartz/dartz.dart';
 import '../../../../../core/errors/failures.dart';
 import '../entities/chat_message.dart';
 import '../entities/chat_room.dart';

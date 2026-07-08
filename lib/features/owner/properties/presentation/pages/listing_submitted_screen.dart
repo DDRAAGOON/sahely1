@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/widgets/buttons.dart';
-import '../../../../../core/widgets/success_check.dart';
+import 'package:sahely/features/shared/widgets/buttons.dart';
+import 'package:sahely/features/shared/widgets/success_check.dart';
 
 
 class ListingSubmittedScreen extends StatelessWidget {
@@ -40,7 +40,7 @@ class ListingSubmittedScreen extends StatelessWidget {
                       RichText(
                         textAlign: TextAlign.center, 
                         text: TextSpan(
-                          style: AppTheme.dm(size: 15, color: Colors.white.withValues(alpha: 0.8), height: 1.5), 
+                          style: AppTheme.dm(size: 15, color: Colors.white.withOpacity(0.8), height: 1.5), 
                           children: [
                             const TextSpan(text: 'Thank you! '), 
                             TextSpan(text: name, style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.goldBright)),
@@ -52,8 +52,8 @@ class ListingSubmittedScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.06), 
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.12)), 
+                          color: Colors.white.withOpacity(0.06), 
+                          border: Border.all(color: Colors.white.withOpacity(0.12)),
                           borderRadius: BorderRadius.circular(16)
                         ),
                         child: Row(children: [
@@ -62,7 +62,7 @@ class ListingSubmittedScreen extends StatelessWidget {
                           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Text('Reviewed within 1–24 hours', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: Colors.white)),
                             const SizedBox(height: 2),
-                            Text("We'll notify you the moment it's decided", style: AppTheme.dm(size: 12, color: Colors.white.withValues(alpha: 0.5))),
+                            Text("We'll notify you the moment it's decided", style: AppTheme.dm(size: 12, color: Colors.white.withOpacity(0.5))),
                           ])),
                         ]),
                       ),
@@ -112,7 +112,7 @@ class _NextStepRow extends StatelessWidget {
           Icon(icon, size: 20, color: color),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(text, style: AppTheme.dm(size: 13, color: Colors.white.withValues(alpha: 0.85))),
+            child: Text(text, style: AppTheme.dm(size: 13, color: Colors.white.withOpacity(0.85))),
           ),
         ],
       ),

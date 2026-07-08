@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/success_check.dart';
-import '../../../core/widgets/ui.dart';
+import 'package:sahely/features/shared/widgets/success_check.dart';
+import 'package:sahely/features/shared/widgets/ui.dart';
 
 class StarsEarnedScreen extends StatelessWidget {
   const StarsEarnedScreen({super.key});
@@ -12,7 +12,7 @@ class StarsEarnedScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(children: [
-        Positioned.fill(child: DecoratedBox(decoration: BoxDecoration(color: AppColors.navy.withValues(alpha: 0.85)))),
+        Positioned.fill(child: DecoratedBox(decoration: BoxDecoration(color: AppColors.navy.withOpacity(0.85)))),
         Center(
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 28),

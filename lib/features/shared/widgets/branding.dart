@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 /// "SAHELY" wordmark.
 class Wordmark extends StatelessWidget {
@@ -33,7 +33,7 @@ class ProgressDots extends StatelessWidget {
           width: on ? 22 : 8,
           height: 8,
           decoration: BoxDecoration(
-            color: on ? AppColors.gold : const Color(0xFFD8CDBB),
+            color: on ? AppColors.gold : AppColors.progressInactive,
             borderRadius: BorderRadius.circular(4),
           ),
         );

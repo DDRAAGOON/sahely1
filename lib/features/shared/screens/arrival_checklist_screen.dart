@@ -101,7 +101,7 @@ class _CheckItem extends StatelessWidget {
                 hintText: 'Describe the issue...',
                 hintStyle: AppTheme.dm(size: 13, color: AppColors.faint),
                 filled: true,
-                fillColor: const Color(0xFFFDECEC).withValues(alpha: 0.5),
+                fillColor: const Color(0xFFFDECEC).withOpacity(0.5),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: AppColors.danger)),
                 contentPadding: const EdgeInsets.all(10),
               ),

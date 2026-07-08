@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../data/models.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 enum BadgeKind { navy, green, greenSoft, gray, red, redSoft, orange, gold, renterLight }
 
@@ -15,14 +15,14 @@ class StatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final (bg, fg) = switch (kind) {
       BadgeKind.navy => (AppColors.navy, AppColors.white),
-      BadgeKind.green => (const Color(0xFF1B6B3A), AppColors.white),
-      BadgeKind.greenSoft => (const Color(0xFFD7EEDD), AppColors.success),
-      BadgeKind.gray => (const Color(0xFF717171), AppColors.white),
-      BadgeKind.red => (const Color(0xFFB22222), AppColors.white),
-      BadgeKind.redSoft => (const Color(0xFFFDECEC), const Color(0xFFB22222)),
-      BadgeKind.orange => (const Color(0xFFFCEEDD), const Color(0xFFD2760A)),
-      BadgeKind.gold => (const Color(0xFFF3E7C4), const Color(0xFF9A7A22)),
-      BadgeKind.renterLight => (const Color(0xFFE6EAF2), AppColors.navy),
+      BadgeKind.green => (AppColors.success, AppColors.white),
+      BadgeKind.greenSoft => (AppColors.successSoft, AppColors.success),
+      BadgeKind.gray => (AppColors.muted, AppColors.white),
+      BadgeKind.red => (AppColors.error, AppColors.white),
+      BadgeKind.redSoft => (AppColors.errorSoft, AppColors.error),
+      BadgeKind.orange => (AppColors.warningSoft, AppColors.warning),
+      BadgeKind.gold => (const Color(0xFFF3E7C4), AppColors.goldDark),
+      BadgeKind.renterLight => (AppColors.navySoft, AppColors.navy),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -49,9 +49,9 @@ class RoleBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (bg, fg, icon) = switch (role) {
-      Role.renter => (const Color(0xFFE6EAF2), AppColors.navy, Icons.person_outline),
-      Role.owner => (const Color(0xFFDCEFE2), AppColors.owner, Icons.apartment_outlined),
-      Role.broker => (const Color(0xFFF6EAC9), const Color(0xFF8A6D1E), Icons.handshake_outlined),
+      Role.renter => (AppColors.navySoft, AppColors.navy, Icons.person_outline),
+      Role.owner => (AppColors.ownerPillBg, AppColors.owner, Icons.apartment_outlined),
+      Role.broker => (AppColors.brokerPillBg, AppColors.brokerText, Icons.handshake_outlined),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),

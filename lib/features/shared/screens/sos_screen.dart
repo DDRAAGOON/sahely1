@@ -195,7 +195,7 @@ class _SosScreenState extends State<SosScreen> {
           Container(
               width: 30,
               height: 30,
-              decoration: BoxDecoration(color: const Color(0xFFB22222).withValues(alpha: 0.2), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: const Color(0xFFB22222).withOpacity(0.2), shape: BoxShape.circle),
               child: const Icon(Icons.headset_mic_outlined, size: 16, color: Color(0xFFB22222))),
           const SizedBox(width: 8),
           Text('Agent is typing...', style: AppTheme.dm(size: 12, color: AppColors.muted, italic: true)),

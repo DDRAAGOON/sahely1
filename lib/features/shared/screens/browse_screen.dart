@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../data/models.dart';
-import '../../../data/sample_data.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../properties/widgets/property_card.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import '../widgets/property_card.dart';
 import '../widgets/browse_empty_state.dart';
 import '../widgets/cream_background.dart';
 import '../widgets/floating_nav.dart';

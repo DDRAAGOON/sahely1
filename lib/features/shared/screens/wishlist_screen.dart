@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../../../data/wishlist_state.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/floating_nav.dart';
-import '../../../core/widgets/property_card.dart';
+import 'package:sahely/features/shared/widgets/cream_background.dart';
+import 'package:sahely/features/shared/widgets/floating_nav.dart';
+import 'package:sahely/features/shared/widgets/property_card.dart';
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
@@ -39,7 +39,7 @@ class WishlistScreen extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.favorite_border, size: 72, color: AppColors.faint.withValues(alpha: 0.2)),
+                            Icon(Icons.favorite_border, size: 72, color: AppColors.faint.withOpacity(0.2)),
                             const SizedBox(height: 20),
                             Text('No places saved yet',
                                 style: AppTheme.dm(size: 17, weight: FontWeight.w600, color: AppColors.muted)),

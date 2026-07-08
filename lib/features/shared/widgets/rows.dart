@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class SettingsRow extends StatelessWidget {
   const SettingsRow({super.key, required this.icon, required this.label, this.value, this.valueColor, this.iconColor, this.onTap, this.last = false});

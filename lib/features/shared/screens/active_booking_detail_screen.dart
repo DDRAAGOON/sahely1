@@ -193,7 +193,7 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
                               left: 12,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(color: AppColors.navy.withValues(alpha: 0.8), borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: AppColors.navy.withOpacity(0.8), borderRadius: BorderRadius.circular(8)),
                                 child: Text('Hacienda White, Marassi', style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: Colors.white)),
                               ),
                             ),
@@ -376,7 +376,7 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
               Image.network(url, fit: BoxFit.cover),
               if (overlay != null)
                 Container(
-                  color: Colors.black.withValues(alpha: 0.45),
+                  color: Colors.black.withOpacity(0.45),
                   alignment: Alignment.center,
                   child: Text(overlay, style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: Colors.white)),
                 ),

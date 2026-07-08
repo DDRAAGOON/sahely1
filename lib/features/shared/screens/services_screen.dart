@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/floating_nav.dart';
+import 'package:sahely/features/shared/widgets/cream_background.dart';
+import 'package:sahely/features/shared/widgets/floating_nav.dart';
 
 class ServicesScreen extends StatelessWidget {
   final bool showNav;
@@ -26,7 +26,7 @@ class ServicesScreen extends StatelessWidget {
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: AppColors.navy.withValues(alpha: 0.04),
+                        color: AppColors.navy.withOpacity(0.04),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.bolt_outlined, size: 40, color: AppColors.gold),

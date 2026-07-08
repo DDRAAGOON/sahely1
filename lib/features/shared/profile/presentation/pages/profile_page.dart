@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_theme.dart';
-import '../../widgets/cards/sahely_card.dart';
-import '../../widgets/buttons/sahely_button.dart';
+import 'package:sahely/features/shared/widgets/cards/sahely_card.dart';
+import 'package:sahely/features/shared/widgets/buttons/sahely_button.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

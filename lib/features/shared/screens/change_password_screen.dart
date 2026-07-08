@@ -79,7 +79,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
-                      color: AppColors.navy.withValues(alpha: 0.04),
+                      color: AppColors.navy.withOpacity(0.04),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.lock_outline, color: AppColors.gold, size: 32),
@@ -134,7 +134,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             duration: const Duration(milliseconds: 300),
                             height: 6,
                             decoration: BoxDecoration(
-                              color: i <= _strengthScore ? strengthColor : AppColors.border.withValues(alpha: 0.5),
+                              color: i <= _strengthScore ? strengthColor : AppColors.border.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(3),
                             ),
                           ),

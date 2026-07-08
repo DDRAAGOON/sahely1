@@ -1,76 +1,53 @@
 import 'package:flutter/material.dart';
-import 'screens/owner_home_screen.dart';
-import 'screens/owner_profile_screen.dart';
-import 'screens/owner_manage_screen.dart';
-import 'screens/owner_properties_screen.dart';
-import 'screens/add_property_screen.dart';
-import 'screens/listing_submitted_screen.dart';
-import 'screens/team_review_screen.dart';
-import 'screens/owner_all_trending_screen.dart';
-import 'screens/owner_bookings_screen.dart';
-import 'screens/owner_requests_screen.dart';
-import 'screens/owner_earnings_screen.dart';
-import 'screens/withdraw_amount_screen.dart';
-import 'screens/withdraw_receipt_screen.dart';
-import 'screens/payout_bank_screen.dart';
-import 'screens/owner_property_detail_screens.dart';
-import 'screens/owner_smart_lock_screen.dart';
-import 'screens/owner_history_screen.dart';
-import 'screens/owner_portfolio_screen.dart';
-import 'screens/owner_ai_chat_screen.dart';
-import 'screens/owner_notification_settings_screen.dart';
-import 'screens/owner_edit_bio_screen.dart';
-
-import 'screens/owner_upcoming_detail_screen.dart';
-import 'screens/owner_active_detail_screen.dart';
-import 'screens/owner_past_detail_screen.dart';
-
-export 'screens/owner_home_screen.dart';
-export 'screens/owner_profile_screen.dart';
-export 'screens/owner_manage_screen.dart';
-export 'screens/owner_properties_screen.dart';
-export 'screens/add_property_screen.dart';
-export 'screens/listing_submitted_screen.dart';
-export 'screens/team_review_screen.dart';
-export 'screens/owner_all_trending_screen.dart';
-export 'screens/owner_bookings_screen.dart';
-export 'screens/owner_requests_screen.dart';
-export 'screens/owner_property_detail_screens.dart';
-export 'screens/owner_smart_lock_screen.dart';
-export 'screens/owner_history_screen.dart';
-export 'screens/owner_portfolio_screen.dart';
-export 'screens/owner_ai_chat_screen.dart';
-export 'screens/owner_notification_settings_screen.dart';
-
 import 'owner_main_screen.dart';
+import 'dashboard/presentation/pages/owner_dashboard_page.dart';
+import 'properties/presentation/pages/owner_properties_page.dart';
+import 'properties/presentation/pages/add_property_screen.dart';
+import 'properties/presentation/pages/listing_submitted_screen.dart';
+import 'bookings/presentation/pages/owner_bookings_page.dart';
+import 'earnings/presentation/pages/owner_earnings_page.dart';
+import '../shared/profile/presentation/pages/profile_page.dart';
+
+// Exports
+export 'owner_main_screen.dart';
+export 'dashboard/presentation/pages/owner_dashboard_page.dart';
+export 'properties/presentation/pages/owner_properties_page.dart';
+export 'properties/presentation/pages/add_property_screen.dart';
+export 'properties/presentation/pages/listing_submitted_screen.dart';
+export 'bookings/presentation/pages/owner_bookings_page.dart';
+export 'earnings/presentation/pages/owner_earnings_page.dart';
 
 final Map<String, WidgetBuilder> ownerRoutes = {
   '/owner/home': (_) => const OwnerMainScreen(),
-  '/owner/profile': (_) => const OwnerProfileScreen(),
-  '/owner/manage': (_) => const OwnerManageScreen(),
-  '/owner/properties': (_) => const OwnerPropertiesScreen(),
-  '/owner/insights': (_) => const OwnerPropertyInsightsScreen(),
-  '/owner/edit': (_) => const OwnerEditPropertyScreen(),
-  '/owner/preview': (_) => const OwnerPreviewListingScreen(),
-  '/owner/smart-lock': (_) => const OwnerSmartLockScreen(),
+  '/owner/dashboard': (_) => const OwnerDashboardPage(),
+  '/owner/profile': (_) => const ProfilePage(),
+  '/owner/properties': (_) => const OwnerPropertiesPage(),
   '/owner/add-property': (_) => const AddPropertyScreen(),
   '/owner/listing-submitted': (_) => const ListingSubmittedScreen(),
-  '/owner/team-review': (_) => const TeamReviewScreen(),
-  '/owner/all-trending': (_) => const OwnerAllTrendingScreen(),
-  '/owner/bookings': (_) => const OwnerBookingsScreen(),
-  '/owner/booking-upcoming': (_) => const OwnerUpcomingDetailScreen(),
-  '/owner/booking-active': (_) => const OwnerActiveDetailScreen(),
-  '/owner/booking-past': (_) => const OwnerPastDetailScreen(),
-  '/owner/requests': (_) => const OwnerRequestsScreen(),
-  '/owner/request-detail': (_) => const OwnerRequestDetailScreen(),
-  '/owner/earnings': (_) => const OwnerEarningsScreen(),
-  '/owner/violations': (_) => const ViolationsScreen(),
-  '/owner/history': (_) => const OwnerHistoryScreen(),
-  '/owner/portfolio': (_) => const PortfolioInsightsScreen(),
-  '/owner/ai-chat': (_) => const OwnerAiChatScreen(),
-  '/owner/withdraw': (_) => const WithdrawAmountScreen(),
-  '/owner/withdraw-receipt': (_) => const WithdrawReceiptScreen(),
-  '/owner/payout': (_) => const PayoutBankScreen(),
-  '/owner/notifications': (_) => const OwnerNotificationSettingsScreen(),
-  '/owner/edit-bio': (_) => const OwnerEditBioScreen(),
+  '/owner/bookings': (_) => const OwnerBookingsPage(),
+  '/owner/earnings': (_) => const OwnerEarningsPage(),
+  
+  // The following routes are placeholders as the screens are not yet implemented
+  // or use the main owner screen as a fallback.
+  // '/owner/manage': (_) => const OwnerManageScreen(),
+  // '/owner/insights': (_) => const OwnerPropertyInsightsScreen(),
+  // '/owner/edit': (_) => const OwnerEditPropertyScreen(),
+  // '/owner/preview': (_) => const OwnerPreviewListingScreen(),
+  // '/owner/smart-lock': (_) => const OwnerSmartLockScreen(),
+  // '/owner/team-review': (_) => const TeamReviewScreen(),
+  // '/owner/all-trending': (_) => const OwnerAllTrendingScreen(),
+  // '/owner/booking-upcoming': (_) => const OwnerUpcomingDetailScreen(),
+  // '/owner/booking-active': (_) => const OwnerActiveDetailScreen(),
+  // '/owner/booking-past': (_) => const OwnerPastDetailScreen(),
+  // '/owner/requests': (_) => const OwnerRequestsScreen(),
+  // '/owner/request-detail': (_) => const OwnerRequestDetailScreen(),
+  // '/owner/violations': (_) => const ViolationsScreen(),
+  // '/owner/history': (_) => const OwnerHistoryScreen(),
+  // '/owner/portfolio': (_) => const PortfolioInsightsScreen(),
+  // '/owner/ai-chat': (_) => const OwnerAiChatScreen(),
+  // '/owner/withdraw': (_) => const WithdrawAmountScreen(),
+  // '/owner/withdraw-receipt': (_) => const WithdrawReceiptScreen(),
+  // '/owner/payout': (_) => const PayoutBankScreen(),
+  // '/owner/notifications': (_) => const OwnerNotificationSettingsScreen(),
+  // '/owner/edit-bio': (_) => const OwnerEditBioScreen(),
 };

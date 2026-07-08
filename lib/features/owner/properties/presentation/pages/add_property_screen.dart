@@ -3,17 +3,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io';
 import 'package:geolocator/geolocator.dart';
-import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_theme.dart';
-import '../../../../../core/widgets/buttons.dart';
-import '../../../../../core/widgets/cards.dart';
-import '../../../../../core/widgets/checklist.dart';
-import '../../../../../core/widgets/cream_background.dart';
-import '../../../../../core/widgets/forms.dart';
-import '../../../../../core/widgets/notes.dart';
-import '../../../../../core/widgets/tags.dart';
-import '../../../../../data/models.dart';
-import '../../../../../data/sample_data.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/features/shared/widgets/buttons.dart';
+import 'package:sahely/features/shared/widgets/cards.dart';
+import 'package:sahely/features/shared/widgets/checklist.dart';
+import 'package:sahely/features/shared/widgets/cream_background.dart';
+import 'package:sahely/features/shared/widgets/forms.dart';
+import 'package:sahely/features/shared/widgets/notes.dart';
+import 'package:sahely/features/shared/widgets/tags.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/sample_data.dart';
 import 'listing_submitted_screen.dart';
 
 class AddPropertyScreen extends StatefulWidget {
@@ -289,7 +289,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                     bottom: 12,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(color: AppColors.navy.withValues(alpha: 0.7), borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: AppColors.navy.withOpacity(0.7), borderRadius: BorderRadius.circular(8)),
                       child: Text(_selectedLatLng == null ? 'Drag pin to exact spot' : 'Location selected', style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: Colors.white)),
                     ),
                   ),
@@ -476,7 +476,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                         top: 6, left: 6,
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(color: AppColors.gold.withValues(alpha: 0.8), borderRadius: BorderRadius.circular(4)),
+                          decoration: BoxDecoration(color: AppColors.gold.withOpacity(0.8), borderRadius: BorderRadius.circular(4)),
                           child: Text('Cover', style: AppTheme.dm(size: 10, weight: FontWeight.w700, color: AppColors.navy)),
                         ),
                       ),

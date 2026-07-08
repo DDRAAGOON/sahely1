@@ -53,7 +53,7 @@ class BookingCalendarCard extends StatelessWidget {
                   return Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: isEnd ? AppColors.navy : (isMid ? const Color(0xFFEFE3C2) : null),
+                      color: isEnd ? AppColors.navy : (isMid ? AppColors.goldMuted : null),
                       borderRadius: BorderRadius.horizontal(
                         left: Radius.circular(d == 21 ? 8 : 0),
                         right: Radius.circular(d == 25 ? 8 : 0),
@@ -142,7 +142,7 @@ class BookingGuestRow extends StatelessWidget {
             border: filled ? null : Border.all(color: enabled ? AppColors.navy : AppColors.border, width: 1.5),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, size: 18, color: filled ? AppColors.white : (enabled ? AppColors.navy : const Color(0xFFBBBBBB))),
+          child: Icon(icon, size: 18, color: filled ? AppColors.white : (enabled ? AppColors.navy : AppColors.disabled)),
         ),
       );
 }

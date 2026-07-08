@@ -75,12 +75,12 @@ class FloatingNav extends StatelessWidget {
       child: Container(
         height: 62,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.15),
+          color: Colors.white.withOpacity(0.15),
           borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
+          border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: Colors.black.withOpacity(0.05),
               blurRadius: 30,
               offset: const Offset(0, 8),
             ),
@@ -127,7 +127,7 @@ class _NavButton extends StatelessWidget {
           Icon(
             selected ? item.activeIcon : item.icon, 
             size: 23, 
-            color: selected ? AppColors.navy : AppColors.navy.withValues(alpha: 0.4),
+            color: selected ? AppColors.navy : AppColors.navy.withOpacity(0.4),
           ),
           const SizedBox(height: 4),
           Text(
@@ -135,7 +135,7 @@ class _NavButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: selected ? AppColors.navy : AppColors.navy.withValues(alpha: 0.4),
+              color: selected ? AppColors.navy : AppColors.navy.withOpacity(0.4),
               fontFamily: 'Cairo',
             ),
           ),

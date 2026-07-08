@@ -186,7 +186,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
           Container(
               width: 28,
               height: 28,
-              decoration: BoxDecoration(color: AppColors.gold.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+              decoration: BoxDecoration(color: AppColors.gold.withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
               child: const Icon(Icons.auto_awesome, size: 15, color: AppColors.gold)),
           const SizedBox(width: 8),
           Text('Sahely is typing...', style: AppTheme.dm(size: 12, color: AppColors.muted, italic: true)),

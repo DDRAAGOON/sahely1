@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../data/models.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models.dart';
-import '../../features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
-import '../theme/app_colors.dart';
+import 'package:provider/provider.dart';
+import '../../../../data/models.dart';
+import '../../../../data/wishlist_state.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class SaveHeart extends StatelessWidget {
   const SaveHeart({super.key, required this.property, this.size = 32, this.padding = 0});
@@ -13,30 +12,29 @@ class SaveHeart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WishlistCubit, WishlistState>(
-      builder: (context, state) {
-        // Find if property is in any collection
-        final isSaved = state.toggledPropertyId == property.name 
-            ? (state.isToggledStatus ?? false) 
-            : state.items.any((item) => item.propertyId == property.name);
+    // Using WishlistState (ChangeNotifier) since WishlistCubit is missing
+    return Consumer<WishlistState>(
+      builder: (context, state, child) {
+        final isSaved = state.isSaved(property);
 
         return GestureDetector(
           onTap: () {
-            context.read<WishlistCubit>().toggleWishlist(
-              propertyId: property.name,
-              propertyName: property.name,
-              propertyImage: property.image,
-            );
+            state.toggleSave(property);
           },
           child: Container(
             width: size,
             height: size,
             alignment: Alignment.center,
             padding: EdgeInsets.all(padding),
-            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.92), shape: BoxShape.circle),
-            child: Icon(isSaved ? Icons.favorite : Icons.favorite_border,
-                size: size * 0.6,
-                color: isSaved ? AppColors.gold : AppColors.navy),
+            decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.92),
+          shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isSaved ? Icons.favorite : Icons.favorite_border,
+              size: size * 0.6,
+              color: isSaved ? AppColors.gold : AppColors.navy,
+            ),
           ),
         );
       },

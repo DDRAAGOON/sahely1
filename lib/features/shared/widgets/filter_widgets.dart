@@ -108,7 +108,7 @@ class PriceSlider extends StatelessWidget {
         inactiveTrackColor: const Color(0xFFE5E0D3),
         trackHeight: 4,
         rangeThumbShape: const CustomRangeThumbShape(),
-        overlayColor: AppColors.navy.withValues(alpha: 0.1),
+        overlayColor: AppColors.navy.withOpacity(0.1),
       ),
       child: RangeSlider(
         values: values,

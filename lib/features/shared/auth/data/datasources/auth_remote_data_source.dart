@@ -1,8 +1,8 @@
-import '../../../../../core/network/api_client.dart';
-import '../../../../../core/constants/api_constants.dart';
-import '../../../../../core/errors/exceptions.dart';
-import '../models/user_model.dart';
-import '../../domain/entities/user.dart';
+import 'package:sahely/core/network/api_client.dart';
+import 'package:sahely/core/constants/api_constants.dart';
+import 'package:sahely/core/errors/exceptions.dart';
+import 'package:sahely/features/shared/auth/data/models/user_model.dart';
+import 'package:sahely/features/shared/auth/domain/entities/user.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel> login(String email, String password);

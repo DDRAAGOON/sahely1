@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../data/models.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import '../../../../data/models.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_theme.dart';
 import 'common.dart';
 import 'ui.dart';
 
@@ -45,7 +45,7 @@ class PropertyCard extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          color: AppColors.navy.withValues(alpha: 0.55),
+                          color: AppColors.navy.withOpacity(0.55),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text('★ Guest favourite',

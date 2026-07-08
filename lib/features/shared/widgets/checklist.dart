@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ChecklistTile extends StatelessWidget {
   const ChecklistTile({super.key, required this.label, required this.done, this.trailing, this.warn = false, this.padding});

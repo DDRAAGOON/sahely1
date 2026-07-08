@@ -11,6 +11,9 @@ class AppColors {
   static const Color cream = Color(0xFFF5F0E8);
   static const Color goldTint = Color(0xFFFDF9F4);
   static const Color surface = Color(0xFFFFFFFF);
+  static const Color goldSoft = Color(0xFFFDF9F4); // Added for backward compatibility/placeholders
+  static const Color goldLight = Color(0xFFE4C56A); // Added for backward compatibility/placeholders
+  static const Color goldBright = Color(0xFFFFD700); // Added for backward compatibility/placeholders
 
   // ==================== TEXT COLORS ====================
   static const Color textPrimary = Color(0xFF2D2D2D);
@@ -99,4 +102,21 @@ class AppColors {
   static const Color secondary = textSecondary;
   static const Color placeholder = textPlaceholder;
   static const Color dark = textPrimary;
+  static const Color textDark = textPrimary;
+  static const Color textLight = textPlaceholder;
+  static const Color board = background;
+  static const Color grey = muted;
+  static const Color lightGrey = faint;
+  static const Color goldDark = Color(0xFFB1974C);
+  static const Color navySoft = Color(0xFFE6EAF2);
+  static const Color successSoft = Color(0xFFD7EEDD);
+  static const Color errorSoft = Color(0xFFFDECEC);
+  static const Color warningSoft = Color(0xFFFCEEDD);
+  static const Color infoSoft = Color(0xFFE3F2FD);
+  static const Color ownerPillBg = Color(0xFFDCEFE2);
+  static const Color brokerPillBg = Color(0xFFF6EAC9);
+  static const Color brokerText = Color(0xFF8A6D1E);
+  static const Color progressInactive = Color(0xFFD8CDBB);
+  static const Color goldMuted = Color(0xFFEFE3C2);
+  static const Color disabled = Color(0xFFBBBBBB);
 }

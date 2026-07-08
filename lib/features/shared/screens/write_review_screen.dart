@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import '../../../data/models.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/ui.dart';
+import 'package:sahely/features/shared/widgets/cream_background.dart';
+import 'package:sahely/features/shared/widgets/kit.dart';
+import 'package:sahely/features/shared/widgets/ui.dart';
 
 class WriteReviewScreen extends StatefulWidget {
   const WriteReviewScreen({super.key});
@@ -56,7 +56,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                 maxLines: 6,
                 decoration: InputDecoration(
                   hintText: 'What did you love? Anything we could improve?',
-                  hintStyle: AppTheme.dm(size: 14, color: AppColors.faint),
+                  hintStyle: AppTheme.dm(size: 14, color: AppColors.placeholder),
                   filled: true,
                   fillColor: AppColors.white,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: AppColors.border)),

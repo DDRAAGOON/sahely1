@@ -1,12 +1,12 @@
 import 'package:get_it/get_it.dart';
-import 'data/datasources/auth_local_data_source.dart';
-import 'data/datasources/auth_remote_data_source.dart';
-import 'data/repositories/auth_repository_impl.dart';
-import 'domain/repositories/auth_repository.dart';
-import 'domain/usecases/login_usecase.dart';
-import 'domain/usecases/register_usecase.dart';
-import 'domain/usecases/verify_otp_usecase.dart';
-import 'presentation/bloc/auth_bloc.dart';
+import 'package:sahely/features/shared/auth/data/datasources/auth_local_data_source.dart';
+import 'package:sahely/features/shared/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:sahely/features/shared/auth/data/repositories/auth_repository_impl.dart';
+import 'package:sahely/features/shared/auth/domain/repositories/auth_repository.dart';
+import 'package:sahely/features/shared/auth/domain/usecases/login_usecase.dart';
+import 'package:sahely/features/shared/auth/domain/usecases/register_usecase.dart';
+import 'package:sahely/features/shared/auth/domain/usecases/verify_otp_usecase.dart';
+import 'package:sahely/features/shared/auth/presentation/bloc/auth_bloc.dart';
 
 final sl = GetIt.instance;
 

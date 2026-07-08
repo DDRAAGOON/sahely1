@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/ui.dart';
+import 'package:sahely/features/shared/widgets/common.dart';
+import 'package:sahely/features/shared/widgets/cream_background.dart';
+import 'package:sahely/features/shared/widgets/kit.dart';
+import 'package:sahely/features/shared/widgets/ui.dart';
 
 const _azure = 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800&q=72&auto=format&fit=crop';
 const _lagoon = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop';
@@ -121,7 +121,7 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
                               bottom: 12,
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-                                decoration: BoxDecoration(color: AppColors.navy.withValues(alpha: 0.8), borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: AppColors.navy.withOpacity(0.8), borderRadius: BorderRadius.circular(8)),
                                 child: Text('Hacienda Bay, Marassi · North Coast', style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: Colors.white)),
                               ),
                             ),
@@ -284,7 +284,7 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
     decoration: BoxDecoration(
       color: const Color(0xFFF9F9F9), 
-      border: Border.all(color: const Color(0xFF22335A).withValues(alpha: 0.8), width: 1.1), 
+      border: Border.all(color: const Color(0xFF22335A).withOpacity(0.8), width: 1.1), 
       borderRadius: BorderRadius.circular(12)
     ),
     child: Text(label, style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: const Color(0xFF22335A))),
@@ -305,7 +305,7 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
           Image.network(url, fit: BoxFit.cover),
           if (overlay != null)
             Container(
-              color: Colors.black.withValues(alpha: 0.45),
+              color: Colors.black.withOpacity(0.45),
               alignment: Alignment.center,
               child: Text(overlay, style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: Colors.white)),
             ),
