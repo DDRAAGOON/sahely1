@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/sample_data.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/chips.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/chips.dart';
+import '../../../core/widgets/common.dart';
+import '../../../core/widgets/ui.dart';
 import '../widgets/filter_widgets.dart';
 
 class FiltersScreen extends StatefulWidget {

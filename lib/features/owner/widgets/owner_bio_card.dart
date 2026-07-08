@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sahely/theme/app_colors.dart';
-import 'package:sahely/theme/app_theme.dart';
-import 'package:sahely/widgets/kit.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/kit.dart';
 
 class OwnerBioCard extends StatelessWidget {
   final String bio;

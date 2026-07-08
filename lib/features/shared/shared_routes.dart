@@ -26,7 +26,7 @@ import 'screens/mawsem_level_screen.dart';
 import 'screens/stars_earned_screen.dart';
 import 'screens/star_nudges_screen.dart';
 import 'screens/level_up_screen.dart';
-import 'screens/wishlist_screen.dart';
+import '../renter/presentation/screens/wishlist/pages/wishlist_screen.dart' as complex;
 import 'screens/collection_inside_screen.dart';
 import 'screens/collection_chat_screen.dart';
 import 'screens/compare_screen.dart';
@@ -56,7 +56,7 @@ final Map<String, WidgetBuilder> sharedRoutes = {
   '/write-review': (_) => const WriteReviewScreen(),
 
   // Wishlist / collections
-  '/wishlist': (_) => const WishlistScreen(),
+  '/wishlist': (_) => const complex.WishlistScreen(),
   '/collection': (_) => const CollectionInsideScreen(),
   '/collection-chat': (_) => const CollectionChatScreen(),
   '/compare': (_) => const CompareScreen(),

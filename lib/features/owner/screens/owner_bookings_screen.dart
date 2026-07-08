@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/floating_nav.dart';
-import '../../../widgets/kit.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/common.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/floating_nav.dart';
+import '../../../core/widgets/kit.dart';
+import '../../../core/widgets/ui.dart';
 
 class OwnerBookingsScreen extends StatefulWidget {
   const OwnerBookingsScreen({super.key});

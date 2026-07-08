@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../theme/app_colors.dart';
-import '../../theme/app_theme.dart';
-import '../../widgets/brand.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_theme.dart';
+import '../../core/widgets/brand.dart';
 
 // ====================================================== 40 · Lock Screen
 class NotificationsScreen extends StatelessWidget {

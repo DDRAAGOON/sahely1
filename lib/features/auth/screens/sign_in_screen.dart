@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/ui.dart';
+import '../../../data/models.dart';
+import '../../../data/role_state.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/ui.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -78,8 +80,7 @@ class _SignInScreenState extends State<SignInScreen> {
             NavyButton(
                 label: 'Sign In',
                 onTap: () {
-                  // In a real app, this would check the user's role from the server.
-                  // For this prototype, we'll default to Renter unless they came from a specific flow.
+                  RoleState().setRole(Role.renter);
                   Navigator.pushReplacementNamed(context, '/renter/home');
                 }),
             const SizedBox(height: 24),

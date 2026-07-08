@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../data/wishlist_state.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/floating_nav.dart';
-import '../../../widgets/property_card.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/floating_nav.dart';
+import '../../../core/widgets/property_card.dart';
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
@@ -28,7 +28,7 @@ class WishlistScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text('Saved', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                            Text('Wishlist', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
                             Text('0 places saved', style: AppTheme.dm(size: 13, color: AppColors.muted)),
                           ]),
                         ],

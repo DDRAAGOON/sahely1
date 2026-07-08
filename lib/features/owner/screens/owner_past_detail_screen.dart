@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/kit.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/common.dart';
+import '../../../core/widgets/kit.dart';
+import '../../../core/widgets/ui.dart';
 
 class OwnerPastDetailScreen extends StatelessWidget {
   const OwnerPastDetailScreen({super.key});
@@ -151,14 +151,14 @@ class OwnerPastDetailScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 32),
 
-                        // 5. Rate Stay Card
+                        // 5. Rate Guest Card
                         WhiteCard(
                           padding: const EdgeInsets.all(18),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                'How was your stay?',
+                                'How was the guest?',
                                 style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy),
                               ),
                               const SizedBox(height: 14),
@@ -171,12 +171,12 @@ class OwnerPastDetailScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 18),
                               WideButton(
-                                label: 'Write a review · earn +5 ★',
+                                label: 'Rate guest · earn +5 ★',
                                 icon: Icons.star,
                                 color: AppColors.navy,
                                 height: 52,
                                 radius: 14,
-                                onTap: () => Navigator.pushNamed(context, '/write-review', arguments: prop),
+                                onTap: () => Navigator.pushNamed(context, '/owner/rate-guest', arguments: prop),
                               ),
                             ],
                           ),

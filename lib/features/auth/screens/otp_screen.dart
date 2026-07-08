@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/ui.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({

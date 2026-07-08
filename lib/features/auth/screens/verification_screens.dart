@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../data/role_state.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/ui.dart';
 import '../widgets/auth_success_badge.dart';
 
 // ===================================================== 10 · ID Verification

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/image.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/common.dart';
+import '../../../core/widgets/image.dart';
 
 class HeroPropertyCard extends StatelessWidget {
   const HeroPropertyCard({
@@ -135,10 +135,10 @@ class HeroPropertyCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 14),
-                  Wrap(
+                  const Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: const [
+                    children: [
                       Pill('Beachfront', bg: AppColors.white, fg: AppColors.navy, radius: 10, border: AppColors.border),
                       Pill('Pool', bg: AppColors.white, fg: AppColors.navy, radius: 10, border: AppColors.border),
                       Pill('WiFi', bg: AppColors.white, fg: AppColors.navy, radius: 10, border: AppColors.border),

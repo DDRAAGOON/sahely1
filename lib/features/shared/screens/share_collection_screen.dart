@@ -1,13 +1,62 @@
 import 'package:flutter/material.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/kit.dart';
-import '../../../widgets/sheet_handle.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:gal/gal.dart';
+import 'package:http/http.dart' as http;
+import 'package:share_plus/share_plus.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/kit.dart';
+import '../../../core/widgets/sheet_handle.dart';
 
 const _lagoon = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop';
+const _link = 'sahely.app/c/beach-2026';
 
 class ShareCollectionScreen extends StatelessWidget {
   const ShareCollectionScreen({super.key});
+
+  void _shareViaWhatsApp() async {
+    final url = 'whatsapp://send?text=${Uri.encodeComponent('Check out this collection: $_link')}';
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      }
+    } catch (_) {}
+  }
+
+  void _shareViaInstagram() async {
+    const url = 'https://www.instagram.com/';
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _saveToGallery(BuildContext context) async {
+    try {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Saving image...')));
+      final hasAccess = await Gal.hasAccess();
+      if (!hasAccess) {
+        final granted = await Gal.requestAccess();
+        if (!granted) {
+          if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Permission denied')));
+          return;
+        }
+      }
+      final response = await http.get(Uri.parse(_lagoon));
+      if (response.statusCode == 200) {
+        await Gal.putImageBytes(response.bodyBytes);
+        if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Saved to gallery!')));
+      }
+    } catch (_) {
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to save image')));
+    }
+  }
+
+  void _openMoreSharing() {
+    Share.share('Check out this collection: $_link');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,17 +91,28 @@ class ShareCollectionScreen extends StatelessWidget {
             child: Row(children: [
               const Icon(Icons.link, size: 16, color: AppColors.gold),
               const SizedBox(width: 8),
-              Expanded(child: Text('sahely.app/c/beach-2026', style: AppTheme.dm(size: 12, color: AppColors.muted))),
-              Text('Copy', style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.navy)),
+              Expanded(child: Text(_link, style: AppTheme.dm(size: 12, color: AppColors.muted))),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(const ClipboardData(text: _link));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Link copied!')));
+                },
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                  child: Text('Copy', style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.navy)),
+                ),
+              ),
             ]),
           ),
           const SizedBox(height: 18),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            _target('WhatsApp', const Color(0xFF25D366), Icons.chat),
+            _target('WhatsApp', const Color(0xFF25D366), Icons.chat, onTap: _shareViaWhatsApp),
             _target('Instagram', null, Icons.camera_alt,
-                gradient: const [Color(0xFFFEDA77), Color(0xFFF58529), Color(0xFFDD2A7B), Color(0xFF8134AF)]),
-            _target('Save', AppColors.navy, Icons.download, iconColor: AppColors.gold),
-            _target('More', AppColors.white, Icons.more_horiz, border: true),
+                gradient: const [Color(0xFFFEDA77), Color(0xFFF58529), Color(0xFFDD2A7B), Color(0xFF8134AF)],
+                onTap: _shareViaInstagram),
+            _target('Save gallery', AppColors.navy, Icons.download, iconColor: AppColors.gold, onTap: () => _saveToGallery(context)),
+            _target('More', AppColors.white, Icons.more_horiz, border: true, onTap: _openMoreSharing),
           ]),
           const SizedBox(height: 18),
           WhiteCard(
@@ -68,7 +128,14 @@ class ShareCollectionScreen extends StatelessWidget {
                 TextSpan(text: 'add & vote', style: TextStyle(fontWeight: FontWeight.w700)),
                 TextSpan(text: ' on places')
               ]))),
-              Text('Invite', style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
+              GestureDetector(
+                onTap: () => Share.share('Help me add & vote on places: $_link'),
+                behavior: HitTestBehavior.opaque,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                  child: Text('Invite', style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
+                ),
+              ),
             ]),
           ),
           const SizedBox(height: 16),
@@ -79,25 +146,29 @@ class ShareCollectionScreen extends StatelessWidget {
   }
 
   Widget _target(String label, Color? bg, IconData icon,
-          {List<Color>? gradient, Color iconColor = Colors.white, bool border = false}) =>
-      Column(
-        children: [
-          Container(
-            width: 54,
-            height: 54,
-            decoration: BoxDecoration(
-                color: bg,
-                gradient: gradient != null
-                    ? LinearGradient(
-                        colors: gradient, begin: Alignment.topLeft, end: Alignment.bottomRight)
-                    : null,
-                shape: BoxShape.circle,
-                border: border ? Border.all(color: AppColors.border) : null),
-            child: Icon(icon, color: border ? AppColors.navy : iconColor, size: 22),
-          ),
-          const SizedBox(height: 6),
-          Text(label, style: AppTheme.dm(size: 11, color: AppColors.ink)),
-        ],
+          {List<Color>? gradient, Color iconColor = Colors.white, bool border = false, VoidCallback? onTap}) =>
+      GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          children: [
+            Container(
+              width: 54,
+              height: 54,
+              decoration: BoxDecoration(
+                  color: bg,
+                  gradient: gradient != null
+                      ? LinearGradient(
+                          colors: gradient, begin: Alignment.topLeft, end: Alignment.bottomRight)
+                      : null,
+                  shape: BoxShape.circle,
+                  border: border ? Border.all(color: AppColors.border) : null),
+              child: Icon(icon, color: border ? AppColors.navy : iconColor, size: 22),
+            ),
+            const SizedBox(height: 6),
+            Text(label, style: AppTheme.dm(size: 11, color: AppColors.ink)),
+          ],
+        ),
       );
 }
 

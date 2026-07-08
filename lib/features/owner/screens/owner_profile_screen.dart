@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sahely/theme/app_colors.dart';
-import 'package:sahely/widgets/cream_background.dart';
-import 'package:sahely/widgets/floating_nav.dart';
-import 'package:sahely/widgets/kit.dart';
-import 'package:sahely/widgets/ui.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/cream_background.dart';
+import 'package:sahely/core/widgets/floating_nav.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/ui.dart';
 import '../widgets/owner_profile_header.dart';
 import '../widgets/owner_bio_card.dart';
 import '../widgets/owner_gradient_cta.dart';
@@ -18,9 +18,10 @@ class OwnerProfileScreen extends StatelessWidget {
         ListView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
           children: [
-            const OwnerProfileHeader(
+            OwnerProfileHeader(
               name: 'Layla Mansour',
               email: 'layla@example.com',
+              onEditProfile: () => Navigator.pushNamed(context, '/owner/edit-bio'),
             ),
             const SizedBox(height: 12),
             const Row(
@@ -80,10 +81,13 @@ class OwnerProfileScreen extends StatelessWidget {
                   iconColor: AppColors.gold,
                   onTap: () => Navigator.pushNamed(context, '/owner/payout'),
                 ),
-                const SettingsRow(
+                SettingsRow(
                   icon: Icons.notifications_none,
                   label: 'Notifications',
                   iconColor: AppColors.gold,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/owner/notifications');
+                  },
                 ),
                 SettingsRow(
                   icon: Icons.lock_outline,

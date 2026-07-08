@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../../data/sample_data.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/floating_nav.dart';
-import '../../../widgets/kit.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/floating_nav.dart';
+import '../../../core/widgets/kit.dart';
+import '../../../core/widgets/ui.dart';
 
 const _azure = 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800&q=72&auto=format&fit=crop';
 const _lagoon = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop';
 const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
 
 class MyBookingsScreen extends StatefulWidget {
-  const MyBookingsScreen({super.key});
+  final bool showNav;
+  const MyBookingsScreen({super.key, this.showNav = true});
   @override
   State<MyBookingsScreen> createState() => _MyBookingsScreenState();
 }
@@ -40,7 +41,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
             children: [
               const SizedBox(height: 10),
-              Text('My Bookings', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+              Text('Bookings', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
               const SizedBox(height: 14),
               SegmentTabs(tabs: const ['Upcoming', 'Active', 'Past'], active: tab, onTap: (i) => setState(() => tab = i)),
               const SizedBox(height: 16),
@@ -157,7 +158,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   onTap: () => Navigator.pushNamed(context, '/booking-past', arguments: Sample.dunes)),
             ],
           ),
-          const FloatingNav(active: 2),
+          if (widget.showNav) const FloatingNav(active: 2),
         ],
       ),
     );

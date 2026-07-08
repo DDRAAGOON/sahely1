@@ -18,6 +18,8 @@ import 'screens/owner_smart_lock_screen.dart';
 import 'screens/owner_history_screen.dart';
 import 'screens/owner_portfolio_screen.dart';
 import 'screens/owner_ai_chat_screen.dart';
+import 'screens/owner_notification_settings_screen.dart';
+import 'screens/owner_edit_bio_screen.dart';
 
 import 'screens/owner_upcoming_detail_screen.dart';
 import 'screens/owner_active_detail_screen.dart';
@@ -38,6 +40,7 @@ export 'screens/owner_smart_lock_screen.dart';
 export 'screens/owner_history_screen.dart';
 export 'screens/owner_portfolio_screen.dart';
 export 'screens/owner_ai_chat_screen.dart';
+export 'screens/owner_notification_settings_screen.dart';
 
 final Map<String, WidgetBuilder> ownerRoutes = {
   '/owner/home': (_) => const OwnerHomeScreen(),
@@ -66,4 +69,6 @@ final Map<String, WidgetBuilder> ownerRoutes = {
   '/owner/withdraw': (_) => const WithdrawAmountScreen(),
   '/owner/withdraw-receipt': (_) => const WithdrawReceiptScreen(),
   '/owner/payout': (_) => const PayoutBankScreen(),
+  '/owner/notifications': (_) => const OwnerNotificationSettingsScreen(),
+  '/owner/edit-bio': (_) => const OwnerEditBioScreen(),
 };

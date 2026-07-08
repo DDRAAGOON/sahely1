@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/data/models.dart';
-import 'package:sahely/theme/app_colors.dart';
-import 'package:sahely/theme/app_theme.dart';
-import 'package:sahely/widgets/common.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/common.dart';
 
-import '../../../widgets/image.dart';
+import '../../../core/widgets/image.dart';
 
 class OwnerPropertyCard extends StatelessWidget {
   const OwnerPropertyCard({

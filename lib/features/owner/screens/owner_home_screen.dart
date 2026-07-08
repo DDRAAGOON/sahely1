@@ -2,15 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/chips.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/floating_nav.dart';
-import '../../../widgets/kit.dart';
-import '../../../widgets/property_card.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/chips.dart';
+import '../../../core/widgets/common.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/floating_nav.dart';
+import '../../../core/widgets/kit.dart';
+import '../../../core/widgets/property_card.dart';
+import '../../../core/widgets/ui.dart';
 import '../widgets/pending_request_card.dart';
 
 class OwnerHomeScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
   final PageController _carouselController = PageController();
   Timer? _carouselTimer;
   int _currentCarouselPage = 0;
-  String? _selectedCategory;
+  String? _selectedCategory = 'All';
 
   final List<Map<String, String>> _carouselItems = [
     {
@@ -88,7 +88,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
         ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
           children: [
-            // 1. Header
+            // 1. Header (Synced with Renter logic)
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text('Welcome back,', style: AppTheme.dm(size: 13, color: AppColors.muted)),
@@ -98,7 +98,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
             ]),
             const SizedBox(height: 16),
 
-            // 2. Search bar row (Fixing Overflow)
+            // 2. Search & Tools (Synced with Renter logic)
             Row(children: [
               Expanded(
                 child: GestureDetector(
@@ -109,22 +109,22 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: BorderRadius.circular(26),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(color: AppColors.borderDefault),
                     ),
                     child: Row(children: [
                       const Icon(Icons.search, color: AppColors.gold, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Search stay...',
-                          style: AppTheme.dm(size: 14, color: AppColors.muted),
+                          'Search your bookings...',
+                          style: AppTheme.dm(size: 14, color: AppColors.textPlaceholder),
                         ),
                       ),
                     ]),
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               GestureDetector(
                 onTap: () async {
                   final result = await Navigator.pushNamed(context, '/filters');
@@ -133,191 +133,267 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                   }
                 },
                 child: Container(
-                  width: 48, 
-                  height: 48, 
-                  decoration: const BoxDecoration(color: AppColors.navy, shape: BoxShape.circle), 
-                  child: const Icon(Icons.tune, color: AppColors.gold, size: 20),
+                  width: 50, 
+                  height: 50, 
+                  decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(14)), 
+                  child: const Icon(Icons.tune, color: AppColors.gold, size: 22),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/owner/ai-chat'),
-                child: Stack(children: [
-                  Container(
-                    width: 48, 
-                    height: 48, 
-                    decoration: const BoxDecoration(color: Color(0xFFD4B982), shape: BoxShape.circle), 
-                    child: const Icon(Icons.chat_bubble_outline, color: AppColors.navy, size: 20),
+                child: Container(
+                  width: 50, 
+                  height: 50, 
+                  decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(14)), 
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const Icon(Icons.chat_bubble_outline, color: AppColors.navy, size: 22),
+                      Positioned(top: 10, right: 10, child: Container(width: 10, height: 10, decoration: BoxDecoration(color: const Color(0xFF34C759), shape: BoxShape.circle, border: Border.all(color: AppColors.cream, width: 2)))),
+                    ],
                   ),
-                  Positioned(top: 4, right: 4, child: Container(width: 10, height: 10, decoration: BoxDecoration(color: const Color(0xFF34C759), shape: BoxShape.circle, border: Border.all(color: AppColors.cream, width: 2)))),
-                ]),
+                ),
               ),
             ]),
             const SizedBox(height: 18),
 
-            // 3. Wave Rider Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(16)),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(children: [
-                  Container(width: 32, height: 32, decoration: BoxDecoration(color: const Color(0xFF2E8B8B), borderRadius: BorderRadius.circular(8)), child: const Center(child: Text('🌊', style: TextStyle(fontSize: 16)))),
-                  const SizedBox(width: 12),
-                  Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('Wave Rider', style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: Colors.white)),
-                    Text('47 ★ this season', style: AppTheme.dm(size: 12, color: AppColors.goldLight)),
-                  ])),
-                  const Icon(Icons.chevron_right, color: Colors.white54, size: 18),
-                ]),
-                const SizedBox(height: 14),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(2),
-                  child: LinearProgressIndicator(value: 0.6, backgroundColor: Colors.white.withValues(alpha: 0.12), valueColor: const AlwaysStoppedAnimation(AppColors.gold), minHeight: 4),
-                ),
-                const SizedBox(height: 10),
-                Text('33 ★ to Coastal Regular', style: AppTheme.dm(size: 11, weight: FontWeight.w500, color: Colors.white60)),
-              ]),
-            ),
+            // 3. MAWSEM Card (Synced Design)
+            _MawsemOwnerCard(onTap: () => Navigator.pushNamed(context, '/mawsem')),
             const SizedBox(height: 16),
 
-            // 4. Carousel Card (Dynamic & Automatic)
+            // 4. Carousel Banners
             SizedBox(
-              height: 140,
+              height: 120,
               child: PageView.builder(
                 controller: _carouselController,
                 onPageChanged: (index) => setState(() => _currentCarouselPage = index),
                 itemCount: _carouselItems.length,
                 itemBuilder: (context, index) {
                   return Container(
-                    margin: const EdgeInsets.only(right: 4),
-                    padding: const EdgeInsets.all(20),
+                    margin: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFC9A84C), 
-                      borderRadius: BorderRadius.circular(20),
-                      gradient: const RadialGradient(center: Alignment(1.2, 0.4), radius: 1, colors: [Color(0xFFE4C56A), Color(0xFFC9A84C)]),
+                      gradient: AppColors.goldGradient,
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      Text(_carouselItems[index]['title']!, style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
-                      const SizedBox(height: 6),
-                      Text(_carouselItems[index]['subtitle']!, style: AppTheme.dm(size: 13, color: AppColors.navy.withValues(alpha: 0.7), height: 1.4)),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Text(_carouselItems[index]['title']!, style: AppTheme.dm(size: 17, weight: FontWeight.w700, color: AppColors.navy)),
+                      const SizedBox(height: 4),
+                      Text(_carouselItems[index]['subtitle']!, style: AppTheme.dm(size: 12, color: AppColors.navy.withValues(alpha: 0.7), height: 1.3)),
                     ]),
                   );
                 },
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Center(child: ProgressDots(count: _carouselItems.length, active: _currentCarouselPage)),
-            const SizedBox(height: 22),
+            const SizedBox(height: 20),
 
-            // 5. Category Filters
-            Row(children: [
-              ChoiceChipPill('All', selected: _selectedCategory == 'All', onTap: () => setState(() => _selectedCategory = _selectedCategory == 'All' ? null : 'All')), 
-              const SizedBox(width: 8),
-              ChoiceChipPill('Beachfront', selected: _selectedCategory == 'Beachfront', onTap: () => setState(() => _selectedCategory = _selectedCategory == 'Beachfront' ? null : 'Beachfront')), 
-              const SizedBox(width: 8),
-              ChoiceChipPill('Pool', selected: _selectedCategory == 'Pool', onTap: () => setState(() => _selectedCategory = _selectedCategory == 'Pool' ? null : 'Pool')),
-            ]),
-            const SizedBox(height: 22),
-
-            // 6. Trending Section (Working Filters)
-            SectionHeader(
-              title: 'Trending Now', 
-              onAction: () => Navigator.pushNamed(context, '/all-properties'),
-            ),
-            const SizedBox(height: 14),
-            if (_filteredProperties.isEmpty)
-               Padding(
-                 padding: const EdgeInsets.symmetric(vertical: 20),
-                 child: Center(child: Text('No properties found in this category', style: AppTheme.dm(color: AppColors.muted))),
-               )
-            else
-              for (var p in _filteredProperties) ...[
-                PropertyCard(
-                  property: p, 
-                  onTap: () => Navigator.pushNamed(context, '/property', arguments: p),
-                ),
-                const SizedBox(height: 16),
-              ],
-
-            const SizedBox(height: 16),
-
-            // 7. Your dashboard
-            Text('Your dashboard', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+            // 5. Dashboard Stats
+            Text('Dashboard Overview', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 12),
             const StatRow(cards: [
               StatCard(value: '3', label: 'Properties'),
-              StatCard(value: '7', label: 'Active bookings'),
-              StatCard(value: '68.4k', label: 'EGP / month'),
+              StatCard(value: '7', label: 'Bookings'),
+              StatCard(value: '68k', label: 'EGP/mo'),
             ]),
             const SizedBox(height: 16),
 
-            // 8. List a new property button
+            // 6. Action: List new property
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/owner/add-property'),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: AppColors.gold,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: AppColors.goldButtonShadow,
                 ),
                 child: Row(children: [
                   Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
-                    child: const Icon(Icons.home_work_outlined, color: AppColors.navy, size: 22),
+                    width: 42, height: 42,
+                    decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
+                    child: const Icon(Icons.add_home_work, color: AppColors.navy, size: 22),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 14),
                   Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text('List a new property', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
-                    Text('Reach thousands of verified renters', style: AppTheme.dm(size: 12, color: AppColors.navy.withValues(alpha: 0.6))),
+                    Text('Reach more verified guests', style: AppTheme.dm(size: 11, color: AppColors.navy.withValues(alpha: 0.6))),
                   ])),
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: const BoxDecoration(color: AppColors.navy, shape: BoxShape.circle),
-                    child: const Icon(Icons.add, size: 18, color: AppColors.gold),
-                  ),
+                  const Icon(Icons.chevron_right, color: AppColors.navy),
                 ]),
               ),
             ),
             const SizedBox(height: 24),
 
-            // 9. Pending Requests
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('Pending Requests', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
-              GestureDetector(onTap: () => Navigator.pushNamed(context, '/owner/requests'), child: Text('View all · 2', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold))),
-            ]),
+            // 7. Pending Requests
+            SectionHeader(
+              title: 'Pending Requests', 
+              action: 'View all · 2',
+              onAction: () => Navigator.pushNamed(context, '/owner/requests'),
+            ),
             const SizedBox(height: 12),
             PendingRequestCard(onTap: () => Navigator.pushNamed(context, '/owner/request-detail')),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
-            // 10. Portfolio Insights Card
+            // 8. Categories & Portfolio
+            Text('Your Properties', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+            const SizedBox(height: 12),
+            Row(children: [
+              ChoiceChipPill('All', selected: _selectedCategory == 'All', onTap: () => setState(() => _selectedCategory = 'All')), 
+              const SizedBox(width: 8),
+              ChoiceChipPill('Villa', selected: _selectedCategory == 'Villa', onTap: () => setState(() => _selectedCategory = 'Villa')), 
+              const SizedBox(width: 8),
+              ChoiceChipPill('Chalet', selected: _selectedCategory == 'Chalet', onTap: () => setState(() => _selectedCategory = 'Chalet')),
+            ]),
+            const SizedBox(height: 16),
+            if (_filteredProperties.isEmpty)
+               Center(child: Padding(padding: const EdgeInsets.all(32), child: Text('No properties in this category', style: AppTheme.dm(color: AppColors.muted))))
+            else
+              for (var p in _filteredProperties) ...[
+                PropertyCard(property: p, onTap: () => Navigator.pushNamed(context, '/owner/insights', arguments: p)),
+                const SizedBox(height: 14),
+              ],
+
+            const SizedBox(height: 12),
+            _buildExploreSection(),
+            const SizedBox(height: 24),
+
+            const SizedBox(height: 12),
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/owner/portfolio'),
               child: WhiteCard(
-                padding: const EdgeInsets.all(14),
-                radius: 20,
+                padding: const EdgeInsets.all(16),
                 child: Row(children: [
-                  Container(
-                    width: 44,
-                    height: 44, 
-                    decoration: BoxDecoration(color: const Color(0xFFF5F0E8), borderRadius: BorderRadius.circular(12)), 
-                    child: const Icon(Icons.bar_chart, color: AppColors.navy, size: 22),
-                  ),
-                  const SizedBox(width: 12),
+                  const Icon(Icons.insights, color: AppColors.gold, size: 24),
+                  const SizedBox(width: 14),
                   Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('Portfolio Insights', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy)),
-                    Text('Compare all properties', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                    Text('Full Portfolio Insights', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy)),
+                    Text('Performance, occupancy, and trends', style: AppTheme.dm(size: 12, color: AppColors.muted)),
                   ])),
                   const Icon(Icons.chevron_right, color: AppColors.faint, size: 18),
                 ]),
               ),
             ),
+            const SizedBox(height: 32),
+            _buildFooter(),
+            const SizedBox(height: 20),
           ],
         ),
         const FloatingNav(active: 0),
       ]),
+    );
+  }
+
+  Widget _buildExploreSection() {
+    final locations = [
+      {'name': 'Marassi', 'image': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400'},
+      {'name': 'Hacienda Bay', 'image': 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400'},
+      {'name': 'Telal', 'image': 'https://images.unsplash.com/photo-1506929194765-410711158975?w=400'},
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Explore North Coast', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 120,
+          child: ListView.separated(
+            padding: EdgeInsets.zero,
+            scrollDirection: Axis.horizontal,
+            itemCount: locations.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) {
+              return Container(
+                width: 160,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(
+                    image: NetworkImage(locations[index]['image']!),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [Colors.black.withValues(alpha: 0.6), Colors.transparent],
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(12),
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    locations[index]['name']!,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFooter() {
+    return Column(
+      children: [
+        const Text(
+          'S A H E L Y',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: AppColors.navy, letterSpacing: 4),
+        ),
+        const SizedBox(height: 8),
+        const Text(
+          'Verified Chalets. Zero Chaos.',
+          style: TextStyle(fontSize: 14, color: AppColors.gold, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'You\'ve reached the end · North Coast, Egypt',
+          style: TextStyle(fontSize: 12, color: AppColors.muted.withValues(alpha: 0.6)),
+        ),
+      ],
+    );
+  }
+}
+
+class _MawsemOwnerCard extends StatelessWidget {
+  const _MawsemOwnerCard({this.onTap});
+  final VoidCallback? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: AppColors.navyGradient,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.gold.withValues(alpha: 0.3)),
+        ),
+        child: Column(children: [
+          Row(children: [
+            Container(width: 32, height: 32, alignment: Alignment.center, decoration: BoxDecoration(color: const Color(0xFF2E8B8B), borderRadius: BorderRadius.circular(8)), child: const Text('🌊', style: TextStyle(fontSize: 16))),
+            const SizedBox(width: 12),
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('Host Level: Wave Rider', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: Colors.white)),
+              Text('47 ★ earned from bookings', style: AppTheme.dm(size: 11, color: AppColors.gold)),
+            ])),
+            const Icon(Icons.chevron_right, color: AppColors.gold, size: 18),
+          ]),
+          const SizedBox(height: 12),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: const LinearProgressIndicator(value: 0.6, backgroundColor: Colors.white10, valueColor: AlwaysStoppedAnimation(AppColors.gold), minHeight: 6),
+          ),
+          const SizedBox(height: 8),
+          Align(alignment: Alignment.centerLeft, child: Text('33 ★ to Elite Host perks', style: AppTheme.dm(size: 11, color: Colors.white54))),
+        ]),
+      ),
     );
   }
 }

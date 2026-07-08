@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../data/models.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/kit.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/common.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/kit.dart';
+import '../../../core/widgets/ui.dart';
 
 const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
 
@@ -17,9 +17,6 @@ class PastBookingDetailScreen extends StatelessWidget {
     final property = ModalRoute.of(context)?.settings.arguments as Property?;
     final img = property?.image ?? _dunes;
     final name = property?.name ?? 'Golden Dunes';
-    final pPrice = property?.price ?? 3800;
-
-    String format(num n) => n.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
 
     return PhoneScaffold(
       child: SafeArea(

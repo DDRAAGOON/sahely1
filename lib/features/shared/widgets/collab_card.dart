@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../theme/app_colors.dart';
-import '../../../theme/app_theme.dart';
-import '../../../widgets/avatars.dart';
-import '../../../widgets/cards.dart';
-import '../../../widgets/common.dart';
-import '../../../widgets/ui.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/avatars.dart';
+import '../../../core/widgets/cards.dart';
+import '../../../core/widgets/common.dart';
+import '../../../core/widgets/ui.dart';
 
 class CollabCard extends StatelessWidget {
   const CollabCard({

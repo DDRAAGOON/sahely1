@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../data/sample_data.dart';
-import '../../../widgets/cream_background.dart';
-import '../../../widgets/kit.dart';
-import '../../../widgets/property_card.dart';
+import '../../../core/widgets/cream_background.dart';
+import '../../../core/widgets/kit.dart';
+import '../../../core/widgets/property_card.dart';
 
 class OwnerAllTrendingScreen extends StatelessWidget {
   const OwnerAllTrendingScreen({super.key});
