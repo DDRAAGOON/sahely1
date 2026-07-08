@@ -2,22 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'app.dart';
-import 'features/renter/presentation/verification/data/repositories/verification_repository.dart';
-import 'features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
-import 'features/renter/presentation/screens/wishlist/data/repositories/wishlist_repository.dart';
-import 'features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
-
-import 'features/broker/data/repositories/broker_wishlist_repository.dart';
-import 'features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
-import 'features/broker/data/repositories/broker_bookings_repository.dart';
-import 'features/broker/presentation/screens/bookings/bloc/broker_bookings_cubit.dart';
-
+import 'features/broker/wishlist/data/repositories/broker_wishlist_repository.dart';
+import 'features/broker/wishlist/presentation/bloc/broker_wishlist_cubit.dart';
 import 'core/providers/auth_provider.dart';
 import 'core/providers/bookings_provider.dart';
 import 'core/providers/currency_provider.dart';
 import 'core/providers/locale_provider.dart';
 import 'core/providers/navigation_provider.dart';
 import 'core/providers/profile_provider.dart';
+import 'features/renter/verification/data/repositories/verification_repository.dart';
+import 'features/renter/verification/presentation/bloc/verification_cubit.dart';
 
 void main() {
   runApp(
