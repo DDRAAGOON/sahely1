@@ -42,8 +42,10 @@ export 'screens/owner_portfolio_screen.dart';
 export 'screens/owner_ai_chat_screen.dart';
 export 'screens/owner_notification_settings_screen.dart';
 
+import 'owner_main_screen.dart';
+
 final Map<String, WidgetBuilder> ownerRoutes = {
-  '/owner/home': (_) => const OwnerHomeScreen(),
+  '/owner/home': (_) => const OwnerMainScreen(),
   '/owner/profile': (_) => const OwnerProfileScreen(),
   '/owner/manage': (_) => const OwnerManageScreen(),
   '/owner/properties': (_) => const OwnerPropertiesScreen(),

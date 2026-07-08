@@ -26,7 +26,10 @@ import 'screens/mawsem_level_screen.dart';
 import 'screens/stars_earned_screen.dart';
 import 'screens/star_nudges_screen.dart';
 import 'screens/level_up_screen.dart';
-import '../renter/presentation/screens/wishlist/pages/wishlist_screen.dart' as complex;
+import 'package:sahely/features/renter/wishlist/presentation/pages/renter_wishlist_page.dart';
+import 'package:sahely/features/shared/screens/my_bookings_screen.dart';
+import 'package:sahely/features/shared/screens/services_screen.dart';
+import 'package:sahely/features/shared/profile/presentation/pages/profile_page.dart';
 import 'screens/collection_inside_screen.dart';
 import 'screens/collection_chat_screen.dart';
 import 'screens/compare_screen.dart';
@@ -56,7 +59,7 @@ final Map<String, WidgetBuilder> sharedRoutes = {
   '/write-review': (_) => const WriteReviewScreen(),
 
   // Wishlist / collections
-  '/wishlist': (_) => const complex.WishlistScreen(),
+  '/wishlist': (_) => const RenterWishlistPage(),
   '/collection': (_) => const CollectionInsideScreen(),
   '/collection-chat': (_) => const CollectionChatScreen(),
   '/compare': (_) => const CompareScreen(),
@@ -72,6 +75,7 @@ final Map<String, WidgetBuilder> sharedRoutes = {
   '/level-up': (_) => const LevelUpScreen(),
 
   // Account utilities
+  '/profile': (_) => const ProfilePage(),
   '/add-card': (_) => const AddPaymentCardScreen(),
   '/change-password': (_) => const ChangePasswordScreen(),
   '/blocked-gate': (_) => const BlockedGateScreen(),

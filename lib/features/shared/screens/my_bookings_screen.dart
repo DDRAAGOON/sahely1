@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../../data/sample_data.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/floating_nav.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/ui.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/features/shared/widgets/kit.dart';
+import 'package:sahely/features/shared/widgets/floating_nav.dart';
 
 const _azure = 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800&q=72&auto=format&fit=crop';
 const _lagoon = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop';

@@ -3,13 +3,14 @@ import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/floating_nav.dart';
-import '../../../core/widgets/property_card.dart';
+import '../properties/widgets/property_card.dart';
 import '../widgets/browse_empty_state.dart';
+import '../widgets/cream_background.dart';
+import '../widgets/floating_nav.dart';
+import '../widgets/headers.dart';
 import '../widgets/search_header_with_input.dart';
 import '../widgets/small_prop_card.dart';
+import '../widgets/tags.dart';
 
 class BrowseScreen extends StatefulWidget {
   const BrowseScreen({super.key});

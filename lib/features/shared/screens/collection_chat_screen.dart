@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/avatars.dart';
+import '../widgets/avatars.dart';
 
 class CollectionChatScreen extends StatelessWidget {
   const CollectionChatScreen({super.key});

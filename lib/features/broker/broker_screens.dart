@@ -3,7 +3,7 @@ import '../owner/screens/payout_bank_screen.dart';
 import '../owner/screens/withdraw_amount_screen.dart';
 import '../owner/screens/withdraw_receipt_screen.dart';
 
-import 'presentation/screens/main/pages/broker_main_screen.dart';
+import 'broker_main_screen.dart';
 import 'presentation/screens/portfolio/pages/referred_property_detail_page.dart';
 import 'presentation/screens/portfolio/pages/referral_issue_page.dart';
 import 'presentation/screens/portfolio/pages/refer_property_page.dart';

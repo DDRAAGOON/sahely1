@@ -3,9 +3,12 @@ import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/ui.dart';
+import '../widgets/badges.dart';
+import '../widgets/cards.dart';
+import '../widgets/checklist.dart';
+import '../widgets/cream_background.dart';
+import '../widgets/image.dart';
+import '../widgets/wide_button.dart';
 
 class ActiveBookingDetailScreen extends StatefulWidget {
   const ActiveBookingDetailScreen({super.key});
