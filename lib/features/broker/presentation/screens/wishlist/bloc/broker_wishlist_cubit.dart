@@ -40,16 +40,79 @@ class BrokerWishlistState {
   }
 }
 
+// Specialized states for easier BlocBuilder filtering
+class BrokerWishlistStatusLoaded extends BrokerWishlistState {
+  final String propertyId;
+  final bool isWishlisted;
+  BrokerWishlistStatusLoaded(this.propertyId, this.isWishlisted, List<BrokerWishlistCollection> collections) 
+    : super(toggledPropertyId: propertyId, isToggledStatus: isWishlisted, collections: collections, status: BrokerWishlistStatus.loaded);
+}
+
+class BrokerWishlistToggled extends BrokerWishlistState {
+  final String propertyId;
+  final bool isWishlisted;
+  BrokerWishlistToggled(this.propertyId, this.isWishlisted, List<BrokerWishlistCollection> collections) 
+    : super(toggledPropertyId: propertyId, isToggledStatus: isWishlisted, collections: collections, status: BrokerWishlistStatus.loaded);
+}
+
+class BrokerCollectionsLoaded extends BrokerWishlistState {
+  final List<BrokerWishlistCollection> collections;
+  BrokerCollectionsLoaded(this.collections) : super(collections: collections, status: BrokerWishlistStatus.loaded);
+}
+
 class BrokerWishlistCubit extends Cubit<BrokerWishlistState> {
   final BrokerWishlistRepository _repository;
 
   BrokerWishlistCubit(this._repository) : super(BrokerWishlistState());
 
+  Future<void> checkStatus(String propertyId) async {
+    try {
+      final isWishlisted = await _repository.isWishlisted(propertyId);
+      emit(BrokerWishlistStatusLoaded(propertyId, isWishlisted, state.collections));
+    } catch (e) {
+      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Error checking status'));
+    }
+  }
+
+  Future<void> toggleWishlist({
+    required String propertyId,
+    required String propertyName,
+    required String propertyImage,
+  }) async {
+    try {
+      final isWishlisted = await _repository.toggleWishlist(
+        propertyId: propertyId,
+        propertyName: propertyName,
+        propertyImage: propertyImage,
+      );
+      
+      final collections = await _repository.getCollections();
+      emit(BrokerWishlistToggled(propertyId, isWishlisted, collections));
+    } catch (e) {
+      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Failed to toggle'));
+    }
+  }
+
+  Future<void> addToCollection({
+    required String propertyId,
+    required String collectionId,
+  }) async {
+    try {
+      await _repository.addToCollection(
+        propertyId: propertyId,
+        collectionId: collectionId,
+      );
+      await loadCollections();
+    } catch (e) {
+      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Failed to add to collection'));
+    }
+  }
+
   Future<void> loadCollections() async {
     emit(state.copyWith(status: BrokerWishlistStatus.loading));
     try {
       final collections = await _repository.getCollections();
-      emit(state.copyWith(collections: collections, status: BrokerWishlistStatus.loaded));
+      emit(BrokerCollectionsLoaded(collections));
     } catch (e) {
       emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Failed to load collections'));
     }

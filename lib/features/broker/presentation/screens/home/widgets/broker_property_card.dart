@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import '../../../../../../core/theme/app_colors.dart';
+import '../../wishlist/widgets/broker_heart_button.dart';
 
 class BrokerPropertyCard extends StatelessWidget {
   final Map<String, dynamic> property;
@@ -19,7 +20,6 @@ class BrokerPropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isWishlisted = property['isWishlisted'] ?? false;
     final name = property['name'] ?? '';
     final location = property['location'] ?? '';
     final imageUrl = property['imageUrl'] ?? '';
@@ -87,28 +87,11 @@ class BrokerPropertyCard extends StatelessWidget {
                   Positioned(
                     top: 12,
                     right: 12,
-                    child: GestureDetector(
-                      onTap: onWishlistTap,
-                      child: Container(
-                        width: 34,
-                        height: 34,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          isWishlisted ? Icons.favorite : Icons.favorite_border,
-                          color: isWishlisted ? AppColors.red : AppColors.navy,
-                          size: 18,
-                        ),
-                      ),
+                    child: BrokerHeartButton(
+                      propertyId: property['id'] ?? '',
+                      propertyName: property['name'] ?? '',
+                      propertyImage: property['imageUrl'] ?? '',
+                      size: 34,
                     ),
                   ),
 

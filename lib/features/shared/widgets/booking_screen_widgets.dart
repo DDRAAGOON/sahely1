@@ -2,76 +2,109 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 
-class BookingCalendarCard extends StatelessWidget {
-  const BookingCalendarCard({super.key});
+import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
+
+class BookingCalendarCard extends StatefulWidget {
+  final Function(DateTime? checkIn, DateTime? checkOut)? onDatesChanged;
+  const BookingCalendarCard({super.key, this.onDatesChanged});
+
+  @override
+  State<BookingCalendarCard> createState() => _BookingCalendarCardState();
+}
+
+class _BookingCalendarCardState extends State<BookingCalendarCard> {
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _rangeStart;
+  DateTime? _rangeEnd;
+
+  bool _isSameDay(DateTime? a, DateTime? b) {
+    if (a == null || b == null) return false;
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  bool _isInRange(DateTime day) {
+    if (_rangeStart == null || _rangeEnd == null) return false;
+    return day.isAfter(_rangeStart!) && day.isBefore(_rangeEnd!);
+  }
 
   @override
   Widget build(BuildContext context) {
-    const selected = [21, 22, 23, 24, 25];
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [BoxShadow(color: Color(0x0F1B2744), blurRadius: 12, offset: Offset(0, 2))],
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.border),
       ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('June 2026', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.navy)),
-              const Row(
-                children: [
-                  Icon(Icons.chevron_left, size: 18, color: AppColors.muted),
-                  SizedBox(width: 14),
-                  Icon(Icons.chevron_right, size: 18, color: AppColors.muted),
-                ],
+      child: TableCalendar(
+        firstDay: DateTime.now(),
+        lastDay: DateTime.now().add(const Duration(days: 365 * 2)),
+        focusedDay: _focusedDay,
+        headerStyle: const HeaderStyle(
+          formatButtonVisible: false,
+          titleCentered: true,
+          titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'DM Sans'),
+          leftChevronIcon: Icon(Icons.chevron_left, color: AppColors.navy, size: 20),
+          rightChevronIcon: Icon(Icons.chevron_right, color: AppColors.navy, size: 20),
+        ),
+        daysOfWeekStyle: const DaysOfWeekStyle(
+          weekdayStyle: TextStyle(fontSize: 11, color: AppColors.secondary, fontFamily: 'DM Sans'),
+          weekendStyle: TextStyle(fontSize: 11, color: AppColors.secondary, fontFamily: 'DM Sans'),
+        ),
+        calendarBuilders: CalendarBuilders(
+          prioritizedBuilder: (context, day, focusedDay) {
+            final isStart = _isSameDay(day, _rangeStart);
+            final isEnd = _isSameDay(day, _rangeEnd);
+            final isInRange = _isInRange(day);
+            final isOutside = day.month != focusedDay.month;
+
+            return Container(
+              margin: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: (isStart || isEnd)
+                    ? AppColors.navy
+                    : isInRange
+                        ? AppColors.gold.withOpacity(0.3)
+                        : null,
+                borderRadius: BorderRadius.circular(8),
               ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              for (final d in ['S', 'M', 'T', 'W', 'T', 'F', 'S'])
-                Expanded(child: Center(child: Text(d, style: AppTheme.dm(size: 11, color: AppColors.muted)))),
-            ],
-          ),
-          const SizedBox(height: 6),
-          GridView.count(
-            crossAxisCount: 7,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
-            childAspectRatio: 1.3,
-            children: [
-              for (var d = 15; d <= 27; d++)
-                Builder(builder: (_) {
-                  final isEnd = d == 21 || d == 25;
-                  final isMid = selected.contains(d) && !isEnd;
-                  return Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: isEnd ? AppColors.navy : (isMid ? const Color(0xFFEFE3C2) : null),
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(d == 21 ? 8 : 0),
-                        right: Radius.circular(d == 25 ? 8 : 0),
-                      ),
-                    ),
-                    child: Text(
-                      '$d',
-                      style: AppTheme.dm(
-                        size: 12,
-                        color: isEnd ? AppColors.white : AppColors.ink,
-                        weight: isEnd ? FontWeight.w600 : FontWeight.w400,
-                      ),
-                    ),
-                  );
-                }),
-            ],
-          ),
-        ],
+              child: Center(
+                child: Text(
+                  '${day.day}',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: isOutside
+                        ? AppColors.secondary.withOpacity(0.4)
+                        : (isStart || isEnd)
+                            ? Colors.white
+                            : isInRange
+                                ? AppColors.navy
+                                : AppColors.dark,
+                    fontWeight: (isStart || isEnd) ? FontWeight.w700 : null,
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+        onDaySelected: (selectedDay, focusedDay) {
+          setState(() {
+            _focusedDay = focusedDay;
+            if (_rangeStart == null || (_rangeStart != null && _rangeEnd != null)) {
+              _rangeStart = selectedDay;
+              _rangeEnd = null;
+            } else if (selectedDay.isAfter(_rangeStart!)) {
+              _rangeEnd = selectedDay;
+            } else {
+              _rangeStart = selectedDay;
+              _rangeEnd = null;
+            }
+          });
+          widget.onDatesChanged?.call(_rangeStart, _rangeEnd);
+        },
       ),
     );
   }

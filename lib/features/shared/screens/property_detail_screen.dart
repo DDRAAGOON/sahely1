@@ -71,189 +71,199 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
       body: CreamBackground(
         child: Column(
           children: [
-            // Hero Carousel
-            Stack(
-              children: [
-                SizedBox(
-                  height: 280,
-                  width: double.infinity,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: (index) => setState(() => _currentPage = index),
-                    itemCount: images.length,
-                    itemBuilder: (context, index) => SahelyImage(
-                      imageUrl: images[index],
-                      allImages: images,
-                      fadeHeight: 140,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          PropertyCircleBtn(icon: Icons.chevron_left, onTap: () => Navigator.maybePop(context)),
-                          SaveHeart(property: property, size: 38),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 14,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: List.generate(images.length, (index) {
-                        return Container(
-                          width: index == _currentPage ? 18 : 6,
-                          height: 6,
-                          margin: const EdgeInsets.symmetric(horizontal: 3),
-                          decoration: BoxDecoration(
-                            color: index == _currentPage ? Colors.white : Colors.white54,
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                ),
-              ],
-            ),
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                children: [
-                  Text(property.name, style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
-                  const SizedBox(height: 6),
-                  Row(children: [
-                    const Icon(Icons.location_on_outlined, size: 14, color: AppColors.muted),
-                    const SizedBox(width: 5),
-                    Text('${property.area}, North Coast', style: AppTheme.dm(size: 14, color: AppColors.muted)),
-                  ]),
-                  const SizedBox(height: 8),
-                  RatingRow(rating: property.rating, reviews: property.reviews, size: 14),
-                  const SizedBox(height: 8),
-                  Row(children: [
-                    const PropertyMetaChip(icon: Icons.meeting_room_outlined, label: 'Unit B-214'),
-                    const SizedBox(width: 8),
-                    PropertyMetaChip(icon: Icons.home_outlined, label: 'Floor ${property.beds > 2 ? "2 of 2" : "1 of 1"}'),
-                  ]),
-                  const SizedBox(height: 14),
-                  Wrap(spacing: 8, runSpacing: 8, children: [
-                    Pill(property.type, border: AppColors.navy),
-                    const Pill('320 m²', border: AppColors.navy),
-                    Pill(property.beds > 2 ? '2 Floors' : '1 Floor', border: AppColors.navy),
-                    const Pill('Beachfront', border: AppColors.navy),
-                    Pill('${property.guests} Guests', border: AppColors.navy),
-                    Pill('${property.beds} Beds', border: AppColors.navy),
-                    const Pill('Pool', border: AppColors.navy),
-                    const Pill('Mixed groups OK', bg: Color(0xFFD7EEDD), fg: AppColors.success),
-                  ]),
-                  const SizedBox(height: 14),
-                  GestureDetector(
-                    onTap: () => setState(() => _isExpanded = !_isExpanded),
-                    child: RichText(
-                      text: TextSpan(
-                        style: AppTheme.dm(size: 14, color: AppColors.ink, height: 1.55),
-                        children: [
-                          TextSpan(
-                            text: _isExpanded ? fullDescription : '${fullDescription.substring(0, 100)}... ',
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Hero Carousel
+                    Stack(
+                      children: [
+                        SizedBox(
+                          height: 280,
+                          width: double.infinity,
+                          child: PageView.builder(
+                            controller: _pageController,
+                            onPageChanged: (index) => setState(() => _currentPage = index),
+                            itemCount: images.length,
+                            itemBuilder: (context, index) => SahelyImage(
+                              imageUrl: images[index],
+                              allImages: images,
+                              fadeHeight: 140,
+                            ),
                           ),
-                          TextSpan(
-                              text: _isExpanded ? ' Show Less' : 'Show More',
-                              style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.gold)),
+                        ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: SafeArea(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  PropertyCircleBtn(icon: Icons.chevron_left, onTap: () => Navigator.maybePop(context)),
+                                  SaveHeart(property: property, size: 38),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 14,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: List.generate(images.length, (index) {
+                                return Container(
+                                  width: index == _currentPage ? 18 : 6,
+                                  height: 6,
+                                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                                  decoration: BoxDecoration(
+                                    color: index == _currentPage ? Colors.white : Colors.white54,
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                );
+                              }),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(property.name, style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                          const SizedBox(height: 6),
+                          Row(children: [
+                            const Icon(Icons.location_on_outlined, size: 14, color: AppColors.muted),
+                            const SizedBox(width: 5),
+                            Text('${property.area}, North Coast', style: AppTheme.dm(size: 14, color: AppColors.muted)),
+                          ]),
+                          const SizedBox(height: 8),
+                          RatingRow(rating: property.rating, reviews: property.reviews, size: 14),
+                          const SizedBox(height: 8),
+                          Row(children: [
+                            const PropertyMetaChip(icon: Icons.meeting_room_outlined, label: 'Unit B-214'),
+                            const SizedBox(width: 8),
+                            PropertyMetaChip(icon: Icons.home_outlined, label: 'Floor ${property.beds > 2 ? "2 of 2" : "1 of 1"}'),
+                          ]),
+                          const SizedBox(height: 14),
+                          Wrap(spacing: 8, runSpacing: 8, children: [
+                            Pill(property.type, border: AppColors.navy),
+                            const Pill('320 m²', border: AppColors.navy),
+                            Pill(property.beds > 2 ? '2 Floors' : '1 Floor', border: AppColors.navy),
+                            const Pill('Beachfront', border: AppColors.navy),
+                            Pill('${property.guests} Guests', border: AppColors.navy),
+                            Pill('${property.beds} Beds', border: AppColors.navy),
+                            const Pill('Pool', border: AppColors.navy),
+                            const Pill('Mixed groups OK', bg: Color(0xFFD7EEDD), fg: AppColors.success),
+                          ]),
+                          const SizedBox(height: 14),
+                          GestureDetector(
+                            onTap: () => setState(() => _isExpanded = !_isExpanded),
+                            child: RichText(
+                              text: TextSpan(
+                                style: AppTheme.dm(size: 14, color: AppColors.ink, height: 1.55),
+                                children: [
+                                  TextSpan(
+                                    text: _isExpanded ? fullDescription : '${fullDescription.substring(0, 100)}... ',
+                                  ),
+                                  TextSpan(
+                                      text: _isExpanded ? ' Show Less' : 'Show More',
+                                      style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.gold)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
+                              decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(8)),
+                              child: Row(mainAxisSize: MainAxisSize.min, children: [
+                                const Icon(Icons.lock_outline, size: 14, color: AppColors.navy),
+                                const SizedBox(width: 6),
+                                Text('Smart Lock Enabled',
+                                    style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.navy)),
+                              ]),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Row(children: [
+                            Expanded(child: PropertyFeature(icon: Icons.pool_outlined, label: 'Private Pool')),
+                            Expanded(child: PropertyFeature(icon: Icons.wifi, label: 'Fast WiFi')),
+                          ]),
+                          const SizedBox(height: 18),
+                          Text('House Rules', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+                          const SizedBox(height: 8),
+                          WhiteCard(
+                            child: Column(children: [
+                              _ruleRow('Calm hours', Icons.schedule, valueText: '11 PM – 8 AM'),
+                              const Divider(height: 1, color: Color(0xFFF4EFE7)),
+                              _ruleRow('Parties', Icons.celebration_outlined, allowed: true),
+                              const Divider(height: 1, color: Color(0xFFF4EFE7)),
+                              _ruleRow('Pets', Icons.pets, allowed: property.petsOk, petPaw: property.petsOk),
+                              const Divider(height: 1, color: Color(0xFFF4EFE7)),
+                              _ruleRow('Mixed groups', Icons.groups_outlined, allowed: true),
+                            ]),
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            height: 70,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(colors: [Color(0xFFCFE0E8), Color(0xFFA7C2CF)]),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Center(child: Icon(Icons.location_on, color: Color(0xFFB22222), size: 22)),
+                          ),
+                          const SizedBox(height: 22),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(children: [
+                                Text('Reviews', style: AppTheme.dm(size: 18, weight: FontWeight.w600, color: AppColors.navy)),
+                                const SizedBox(width: 8),
+                                const Icon(Icons.star, size: 14, color: AppColors.gold),
+                                const SizedBox(width: 4),
+                                Text('${property.rating} · ${property.reviews}', style: AppTheme.dm(size: 13, color: AppColors.muted)),
+                              ]),
+                              GestureDetector(
+                                  onTap: () => Navigator.pushNamed(context, '/property-reviews', arguments: property),
+                                  child: Text('See All', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold))),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          _review('Nour A.', 'Renter', BadgeKind.renterLight, 5, 'Jun 2026',
+                              'Absolutely stunning. The pool and sea views were unreal, and check-in via the smart lock was seamless.',
+                              const [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
+                          const SizedBox(height: 10),
+                          _review('Omar K.', 'Renter', BadgeKind.renterLight, 5, 'May 2026',
+                              'Spotless, exactly as pictured. Host was responsive and the location is unbeatable. Will book again.',
+                              const [Color(0xFFD8B98A), Color(0xFF7D5A2C)]),
+                          const SizedBox(height: 10),
+                          _review('Sara M.', 'Broker', BadgeKind.gold, 4, 'May 2026',
+                              'Great property for clients. Beautiful finish; only note is the beach can get busy on weekends.',
+                              const [Color(0xFFC9A84C), Color(0xFF8A7330)]),
+                          const SizedBox(height: 14),
+                          WideButton(
+                            label: 'See All ${property.reviews} Reviews',
+                            color: AppColors.navy,
+                            outline: true,
+                            height: 46,
+                            onTap: () => Navigator.pushNamed(context, '/property-reviews', arguments: property),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 14),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
-                      decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(8)),
-                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                        const Icon(Icons.lock_outline, size: 14, color: AppColors.navy),
-                        const SizedBox(width: 6),
-                        Text('Smart Lock Enabled',
-                            style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.navy)),
-                      ]),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Row(children: [
-                    Expanded(child: PropertyFeature(icon: Icons.pool_outlined, label: 'Private Pool')),
-                    Expanded(child: PropertyFeature(icon: Icons.wifi, label: 'Fast WiFi')),
-                  ]),
-                  const SizedBox(height: 18),
-                  Text('House Rules', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
-                  const SizedBox(height: 8),
-                  WhiteCard(
-                    child: Column(children: [
-                      _ruleRow('Calm hours', Icons.schedule, valueText: '11 PM – 8 AM'),
-                      const Divider(height: 1, color: Color(0xFFF4EFE7)),
-                      _ruleRow('Parties', Icons.celebration_outlined, allowed: true),
-                      const Divider(height: 1, color: Color(0xFFF4EFE7)),
-                      _ruleRow('Pets', Icons.pets, allowed: property.petsOk, petPaw: property.petsOk),
-                      const Divider(height: 1, color: Color(0xFFF4EFE7)),
-                      _ruleRow('Mixed groups', Icons.groups_outlined, allowed: true),
-                    ]),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    height: 70,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(colors: [Color(0xFFCFE0E8), Color(0xFFA7C2CF)]),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Center(child: Icon(Icons.location_on, color: Color(0xFFB22222), size: 22)),
-                  ),
-                  const SizedBox(height: 22),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(children: [
-                        Text('Reviews', style: AppTheme.dm(size: 18, weight: FontWeight.w600, color: AppColors.navy)),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.star, size: 14, color: AppColors.gold),
-                        const SizedBox(width: 4),
-                        Text('${property.rating} · ${property.reviews}', style: AppTheme.dm(size: 13, color: AppColors.muted)),
-                      ]),
-                      GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, '/property-reviews', arguments: property),
-                          child: Text('See All', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold))),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  _review('Nour A.', 'Renter', BadgeKind.renterLight, 5, 'Jun 2026',
-                      'Absolutely stunning. The pool and sea views were unreal, and check-in via the smart lock was seamless.',
-                      const [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
-                  const SizedBox(height: 10),
-                  _review('Omar K.', 'Renter', BadgeKind.renterLight, 5, 'May 2026',
-                      'Spotless, exactly as pictured. Host was responsive and the location is unbeatable. Will book again.',
-                      const [Color(0xFFD8B98A), Color(0xFF7D5A2C)]),
-                  const SizedBox(height: 10),
-                  _review('Sara M.', 'Broker', BadgeKind.gold, 4, 'May 2026',
-                      'Great property for clients. Beautiful finish; only note is the beach can get busy on weekends.',
-                      const [Color(0xFFC9A84C), Color(0xFF8A7330)]),
-                  const SizedBox(height: 14),
-                  WideButton(
-                    label: 'See All ${property.reviews} Reviews',
-                    color: AppColors.navy,
-                    outline: true,
-                    height: 46,
-                    onTap: () => Navigator.pushNamed(context, '/property-reviews', arguments: property),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             // Sticky book bar

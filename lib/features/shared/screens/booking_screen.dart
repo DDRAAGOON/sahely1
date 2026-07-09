@@ -18,8 +18,28 @@ class _BookingScreenState extends State<BookingScreen> {
   int _adults = 2;
   int _children = 1;
   int _infants = 0;
-  final int _nights = 4;
+  int _nights = 0;
+  DateTime? _checkIn;
+  DateTime? _checkOut;
   final int _cleaningFee = 500;
+
+  void _updateDates(DateTime? checkIn, DateTime? checkOut) {
+    setState(() {
+      _checkIn = checkIn;
+      _checkOut = checkOut;
+      if (checkIn != null && checkOut != null) {
+        _nights = checkOut.difference(checkIn).inDays;
+      } else {
+        _nights = 0;
+      }
+    });
+  }
+
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'Select';
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return '${months[date.month - 1]} ${date.day}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +48,8 @@ class _BookingScreenState extends State<BookingScreen> {
     final pPrice = property?.price ?? 4500;
     
     final subtotal = pPrice * _nights;
-    final vat = (subtotal + _cleaningFee) * 0.14;
-    final total = subtotal + _cleaningFee + vat;
+    final vat = (subtotal + (subtotal > 0 ? _cleaningFee : 0)) * 0.14;
+    final total = subtotal + (subtotal > 0 ? _cleaningFee : 0) + vat;
 
     String format(num n) => n.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
 
@@ -63,11 +83,11 @@ class _BookingScreenState extends State<BookingScreen> {
                   ]),
                 ),
                 const SizedBox(height: 16),
-                const BookingCalendarCard(),
+                BookingCalendarCard(onDatesChanged: _updateDates),
                 const SizedBox(height: 16),
-                const Row(children: [
-                  Expanded(child: BookingCheckCol('Check-in', 'Jun 21')),
-                  Expanded(child: BookingCheckCol('Check-out', 'Jun 25')),
+                Row(children: [
+                  Expanded(child: BookingCheckCol('Check-in', _formatDate(_checkIn))),
+                  Expanded(child: BookingCheckCol('Check-out', _formatDate(_checkOut))),
                 ]),
                 const SizedBox(height: 16),
                 WhiteCard(

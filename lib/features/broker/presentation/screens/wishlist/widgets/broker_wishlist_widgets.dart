@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../../../../core/theme/app_colors.dart';
 
+export 'broker_create_collection_sheet.dart';
+
 class BrokerWishlistCollectionCard extends StatelessWidget {
   final String name;
   final int count;
@@ -148,61 +150,6 @@ class BrokerNewCollectionTile extends StatelessWidget {
             Text(
               'New Collection',
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.navy),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BrokerCreateCollectionSheet extends StatefulWidget {
-  const BrokerCreateCollectionSheet({super.key});
-
-  @override
-  State<BrokerCreateCollectionSheet> createState() => _BrokerCreateCollectionSheetState();
-}
-
-class _BrokerCreateCollectionSheetState extends State<BrokerCreateCollectionSheet> {
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Create new collection',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.navy),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _controller,
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: 'e.g., Summer Rentals 2026',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context, _controller.text),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.navy,
-                foregroundColor: AppColors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text('Create'),
             ),
           ],
         ),
