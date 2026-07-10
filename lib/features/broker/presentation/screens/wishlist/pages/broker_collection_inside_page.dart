@@ -1,0 +1,157 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../../data/models.dart';
+import '../../../../domain/models/broker_wishlist_item.dart';
+import '../widgets/broker_collection_header.dart';
+import '../widgets/broker_collection_members_actions.dart';
+import '../widgets/broker_collection_property_card.dart';
+import '../widgets/broker_share_collection_sheet.dart';
+import '../bloc/broker_wishlist_cubit.dart';
+
+class BrokerCollectionInsidePage extends StatefulWidget {
+  final String collectionId;
+  final String collectionName;
+  final int propertyCount;
+  final int sharedWithCount;
+  final List<String> memberNames;
+
+  const BrokerCollectionInsidePage({
+    super.key,
+    required this.collectionId,
+    required this.collectionName,
+    required this.propertyCount,
+    required this.sharedWithCount,
+    required this.memberNames,
+  });
+
+  @override
+  State<BrokerCollectionInsidePage> createState() => _BrokerCollectionInsidePageState();
+}
+
+class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<BrokerWishlistCubit>().loadWishlistItems(widget.collectionId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.cream,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            // Header
+            BrokerCollectionHeader(
+              collectionName: widget.collectionName,
+              propertyCount: widget.propertyCount,
+              sharedWithCount: widget.sharedWithCount,
+              onBackTap: () => Navigator.pop(context),
+            ),
+
+            // Members & Actions
+            BrokerCollectionMembersActions(
+              memberNames: widget.memberNames,
+              onChatTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Opening Group Chat...')),
+                );
+              },
+              onShareTap: () {
+                final cubit = context.read<BrokerWishlistCubit>();
+                final collection = cubit.state.collections.firstWhere(
+                  (c) => c.id == widget.collectionId,
+                  orElse: () => BrokerWishlistCollection(id: widget.collectionId, name: widget.collectionName, itemCount: widget.propertyCount),
+                );
+
+                showModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  isScrollControlled: true,
+                  builder: (context) => BrokerShareCollectionSheet(
+                    collectionName: widget.collectionName,
+                    collectionImage: collection.coverImage ?? 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+                    placesCount: collection.itemCount,
+                    shareableLink: 'sahely.app/broker/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
+                    isInviteOnly: false,
+                  ),
+                );
+              },
+              onCompareTap: () {
+                // Navigate to comparison if needed, or show snackbar
+                 ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Comparing properties...')),
+                );
+              },
+            ),
+
+            const SizedBox(height: 16),
+
+            // Property List
+            Expanded(
+              child: BlocBuilder<BrokerWishlistCubit, BrokerWishlistState>(
+                builder: (context, state) {
+                  if (state.status == BrokerWishlistStatus.loading) {
+                    return const Center(child: CircularProgressIndicator(color: AppColors.gold));
+                  }
+
+                  if (state.items.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.favorite_border, size: 64, color: AppColors.secondary.withOpacity(0.3)),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'No properties in this collection yet',
+                            style: TextStyle(color: AppColors.secondary, fontFamily: 'Cairo'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: state.items.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      final item = state.items[index];
+                      return BrokerCollectionPropertyCard(
+                        propertyName: item.propertyName,
+                        location: 'North Coast, Egypt', 
+                        propertyType: 'Villa',
+                        beds: 3,
+                        amenities: const ['Pool', 'WiFi'],
+                        rating: 4.8,
+                        reviewCount: 12,
+                        pricePerNight: 4500,
+                        imageUrl: item.propertyImage,
+                        friendNote: 'Added recently',
+                        friendAvatarColor: AppColors.navy,
+                        onTap: () {
+                          final p = Property(
+                            name: item.propertyName,
+                            area: 'North Coast',
+                            image: item.propertyImage,
+                            price: 4500,
+                            rating: 4.8,
+                            reviews: 12,
+                          );
+                          Navigator.pushNamed(context, '/property', arguments: p);
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

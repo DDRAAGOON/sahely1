@@ -51,14 +51,14 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
   void _showStarsEarnedDialog() {
     final profile = context.read<ProfileProvider>();
     final int previousStars = profile.stars;
-    final int? newLevel = profile.addStars(10);
+    final int? newLevel = profile.addStars(widget.starsEarned);
     final nextLevel = profile.nextLevelData;
 
     showDialog(
       context: context,
       barrierColor: const Color(0xFF1B2744).withOpacity(0.7),
       builder: (context) => StarsEarnedDialog(
-        starsEarned: 10,
+        starsEarned: widget.starsEarned,
         reason: 'confirming your booking at',
         propertyName: widget.propertyName,
         previousTotal: previousStars,
@@ -185,8 +185,8 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
                 onViewBookings: () {
                   // 1. Switch to My Bookings Tab (index 2)
                   context.read<NavigationProvider>().setTab(2);
-                  // 2. Navigate back to Home
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  // 2. Navigate back to Home and clear stack
+                  Navigator.of(context).pushNamedAndRemoveUntil('/renter/home', (route) => false);
                 },
               ),
               

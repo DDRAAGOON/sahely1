@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../../../../core/theme/app_theme.dart';
-import '../../../../../../core/widgets/kit.dart';
-import '../../../../../../core/widgets/ui.dart';
-import '../../smart_lock/pages/broker_smart_lock_screen.dart';
-import '../../support/pages/broker_sos_chat_screen.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booked_property_header.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_photo_gallery.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booking_info_chips.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/door_passcode_sos_buttons.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_details_card.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/location_map_section.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/arrival_checklist_section.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/rate_your_stay_section.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/ask_sahely_ai_section.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/pages/broker_smart_lock_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/reviews/pages/write_review_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/pages/arrival_checklist_screen.dart';
 
 class BrokerBookingDetailsPage extends StatelessWidget {
   final Map<String, dynamic> booking;
@@ -16,215 +23,181 @@ class BrokerBookingDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String pName = booking['propertyName'] ?? '';
+    final String propertyName = booking['propertyName'] ?? '';
     final String location = booking['location'] ?? '';
     final String imageUrl = booking['imageUrl'] ?? '';
-    final String orderNo = booking['orderNumber'] ?? '';
+    final String orderNumber = booking['orderNumber'] ?? '';
     final String dates = booking['dates'] ?? '';
     final String guests = booking['guests'] ?? '';
+    
+    // Default checklist if not provided
+    final List<Map<String, dynamic>> checklist = booking['checklist'] ?? [
+      {'label': 'Key collection / Smart lock', 'completed': true},
+      {'label': 'WiFi connectivity', 'completed': true},
+      {'label': 'AC performance', 'completed': false},
+      {'label': 'Cleaning standard', 'completed': false},
+      {'label': 'Hot water availability', 'completed': false},
+      {'label': 'Pool access', 'completed': false},
+    ];
 
     return Scaffold(
       backgroundColor: AppColors.cream,
       body: CustomScrollView(
         slivers: [
-          // Header
+          // Header with Hero Image
           SliverToBoxAdapter(
-            child: Stack(
-              children: [
-                SahelyImage(
-                  imageUrl: imageUrl,
-                  height: 240,
-                  width: double.infinity,
-                  fadeHeight: 100,
-                ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: const Icon(Icons.chevron_left, color: AppColors.navy),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        pName,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          fontFamily: 'DM Sans',
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(Icons.location_on, color: Colors.white70, size: 14),
-                          const SizedBox(width: 4),
-                          Text(
-                            location,
-                            style: const TextStyle(color: Colors.white70, fontSize: 13, fontFamily: 'DM Sans'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            child: BookedPropertyHeader(
+              propertyName: propertyName,
+              location: location,
+              imageUrl: imageUrl,
+              onBackTap: () => Navigator.pop(context),
             ),
           ),
 
-          // Content
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                // Info Chips
-                Row(
-                  children: [
-                    _infoChip(Icons.tag, orderNo),
-                    const SizedBox(width: 8),
-                    _infoChip(Icons.calendar_today, dates.split('·')[0]),
-                    const SizedBox(width: 8),
-                    _infoChip(Icons.people_outline, guests.split(',')[0]),
-                  ],
-                ),
-                const SizedBox(height: 24),
-
-                // Main Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: NavyButton(
-                        label: 'Digital Lock',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BrokerSmartLockScreen(
-                                propertyName: pName,
-                                bookingRef: orderNo,
-                                passcode: '8842',
-                                checkIn: booking['checkIn'],
-                                checkOut: booking['checkOut'],
-                                propertyLat: 31.02,
-                                propertyLng: 29.60,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: WideButton(
-                        label: 'SOS',
-                        color: AppColors.sos,
-                        icon: Icons.warning_amber_rounded,
-                        onTap: () {
-                          Navigator.pushNamed(context, '/sos');
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-
-                // Details Card
-                WhiteCard(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Property Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.navy)),
-                      const SizedBox(height: 16),
-                      _detailRow(Icons.king_bed_outlined, '3 Bedrooms'),
-                      const Divider(height: 24),
-                      _detailRow(Icons.bathtub_outlined, '2 Bathrooms'),
-                      const Divider(height: 24),
-                      _detailRow(Icons.beach_access_outlined, 'Beachfront Access'),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Location Map Placeholder
-                Container(
-                  height: 160,
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  child: const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.map_outlined, size: 32, color: AppColors.muted),
-                        SizedBox(height: 8),
-                        Text('Map View', style: TextStyle(color: AppColors.muted)),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 100),
-              ]),
+          // Photo Gallery
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: PropertyPhotoGallery(
+                photos: [imageUrl, imageUrl, imageUrl],
+              ),
             ),
           ),
+
+          // Booking Info Chips
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: BookingInfoChips(
+                orderNumber: orderNumber,
+                dates: dates,
+                guests: guests,
+              ),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+          // Door Passcode & SOS Buttons
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: DoorPasscodeSosButtons(
+                onDoorPasscodeTap: () {
+                   Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BrokerSmartLockScreen(
+                        propertyName: propertyName,
+                        bookingRef: orderNumber,
+                        passcode: '8842',
+                        checkIn: booking['checkIn'] ?? DateTime.now(),
+                        checkOut: booking['checkOut'] ?? DateTime.now().add(const Duration(days: 4)),
+                        propertyLat: 31.0263,
+                        propertyLng: 28.9402,
+                      ),
+                    ),
+                  );
+                },
+                onSOSTap: () {
+                  Navigator.pushNamed(context, '/broker/sos');
+                },
+              ),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+          // Property Details
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: PropertyDetailsCard(
+                details: const {
+                  'bedrooms': 3,
+                  'beds': 4,
+                  'bathrooms': 2,
+                  'beach': 'Hacienda White Beach',
+                },
+              ),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+          // Location
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: LocationMapSection(
+                location: location,
+              ),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+          // Arrival Checklist
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ArrivalChecklistSection(
+                checklist: checklist,
+                onChecklistChanged: (newChecklist) {
+                  // In a real app, you would update a provider or state here
+                },
+                onReportIssue: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ArrivalChecklistScreen(
+                        bookingId: orderNumber,
+                        checkInTime: booking['checkIn'] ?? DateTime.now(),
+                        checklistItems: List<Map<String, dynamic>>.from(checklist),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+          // Rate Your Stay
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: RateYourStaySection(
+                onAddReview: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WriteReviewScreen(
+                        propertyName: propertyName,
+                        propertyImage: imageUrl,
+                        stayDates: dates,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+          // Ask Sahely AI
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: AskSahelyAiSection(),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
       ),
-    );
-  }
-
-  Widget _infoChip(IconData icon, String label) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, size: 16, color: AppColors.gold),
-            const SizedBox(height: 4),
-            Text(label, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.navy), textAlign: TextAlign.center),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _detailRow(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, size: 20, color: AppColors.navy),
-        const SizedBox(width: 12),
-        Text(text, style: const TextStyle(fontSize: 14, color: AppColors.navy)),
-      ],
     );
   }
 }

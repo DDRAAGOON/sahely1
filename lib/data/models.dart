@@ -19,6 +19,7 @@ extension RoleX on Role {
 
 class Property {
   const Property({
+    this.id = '1',
     required this.name,
     required this.area,
     required this.image,
@@ -35,6 +36,7 @@ class Property {
     this.saved = false,
   });
 
+  final String id;
   final String name;
   final String area; // compound / location
   final String image;

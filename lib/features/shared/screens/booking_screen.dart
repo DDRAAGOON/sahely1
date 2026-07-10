@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
+import '../../../core/providers/bookings_provider.dart';
 import '../widgets/booking_screen_widgets.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -127,11 +129,42 @@ class _BookingScreenState extends State<BookingScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            child: SafeArea(top: false, child: NavyButton(label: 'Confirm & Pay', onTap: () => Navigator.pushNamed(context, '/booking-confirmed', arguments: {
-              'property': property,
-              'total': total,
-              'guests': _adults + _children,
-            }))),
+            child: SafeArea(
+              top: false,
+              child: NavyButton(
+                label: 'Confirm & Pay',
+                onTap: () {
+                  if (_checkIn == null || _checkOut == null) return;
+                  
+                  // Add to provider so it shows up in Renter's My Bookings
+                  final bookingsProvider = context.read<BookingsProvider>();
+                  final newBooking = Booking(
+                    id: DateTime.now().millisecondsSinceEpoch.toString(),
+                    propertyName: pName,
+                    location: property?.area ?? 'North Coast',
+                    orderNumber: 'SHLY-${(1000 + (DateTime.now().millisecond % 9000))}',
+                    dates: '${_formatDate(_checkIn)} – ${_formatDate(_checkOut)} · $_nights nights',
+                    guests: '$_adults adults${_children > 0 ? ', $_children children' : ''}',
+                    imageUrl: property?.image ?? '',
+                    checkIn: _checkIn!,
+                    checkOut: _checkOut!,
+                    totalPaid: total.toInt(),
+                  );
+                  bookingsProvider.addBooking(newBooking);
+
+                  Navigator.pushNamed(context, '/booking-confirmed', arguments: {
+                    'propertyName': pName,
+                    'property': property,
+                    'total': total,
+                    'guests': _adults + _children,
+                    'checkIn': _checkIn,
+                    'checkOut': _checkOut,
+                    'bookingRef': newBooking.orderNumber,
+                    'starsEarned': (total / 1000).round(),
+                  });
+                },
+              ),
+            ),
           ),
         ],
       ),

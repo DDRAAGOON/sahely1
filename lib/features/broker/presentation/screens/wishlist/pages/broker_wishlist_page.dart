@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../bloc/broker_wishlist_cubit.dart';
 import '../widgets/broker_wishlist_widgets.dart';
+import 'broker_collection_inside_page.dart';
 
 class BrokerWishlistPage extends StatefulWidget {
   const BrokerWishlistPage({super.key});
@@ -119,11 +120,27 @@ class _BrokerWishlistPageState extends State<BrokerWishlistPage> {
                           return BrokerNewCollectionTile(onTap: _createNewCollection);
                         }
                         final collection = collections[index];
-                        return BrokerWishlistCollectionCard(
-                          name: collection.name,
-                          count: collection.itemCount,
-                          coverImage: collection.coverImage,
-                          isShared: collection.isShared,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BrokerCollectionInsidePage(
+                                  collectionId: collection.id,
+                                  collectionName: collection.name,
+                                  propertyCount: collection.itemCount,
+                                  sharedWithCount: collection.isShared ? 3 : 0,
+                                  memberNames: const ['Omar', 'Nour', 'Youssef'],
+                                ),
+                              ),
+                            );
+                          },
+                          child: BrokerWishlistCollectionCard(
+                            name: collection.name,
+                            count: collection.itemCount,
+                            coverImage: collection.coverImage,
+                            isShared: collection.isShared,
+                          ),
                         );
                       },
                     ),

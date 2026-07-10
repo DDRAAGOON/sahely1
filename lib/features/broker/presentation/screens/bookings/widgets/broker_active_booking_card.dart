@@ -185,7 +185,7 @@ class BrokerActiveBookingCard extends StatelessWidget {
                         child: Container(
                           height: 44,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE57373),
+                            color: AppColors.sos,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Row(

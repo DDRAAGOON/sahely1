@@ -62,7 +62,7 @@ class DoorPasscodeSosButtons extends StatelessWidget {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFB22222), // Proper Red
+                backgroundColor: AppColors.sos,
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

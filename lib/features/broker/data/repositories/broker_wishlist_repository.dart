@@ -1,10 +1,36 @@
 import '../../domain/models/broker_wishlist_item.dart';
 
 class BrokerWishlistRepository {
-  final Map<String, BrokerWishlistItem> _wishlistItems = {};
+  final Map<String, BrokerWishlistItem> _wishlistItems = {
+    '1': BrokerWishlistItem(
+      propertyId: '1',
+      propertyName: 'Azure Beach Villa',
+      propertyImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+      collectionIds: ['broker_saved', 'client_leads'],
+      addedAt: DateTime.now(),
+    ),
+    '2': BrokerWishlistItem(
+      propertyId: '2',
+      propertyName: 'Lagoon Retreat',
+      propertyImage: 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800',
+      collectionIds: ['broker_saved'],
+      addedAt: DateTime.now(),
+    ),
+  };
   final List<BrokerWishlistCollection> _collections = [
-    const BrokerWishlistCollection(id: 'broker_saved', name: 'My Broker Saves', itemCount: 0),
-    const BrokerWishlistCollection(id: 'client_leads', name: 'Client Recommendations', itemCount: 0, isShared: true),
+    const BrokerWishlistCollection(
+      id: 'broker_saved',
+      name: 'My Broker Saves',
+      itemCount: 2,
+      coverImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+    ),
+    const BrokerWishlistCollection(
+      id: 'client_leads',
+      name: 'Client Recommendations',
+      itemCount: 1,
+      coverImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+      isShared: true,
+    ),
   ];
 
   Future<bool> isWishlisted(String propertyId) async {
