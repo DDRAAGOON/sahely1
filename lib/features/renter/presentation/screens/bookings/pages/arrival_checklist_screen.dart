@@ -132,7 +132,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
     // Show stars earned dialog
     showDialog(
       context: context,
-      barrierColor: const Color(0xFF1B2744).withOpacity(0.7),
+      barrierColor: const Color(0xFF1B2744).withValues(alpha: 0.7),
       builder: (context) => StarsEarnedDialog(
         starsEarned: 5,
         reason: 'submitting arrival checklist for',
@@ -218,8 +218,8 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ChecklistHeaderBanner(
-                      timeRemaining: const Duration(hours: 1, minutes: 24),
+                    const ChecklistHeaderBanner(
+                      timeRemaining: Duration(hours: 1, minutes: 24),
                       starsEarned: 5,
                     ),
 
@@ -274,7 +274,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
                       const SizedBox(height: 24),
                     ],
 
-                    SubmitChecklistBanner(
+                    const SubmitChecklistBanner(
                       starsEarned: 5,
                       collectionName: 'AL MAWSEM',
                     ),

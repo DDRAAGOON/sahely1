@@ -80,7 +80,7 @@ class BrokerSearchBar extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  Center(
+                  const Center(
                     child: Icon(
                       Icons.chat_bubble_outline,
                       color: AppColors.navy,

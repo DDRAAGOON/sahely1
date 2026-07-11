@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../verification/presentation/bloc/verification_cubit.dart';
-import 'package:sahely/core/providers/navigation_provider.dart';
 import '../../../../../../core/theme/app_colors.dart';
-import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/navigation/app_navigation.dart';
+import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
+import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
+import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
+import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
 import '../widgets1/greeting_header.dart';
 import '../widgets1/search_row.dart';
 import '../widgets1/mawsem_card.dart';
 import '../widgets1/promo_banner.dart';
 import '../widgets1/category_chips.dart';
 import '../widgets1/property_card.dart';
-import '../widgets1/renter_bottom_nav.dart';
-
-import '../../wishlist/pages/wishlist_screen.dart';
-import '../../bookings/pages/my_bookings_screen.dart';
-import '../../concierge/pages/concierge_screen.dart';
-import '../../profile/pages/profile_screen.dart';
 import '../../Search/pages/search_filters_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _selectedCategory = 'All';
 
-  Map<String, dynamic> _appliedFilters = {
+  final Map<String, dynamic> _appliedFilters = {
     'propertyType': 'All',
     'bedrooms': 'Any',
     'minPrice': 0.0,
@@ -42,84 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
     'mixedGroupsOK': true,
   };
 
-  final List<Map<String, dynamic>> _allProperties = [
-    {
-      'id': '1', 'name': 'Lagoon Retreat', 'location': 'Marassi', 'rating': 4.9, 'reviewCount': 86, 
-      'price': 620000, 'type': 'Villa', 'beds': 3, 'features': ['Pool', 'Beachfront'], 'imageUrl': 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
-      'partyAllowed': true, 'petsAllowed': true, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '2', 'name': 'Golden Dunes', 'location': 'Hacienda Bay', 'rating': 4.7, 'reviewCount': 53, 
-      'price': 380000, 'type': 'Chalet', 'beds': 2, 'features': ['Pool', 'Budget'], 'imageUrl': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
-      'partyAllowed': false, 'petsAllowed': false, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '3', 'name': 'Azure Villa', 'location': 'North Coast', 'rating': 4.8, 'reviewCount': 124, 
-      'price': 450000, 'type': 'Villa', 'beds': 4, 'features': ['Beachfront', 'Pool'], 'imageUrl': 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
-      'partyAllowed': true, 'petsAllowed': false, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '4', 'name': 'Sea Breeze Chalet', 'location': 'Amwaj', 'rating': 4.5, 'reviewCount': 42, 
-      'price': 250000, 'type': 'Chalet', 'beds': 2, 'features': ['Beachfront', 'Budget'], 'imageUrl': 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800',
-      'partyAllowed': false, 'petsAllowed': false, 'mixedGroupsOK': false,
-    },
-    {
-      'id': '5', 'name': 'Royal Palace Villa', 'location': 'Diplomats', 'rating': 5.0, 'reviewCount': 15, 
-      'price': 950000, 'type': 'Villa', 'beds': 5, 'features': ['Pool', 'Beachfront'], 'imageUrl': 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800',
-      'partyAllowed': true, 'petsAllowed': true, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '6', 'name': 'Golden Sands Chalet', 'location': 'Telal', 'rating': 4.6, 'reviewCount': 65, 
-      'price': 320000, 'type': 'Chalet', 'beds': 2, 'features': ['Beachfront', 'Pool'], 'imageUrl': 'https://images.unsplash.com/photo-1515263487990-61b07816b324?w=800',
-      'partyAllowed': true, 'petsAllowed': false, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '7', 'name': 'Pine Wood Villa', 'location': 'Hacienda White', 'rating': 4.9, 'reviewCount': 28, 
-      'price': 850000, 'type': 'Villa', 'beds': 4, 'features': ['Pool', 'WiFi'], 'imageUrl': 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800',
-      'partyAllowed': true, 'petsAllowed': true, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '8', 'name': 'Sunset Bay Apartment', 'location': 'Marina 7', 'rating': 4.4, 'reviewCount': 92, 
-      'price': 210000, 'type': 'Apartment', 'beds': 1, 'features': ['Budget', 'WiFi'], 'imageUrl': 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
-      'partyAllowed': false, 'petsAllowed': false, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '9', 'name': 'Palm Breeze Villa', 'location': 'Fouka Bay', 'rating': 4.8, 'reviewCount': 55, 
-      'price': 580000, 'type': 'Villa', 'beds': 3, 'features': ['Beachfront', 'Pool'], 'imageUrl': 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800',
-      'partyAllowed': true, 'petsAllowed': false, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '10', 'name': 'Coral Reef Chalet', 'location': 'La Vista Cascada', 'rating': 4.7, 'reviewCount': 34, 
-      'price': 420000, 'type': 'Chalet', 'beds': 2, 'features': ['Beachfront', 'WiFi'], 'imageUrl': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800',
-      'partyAllowed': true, 'petsAllowed': true, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '11', 'name': 'Urban Loft', 'location': 'New Alamein', 'rating': 4.3, 'reviewCount': 110, 
-      'price': 150000, 'type': 'Apartment', 'beds': 1, 'features': ['Budget', 'AC'], 'imageUrl': 'https://images.unsplash.com/photo-1536376074432-8d2a32753b94?w=800',
-      'partyAllowed': false, 'petsAllowed': false, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '12', 'name': 'White Pearl Villa', 'location': 'Silver Sands', 'rating': 5.0, 'reviewCount': 12, 
-      'price': 1200000, 'type': 'Villa', 'beds': 6, 'features': ['Pool', 'Beachfront', 'WiFi'], 'imageUrl': 'https://images.unsplash.com/photo-1512918766775-d263234b4b73?w=800',
-      'partyAllowed': true, 'petsAllowed': true, 'mixedGroupsOK': true,
-    },
-    {
-      'id': '13', 'name': 'Morning Dew Chalet', 'location': 'Mountain View', 'rating': 4.6, 'reviewCount': 78, 
-      'price': 350000, 'type': 'Chalet', 'beds': 2, 'features': ['Pool', 'Budget'], 'imageUrl': 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800',
-      'partyAllowed': true, 'petsAllowed': false, 'mixedGroupsOK': true,
-    },
-  ];
-
+  List<Map<String, dynamic>> _allProperties = [];
   List<Map<String, dynamic>> _filteredProperties = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredProperties = _allProperties;
-  }
-
-  void _onTabChanged(int index) {
-    context.read<NavigationProvider>().setTab(index);
   }
 
   void _onCategoryChanged(String category) {
@@ -198,43 +119,40 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<NavigationProvider>(
-      builder: (context, nav, child) {
-        final currentTab = nav.currentTabIndex;
-        return Scaffold(
-          backgroundColor: AppColors.cream,
-          body: _buildBody(currentTab),
-          bottomNavigationBar: RenterBottomNav(
-            activeIndex: currentTab,
-            onTap: _onTabChanged,
-          ),
-          extendBody: true,
-        );
-      },
-    );
-  }
+    return BlocProvider(
+      create: (context) => RenterHomeCubit(
+        repository: RenterRepositoryImpl(
+          remoteDataSource: MockRenterDataSource(),
+        ),
+      )..loadProperties(),
+      child: BlocConsumer<RenterHomeCubit, RenterHomeState>(
+        listener: (context, state) {
+          if (state is RenterHomeLoaded) {
+            setState(() {
+              _allProperties = state.properties;
+              _applyFilters();
+            });
+          }
+        },
+        builder: (context, state) {
+          if (state is RenterHomeLoading || state is RenterHomeInitial) {
+            return const Scaffold(
+              backgroundColor: AppColors.cream,
+              body: Center(child: CircularProgressIndicator(color: AppColors.gold)),
+            );
+          }
+          if (state is RenterHomeError) {
+            return Scaffold(
+              backgroundColor: AppColors.cream,
+              body: Center(child: Text(state.message)),
+            );
+          }
 
-  Widget _buildBody(int currentTab) {
-    switch (currentTab) {
-      case 0:
-        return _buildHomeContent();
-      case 1:
-        return const WishlistScreen();
-      case 2:
-        return const MyBookingsScreen();
-      case 3:
-        return const ConciergeScreen();
-      case 4:
-        return const ProfileScreen();
-      default:
-        return _buildHomeContent();
-    }
-  }
-
-  Widget _buildHomeContent() {
-    return SafeArea(
-      bottom: false,
-      child: Column(
+          return Scaffold(
+            backgroundColor: AppColors.cream,
+            body: SafeArea(
+              bottom: false,
+              child: Column(
         children: [
           Expanded(
             child: CustomScrollView(
@@ -363,6 +281,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+            ) 
+             );
+        },
       ),
     );
   }

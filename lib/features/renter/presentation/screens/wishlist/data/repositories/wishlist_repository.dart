@@ -4,9 +4,9 @@ class WishlistRepository {
   // Real In-memory Data
   final Map<String, WishlistItem> _wishlistItems = {};
   final List<WishlistCollection> _collections = [
-    WishlistCollection(id: 'all_saved', name: 'All Saved', itemCount: 0),
-    WishlistCollection(id: 'beach_trip_2026', name: 'Beach Trip 2026', itemCount: 0, isShared: true),
-    WishlistCollection(id: 'family_villas', name: 'Family Villas', itemCount: 0),
+    const WishlistCollection(id: 'all_saved', name: 'All Saved', itemCount: 0),
+    const WishlistCollection(id: 'beach_trip_2026', name: 'Beach Trip 2026', itemCount: 0, isShared: true),
+    const WishlistCollection(id: 'family_villas', name: 'Family Villas', itemCount: 0),
   ];
 
   Future<bool> isWishlisted(String propertyId) async {

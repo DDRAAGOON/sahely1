@@ -20,14 +20,14 @@ class ReservationDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Soft divider color to match the page style
-    final Color softDivider = AppColors.border.withOpacity(0.3);
+    final Color softDivider = AppColors.border.withValues(alpha: 0.3);
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withOpacity(0.5)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
       ),
       child: Column(
         children: [

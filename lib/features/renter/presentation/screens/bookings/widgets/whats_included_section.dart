@@ -41,7 +41,7 @@ class WhatsIncludedSection extends StatelessWidget {
                   color: isPets ? const Color(0xFFE8F5E9) : const Color(0xFFF3EFE7),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: isPets ? const Color(0xFF2E7D32) : AppColors.navy.withOpacity(0.8),
+                    color: isPets ? const Color(0xFF2E7D32) : AppColors.navy.withValues(alpha: 0.8),
                     width: 1,
                   ),
                 ),

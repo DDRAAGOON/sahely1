@@ -26,7 +26,7 @@ class PaymentMethodTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        color: isSelected ? AppColors.navy.withOpacity(0.04) : Colors.transparent,
+        color: isSelected ? AppColors.navy.withValues(alpha: 0.04) : Colors.transparent,
         child: Row(
           children: [
             // Icon
@@ -180,7 +180,7 @@ class PaymentMethodTile extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.gold.withOpacity(0.15),
+                    color: AppColors.gold.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: AppColors.gold, width: 0.5),
                   ),

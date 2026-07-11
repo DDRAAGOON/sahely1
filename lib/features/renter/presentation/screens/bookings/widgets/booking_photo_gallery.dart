@@ -107,7 +107,7 @@ class BookingPhotoGallery extends StatelessWidget {
                         Container(
                           height: 56,
                           width: double.infinity,
-                          color: Colors.black.withOpacity(0.4),
+                          color: Colors.black.withValues(alpha: 0.4),
                           child: Center(
                             child: Text(
                               '+${photos.length - 2}',

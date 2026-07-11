@@ -35,7 +35,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
         color: AppColors.white,
         boxShadow: [
           BoxShadow(
-            color: AppColors.navy.withOpacity(0.05),
+            color: AppColors.navy.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),

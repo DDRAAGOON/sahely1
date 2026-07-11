@@ -11,8 +11,6 @@ import '../widgets/whats_included_section.dart';
 import '../widgets/price_breakdown_card.dart';
 import '../widgets/ask_sahely_ai_banner.dart';
 import '../widgets/cancel_booking_button.dart';
-import '../widgets/smart_lock_card.dart';
-import 'smart_lock_screen.dart';
 
 class UpcomingBookingDetailScreen extends StatelessWidget {
   final Map<String, dynamic> booking;

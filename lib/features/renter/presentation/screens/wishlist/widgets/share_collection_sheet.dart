@@ -375,7 +375,7 @@ class _SocialOption extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ) 
                 : null,
-              boxShadow: isMore ? [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2))] : null,
+              boxShadow: isMore ? [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))] : null,
             ),
             child: Icon(
               label == 'WhatsApp' ? Icons.chat : (isInstagram ? Icons.camera_alt : icon), 

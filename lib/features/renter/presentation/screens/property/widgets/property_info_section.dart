@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/core/theme/app_theme.dart';
 
 class PropertyInfoSection extends StatelessWidget {
   final String propertyName;

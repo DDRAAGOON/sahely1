@@ -35,15 +35,15 @@ class HistoryTransactionRow extends StatelessWidget {
   Color _getIconBgColor() {
     switch (type) {
       case 'payment':
-        return AppColors.red.withOpacity(0.1);
+        return AppColors.red.withValues(alpha: 0.1);
       case 'credit':
-        return AppColors.green.withOpacity(0.1);
+        return AppColors.green.withValues(alpha: 0.1);
       case 'violation':
-        return AppColors.warning.withOpacity(0.1);
+        return AppColors.warning.withValues(alpha: 0.1);
       case 'refund':
-        return AppColors.green.withOpacity(0.1);
+        return AppColors.green.withValues(alpha: 0.1);
       default:
-        return AppColors.secondary.withOpacity(0.1);
+        return AppColors.secondary.withValues(alpha: 0.1);
     }
   }
 

@@ -154,8 +154,8 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                   // Empty State
                   if (!_hasTransactionsForMonth('THIS MONTH') && 
                       !_hasTransactionsForMonth('LAST MONTH'))
-                    Padding(
-                      padding: const EdgeInsets.only(top: 48),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 48),
                       child: Center(
                         child: Column(
                           children: [
@@ -164,8 +164,8 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                               size: 64,
                               color: AppColors.border,
                             ),
-                            const SizedBox(height: 16),
-                            const Text(
+                            SizedBox(height: 16),
+                            Text(
                               'No transactions found',
                               style: TextStyle(
                                 fontSize: 14,
@@ -248,7 +248,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
           border: Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),

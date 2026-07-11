@@ -31,14 +31,14 @@ class PriceBreakdownCard extends StatelessWidget {
     final num t = (total is num) ? total : 0;
 
     // Soft divider color
-    final Color softDivider = AppColors.border.withOpacity(0.3);
+    final Color softDivider = AppColors.border.withValues(alpha: 0.3);
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withOpacity(0.5)),
+        border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +74,7 @@ class PriceBreakdownCard extends StatelessWidget {
         ),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w700,
             color: AppColors.navy,

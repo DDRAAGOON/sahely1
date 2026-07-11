@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'models.dart';
 import 'sample_data.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
 
 class WishlistState extends ChangeNotifier {
   static final WishlistState _instance = WishlistState._internal();

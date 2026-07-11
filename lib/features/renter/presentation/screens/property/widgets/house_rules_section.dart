@@ -30,25 +30,25 @@ class HouseRulesSection extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  _RuleRow(
+                  const _RuleRow(
                     icon: Icons.access_time,
                     label: 'Calm hours',
                     value: '11 PM - 8 AM',
                   ),
                   _Divider(),
-                  _RuleRow(
+                  const _RuleRow(
                     icon: Icons.party_mode,
                     label: 'Parties',
                     isAllowed: true,
                   ),
                   _Divider(),
-                  _RuleRow(
+                  const _RuleRow(
                     icon: Icons.pets,
                     label: 'Pets',
                     isAllowed: true,
                   ),
                   _Divider(),
-                  _RuleRow(
+                  const _RuleRow(
                     icon: Icons.groups,
                     label: 'Mixed groups',
                     isAllowed: true,
@@ -130,7 +130,7 @@ class _RuleRow extends StatelessWidget {
 class _Divider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Divider(
+    return const Divider(
       height: 1,
       color: AppColors.border,
       indent: 16,

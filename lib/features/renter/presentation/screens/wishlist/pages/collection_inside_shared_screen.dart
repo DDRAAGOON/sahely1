@@ -110,9 +110,9 @@ class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScr
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.favorite_border, size: 64, color: AppColors.secondary.withOpacity(0.3)),
+                            Icon(Icons.favorite_border, size: 64, color: AppColors.secondary.withValues(alpha: 0.3)),
                             const SizedBox(height: 16),
-                            Text(
+                            const Text(
                               'No properties in this collection yet',
                               style: TextStyle(color: AppColors.secondary, fontFamily: 'Cairo'),
                             ),

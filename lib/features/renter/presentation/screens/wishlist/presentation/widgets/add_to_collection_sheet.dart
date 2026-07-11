@@ -70,7 +70,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                           margin: const EdgeInsets.only(bottom: 8),
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
-                            color: isSelected ? AppColors.white : AppColors.white.withOpacity(0.5),
+                            color: isSelected ? AppColors.white : AppColors.white.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: isSelected ? AppColors.gold : AppColors.border, width: isSelected ? 2 : 1),
                           ),
@@ -78,7 +78,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                             children: [
                               Container(
                                 width: 40, height: 40,
-                                decoration: BoxDecoration(color: AppColors.gold.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
+                                decoration: BoxDecoration(color: AppColors.gold.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(10)),
                                 child: const Icon(Icons.folder, color: AppColors.gold, size: 20),
                               ),
                               const SizedBox(width: 12),

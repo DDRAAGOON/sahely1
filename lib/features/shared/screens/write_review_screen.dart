@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
+
 
 class WriteReviewScreen extends StatefulWidget {
   const WriteReviewScreen({super.key});

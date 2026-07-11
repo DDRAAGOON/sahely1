@@ -34,16 +34,16 @@ class ReviewTextField extends StatelessWidget {
             controller: controller,
             maxLines: 5,
             maxLength: 500,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Tell others about the property, cleanliness, check-in...',
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                 fontSize: 13,
                 color: AppColors.placeholder,
                 fontFamily: 'DM Sans',
               ),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.all(14),
-              counterStyle: const TextStyle(
+              contentPadding: EdgeInsets.all(14),
+              counterStyle: TextStyle(
                 fontSize: 11,
                 color: AppColors.secondary,
               ),

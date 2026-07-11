@@ -26,7 +26,7 @@ class SaveCardButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.gold,
           foregroundColor: AppColors.navy,
-          disabledBackgroundColor: AppColors.gold.withOpacity(0.5),
+          disabledBackgroundColor: AppColors.gold.withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

@@ -4,7 +4,6 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/floating_nav.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
-import '../../../core/widgets/cream_background.dart';
 
 class OwnerEarningsScreen extends StatefulWidget {
   const OwnerEarningsScreen({super.key});

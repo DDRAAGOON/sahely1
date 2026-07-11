@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/core/providers/navigation_provider.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import '../widgets/animated_checkmark.dart';
 import '../widgets/booking_details_card.dart';
@@ -56,7 +56,7 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
 
     showDialog(
       context: context,
-      barrierColor: const Color(0xFF1B2744).withOpacity(0.7),
+      barrierColor: const Color(0xFF1B2744).withValues(alpha: 0.7),
       builder: (context) => StarsEarnedDialog(
         starsEarned: widget.starsEarned,
         reason: 'confirming your booking at',
@@ -182,12 +182,7 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
               const SizedBox(height: 32),
 
               BookingActionButtons(
-                onViewBookings: () {
-                  // 1. Switch to My Bookings Tab (index 2)
-                  context.read<NavigationProvider>().setTab(2);
-                  // 2. Navigate back to Home and clear stack
-                  Navigator.of(context).pushNamedAndRemoveUntil('/renter/home', (route) => false);
-                },
+                onViewBookings: () => AppNavigation.goToRenterBookings(context),
               ),
               
               const SizedBox(height: 24),

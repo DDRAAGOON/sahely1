@@ -37,7 +37,7 @@ class UpcomingCheckinsSection extends StatelessWidget {
                 onTap: () => onCheckinTap(checkin),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

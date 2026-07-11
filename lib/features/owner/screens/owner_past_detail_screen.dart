@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
 

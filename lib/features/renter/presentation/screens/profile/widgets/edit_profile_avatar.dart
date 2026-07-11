@@ -28,7 +28,7 @@ class EditProfileAvatar extends StatelessWidget {
                 height: 96,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.navy.withOpacity(0.2),
+                  color: AppColors.navy.withValues(alpha: 0.2),
                 ),
                 child: _buildImage(),
               ),

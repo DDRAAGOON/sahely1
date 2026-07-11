@@ -77,7 +77,7 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
         return;
       }
 
-      final LocationSettings locationSettings = LocationSettings(
+      const LocationSettings locationSettings = LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 10,
       );

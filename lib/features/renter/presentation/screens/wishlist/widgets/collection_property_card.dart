@@ -87,7 +87,7 @@ class CollectionPropertyCard extends StatelessWidget {
                           end: Alignment.bottomCenter,
                           colors: [
                             Colors.transparent,
-                            AppColors.white.withOpacity(0.9),
+                            AppColors.white.withValues(alpha: 0.9),
                           ],
                         ),
                       ),
@@ -278,7 +278,7 @@ class CollectionPropertyCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: borderColor.withOpacity(0.5)),
+        border: Border.all(color: borderColor.withValues(alpha: 0.5)),
       ),
       child: Text(
         label,

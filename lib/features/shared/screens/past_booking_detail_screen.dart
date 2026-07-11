@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
 
 const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
 

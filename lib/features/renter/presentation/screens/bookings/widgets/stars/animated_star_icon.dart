@@ -14,7 +14,7 @@ class AnimatedStarIcon extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: AppColors.gold.withOpacity(0.4),
+            color: AppColors.gold.withValues(alpha: 0.4),
             blurRadius: 20,
             spreadRadius: 5,
           ),

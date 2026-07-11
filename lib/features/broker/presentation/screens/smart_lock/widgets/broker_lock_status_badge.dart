@@ -13,7 +13,7 @@ class BrokerLockStatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statusColor = isInRange ? const Color(0xFF5B926C) : const Color(0xFFE57373);
-    final bgColor = isInRange ? const Color(0xFFDFEDDE).withOpacity(0.1) : const Color(0xFFFBF3DE).withOpacity(0.05);
+    final bgColor = isInRange ? const Color(0xFFDFEDDE).withValues(alpha: 0.1) : const Color(0xFFFBF3DE).withValues(alpha: 0.05);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -21,7 +21,7 @@ class BrokerLockStatusBadge extends StatelessWidget {
         color: bgColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: statusColor.withOpacity(0.3),
+          color: statusColor.withValues(alpha: 0.3),
           width: 1,
         ),
       ),

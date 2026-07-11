@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
 import '../theme/app_colors.dart';
 import '../../data/models.dart';
 import '../../data/role_state.dart';
@@ -24,17 +23,17 @@ class FloatingNav extends StatelessWidget {
 
   static const renterTabs = [
     NavItem(Icons.home_outlined, Icons.home, 'Home', '/renter/home'),
-    NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist', '/wishlist'),
-    NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings', '/bookings'),
-    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services', '/services'),
+    NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist', '/renter/wishlist'),
+    NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings', '/renter/bookings'),
+    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services', '/renter/services'),
     NavItem(Icons.person_outline, Icons.person, 'Profile', '/renter/profile'),
   ];
 
   static const ownerTabs = [
     NavItem(Icons.home_outlined, Icons.home, 'Home', '/owner/home'),
-    NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist', '/wishlist'),
+    NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist', '/owner/wishlist'),
     NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings', '/owner/bookings'),
-    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services', '/services'),
+    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services', '/owner/services'),
     NavItem(Icons.person_outline, Icons.person, 'Profile', '/owner/profile'),
   ];
 

@@ -44,13 +44,13 @@ class WalletActivityRow extends StatelessWidget {
   Color _getIconBgColor() {
     switch (type) {
       case 'booking':
-        return AppColors.red.withOpacity(0.1);
+        return AppColors.red.withValues(alpha: 0.1);
       case 'credit_added':
-        return AppColors.green.withOpacity(0.1);
+        return AppColors.green.withValues(alpha: 0.1);
       case 'violation':
-        return AppColors.warning.withOpacity(0.1);
+        return AppColors.warning.withValues(alpha: 0.1);
       default:
-        return AppColors.secondary.withOpacity(0.1);
+        return AppColors.secondary.withValues(alpha: 0.1);
     }
   }
 

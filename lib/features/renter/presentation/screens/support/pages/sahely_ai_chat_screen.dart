@@ -74,7 +74,7 @@ class _SahelyAiChatScreenState extends State<SahelyAiChatScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.gold.withOpacity(0.2),
+                color: AppColors.gold.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.auto_awesome, color: AppColors.gold, size: 18),
@@ -134,7 +134,7 @@ class _SahelyAiChatScreenState extends State<SahelyAiChatScreen> {
             padding: EdgeInsets.fromLTRB(16, 12, 16, MediaQuery.of(context).padding.bottom + 12),
             decoration: BoxDecoration(
               color: AppColors.white,
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -2))],
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, -2))],
             ),
             child: Row(
               children: [

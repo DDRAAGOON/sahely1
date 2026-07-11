@@ -26,7 +26,7 @@ class ReferredPropertyDetailPage extends StatelessWidget {
             ])),
           ]),
           Padding(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Wrap(spacing: 7, runSpacing: 7, children: [Pill('Villa', border: AppColors.navy), Pill('320 m²', border: AppColors.navy), Pill('6 Guests', border: AppColors.navy), Pill('Pool', border: AppColors.navy)]),
+            const Wrap(spacing: 7, runSpacing: 7, children: [Pill('Villa', border: AppColors.navy), Pill('320 m²', border: AppColors.navy), Pill('6 Guests', border: AppColors.navy), Pill('Pool', border: AppColors.navy)]),
             const SizedBox(height: 16),
             Text('Owner', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 8),

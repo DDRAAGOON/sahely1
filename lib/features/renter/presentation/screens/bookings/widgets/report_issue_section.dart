@@ -53,7 +53,7 @@ class ReportIssueSection extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
+                  color: Colors.black.withValues(alpha: 0.02),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -86,7 +86,7 @@ class ReportIssueSection extends StatelessWidget {
                       ? Image.network(photoPath, width: 80, height: 80, fit: BoxFit.cover)
                       : Image.file(File(photoPath), width: 80, height: 80, fit: BoxFit.cover),
                   ),
-                )).toList(),
+                )),
                 // Add Photo Button
                 GestureDetector(
                   onTap: onAddPhoto,

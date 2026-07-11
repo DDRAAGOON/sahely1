@@ -23,7 +23,7 @@ class SubmitReviewButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.navy,
           foregroundColor: AppColors.white,
-          disabledBackgroundColor: AppColors.navy.withOpacity(0.6),
+          disabledBackgroundColor: AppColors.navy.withValues(alpha: 0.6),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -38,9 +38,9 @@ class SubmitReviewButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
                 ),
               )
-            : Row(
+            : const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     'Submit Review & earn +5',
                     style: TextStyle(

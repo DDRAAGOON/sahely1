@@ -56,7 +56,7 @@ class PropertySection extends StatelessWidget {
               property: property,
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

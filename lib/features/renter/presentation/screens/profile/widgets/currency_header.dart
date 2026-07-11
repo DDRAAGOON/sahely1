@@ -6,12 +6,12 @@ class CurrencyHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Choose currency',
             style: TextStyle(
               fontSize: 20,
@@ -20,8 +20,8 @@ class CurrencyHeader extends StatelessWidget {
               fontFamily: 'DM Sans',
             ),
           ),
-          const SizedBox(height: 6),
-          const Text(
+          SizedBox(height: 6),
+          Text(
             'All prices across the app update instantly',
             style: TextStyle(
               fontSize: 13,

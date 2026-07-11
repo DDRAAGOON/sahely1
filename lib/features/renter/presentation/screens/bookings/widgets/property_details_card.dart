@@ -28,11 +28,11 @@ class PropertyDetailsCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
+          const Row(
             children: [
-              const _DetailItem(icon: Icons.pool, label: 'Private pool'),
-              const SizedBox(width: 16),
-              const _DetailItem(icon: Icons.wifi, label: 'Fast WiFi'),
+              _DetailItem(icon: Icons.pool, label: 'Private pool'),
+              SizedBox(width: 16),
+              _DetailItem(icon: Icons.wifi, label: 'Fast WiFi'),
             ],
           ),
           const SizedBox(height: 12),

@@ -43,7 +43,7 @@ class ReviewsGivenSection extends StatelessWidget {
               reviewText: review['reviewText'],
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

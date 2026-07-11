@@ -120,7 +120,7 @@ class PaymentInstructionsCard extends StatelessWidget {
                 width: 28,
                 height: 28,
                 decoration: BoxDecoration(
-                  color: AppColors.gold.withOpacity(0.15),
+                  color: AppColors.gold.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Icon(
@@ -266,7 +266,7 @@ class PaymentInstructionsCard extends StatelessWidget {
                 ],
               ),
             );
-          }).toList(),
+          }),
 
           const SizedBox(height: 12),
 
@@ -275,7 +275,7 @@ class PaymentInstructionsCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: AppColors.gold.withOpacity(0.08),
+                color: AppColors.gold.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(

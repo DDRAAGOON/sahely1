@@ -38,7 +38,7 @@ class SeasonPerksSection extends StatelessWidget {
                 perkColor: perkColor,
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

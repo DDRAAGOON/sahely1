@@ -136,7 +136,7 @@ class ProfileListRows extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LanguageSelectionScreen(),
+                  builder: (context) => const LanguageSelectionScreen(),
                 ),
               );
             },

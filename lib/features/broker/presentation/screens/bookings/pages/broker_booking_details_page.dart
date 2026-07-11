@@ -109,11 +109,11 @@ class BrokerBookingDetailsPage extends StatelessWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
           // Property Details
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: PropertyDetailsCard(
-                details: const {
+                details: {
                   'bedrooms': 3,
                   'beds': 4,
                   'bathrooms': 2,
@@ -190,7 +190,7 @@ class BrokerBookingDetailsPage extends StatelessWidget {
           // Ask Sahely AI
           const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: AskSahelyAiSection(),
             ),
           ),

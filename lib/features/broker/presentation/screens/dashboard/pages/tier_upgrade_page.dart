@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../../../../../../core/navigation/app_navigation.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/widgets/kit.dart';
 import '../../../../../../core/widgets/ui.dart';
-import '../../../../../../core/widgets/cream_background.dart';
-import '../../../../../../core/providers/navigation_provider.dart';
 
 class BrokerTierUpgradePage extends StatelessWidget {
   const BrokerTierUpgradePage({super.key});
@@ -50,8 +48,7 @@ class BrokerTierUpgradePage extends StatelessWidget {
             label: 'View My Wallet', 
             radius: 999, 
             onTap: () {
-              context.read<NavigationProvider>().setTab(3);
-              Navigator.of(context).popUntil((route) => route.isFirst);
+              AppNavigation.goToBrokerHistory(context);
             },
           ),
           const SizedBox(height: 14),

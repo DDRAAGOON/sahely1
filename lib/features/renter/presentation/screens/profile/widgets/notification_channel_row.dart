@@ -62,10 +62,10 @@ class NotificationChannelRow extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: AppColors.green,
-            activeTrackColor: AppColors.green.withOpacity(0.3),
+            activeThumbColor: AppColors.green,
+            activeTrackColor: AppColors.green.withValues(alpha: 0.3),
             inactiveThumbColor: AppColors.border,
-            inactiveTrackColor: AppColors.border.withOpacity(0.3),
+            inactiveTrackColor: AppColors.border.withValues(alpha: 0.3),
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         ],

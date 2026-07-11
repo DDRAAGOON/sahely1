@@ -56,11 +56,13 @@ class WishlistToggled extends WishlistState {
 }
 
 class CollectionsLoaded extends WishlistState {
+  @override
   final List<WishlistCollection> collections;
   CollectionsLoaded(this.collections) : super(collections: collections, status: WishlistStatus.loaded);
 }
 
 class WishlistItemsLoaded extends WishlistState {
+  @override
   final List<WishlistItem> items;
   WishlistItemsLoaded(this.items, List<WishlistCollection> collections) 
     : super(items: items, collections: collections, status: WishlistStatus.loaded);

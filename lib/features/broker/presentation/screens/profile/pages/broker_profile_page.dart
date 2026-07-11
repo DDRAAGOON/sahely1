@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:http/http.dart';
-import '../../../../../../core/providers/navigation_provider.dart';
+import '../../../../../../core/navigation/app_navigation.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/widgets/kit.dart';
 import '../../../../../../core/widgets/ui.dart';
-import '../../../../../../data/models.dart';
 
 class BrokerProfilePage extends StatelessWidget {
   const BrokerProfilePage({super.key});
@@ -38,7 +35,7 @@ class BrokerProfilePage extends StatelessWidget {
             'My Role Dashboard',
             'Tier · Commissions · Portfolio',
             Icons.workspace_premium_outlined,
-            () => context.read<NavigationProvider>().setTab(1),
+            () => AppNavigation.goToBrokerTier(context),
             const [Color(0xFF2F8F86), Color(0xFF1D5E57)],
           ),
           const SizedBox(height: 12),
@@ -66,7 +63,7 @@ class BrokerProfilePage extends StatelessWidget {
             'AL MAWSEM Season Pass',
             'Wave Rider · 18 ★ · earn stars when you rent',
             Icons.waves,
-            () => Navigator.pushNamed(context, '/mawsem'),
+            () => Navigator.pushNamed(context, '/broker/mawsem'),
             const [Color(0xFF2A2418), AppColors.navy],
           ),
           const SizedBox(height: 12),

@@ -44,10 +44,10 @@ class BrokerLockInfoCards extends StatelessWidget {
         height: 80, // Fixed height to ensure both match exactly
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E293B).withOpacity(0.4),
+          color: const Color(0xFF1E293B).withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: Colors.white.withOpacity(0.08),
+            color: Colors.white.withValues(alpha: 0.08),
             width: 1,
           ),
         ),

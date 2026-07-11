@@ -68,8 +68,8 @@ class PastBookingHeroImage extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  AppColors.cream.withOpacity(0.4),
-                  AppColors.cream.withOpacity(0.8),
+                  AppColors.cream.withValues(alpha: 0.4),
+                  AppColors.cream.withValues(alpha: 0.8),
                   AppColors.cream,
                 ],
                 stops: const [0.0, 0.4, 0.7, 1.0],
@@ -134,7 +134,7 @@ class PastBookingHeroImage extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.12),
+                    color: Colors.black.withValues(alpha: 0.12),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -152,7 +152,7 @@ class PastBookingHeroImage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFF1B2744).withOpacity(0.5),
+              color: const Color(0xFF1B2744).withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Text(

@@ -271,7 +271,7 @@ class MawsemHeroCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
+                    const Expanded(
                       child: _InfoChip(
                         icon: Icons.refresh,
                         label: 'Resets each season',

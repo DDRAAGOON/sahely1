@@ -18,10 +18,10 @@ class BrokerPasscodeDisplay extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+        color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: const Color(0xFFC49F45).withOpacity(0.2),
+          color: const Color(0xFFC49F45).withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -47,10 +47,10 @@ class BrokerPasscodeDisplay extends StatelessWidget {
                 height: 58,
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E293B).withOpacity(0.4),
+                  color: const Color(0xFF1E293B).withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
@@ -60,7 +60,7 @@ class BrokerPasscodeDisplay extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: isInRange ? Colors.white : Colors.white.withOpacity(0.2),
+                      color: isInRange ? Colors.white : Colors.white.withValues(alpha: 0.2),
                       fontFamily: 'DM Sans',
                     ),
                   ),
@@ -74,7 +74,7 @@ class BrokerPasscodeDisplay extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(

@@ -44,7 +44,7 @@ class BookedPropertyHeader extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  AppColors.navy.withOpacity(0.8),
+                  AppColors.navy.withValues(alpha: 0.8),
                 ],
               ),
             ),

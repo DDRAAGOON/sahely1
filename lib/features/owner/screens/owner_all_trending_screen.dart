@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../data/sample_data.dart';
-import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/property_card.dart';
 

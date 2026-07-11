@@ -67,7 +67,7 @@ class _BookingCalendarCardState extends State<BookingCalendarCard> {
                 color: (isStart || isEnd)
                     ? AppColors.navy
                     : isInRange
-                        ? AppColors.gold.withOpacity(0.3)
+                        ? AppColors.gold.withValues(alpha: 0.3)
                         : null,
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -77,7 +77,7 @@ class _BookingCalendarCardState extends State<BookingCalendarCard> {
                   style: TextStyle(
                     fontSize: 13,
                     color: isOutside
-                        ? AppColors.secondary.withOpacity(0.4)
+                        ? AppColors.secondary.withValues(alpha: 0.4)
                         : (isStart || isEnd)
                             ? Colors.white
                             : isInRange

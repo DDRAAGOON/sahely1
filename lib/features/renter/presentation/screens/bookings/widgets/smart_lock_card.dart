@@ -19,15 +19,15 @@ class SmartLockCard extends StatelessWidget {
           color: AppColors.navy,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Row(
+        child: const Row(
           children: [
-            const Icon(
+            Icon(
               Icons.lock_outline,
               color: AppColors.gold,
               size: 18,
             ),
-            const SizedBox(width: 10),
-            const Expanded(
+            SizedBox(width: 10),
+            Expanded(
               child: Text(
                 'Smart lock ready — tap to access your property',
                 style: TextStyle(

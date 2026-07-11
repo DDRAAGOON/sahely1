@@ -32,14 +32,14 @@ class LevelHeader extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  levelColor.withOpacity(0.8),
+                  levelColor.withValues(alpha: 0.8),
                   levelColor,
                 ],
               ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: levelColor.withOpacity(0.3),
+                  color: levelColor.withValues(alpha: 0.3),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),

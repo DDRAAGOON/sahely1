@@ -203,7 +203,7 @@ class MawsemLevelsList extends StatelessWidget {
               onTap: () => _showLevelDetail(context, level),
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

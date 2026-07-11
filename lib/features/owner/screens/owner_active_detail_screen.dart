@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';

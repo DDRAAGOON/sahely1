@@ -39,7 +39,7 @@ class PropertyDetailScreen extends StatefulWidget {
 
 class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
   final ScrollController _scrollController = ScrollController();
-  bool _isWishlisted = false;
+  final bool _isWishlisted = false;
 
   @override
   void dispose() {

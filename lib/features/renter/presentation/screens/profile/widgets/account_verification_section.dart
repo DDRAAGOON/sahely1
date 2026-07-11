@@ -58,7 +58,7 @@ class AccountVerificationSection extends StatelessWidget {
           child: Column(
             children: [
               // Email
-              _VerificationRow(
+              const _VerificationRow(
                 icon: Icons.check_circle,
                 iconColor: AppColors.green,
                 label: 'Email Confirmed',
@@ -66,7 +66,7 @@ class AccountVerificationSection extends StatelessWidget {
               ),
               _Divider(),
               // Phone
-              _VerificationRow(
+              const _VerificationRow(
                 icon: Icons.check_circle,
                 iconColor: AppColors.green,
                 label: 'Phone Verified',

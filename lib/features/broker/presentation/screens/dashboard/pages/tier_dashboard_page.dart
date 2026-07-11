@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/widgets/kit.dart';
 import '../../../../../../core/widgets/ui.dart';
-import '../../../../../../core/widgets/cream_background.dart';
-import '../../../../../../core/providers/navigation_provider.dart';
 
 class TierDashboardPage extends StatelessWidget {
   const TierDashboardPage({super.key});

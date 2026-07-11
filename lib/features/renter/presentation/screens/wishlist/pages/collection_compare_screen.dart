@@ -52,12 +52,12 @@ class CollectionCompareScreen extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Chat Thread
-            Expanded(
+            const Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     // Omar's message
                     ChatMessageBubble(
                       userName: 'Omar',

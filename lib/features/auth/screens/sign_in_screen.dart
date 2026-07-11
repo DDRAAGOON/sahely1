@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/models.dart';
 import '../../../data/role_state.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/ui.dart';
+import '../../../core/providers/auth_provider.dart';
+import '../mock_auth_service.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  final String? from;
+  const SignInScreen({super.key, this.from});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -78,11 +83,29 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             const SizedBox(height: 22),
             NavyButton(
-                label: 'Sign In',
-                onTap: () {
-                  RoleState().setRole(Role.renter);
-                  Navigator.pushReplacementNamed(context, '/renter/home');
-                }),
+              label: 'Sign In',
+              onTap: () async {
+                 // TODO: replace with real auth logic
+                 // Mark user authenticated and set default role for demo
+                 final auth = context.read<AuthProvider>();
+
+                 // Use the mock auth service while the real API is not available.
+                 final email = _emailController.text.trim();
+                 final password = _passwordController.text;
+                 final resp = await MockAuthService().signIn(email, password);
+
+                 await auth.login(token: resp.token, role: resp.role);
+
+                 // If router provided a 'from' query param, go there; otherwise go to role home
+                 final target = widget.from != null ? Uri.decodeComponent(widget.from!) : (resp.role == Role.broker ? '/broker/home' : (resp.role == Role.owner ? '/owner/home' : '/renter/home'));
+
+                 // Use GoRouter navigation (works when app uses MaterialApp.router)
+                 try {
+                   context.go(target);
+                 } catch (_) {
+                   Navigator.pushReplacementNamed(context, target);
+                 }
+              }),
             const SizedBox(height: 24),
             Row(
               children: [

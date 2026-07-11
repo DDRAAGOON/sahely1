@@ -44,7 +44,7 @@ class PremiumServicesList extends StatelessWidget {
               onRequest: () => onRequest(service['name'], service['price']),
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

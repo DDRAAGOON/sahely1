@@ -366,7 +366,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         Icon(icon, size: 20, color: AppColors.navy),
         const SizedBox(width: 12),
         Expanded(child: Text(label, style: const TextStyle(fontSize: 14, color: AppColors.dark, fontFamily: 'Cairo'))),
-        Switch(value: value, onChanged: onChanged, activeColor: AppColors.white, activeTrackColor: AppColors.green, inactiveThumbColor: AppColors.white, inactiveTrackColor: AppColors.border),
+        Switch(value: value, onChanged: onChanged, activeThumbColor: AppColors.white, activeTrackColor: AppColors.green, inactiveThumbColor: AppColors.white, inactiveTrackColor: AppColors.border),
       ]),
     );
   }
@@ -388,7 +388,11 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     final isSelected = _selectedAmenities.contains(amenity);
     return GestureDetector(
       onTap: () {
-        setState(() { if (isSelected) _selectedAmenities.remove(amenity); else _selectedAmenities.add(amenity); });
+        setState(() { if (isSelected) {
+          _selectedAmenities.remove(amenity);
+        } else {
+          _selectedAmenities.add(amenity);
+        } });
         _updateResultsCount();
       },
       child: Container(
@@ -416,7 +420,11 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
   Future<void> _selectDate(BuildContext context, {required bool isCheckIn}) async {
     final picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime.now().add(const Duration(days: 365)));
     if (picked != null) {
-      setState(() { if (isCheckIn) _checkInDate = picked; else _checkOutDate = picked; });
+      setState(() { if (isCheckIn) {
+        _checkInDate = picked;
+      } else {
+        _checkOutDate = picked;
+      } });
       _updateResultsCount();
     }
   }

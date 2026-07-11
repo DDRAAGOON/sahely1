@@ -21,7 +21,7 @@ class SeasonPerkItem extends StatelessWidget {
           width: 28,
           height: 28,
           decoration: BoxDecoration(
-            color: perkColor.withOpacity(0.12),
+            color: perkColor.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(

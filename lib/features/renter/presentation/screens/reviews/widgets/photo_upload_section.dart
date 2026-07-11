@@ -121,16 +121,16 @@ class PhotoUploadSection extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.add,
                         color: AppColors.gold,
                         size: 24,
                       ),
-                      const SizedBox(height: 4),
-                      const Text(
+                      SizedBox(height: 4),
+                      Text(
                         'Photo',
                         style: TextStyle(
                           fontSize: 10,

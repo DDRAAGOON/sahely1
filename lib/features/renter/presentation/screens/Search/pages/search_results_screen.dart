@@ -20,7 +20,7 @@ class SearchResultsScreen extends StatefulWidget {
 }
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
-  String _selectedSort = 'Rating';
+  final String _selectedSort = 'Rating';
   final List<String> _sortOptions = ['Rating', 'Price Low', 'Price High', 'Newest'];
   final TextEditingController _searchController = TextEditingController();
   String _activeChip = 'All';
@@ -158,8 +158,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
 
     // 2. الفلترة بـ Chips العلوية
     if (_activeChip != 'All') {
-      if (_activeChip == 'Beachfront') results = results.where((p) => (p['features'] as List).contains('Beachfront')).toList();
-      else if (_activeChip == 'Newest') results = results.where((p) => p['isNew'] == true).toList();
+      if (_activeChip == 'Beachfront') {
+        results = results.where((p) => (p['features'] as List).contains('Beachfront')).toList();
+      } else if (_activeChip == 'Newest') results = results.where((p) => p['isNew'] == true).toList();
       else if (_activeChip == 'Top rated') results = results.where((p) => p['rating'] >= 4.8).toList();
       // Price ↑ handled at the end as sorting
     }

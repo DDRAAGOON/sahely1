@@ -56,6 +56,7 @@ class BrokerWishlistToggled extends BrokerWishlistState {
 }
 
 class BrokerCollectionsLoaded extends BrokerWishlistState {
+  @override
   final List<BrokerWishlistCollection> collections;
   BrokerCollectionsLoaded(this.collections) : super(collections: collections, status: BrokerWishlistStatus.loaded);
 }

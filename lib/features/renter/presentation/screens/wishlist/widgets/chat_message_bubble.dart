@@ -64,7 +64,7 @@ class ChatMessageBubble extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.gold.withOpacity(0.2),
+                          color: AppColors.gold.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: const Text(
@@ -88,12 +88,12 @@ class ChatMessageBubble extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isAI
-                      ? AppColors.gold.withOpacity(0.15)
+                      ? AppColors.gold.withValues(alpha: 0.15)
                       : AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isAI
-                        ? AppColors.gold.withOpacity(0.3)
+                        ? AppColors.gold.withValues(alpha: 0.3)
                         : AppColors.border,
                   ),
                 ),

@@ -77,7 +77,7 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
         return;
       }
 
-      final LocationSettings locationSettings = LocationSettings(
+      const LocationSettings locationSettings = LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 10,
       );
@@ -239,7 +239,7 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
+                color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(Icons.chevron_left, color: Colors.white, size: 24),

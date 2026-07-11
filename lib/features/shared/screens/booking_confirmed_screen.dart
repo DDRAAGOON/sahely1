@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
-import '../../../core/providers/navigation_provider.dart';
+import '../../../core/navigation/app_navigation.dart';
 
 class BookingConfirmedScreen extends StatelessWidget {
   const BookingConfirmedScreen({super.key});
@@ -113,13 +112,7 @@ class BookingConfirmedScreen extends StatelessWidget {
             const SizedBox(height: 32),
             NavyButton(
               label: 'View My Bookings',
-              onTap: () {
-                // Set tab to Bookings and go to home
-                try {
-                  context.read<NavigationProvider>().setTab(2);
-                } catch (_) {}
-                Navigator.pushNamedAndRemoveUntil(context, '/renter/home', (r) => false);
-              },
+              onTap: () => AppNavigation.goToRenterBookings(context),
             ),
             const SizedBox(height: 40),
           ],

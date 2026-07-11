@@ -15,12 +15,12 @@ class ConciergeScreen extends StatefulWidget {
 }
 
 class _ConciergeScreenState extends State<ConciergeScreen> {
-  String _selectedCategory = 'All';
+  final String _selectedCategory = 'All';
   final List<String> _categories = ['All', 'Home', 'Dining', 'Transport'];
 
   // Mocked state for logic
   final bool _hasActiveBooking = true;
-  int _userMawsemLevel = 3;
+  final int _userMawsemLevel = 3;
 
   // قائمة الخدمات المتميزة مع التصنيفات
   final List<Map<String, dynamic>> _allPremiumServices = [
@@ -141,7 +141,7 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
                               border: Border.all(color: AppColors.border),
                             ),
                             child: Icon(Icons.hourglass_bottom_rounded,
-                                color: AppColors.gold.withOpacity(0.6),
+                                color: AppColors.gold.withValues(alpha: 0.6),
                                 size: 48),
                           ),
                           const SizedBox(height: 24),
@@ -177,7 +177,7 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: ConciergeBottomNav(activeIndex: 3),
+      bottomNavigationBar: const ConciergeBottomNav(activeIndex: 3),
     );
   }
 }

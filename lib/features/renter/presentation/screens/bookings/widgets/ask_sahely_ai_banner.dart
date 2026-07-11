@@ -37,11 +37,11 @@ class AskSahelyAiBanner extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             // Text
-            Expanded(
+            const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Ask Sahely AI',
                     style: TextStyle(
                       fontSize: 14,
@@ -50,8 +50,8 @@ class AskSahelyAiBanner extends StatelessWidget {
                       fontFamily: 'DM Sans',
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  const Text(
+                  SizedBox(height: 2),
+                  Text(
                     'Questions about this stay — directions, parking, check-in',
                     style: TextStyle(
                       fontSize: 11,

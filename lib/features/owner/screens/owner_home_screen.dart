@@ -1,12 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/features/owner/data/datasources/mock_owner_data_source.dart';
+import 'package:sahely/features/owner/data/repositories/owner_repository_impl.dart';
+import 'package:sahely/features/owner/domain/entities/owner_dashboard.dart';
+import 'package:sahely/features/owner/presentation/bloc/owner_home_cubit.dart';
+import 'package:sahely/features/owner/presentation/bloc/owner_home_state.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
-import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/chips.dart';
 import '../../../core/widgets/common.dart';
-import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/floating_nav.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/property_card.dart';
@@ -71,11 +76,15 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
     super.dispose();
   }
 
-  List<Property> get _filteredProperties {
+  List<Property> _filteredProperties = [];
+  OwnerDashboard? _dashboard;
+
+  List<Property> _getFilteredFromDashboard() {
+    if (_dashboard == null) return [];
     if (_selectedCategory == null || _selectedCategory == 'All') {
-      return Sample.allTrending.take(3).toList();
+      return _dashboard!.trendingProperties.take(3).toList();
     }
-    return Sample.allTrending
+    return _dashboard!.trendingProperties
         .where((p) => p.tags.contains(_selectedCategory!))
         .take(3)
         .toList();
@@ -83,19 +92,43 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PhoneScaffold(
-      child: Stack(children: [
-        ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-          children: [
-            // 1. Header (Synced with Renter logic)
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('Welcome back,', style: AppTheme.dm(size: 13, color: AppColors.muted)),
-                Text('Layla Mansour', style: AppTheme.dm(size: 24, weight: FontWeight.w700, color: AppColors.navy)),
-              ]),
-              const RoleBadge(role: Role.owner),
-            ]),
+    return BlocProvider(
+      create: (context) => OwnerHomeCubit(
+        repository: OwnerRepositoryImpl(
+          remoteDataSource: MockOwnerDataSource(),
+        ),
+      )..loadDashboard(),
+      child: BlocConsumer<OwnerHomeCubit, OwnerHomeState>(
+        listener: (context, state) {
+          if (state is OwnerHomeLoaded) {
+            setState(() {
+              _dashboard = state.dashboard;
+              _filteredProperties = _getFilteredFromDashboard();
+            });
+          }
+        },
+        builder: (context, state) {
+          if (state is OwnerHomeLoading || state is OwnerHomeInitial) {
+            return const Center(child: CircularProgressIndicator(color: Color(0xFFC9A84C)));
+          }
+          if (state is OwnerHomeError) {
+            return Center(child: Text(state.message));
+          }
+
+          final dashboard = _dashboard;
+          return PhoneScaffold(
+          child: Stack(children: [
+            ListView(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+              children: [
+                // 1. Header
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text('Welcome back,', style: AppTheme.dm(size: 13, color: AppColors.muted)),
+                    Text(dashboard?.ownerName ?? 'Layla Mansour', style: AppTheme.dm(size: 24, weight: FontWeight.w700, color: AppColors.navy)),
+                  ]),
+                  const RoleBadge(role: Role.owner),
+                ]),
             const SizedBox(height: 16),
 
             // 2. Search & Tools (Synced with Renter logic)
@@ -190,14 +223,14 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
             Center(child: ProgressDots(count: _carouselItems.length, active: _currentCarouselPage)),
             const SizedBox(height: 20),
 
-            // 5. Dashboard Stats
-            Text('Dashboard Overview', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
-            const SizedBox(height: 12),
-            const StatRow(cards: [
-              StatCard(value: '3', label: 'Properties'),
-              StatCard(value: '7', label: 'Bookings'),
-              StatCard(value: '68k', label: 'EGP/mo'),
-            ]),
+                // 5. Dashboard Stats
+                Text('Dashboard Overview', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+                const SizedBox(height: 12),
+                StatRow(cards: [
+                  StatCard(value: '${dashboard?.propertiesCount ?? 3}', label: 'Properties'),
+                  StatCard(value: '${dashboard?.bookingsCount ?? 7}', label: 'Bookings'),
+                  StatCard(value: '${dashboard?.monthlyEarnings ?? '68k'}', label: 'EGP/mo'),
+                ]),
             const SizedBox(height: 16),
 
             // 6. Action: List new property
@@ -241,20 +274,35 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
             Text('Your Properties', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 12),
             Row(children: [
-              ChoiceChipPill('All', selected: _selectedCategory == 'All', onTap: () => setState(() => _selectedCategory = 'All')), 
+              ChoiceChipPill('All', selected: _selectedCategory == 'All', onTap: () {
+                setState(() {
+                  _selectedCategory = 'All';
+                  _filteredProperties = _getFilteredFromDashboard();
+                });
+              }), 
               const SizedBox(width: 8),
-              ChoiceChipPill('Villa', selected: _selectedCategory == 'Villa', onTap: () => setState(() => _selectedCategory = 'Villa')), 
+              ChoiceChipPill('Villa', selected: _selectedCategory == 'Villa', onTap: () {
+                setState(() {
+                  _selectedCategory = 'Villa';
+                  _filteredProperties = _getFilteredFromDashboard();
+                });
+              }), 
               const SizedBox(width: 8),
-              ChoiceChipPill('Chalet', selected: _selectedCategory == 'Chalet', onTap: () => setState(() => _selectedCategory = 'Chalet')),
+              ChoiceChipPill('Chalet', selected: _selectedCategory == 'Chalet', onTap: () {
+                setState(() {
+                  _selectedCategory = 'Chalet';
+                  _filteredProperties = _getFilteredFromDashboard();
+                });
+              }),
             ]),
             const SizedBox(height: 16),
-            if (_filteredProperties.isEmpty)
-               Center(child: Padding(padding: const EdgeInsets.all(32), child: Text('No properties in this category', style: AppTheme.dm(color: AppColors.muted))))
-            else
-              for (var p in _filteredProperties) ...[
-                PropertyCard(property: p, onTap: () => Navigator.pushNamed(context, '/owner/insights', arguments: p)),
-                const SizedBox(height: 14),
-              ],
+                if (_filteredProperties.isEmpty)
+                   Center(child: Padding(padding: const EdgeInsets.all(32), child: Text('No properties in this category', style: AppTheme.dm(color: AppColors.muted))))
+                else
+                  for (var p in _filteredProperties) ...[
+                    PropertyCard(property: p, onTap: () => Navigator.pushNamed(context, '/owner/insights', arguments: p)),
+                    const SizedBox(height: 14),
+                  ],
 
             const SizedBox(height: 12),
             _buildExploreSection(),
@@ -279,10 +327,13 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
             const SizedBox(height: 32),
             _buildFooter(),
             const SizedBox(height: 20),
-          ],
-        ),
-        const FloatingNav(active: 0),
-      ]),
+              ],
+            ),
+            const FloatingNav(active: 0),
+          ]),
+        );
+        },
+      ),
     );
   }
 

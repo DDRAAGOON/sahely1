@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../../../../../core/providers/navigation_provider.dart';
+import '../../../../../../core/navigation/app_navigation.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/widgets/kit.dart';
@@ -48,9 +47,9 @@ class BrokerDashboardPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Row(children: [
-            Expanded(child: _actionTile(context, 'Wallet', Icons.account_balance_wallet_outlined, () => context.read<NavigationProvider>().setTab(3))),
+            Expanded(child: _actionTile(context, 'Wallet', Icons.account_balance_wallet_outlined, () => AppNavigation.goToBrokerHistory(context))),
             const SizedBox(width: 10),
-            Expanded(child: _actionTile(context, 'Portfolio', Icons.pie_chart_outline, () => context.read<NavigationProvider>().setTab(2))),
+            Expanded(child: _actionTile(context, 'Portfolio', Icons.pie_chart_outline, () => AppNavigation.goToBrokerReferredDetail(context))),
             const SizedBox(width: 10),
             Expanded(child: _actionTile(context, 'Refer', Icons.group_add_outlined, () => Navigator.pushNamed(context, '/broker/refer'))),
           ]),

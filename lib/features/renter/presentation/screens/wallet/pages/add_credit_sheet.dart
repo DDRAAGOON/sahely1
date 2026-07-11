@@ -26,67 +26,67 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
 
   // كل طرق الدفع المتاحة في Sahely
   final List<PaymentMethod> _allMethods = [
-    PaymentMethod(
+    const PaymentMethod(
       id: 'card',
       name: 'Credit / Debit Card',
       subtitle: 'Visa, Mastercard, Meeza',
       icon: Icons.credit_card,
-      iconColor: const Color(0xFF1A1F71),
-      iconBgColor: const Color(0xFFE8EAF6),
+      iconColor: Color(0xFF1A1F71),
+      iconBgColor: Color(0xFFE8EAF6),
       processingTime: 'Instant',
     ),
-    PaymentMethod(
+    const PaymentMethod(
       id: 'instapay',
       name: 'Instapay',
       subtitle: 'Instant bank transfer',
       icon: Icons.account_balance,
-      iconColor: const Color(0xFFE91E63),
-      iconBgColor: const Color(0xFFFCE4EC),
+      iconColor: Color(0xFFE91E63),
+      iconBgColor: Color(0xFFFCE4EC),
       processingTime: 'Within 5 minutes',
     ),
-    PaymentMethod(
+    const PaymentMethod(
       id: 'vodafone_cash',
       name: 'Vodafone Cash',
       subtitle: 'Mobile wallet',
       icon: Icons.phone_android,
-      iconColor: const Color(0xFFE60000),
-      iconBgColor: const Color(0xFFFFEBEE),
+      iconColor: Color(0xFFE60000),
+      iconBgColor: Color(0xFFFFEBEE),
       processingTime: 'Within 5 minutes',
     ),
-    PaymentMethod(
+    const PaymentMethod(
       id: 'orange_money',
       name: 'Orange Money',
       subtitle: 'Mobile wallet',
       icon: Icons.phone_android,
-      iconColor: const Color(0xFFFF6600),
-      iconBgColor: const Color(0xFFFFF3E0),
+      iconColor: Color(0xFFFF6600),
+      iconBgColor: Color(0xFFFFF3E0),
       processingTime: 'Within 5 minutes',
     ),
-    PaymentMethod(
+    const PaymentMethod(
       id: 'etisalat_cash',
       name: 'Etisalat Cash',
       subtitle: 'Mobile wallet',
       icon: Icons.phone_android,
-      iconColor: const Color(0xFF00A651),
-      iconBgColor: const Color(0xFFE8F5E9),
+      iconColor: Color(0xFF00A651),
+      iconBgColor: Color(0xFFE8F5E9),
       processingTime: 'Within 5 minutes',
     ),
-    PaymentMethod(
+    const PaymentMethod(
       id: 'fawry',
       name: 'Fawry',
       subtitle: 'Pay at any Fawry point',
       icon: Icons.point_of_sale,
-      iconColor: const Color(0xFFFFC107),
-      iconBgColor: const Color(0xFFFFF8E1),
+      iconColor: Color(0xFFFFC107),
+      iconBgColor: Color(0xFFFFF8E1),
       processingTime: 'Within 1 hour',
     ),
-    PaymentMethod(
+    const PaymentMethod(
       id: 'bank_transfer',
       name: 'Bank Transfer',
       subtitle: 'Direct from your bank',
       icon: Icons.account_balance_wallet,
       iconColor: AppColors.navy,
-      iconBgColor: const Color(0xFFE6EAF2),
+      iconBgColor: Color(0xFFE6EAF2),
       processingTime: '1 business day',
     ),
   ];
@@ -140,9 +140,9 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.88,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.cream,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         children: [
@@ -162,11 +162,11 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
             padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Add Credit',
                         style: TextStyle(
                           fontSize: 22,
@@ -175,7 +175,7 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
                           fontFamily: 'DM Sans',
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       Text(
                         'Top up your Sahely wallet',
                         style: TextStyle(
@@ -278,7 +278,7 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
                               },
                             ),
                             if (!isLast)
-                              Divider(
+                              const Divider(
                                 height: 1,
                                 color: AppColors.border,
                                 indent: 16,
@@ -305,22 +305,22 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.gold.withOpacity(0.08),
+                      color: AppColors.gold.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: AppColors.gold.withOpacity(0.3),
+                        color: AppColors.gold.withValues(alpha: 0.3),
                         width: 1,
                       ),
                     ),
-                    child: Row(
+                    child: const Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.shield_outlined,
                           size: 16,
                           color: AppColors.gold,
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Expanded(
                           child: Text(
                             'All transactions are secured by Sahely. Your payment information is encrypted and never stored on our servers.',
@@ -349,7 +349,7 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
               color: AppColors.cream,
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.navy.withOpacity(0.05),
+                  color: AppColors.navy.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),

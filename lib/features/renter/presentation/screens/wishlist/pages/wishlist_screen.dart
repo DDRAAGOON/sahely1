@@ -54,7 +54,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             }
 
             final collections = state.collections;
-            final totalPlaces = collections.fold<int>(0, (sum, col) => sum + (col.itemCount as int));
+            final totalPlaces = collections.fold<int>(0, (sum, col) => sum + (col.itemCount));
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,

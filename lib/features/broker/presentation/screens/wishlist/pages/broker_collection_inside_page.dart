@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../data/models.dart';
 import '../../../../domain/models/broker_wishlist_item.dart';
@@ -103,7 +104,7 @@ class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.favorite_border, size: 64, color: AppColors.secondary.withOpacity(0.3)),
+                          Icon(Icons.favorite_border, size: 64, color: AppColors.secondary.withValues(alpha: 0.3)),
                           const SizedBox(height: 16),
                           const Text(
                             'No properties in this collection yet',

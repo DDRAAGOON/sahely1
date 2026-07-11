@@ -38,16 +38,16 @@ class GreetingHeader extends StatelessWidget {
             color: AppColors.renterPillBg,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Row(
+          child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.person_outline,
                 size: 16,
                 color: AppColors.navy,
               ),
-              const SizedBox(width: 6),
-              const Text(
+              SizedBox(width: 6),
+              Text(
                 'Renter',
                 style: TextStyle(
                   fontSize: 12,

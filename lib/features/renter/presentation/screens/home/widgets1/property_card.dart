@@ -5,7 +5,6 @@ import 'package:sahely/core/providers/currency_provider.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../property/page/property_detail_screen.dart';
 import '../../wishlist/presentation/widgets/heart_button.dart';
-import '../../wishlist/presentation/bloc/wishlist_cubit.dart';
 
 class PropertyCard extends StatelessWidget {
   final Map<String, dynamic>? property;

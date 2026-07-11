@@ -69,7 +69,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
       // Show stars earned dialog
       showDialog(
         context: context,
-        barrierColor: const Color(0xFF1B2744).withOpacity(0.7),
+        barrierColor: const Color(0xFF1B2744).withValues(alpha: 0.7),
         builder: (context) => StarsEarnedDialog(
           starsEarned: 5,
           reason: 'leaving a review for',

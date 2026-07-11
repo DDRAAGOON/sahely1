@@ -5,7 +5,6 @@ import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/widgets/chips.dart';
 import '../../../../../../core/widgets/common.dart';
 import '../../../../../../core/widgets/kit.dart';
-import '../../../../../../core/widgets/ui.dart';
 
 class BrokerPortfolioPage extends StatelessWidget {
   const BrokerPortfolioPage({super.key});

@@ -188,9 +188,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   const SizedBox(height: 24),
 
                   // Social Accounts Section
-                  Row(
+                  const Row(
                     children: [
-                      const Text(
+                      Text(
                         'Link social accounts',
                         style: TextStyle(
                           fontSize: 15,
@@ -199,8 +199,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           fontFamily: 'Cairo',
                         ),
                       ),
-                      const SizedBox(width: 6),
-                      const Text(
+                      SizedBox(width: 6),
+                      Text(
                         '· optional',
                         style: TextStyle(
                           fontSize: 14,
@@ -359,7 +359,7 @@ class _SocialLinkFieldState extends State<_SocialLinkField> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: isLinked ? AppColors.green.withOpacity(0.1) : AppColors.gold.withOpacity(0.1),
+        color: isLinked ? AppColors.green.withValues(alpha: 0.1) : AppColors.gold.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

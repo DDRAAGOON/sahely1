@@ -25,7 +25,7 @@ class WishlistCollectionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppColors.navy.withOpacity(0.08),
+            color: AppColors.navy.withValues(alpha: 0.08),
             blurRadius: 12,
             offset: const Offset(0, 2),
           ),
@@ -72,7 +72,7 @@ class WishlistCollectionCard extends StatelessWidget {
                 child: Center(
                   child: Icon(
                     Icons.folder_open,
-                    color: AppColors.gold.withOpacity(0.5),
+                    color: AppColors.gold.withValues(alpha: 0.5),
                     size: 48,
                   ),
                 ),
@@ -91,7 +91,7 @@ class WishlistCollectionCard extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      AppColors.navy.withOpacity(0.85),
+                      AppColors.navy.withValues(alpha: 0.85),
                     ],
                   ),
                 ),
@@ -109,19 +109,19 @@ class WishlistCollectionCard extends StatelessWidget {
                     vertical: 5,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.navy.withOpacity(0.85),
+                    color: AppColors.navy.withValues(alpha: 0.85),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.people,
                         color: AppColors.gold,
                         size: 12,
                       ),
-                      const SizedBox(width: 4),
-                      const Text(
+                      SizedBox(width: 4),
+                      Text(
                         'Shared',
                         style: TextStyle(
                           fontSize: 10,

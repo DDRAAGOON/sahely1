@@ -29,7 +29,7 @@ class NewCollectionTile extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.gold.withOpacity(0.15),
+                color: AppColors.gold.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
