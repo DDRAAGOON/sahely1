@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/brand.dart';
@@ -44,11 +45,11 @@ class WelcomeScreen extends StatelessWidget {
                   const SizedBox(height: 26),
                   GoldButton(
                     label: 'Get Started',
-                    onTap: () => Navigator.pushNamed(context, '/onboarding'),
+                    onTap: () => context.push('/onboarding'),
                   ),
                   const SizedBox(height: 18),
                   GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, '/signin'),
+                    onTap: () => context.push('/signin'),
                     child: RichText(
                       text: TextSpan(
                         text: 'Already have an account? ',

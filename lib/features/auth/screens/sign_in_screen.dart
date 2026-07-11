@@ -57,7 +57,7 @@ class _SignInScreenState extends State<SignInScreen> {
             FieldGroup(
               label: 'Password',
               trailingLabel: GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/forgot'),
+                onTap: () => context.push('/forgot'),
                 child: Text('Forgot Password?',
                     style: AppTheme.dm(
                         size: 13,
@@ -136,7 +136,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             const SizedBox(height: 22),
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/role'),
+              onTap: () => context.push('/role'),
               child: Center(
                 child: RichText(
                   text: TextSpan(

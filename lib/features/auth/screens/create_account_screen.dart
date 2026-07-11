@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/ui.dart';
 
 class CreateAccountScreen extends StatefulWidget {
-  const CreateAccountScreen({super.key});
+  final String? role;
+  const CreateAccountScreen({super.key, this.role});
 
   @override
   State<CreateAccountScreen> createState() => _CreateAccountScreenState();
@@ -34,7 +36,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final role = ModalRoute.of(context)?.settings.arguments as String? ?? 'Renter';
+    final role = widget.role ?? 'Renter';
 
     return PhoneScaffold(
       child: SingleChildScrollView(
@@ -185,10 +187,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 label: 'Create Account',
                 onTap: () {
                   if (_formKey.currentState!.validate() && _agreed) {
-                    Navigator.pushNamed(
-                      context, 
+                    context.push(
                       '/verify-email', 
-                      arguments: {
+                      extra: {
                         'email': _emailController.text,
                         'phone': _phoneController.text,
                         'role': role,

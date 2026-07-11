@@ -109,7 +109,7 @@ GoRouter createAppRouter(AuthProvider authProvider) {
     GoRoute(path: '/welcome', builder: (context, state) => const WelcomeScreen()),
     GoRoute(path: '/onboarding', builder: (context, state) => const OnboardingScreen()),
     GoRoute(path: '/role', builder: (context, state) => const RoleSelectionScreen()),
-    GoRoute(path: '/create', builder: (context, state) => const CreateAccountScreen()),
+    GoRoute(path: '/create', builder: (context, state) => CreateAccountScreen(role: state.extra as String?)),
     GoRoute(path: '/signin', builder: (context, state) => SignInScreen(from: state.uri.queryParameters['from'])),
     GoRoute(
       path: '/verify-email',
