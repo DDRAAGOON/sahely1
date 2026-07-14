@@ -2,10 +2,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
-class BrokerBottomNav extends StatelessWidget {
+class OwnerBottomNav extends StatelessWidget {
   final int activeIndex;
   final Function(int) onTap;
-  const BrokerBottomNav({super.key, required this.activeIndex, required this.onTap});
+  const OwnerBottomNav({super.key, required this.activeIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

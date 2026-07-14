@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/navigation/app_navigation.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
@@ -51,13 +52,14 @@ class BrokerDashboardPage extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(child: _actionTile(context, 'Portfolio', Icons.pie_chart_outline, () => AppNavigation.goToBrokerReferredDetail(context))),
             const SizedBox(width: 10),
-            Expanded(child: _actionTile(context, 'Refer', Icons.group_add_outlined, () => Navigator.pushNamed(context, '/broker/refer'))),
+            Expanded(child: _actionTile(context, 'Refer', Icons.group_add_outlined, () => context.push('/broker/refer'))),
           ]),
           const SizedBox(height: 12),
           const StatRow(cards: [StatCard(value: '18.2k', label: 'This Month'), StatCard(value: '312k', label: 'Total Earned'), StatCard(value: '51', label: 'Live Props')]),
           const SizedBox(height: 12),
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/broker/referred'),
+            onTap: () => context.push('/broker/referred'),
+            behavior: HitTestBehavior.opaque,
             child: WhiteCard(padding: const EdgeInsets.all(14), child: Row(children: [
               Container(width: 40, height: 40, decoration: BoxDecoration(color: AppColors.cream, borderRadius: BorderRadius.circular(12)), child: const Icon(Icons.grid_view_outlined, color: AppColors.navy)),
               const SizedBox(width: 12),
@@ -71,7 +73,10 @@ class BrokerDashboardPage extends StatelessWidget {
           const SizedBox(height: 18),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text('Top Referred Properties', style: AppTheme.dm(size: 18, weight: FontWeight.w600, color: AppColors.navy)),
-            GestureDetector(onTap: () => Navigator.pushNamed(context, '/broker/portfolio'), child: Text('All 55', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold))),
+            GestureDetector(
+                onTap: () => context.push('/broker/portfolio'),
+                behavior: HitTestBehavior.opaque,
+                child: Text('All 55', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold))),
           ]),
           const SizedBox(height: 12),
           _topReferred(context, 'Palm Chalet', 'Owner: Layla M.', '86', '4,500', '+15.4k'),
@@ -89,6 +94,7 @@ class BrokerDashboardPage extends StatelessWidget {
 
   Widget _actionTile(BuildContext context, String label, IconData icon, VoidCallback onTap) => GestureDetector(
         onTap: onTap,
+        behavior: HitTestBehavior.opaque,
         child: Container(height: 72, decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(14)), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Icon(icon, color: AppColors.gold, size: 22),
           const SizedBox(height: 6),
@@ -97,7 +103,8 @@ class BrokerDashboardPage extends StatelessWidget {
       );
 
   Widget _topReferred(BuildContext context, String name, String owner, String days, String avg, String profit) => GestureDetector(
-        onTap: () => Navigator.pushNamed(context, '/broker/referred-detail'),
+        onTap: () => context.push('/broker/referred-detail'),
+        behavior: HitTestBehavior.opaque,
         child: WhiteCard(padding: const EdgeInsets.all(14), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
             Expanded(child: Text(name, style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy))),

@@ -4,7 +4,6 @@ import 'package:sahely/features/renter/presentation/verification/presentation/bl
 import 'package:sahely/features/renter/presentation/verification/presentation/widgets/blocked_action_gate.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import '../widgets/concierge_bottom_nav.dart';
 import 'concierge_booking_screen.dart';
 
 class ConciergeScreen extends StatefulWidget {
@@ -116,10 +115,9 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
       return service['category'] == _selectedCategory;
     }).toList();
 
-    return Scaffold(
-      backgroundColor: AppColors.cream,
-      extendBody: true,
-      body: SafeArea(
+    return Container(
+      color: AppColors.cream,
+      child: SafeArea(
         bottom: false,
         child: Column(
           children: [
@@ -167,6 +165,7 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 120),
                         ],
                       ),
                     ),
@@ -177,7 +176,6 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const ConciergeBottomNav(activeIndex: 3),
     );
   }
 }

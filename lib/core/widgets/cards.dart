@@ -23,28 +23,33 @@ class WhiteCard extends StatelessWidget {
 }
 
 class StatCard extends StatelessWidget {
-  const StatCard({super.key, required this.value, required this.label, this.valueColor = AppColors.navy, this.dark = false});
+  const StatCard({super.key, required this.value, required this.label, this.valueColor = AppColors.navy, this.dark = false, this.onTap});
   final String value;
   final String label;
   final Color valueColor;
   final bool dark;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-      decoration: BoxDecoration(
-        color: dark ? Colors.white.withValues(alpha: 0.08) : AppColors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: dark ? null : const [BoxShadow(color: Color(0x0F1B2744), blurRadius: 12, offset: Offset(0, 2))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(value, style: AppTheme.dm(size: 17, weight: FontWeight.w700, color: valueColor)),
-          const SizedBox(height: 2),
-          Text(label, style: AppTheme.dm(size: 11, color: dark ? Colors.white70 : AppColors.muted)),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        decoration: BoxDecoration(
+          color: dark ? Colors.white.withValues(alpha: 0.08) : AppColors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: dark ? null : const [BoxShadow(color: Color(0x0F1B2744), blurRadius: 12, offset: Offset(0, 2))],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(value, style: AppTheme.dm(size: 17, weight: FontWeight.w700, color: valueColor)),
+            const SizedBox(height: 2),
+            Text(label, style: AppTheme.dm(size: 11, color: dark ? Colors.white70 : AppColors.muted)),
+          ],
+        ),
       ),
     );
   }

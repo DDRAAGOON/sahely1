@@ -111,7 +111,7 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
                 onSubmitted: _send,
                 decoration: InputDecoration(
                   hintText: 'Ask Sahely AI…', 
-                  hintStyle: AppTheme.dm(size: 13, color: AppColors.faint),
+                  hintStyle: AppTheme.dm(size: 13, color: AppColors.navy.withValues(alpha: 0.5)),
                   border: InputBorder.none,
                   isDense: true,
                   contentPadding: const EdgeInsets.symmetric(vertical: 12),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../data/models.dart';
 import '../theme/app_colors.dart';
@@ -19,6 +20,7 @@ class PropertyCard extends StatelessWidget {
     final p = property;
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -139,6 +141,7 @@ class PropertyMiniCard extends StatelessWidget {
     final p = property;
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,

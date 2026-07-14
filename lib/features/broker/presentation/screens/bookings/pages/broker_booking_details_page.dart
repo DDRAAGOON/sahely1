@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booked_property_header.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_photo_gallery.dart';
@@ -50,7 +51,7 @@ class BrokerBookingDetailsPage extends StatelessWidget {
               propertyName: propertyName,
               location: location,
               imageUrl: imageUrl,
-              onBackTap: () => Navigator.pop(context),
+              onBackTap: () => context.pop(),
             ),
           ),
 
@@ -84,23 +85,21 @@ class BrokerBookingDetailsPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: DoorPasscodeSosButtons(
                 onDoorPasscodeTap: () {
-                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BrokerSmartLockScreen(
-                        propertyName: propertyName,
-                        bookingRef: orderNumber,
-                        passcode: '8842',
-                        checkIn: booking['checkIn'] ?? DateTime.now(),
-                        checkOut: booking['checkOut'] ?? DateTime.now().add(const Duration(days: 4)),
-                        propertyLat: 31.0263,
-                        propertyLng: 28.9402,
-                      ),
-                    ),
-                  );
+                   context.push(
+                      '/broker/smart-lock',
+                      extra: {
+                        'propertyName': propertyName,
+                        'bookingRef': orderNumber,
+                        'passcode': '8842',
+                        'checkIn': booking['checkIn'] ?? DateTime.now(),
+                        'checkOut': booking['checkOut'] ?? DateTime.now().add(const Duration(days: 4)),
+                        'propertyLat': 31.0263,
+                        'propertyLng': 28.9402,
+                      },
+                    );
                 },
                 onSOSTap: () {
-                  Navigator.pushNamed(context, '/broker/sos');
+                  context.push('/broker/sos');
                 },
               ),
             ),
@@ -147,16 +146,14 @@ class BrokerBookingDetailsPage extends StatelessWidget {
                   // In a real app, you would update a provider or state here
                 },
                 onReportIssue: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ArrivalChecklistScreen(
-                        bookingId: orderNumber,
-                        checkInTime: booking['checkIn'] ?? DateTime.now(),
-                        checklistItems: List<Map<String, dynamic>>.from(checklist),
-                      ),
-                    ),
-                  );
+                  context.push(
+                      '/broker/arrival-checklist',
+                      extra: {
+                        'bookingId': orderNumber,
+                        'checkInTime': booking['checkIn'] ?? DateTime.now(),
+                        'checklistItems': List<Map<String, dynamic>>.from(checklist),
+                      },
+                    );
                 },
               ),
             ),
@@ -170,16 +167,14 @@ class BrokerBookingDetailsPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: RateYourStaySection(
                 onAddReview: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => WriteReviewScreen(
-                        propertyName: propertyName,
-                        propertyImage: imageUrl,
-                        stayDates: dates,
-                      ),
-                    ),
-                  );
+                  context.push(
+                      '/write-review',
+                      extra: {
+                        'propertyName': propertyName,
+                        'propertyImage': imageUrl,
+                        'stayDates': dates,
+                      },
+                    );
                 },
               ),
             ),

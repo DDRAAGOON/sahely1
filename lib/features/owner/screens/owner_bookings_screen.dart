@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
@@ -20,30 +21,21 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
   void _ownerNav(BuildContext context, int i) {
     final routes = [
       '/owner/home',
-      '/wishlist',
+      '/owner/wishlist',
       '/owner/bookings',
-      '/services',
+      '/owner/services',
       '/owner/profile',
     ];
 
-    if (i == 0) {
-      Navigator.popUntil(context, (r) => r.isFirst);
-    } else {
-      Navigator.pushNamedAndRemoveUntil(
-        context, 
-        routes[i], 
-        (r) => r.isFirst,
-      );
-    }
+    context.go(routes[i]);
   }
 
   @override
   Widget build(BuildContext context) {
-    return PhoneScaffold(
-      child: Stack(children: [
-        ListView(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
-          children: [
+    return SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
+        children: [
             const TopBar(title: 'Bookings', subtitle: 'Accepted bookings only'),
             const SizedBox(height: 16),
             SegmentTabs(tabs: const ['Upcoming', 'Active', 'Past'], active: tab, onTap: (i) => setState(() => tab = i)),
@@ -59,8 +51,6 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
             ],
           ],
         ),
-        FloatingNav(active: 2, items: FloatingNav.ownerTabs, onTap: (i, _) => _ownerNav(context, i)),
-      ]),
     );
   }
 
@@ -70,7 +60,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
     if (rated) route = '/owner/booking-past';
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, route, arguments: {'prop': property, 'badge': badge, 'kind': kind}),
+      onTap: () => context.push(route, extra: {'prop': property, 'badge': badge, 'kind': kind}),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -132,14 +122,14 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                     _kv('Guests', chips[1]),
                     const SizedBox(height: 16),
                     Row(children: [
-                      Expanded(child: WideButton(label: 'Key Lock', icon: Icons.lock_outline, color: AppColors.navy, height: 48, radius: 12, onTap: () => Navigator.pushNamed(context, '/owner/smart-lock'))),
+                      Expanded(child: WideButton(label: 'Key Lock', icon: Icons.lock_outline, color: AppColors.navy, height: 48, radius: 12, onTap: () => context.push('/owner/smart-lock'))),
                       const SizedBox(width: 10),
-                      Expanded(child: WideButton(label: 'SOS', icon: Icons.warning_amber_rounded, color: const Color(0xFFB22222), height: 48, radius: 12, onTap: () => Navigator.pushNamed(context, '/sos-owner'))),
+                      Expanded(child: WideButton(label: 'SOS', icon: Icons.warning_amber_rounded, color: const Color(0xFFB22222), height: 48, radius: 12, onTap: () => context.push('/sos-owner'))),
                     ]),
                     const SizedBox(height: 14),
                     Center(
                       child: GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/owner/booking-detail', arguments: {'prop': property, 'badge': badge, 'kind': kind}),
+                        onTap: () => context.push('/owner/booking-detail', extra: {'prop': property, 'badge': badge, 'kind': kind}),
                         child: Text('View booking details →', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.gold)),
                       ),
                     ),

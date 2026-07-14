@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -58,7 +59,8 @@ class TeamReviewScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/owner/ai-chat'),
+            onTap: () => context.push('/owner/ai-chat'),
+            behavior: HitTestBehavior.opaque,
             child: WhiteCard(padding: const EdgeInsets.all(14), child: Row(children: [
               Container(width: 38, height: 38, decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF46B7A8), Color(0xFF226F66)]), borderRadius: BorderRadius.circular(10)), child: const Text('🌊', style: TextStyle(fontSize: 18), textAlign: TextAlign.center)),
               const SizedBox(width: 12),
@@ -70,7 +72,7 @@ class TeamReviewScreen extends StatelessWidget {
             ])),
           ),
           const SizedBox(height: 16),
-          NavyButton(label: 'Make changes & resubmit', radius: 999, onTap: () => Navigator.maybePop(context)),
+          NavyButton(label: 'Make changes & resubmit', radius: 999, onTap: () => context.pop()),
         ],
       ),
     );

@@ -148,10 +148,10 @@ class _SahelyAiChatScreenState extends State<SahelyAiChatScreen> {
                     ),
                     child: TextField(
                       controller: _controller,
-                      decoration: const InputDecoration(
-                        hintText: 'Type a message...',
+                      decoration: InputDecoration(
+                        hintText: 'Ask Sahely AI...',
                         border: InputBorder.none,
-                        hintStyle: TextStyle(fontSize: 14, color: AppColors.placeholder),
+                        hintStyle: TextStyle(fontSize: 14, color: AppColors.navy.withValues(alpha: 0.5)),
                       ),
                       onSubmitted: (_) => _sendMessage(),
                     ),

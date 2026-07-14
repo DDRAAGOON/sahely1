@@ -32,4 +32,51 @@ class Property {
   final int? minutesToBeach;
   final bool guestFavourite;
   final bool saved;
+
+  factory Property.fromMap(Map<String, dynamic> map) {
+    int parseInt(dynamic value, [int fallback = 0]) {
+      if (value is int) return value;
+      if (value is double) return value.toInt();
+      if (value is String)
+        return int.tryParse(value) ??
+            int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ??
+            fallback;
+      return fallback;
+    }
+
+    double parseDouble(dynamic value, [double fallback = 0.0]) {
+      if (value is double) return value;
+      if (value is int) return value.toDouble();
+      if (value is String)
+        return double.tryParse(value) ??
+            double.tryParse(value.replaceAll(RegExp(r'[^0-9\.]'), '')) ??
+            fallback;
+      return fallback;
+    }
+
+    bool parseBool(dynamic value, [bool fallback = true]) {
+      if (value is bool) return value;
+      if (value is String) {
+        final lower = value.toLowerCase();
+        if (lower == 'true' || lower == 'yes' || lower == '1') return true;
+        if (lower == 'false' || lower == 'no' || lower == '0') return false;
+      }
+      return fallback;
+    }
+
+    return Property(
+      id: map['id']?.toString() ?? '1',
+      name: map['name'] ?? 'Untitled',
+      area: map['location'] ?? map['area'] ?? 'North Coast',
+      image: map['imageUrl'] ?? map['image'] ?? '',
+      price: parseInt(map['price']),
+      rating: parseDouble(map['rating']),
+      reviews: parseInt(map['reviewCount'] ?? map['reviews']),
+      type: map['type'] ?? 'Villa',
+      beds: parseInt(map['beds'], 3),
+      guests: parseInt(map['guests'], 6),
+      tags: List<String>.from(map['features'] ?? map['tags'] ?? []),
+      petsOk: parseBool(map['petsAllowed'] ?? map['petsOk'], true),
+    );
+  }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/models.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
@@ -104,7 +105,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  PropertyCircleBtn(icon: Icons.chevron_left, onTap: () => Navigator.maybePop(context)),
+                                  PropertyCircleBtn(icon: Icons.chevron_left, onTap: () => context.pop()),
                                   SaveHeart(property: property, size: 38),
                                 ],
                               ),
@@ -168,6 +169,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                           const SizedBox(height: 14),
                           GestureDetector(
                             onTap: () => setState(() => _isExpanded = !_isExpanded),
+                            behavior: HitTestBehavior.opaque,
                             child: RichText(
                               text: TextSpan(
                                 style: AppTheme.dm(size: 14, color: AppColors.ink, height: 1.55),
@@ -236,7 +238,8 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                                 Text('${property.rating} · ${property.reviews}', style: AppTheme.dm(size: 13, color: AppColors.muted)),
                               ]),
                               GestureDetector(
-                                  onTap: () => Navigator.pushNamed(context, '/property-reviews', arguments: property),
+                                  onTap: () => context.push('/property-reviews', extra: property),
+                                  behavior: HitTestBehavior.opaque,
                                   child: Text('See All', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold))),
                             ],
                           ),
@@ -258,7 +261,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                             color: AppColors.navy,
                             outline: true,
                             height: 46,
-                            onTap: () => Navigator.pushNamed(context, '/property-reviews', arguments: property),
+                            onTap: () => context.push('/property-reviews', extra: property),
                           ),
                         ],
                       ),
@@ -289,7 +292,8 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
                       ],
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/booking', arguments: property),
+                      onTap: () => context.push('/booking', extra: property),
+                      behavior: HitTestBehavior.opaque,
                       child: Container(
                         height: 50,
                         padding: const EdgeInsets.symmetric(horizontal: 34),

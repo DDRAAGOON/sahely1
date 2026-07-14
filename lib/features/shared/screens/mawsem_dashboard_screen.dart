@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -101,7 +102,7 @@ class MawsemDashboardScreen extends StatelessWidget {
           const SizedBox(height: 12),
           for (var i = 0; i < _levels.length; i++) ...[
             _LevelRow(
-                index: i + 1, data: _levels[i], current: i == 2, onTap: () => Navigator.pushNamed(context, '/mawsem-level')),
+                index: i + 1, data: _levels[i], current: i == 2, onTap: () => context.push('/mawsem-level')),
             const SizedBox(height: 8),
           ],
           const SizedBox(height: 10),
@@ -213,6 +214,7 @@ class _LevelRow extends StatelessWidget {
     final reached = index <= 2;
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Opacity(
         opacity: (reached && !current) ? 0.7 : 1,
         child: Container(

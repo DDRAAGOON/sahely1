@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -28,7 +29,8 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text('My Properties', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/owner/add-property'),
+                onTap: () => context.push('/owner/add-property'),
+                behavior: HitTestBehavior.opaque,
                 child: Container(
                   height: 36, 
                   padding: const EdgeInsets.symmetric(horizontal: 14), 
@@ -67,9 +69,9 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
                 badgeKind: BadgeKind.green,
                 meta: 'Villa · Hacienda Bay · 320 m²',
                 stats: const ['★ 4.8', '88% occ.', '1,284 views'],
-                onPrimaryAction: () => Navigator.pushNamed(context, '/owner/insights', arguments: Sample.azure),
-                onSecondaryAction: () => Navigator.pushNamed(context, '/owner/edit'),
-                onSosAction: () => Navigator.pushNamed(context, '/sos-owner'),
+                onPrimaryAction: () => context.push('/owner/insights', extra: Sample.azure),
+                onSecondaryAction: () => context.push('/owner/edit'),
+                onSosAction: () => context.push('/sos-owner'),
               ),
               const SizedBox(height: 12),
               OwnerPropertyCard(
@@ -78,9 +80,9 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
                 badgeKind: BadgeKind.green,
                 meta: 'Chalet · Marassi · 180 m² · 2 floors',
                 stats: const ['★ 4.7', '62% occ.', '643 views'],
-                onPrimaryAction: () => Navigator.pushNamed(context, '/owner/insights', arguments: Sample.dunes),
-                onSecondaryAction: () => Navigator.pushNamed(context, '/owner/edit'),
-                onSosAction: () => Navigator.pushNamed(context, '/sos-owner'),
+                onPrimaryAction: () => context.push('/owner/insights', extra: Sample.dunes),
+                onSecondaryAction: () => context.push('/owner/edit'),
+                onSosAction: () => context.push('/sos-owner'),
               ),
               const SizedBox(height: 12),
             ],
@@ -94,8 +96,8 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
                 nameOverride: 'Palm Shores',
                 note: 'Submitted · our team is reviewing (1–24h)',
                 primaryActionLabel: 'View submission status',
-                onPrimaryAction: () => Navigator.pushNamed(context, '/owner/listing-submitted', arguments: Sample.lagoon),
-                onSecondaryAction: () => Navigator.pushNamed(context, '/owner/edit'),
+                onPrimaryAction: () => context.push('/owner/listing-submitted', extra: Sample.lagoon),
+                onSecondaryAction: () => context.push('/owner/edit'),
               ),
               const SizedBox(height: 12),
             ],
@@ -110,7 +112,7 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
                 note: 'Listing 60% complete — add photos',
                 primaryActionLabel: 'Continue setup',
                 secondaryActionLabel: 'Delete',
-                onPrimaryAction: () => Navigator.pushNamed(context, '/owner/edit'),
+                onPrimaryAction: () => context.push('/owner/edit'),
                 onSecondaryAction: () {/* Handle Delete */},
               ),
             ],

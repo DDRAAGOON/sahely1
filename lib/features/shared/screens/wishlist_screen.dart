@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/wishlist_state.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -70,7 +71,7 @@ class WishlistScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   for (final p in savedOnes) ...[
-                    PropertyCard(property: p, onTap: () => Navigator.pushNamed(context, '/property', arguments: p)),
+                    PropertyCard(property: p, onTap: () => context.push('/property', extra: p)),
                     const SizedBox(height: 16),
                   ],
                 ],

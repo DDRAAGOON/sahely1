@@ -13,7 +13,7 @@ class RenterBottomNav extends StatelessWidget {
       _NavItem(activeIcon: Icons.home_filled, inactiveIcon: Icons.home_outlined, label: 'Home'),
       _NavItem(activeIcon: Icons.favorite, inactiveIcon: Icons.favorite_border, label: 'Wishlist'),
       _NavItem(activeIcon: Icons.calendar_month, inactiveIcon: Icons.calendar_today, label: 'Bookings'),
-      _NavItem(activeIcon: Icons.notifications, inactiveIcon: Icons.notifications_outlined, label: 'Services'),
+      _NavItem(activeIcon: Icons.room_service, inactiveIcon: Icons.room_service_outlined, label: 'Services'),
       _NavItem(activeIcon: Icons.person, inactiveIcon: Icons.person_outline, label: 'Profile'),
     ];
 
@@ -40,31 +40,34 @@ class RenterBottomNav extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: List.generate(items.length, (index) {
               final isActive = index == activeIndex;
-              return GestureDetector(
-                onTap: () => onTap(index),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      isActive ? items[index].activeIcon : items[index].inactiveIcon,
-                      size: 23,
-                      color: isActive
-                          ? AppColors.navy
-                          : AppColors.navy.withValues(alpha: 0.4),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      items[index].label,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+              return Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => onTap(index),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        isActive ? items[index].activeIcon : items[index].inactiveIcon,
+                        size: 23,
                         color: isActive
                             ? AppColors.navy
                             : AppColors.navy.withValues(alpha: 0.4),
-                        fontFamily: 'Cairo',
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(
+                        items[index].label,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: isActive
+                              ? AppColors.navy
+                              : AppColors.navy.withValues(alpha: 0.4),
+                          fontFamily: 'Cairo',
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }),

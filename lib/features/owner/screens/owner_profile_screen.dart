@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/widgets/floating_nav.dart';
 import 'package:sahely/core/widgets/kit.dart';
@@ -12,15 +13,14 @@ class OwnerProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PhoneScaffold(
-      child: Stack(children: [
-        ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
-          children: [
-            OwnerProfileHeader(
+    return SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+        children: [
+          OwnerProfileHeader(
               name: 'Layla Mansour',
               email: 'layla@example.com',
-              onEditProfile: () => Navigator.pushNamed(context, '/owner/edit-bio'),
+              onEditProfile: () => context.push('/owner/edit-bio'),
             ),
             const SizedBox(height: 12),
             const Row(
@@ -58,7 +58,7 @@ class OwnerProfileScreen extends StatelessWidget {
                   value: 'EGP 1,250',
                   valueColor: AppColors.gold,
                   iconColor: AppColors.gold,
-                  onTap: () => Navigator.pushNamed(context, '/owner/earnings'),
+                  onTap: () => context.push('/owner/earnings'),
                 ),
                 const SettingsRow(
                   icon: Icons.credit_card_outlined,
@@ -78,28 +78,28 @@ class OwnerProfileScreen extends StatelessWidget {
                   value: 'EG••4821',
                   valueColor: AppColors.success,
                   iconColor: AppColors.gold,
-                  onTap: () => Navigator.pushNamed(context, '/owner/payout'),
+                  onTap: () => context.push('/owner/payout'),
                 ),
                 SettingsRow(
                   icon: Icons.notifications_none,
                   label: 'Notifications',
                   iconColor: AppColors.gold,
                   onTap: () {
-                    Navigator.pushNamed(context, '/owner/notifications');
+                    context.push('/owner/notifications');
                   },
                 ),
                 SettingsRow(
                   icon: Icons.lock_outline,
                   label: 'Change Password',
                   iconColor: AppColors.gold,
-                  onTap: () => Navigator.pushNamed(context, '/change-password'),
+                  onTap: () => context.push('/change-password'),
                 ),
                 SettingsRow(
                   icon: Icons.language,
                   label: 'Language',
                   value: 'English',
                   iconColor: AppColors.gold,
-                  onTap: () => Navigator.pushNamed(context, '/language'),
+                  onTap: () => context.push('/language'),
                   last: true,
                 ),
               ]),
@@ -115,8 +115,6 @@ class OwnerProfileScreen extends StatelessWidget {
             ),
           ],
         ),
-        const FloatingNav(active: 4),
-      ]),
     );
   }
 }

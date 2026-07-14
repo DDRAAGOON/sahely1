@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../data/sample_data.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
@@ -57,7 +58,7 @@ class ReferredPropertyDetailPage extends StatelessWidget {
             const SizedBox(height: 8),
             const StatRow(cards: [StatCard(value: '★ 4.8', label: '124 reviews'), StatCard(value: '88%', label: 'Occupancy'), StatCard(value: '1.2k', label: 'Views/wk')]),
             const SizedBox(height: 16),
-            NavyButton(label: 'View public listing', radius: 14, onTap: () => Navigator.pushNamed(context, '/property')),
+            NavyButton(label: 'View public listing', radius: 14, onTap: () => context.push('/property', extra: Sample.azure)),
           ])),
         ]),
       ),

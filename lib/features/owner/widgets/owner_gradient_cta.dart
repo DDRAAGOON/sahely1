@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 
@@ -21,7 +22,8 @@ class OwnerGradientCta extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, route),
+      onTap: () => context.push(route),
+      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
@@ -152,7 +153,7 @@ class _BookingScreenState extends State<BookingScreen> {
                   );
                   bookingsProvider.addBooking(newBooking);
 
-                  Navigator.pushNamed(context, '/booking-confirmed', arguments: {
+                  context.push('/booking-confirmed', extra: {
                     'propertyName': pName,
                     'property': property,
                     'total': total,

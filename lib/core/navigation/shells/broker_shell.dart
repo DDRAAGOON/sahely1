@@ -22,12 +22,20 @@ class BrokerShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.cream,
-      body: navigationShell,
-      bottomNavigationBar: BrokerBottomNav(
-        activeIndex: navigationShell.currentIndex,
-        onTap: _onTabChanged,
+      body: Stack(
+        children: [
+          navigationShell,
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: BrokerBottomNav(
+              activeIndex: navigationShell.currentIndex,
+              onTap: _onTabChanged,
+            ),
+          ),
+        ],
       ),
-      extendBody: true,
     );
   }
 }

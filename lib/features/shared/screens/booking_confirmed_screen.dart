@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
@@ -78,10 +79,9 @@ class BookingConfirmedScreen extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(14),
                 onTap: () {
-                  Navigator.pushNamed(
-                    context,
+                  context.push(
                     '/broker/smart-lock',
-                    arguments: {
+                    extra: {
                       'propertyName': pName,
                       'bookingRef': 'SHLY-8842',
                       'passcode': '1248',

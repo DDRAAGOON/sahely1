@@ -8,22 +8,14 @@ class AppNavigation {
   // CORE ROUTING HELPERS (Phase 4.1 Bridge)
   // ═══════════════════════════════════════════════════════
 
-  /// Safely pushes a route, trying GoRouter first, falling back to legacy Navigator.
+  /// Safely pushes a route, trying GoRouter first.
   static void safePush(BuildContext context, String path) {
-    try {
-      context.push(path);
-    } catch (_) {
-      Navigator.pushNamed(context, path);
-    }
+    context.push(path);
   }
 
-  /// Safely replaces a route, trying GoRouter first, falling back to legacy Navigator.
+  /// Safely replaces a route, trying GoRouter first.
   static void safeGo(BuildContext context, String path) {
-    try {
-      context.go(path);
-    } catch (_) {
-      Navigator.pushReplacementNamed(context, path);
-    }
+    context.go(path);
   }
 
   // ═══════════════════════════════════════════════════════
@@ -71,11 +63,11 @@ class AppNavigation {
   // ═══════════════════════════════════════════════════════
 
   static void goToSearchResults(BuildContext context, {String query = '', Map<String, dynamic>? filters}) {
-    // TODO: Implement search results navigation
+    context.push('/browse', extra: filters ?? query);
   }
 
   static void goToAllProperties(BuildContext context, {Map<String, dynamic>? filters}) {
-    // TODO: Implement all properties navigation
+    context.push('/all-properties', extra: filters);
   }
 
   // ═══════════════════════════════════════════════════════

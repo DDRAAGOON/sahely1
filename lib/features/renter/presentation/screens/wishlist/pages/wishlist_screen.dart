@@ -5,7 +5,6 @@ import '../widgets/wishlist_collection_card.dart';
 import '../widgets/new_collection_tile.dart';
 import '../widgets/create_collection_sheet.dart';
 import '../presentation/bloc/wishlist_cubit.dart';
-import '../../../../../../core/widgets/floating_nav.dart';
 import 'collection_inside_shared_screen.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -41,13 +40,11 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.cream,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: BlocBuilder<WishlistCubit, WishlistState>(
-              builder: (context, state) {
+    return Container(
+      color: AppColors.cream,
+      child: SafeArea(
+        child: BlocBuilder<WishlistCubit, WishlistState>(
+          builder: (context, state) {
             // Only show loader if we have absolutely no data
             if (state.status == WishlistStatus.loading && state.collections.isEmpty) {
               return const Center(child: CircularProgressIndicator(color: AppColors.gold));
@@ -94,6 +91,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: GridView.builder(
+                      padding: const EdgeInsets.only(bottom: 120),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1.1),
                       itemCount: collections.length + 1,
                       itemBuilder: (context, index) {
@@ -128,9 +126,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
           },
         ),
       ),
-      if (widget.showNav) const FloatingNav(active: 1),
-    ],
-  ),
-);
-}
+    );
+  }
 }

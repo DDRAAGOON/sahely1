@@ -121,9 +121,9 @@ class _BrokerSOSChatScreenState extends State<BrokerSOSChatScreen> {
                       child: TextField(
                         controller: _controller,
                         onSubmitted: _send,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Message support…',
-                          hintStyle: TextStyle(fontSize: 13, color: Colors.grey),
+                          hintStyle: TextStyle(fontSize: 13, color: AppColors.navy.withValues(alpha: 0.5)),
                           border: InputBorder.none,
                           isDense: true,
                           contentPadding: EdgeInsets.symmetric(vertical: 12),

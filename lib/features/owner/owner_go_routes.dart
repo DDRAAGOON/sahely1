@@ -27,8 +27,6 @@ import 'screens/owner_active_detail_screen.dart';
 import 'screens/owner_past_detail_screen.dart';
 
 final List<GoRoute> ownerGoRoutes = [
-  GoRoute(path: '/owner/home', builder: (context, state) => const OwnerHomeScreen()),
-  GoRoute(path: '/owner/profile', builder: (context, state) => const OwnerProfileScreen()),
   GoRoute(path: '/owner/manage', builder: (context, state) => const OwnerManageScreen()),
   GoRoute(path: '/owner/properties', builder: (context, state) => const OwnerPropertiesScreen()),
   GoRoute(path: '/owner/insights', builder: (context, state) => const OwnerPropertyInsightsScreen()),
@@ -39,7 +37,6 @@ final List<GoRoute> ownerGoRoutes = [
   GoRoute(path: '/owner/listing-submitted', builder: (context, state) => const ListingSubmittedScreen()),
   GoRoute(path: '/owner/team-review', builder: (context, state) => const TeamReviewScreen()),
   GoRoute(path: '/owner/all-trending', builder: (context, state) => const OwnerAllTrendingScreen()),
-  GoRoute(path: '/owner/bookings', builder: (context, state) => const OwnerBookingsScreen()),
   GoRoute(path: '/owner/booking-upcoming', builder: (context, state) => const OwnerUpcomingDetailScreen()),
   GoRoute(path: '/owner/booking-active', builder: (context, state) => const OwnerActiveDetailScreen()),
   GoRoute(path: '/owner/booking-past', builder: (context, state) => const OwnerPastDetailScreen()),

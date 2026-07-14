@@ -4,7 +4,8 @@ import '../../../../../../core/navigation/app_navigation.dart';
 
 class SearchRow extends StatelessWidget {
   final VoidCallback? onFilterTap;
-  const SearchRow({super.key, this.onFilterTap});
+  final VoidCallback? onChatTap;
+  const SearchRow({super.key, this.onFilterTap, this.onChatTap});
 
   @override
   Widget build(BuildContext context) {
@@ -70,37 +71,40 @@ class SearchRow extends StatelessWidget {
         const SizedBox(width: 10),
 
         // AI Chat Button - Kept as is
-        Container(
-          width: 54,
-          height: 54,
-          decoration: BoxDecoration(
-            color: AppColors.gold,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Stack(
-            children: [
-              const Center(
-                child: Icon(
-                  Icons.chat_bubble_outline,
-                  color: AppColors.navy,
-                  size: 20,
-                ),
-              ),
-              // Green presence dot
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: AppColors.success,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.gold, width: 2),
+        GestureDetector(
+          onTap: onChatTap,
+          child: Container(
+            width: 54,
+            height: 54,
+            decoration: BoxDecoration(
+              color: AppColors.gold,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Stack(
+              children: [
+                const Center(
+                  child: Icon(
+                    Icons.chat_bubble_outline,
+                    color: AppColors.navy,
+                    size: 20,
                   ),
                 ),
-              ),
-            ],
+                // Green presence dot
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: AppColors.success,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.gold, width: 2),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

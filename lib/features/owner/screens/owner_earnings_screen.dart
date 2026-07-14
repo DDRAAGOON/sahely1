@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/floating_nav.dart';
@@ -107,6 +108,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
                 Text('Wallet', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
                 GestureDetector(
                   onTap: () => _exportPDF(context),
+                  behavior: HitTestBehavior.opaque,
                   child: Text('Export PDF', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
                 ),
               ]),
@@ -149,11 +151,11 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
               const SizedBox(height: 10),
               Center(
                 child: GestureDetector(
-                  onTap: () => Navigator.pushNamed(
-                    context,
+                  onTap: () => context.push(
                     '/owner/history',
-                    arguments: _activeTab == 0 ? 'Month' : (_activeTab == 1 ? 'Quarter' : 'Year'),
+                    extra: _activeTab == 0 ? 'Month' : (_activeTab == 1 ? 'Quarter' : 'Year'),
                   ),
+                  behavior: HitTestBehavior.opaque,
                   child: Text(
                     'View Full History →',
                     style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold),
@@ -165,7 +167,8 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
                   text: 'Payouts are released 48h after guest check-in. Pending funds appear here until cleared.'),
               const SizedBox(height: 14),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/owner/violations'),
+                onTap: () => context.push('/owner/violations'),
+                behavior: HitTestBehavior.opaque,
                 child: WhiteCard(
                     padding: const EdgeInsets.all(14),
                     child: Row(children: [
@@ -187,7 +190,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
               const SizedBox(height: 20),
               GoldButton(
                 label: 'Withdraw to Bank',
-                onTap: () => Navigator.pushNamed(context, '/owner/withdraw'),
+                onTap: () => context.push('/owner/withdraw'),
               ),
               const SizedBox(height: 20),
             ],
@@ -198,9 +201,9 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
               onTap: (i, _) {
                 final routes = ['/owner/home', '/wishlist', '/owner/bookings', '/services', '/owner/profile'];
                 if (i == 0) {
-                  Navigator.popUntil(context, (r) => r.isFirst);
+                  context.go(routes[0]);
                 } else {
-                  Navigator.pushNamedAndRemoveUntil(context, routes[i], (r) => r.isFirst);
+                  context.go(routes[i]);
                 }
               }),
         ],

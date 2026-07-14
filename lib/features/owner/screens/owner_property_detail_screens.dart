@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
@@ -28,8 +29,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
               width: double.infinity, 
               child: SahelyImage(imageUrl: prop.image, enableViewer: true),
             ),
-              Positioned(top: 44, left: 16, child: GestureDetector(onTap: () => Navigator.maybePop(context), child: Container(width: 34, height: 34, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.92), shape: BoxShape.circle), child: const Icon(Icons.chevron_left, color: AppColors.navy)))),
-              Positioned(top: 50, right: 16, child: GestureDetector(onTap: () => Navigator.pushNamed(context, '/sos-owner'), child: const StatusBadge('SOS', kind: BadgeKind.red))),
+              Positioned(top: 44, left: 16, child: GestureDetector(onTap: () => context.pop(), behavior: HitTestBehavior.opaque, child: Container(width: 34, height: 34, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.92), shape: BoxShape.circle), child: const Icon(Icons.chevron_left, color: AppColors.navy)))),
+              Positioned(top: 50, right: 16, child: GestureDetector(onTap: () => context.push('/sos-owner'), behavior: HitTestBehavior.opaque, child: const StatusBadge('SOS', kind: BadgeKind.red))),
               Positioned(left: 18, bottom: 12, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(prop.name, style: AppTheme.dm(size: 19, weight: FontWeight.w700, color: Colors.white)),
                 Text('${prop.area} · Active', style: AppTheme.dm(size: 12, color: Colors.white70)),
@@ -39,9 +40,9 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Row(children: [
-                  Expanded(child: WideButton(label: 'Edit property', icon: Icons.edit_outlined, color: AppColors.navy, height: 46, onTap: () => Navigator.pushNamed(context, '/owner/edit'))),
+                  Expanded(child: WideButton(label: 'Edit property', icon: Icons.edit_outlined, color: AppColors.navy, height: 46, onTap: () => context.push('/owner/edit'))),
                   const SizedBox(width: 10),
-                  Expanded(child: WideButton(label: 'Preview listing', color: AppColors.navy, outline: true, height: 46, onTap: () => Navigator.pushNamed(context, '/owner/preview'))),
+                  Expanded(child: WideButton(label: 'Preview listing', color: AppColors.navy, outline: true, height: 46, onTap: () => context.push('/owner/preview'))),
                 ]),
                 const SizedBox(height: 16),
                 const StatRow(cards: [StatCard(value: '1,284', label: 'Views ▲18%'), StatCard(value: '96', label: 'Saved'), StatCard(value: '12', label: 'Bookings')]),
@@ -79,7 +80,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                   ]),
                 ),
                 const SizedBox(height: 12),
-                WideButton(label: 'Manage smart lock', color: AppColors.navy, outline: true, height: 44, onTap: () => Navigator.pushNamed(context, '/owner/smart-lock')),
+                WideButton(label: 'Manage smart lock', color: AppColors.navy, outline: true, height: 44, onTap: () => context.push('/owner/smart-lock')),
                 const SizedBox(height: 16),
                 Text('Availability', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
                 const SizedBox(height: 8),
@@ -210,6 +211,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                       else
                         GestureDetector(
                           onTap: () => setState(() => _isEditingPrice = true),
+                          behavior: HitTestBehavior.opaque,
                           child: Text(format(_price), style: AppTheme.dm(size: 30, weight: FontWeight.w700, color: AppColors.navy)),
                         ),
                     ]),
@@ -258,9 +260,9 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           child: Row(children: [
-            Expanded(child: WideButton(label: 'Discard', color: AppColors.navy, outline: true, height: 52, radius: 14, onTap: () => Navigator.maybePop(context))),
+            Expanded(child: WideButton(label: 'Discard', color: AppColors.navy, outline: true, height: 52, radius: 14, onTap: () => context.pop())),
             const SizedBox(width: 12),
-            Expanded(child: NavyButton(label: 'Save changes', height: 52, radius: 14, onTap: () => Navigator.maybePop(context))),
+            Expanded(child: NavyButton(label: 'Save changes', height: 52, radius: 14, onTap: () => context.pop())),
           ]),
         ),
       ]),

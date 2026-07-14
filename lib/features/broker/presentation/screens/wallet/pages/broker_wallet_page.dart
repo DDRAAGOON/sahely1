@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/widgets/kit.dart';
@@ -65,7 +66,8 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
                 Text('Add your card to withdraw earnings', style: AppTheme.dm(size: 11, color: const Color(0xFF8A6A1E))),
               ])),
               GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/add-card'),
+                  onTap: () => context.push('/add-card'),
+                  behavior: HitTestBehavior.opaque,
                   child: Text('Add Card →',
                       style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: const Color(0xFFD2760A)))),
             ]),
@@ -132,7 +134,8 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
           const SizedBox(height: 10),
           Center(
               child: GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/broker/history'),
+                  onTap: () => context.push('/broker/history'),
+                  behavior: HitTestBehavior.opaque,
                   child: Text('View Full History →', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)))),
         ],
       ),

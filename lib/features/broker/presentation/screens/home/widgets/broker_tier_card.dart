@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
 
@@ -8,7 +9,8 @@ class BrokerTierCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/broker/tier'),
+      onTap: () => context.push('/broker/tier'),
+      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(

@@ -6,6 +6,7 @@ import 'package:sahely/features/notifications/notifications_screen.dart';
 
 import 'package:sahely/core/navigation/shells/renter_shell.dart';
 import 'package:sahely/core/navigation/shells/broker_shell.dart';
+import 'package:sahely/core/navigation/shells/owner_shell.dart';
 import 'package:sahely/features/shared/shared_go_routes.dart';
 import 'package:sahely/features/owner/owner_go_routes.dart';
 import 'package:sahely/features/broker/broker_go_routes.dart';
@@ -24,6 +25,11 @@ import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broke
 import 'package:sahely/features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
 import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
 import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
+
+import 'package:sahely/features/owner/screens/owner_home_screen.dart';
+import 'package:sahely/features/owner/screens/owner_bookings_screen.dart';
+import 'package:sahely/features/owner/screens/owner_profile_screen.dart';
+import 'package:sahely/features/shared/screens/services_screen.dart';
 
 /// The global navigator key for the main router.
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -97,6 +103,9 @@ GoRouter createAppRouter(AuthProvider authProvider) {
           return role == Role.broker ? '/broker/home' : '/renter/home';
         }
       }
+
+      // Root redirect to splash
+      if (loc == '/') return '/splash';
 
       // No redirect
       return null;
@@ -205,6 +214,28 @@ GoRouter createAppRouter(AuthProvider authProvider) {
         ),
         StatefulShellBranch(
           routes: [GoRoute(path: '/broker/profile', builder: (context, state) => const BrokerProfilePage())],
+        ),
+      ],
+    ),
+
+    // ---- Owner (Standalone Shell) ----
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) => OwnerShell(navigationShell: navigationShell),
+      branches: [
+        StatefulShellBranch(
+          routes: [GoRoute(path: '/owner/home', builder: (context, state) => const OwnerHomeScreen())],
+        ),
+        StatefulShellBranch(
+          routes: [GoRoute(path: '/owner/wishlist', builder: (context, state) => const WishlistScreen(showNav: false))],
+        ),
+        StatefulShellBranch(
+          routes: [GoRoute(path: '/owner/bookings', builder: (context, state) => const OwnerBookingsScreen())],
+        ),
+        StatefulShellBranch(
+          routes: [GoRoute(path: '/owner/services', builder: (context, state) => const ServicesScreen(showNav: false))],
+        ),
+        StatefulShellBranch(
+          routes: [GoRoute(path: '/owner/profile', builder: (context, state) => const OwnerProfileScreen())],
         ),
       ],
     ),

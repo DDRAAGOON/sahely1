@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/common.dart';
@@ -37,9 +38,12 @@ class BlockedGateScreen extends StatelessWidget {
                   Pill('Card !', bg: Color(0xFFFEF4E8), fg: Color(0xFFD2760A), border: Color(0xFFD2760A)),
                 ]),
                 const SizedBox(height: 18),
-                NavyButton(label: 'Complete Setup', onTap: () => Navigator.pushReplacementNamed(context, '/add-card')),
+                NavyButton(label: 'Complete Setup', onTap: () => context.pushReplacement('/add-card')),
                 const SizedBox(height: 10),
-                GestureDetector(onTap: () => Navigator.maybePop(context), child: Text('Not Now', style: AppTheme.dm(size: 13, color: AppColors.muted))),
+                GestureDetector(
+                    onTap: () => context.pop(),
+                    behavior: HitTestBehavior.opaque,
+                    child: Text('Not Now', style: AppTheme.dm(size: 13, color: AppColors.muted))),
               ]),
             ),
           ),

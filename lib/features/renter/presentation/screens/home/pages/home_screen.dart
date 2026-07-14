@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/navigation/app_navigation.dart';
 import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
 import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
-import '../widgets1/greeting_header.dart';
-import '../widgets1/search_row.dart';
-import '../widgets1/mawsem_card.dart';
-import '../widgets1/promo_banner.dart';
-import '../widgets1/category_chips.dart';
+import '../widgets/category_chips.dart';
+import '../widgets/greeting_header.dart';
+import '../widgets/mawsem_card.dart';
+import '../widgets/promo_banner.dart';
+import '../widgets/search_row.dart';
 import '../widgets1/property_card.dart';
 import '../../Search/pages/search_filters_sheet.dart';
 
@@ -136,154 +137,150 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         builder: (context, state) {
           if (state is RenterHomeLoading || state is RenterHomeInitial) {
-            return const Scaffold(
-              backgroundColor: AppColors.cream,
-              body: Center(child: CircularProgressIndicator(color: AppColors.gold)),
-            );
+            return const Center(child: CircularProgressIndicator(color: AppColors.gold));
           }
           if (state is RenterHomeError) {
-            return Scaffold(
-              backgroundColor: AppColors.cream,
-              body: Center(child: Text(state.message)),
-            );
+            return Center(child: Text(state.message));
           }
 
-          return Scaffold(
-            backgroundColor: AppColors.cream,
-            body: SafeArea(
+          return Container(
+            color: AppColors.cream,
+            child: SafeArea(
               bottom: false,
               child: Column(
-        children: [
-          Expanded(
-            child: CustomScrollView(
-              slivers: [
-                // Greeting Header
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 14),
-                    child: GreetingHeader(),
-                  ),
-                ),
-
-                // Search Row
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SearchRow(
-                      onFilterTap: _showFiltersSheet,
-                    ),
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 14)),
-
-                // MAWSEM Card
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: MawsemCard(),
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 14)),
-
-                // Promo Banner
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: PromoBanner(),
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 18)),
-
-                // Category Chips
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: CategoryChips(
-                      onCategorySelected: _onCategoryChanged,
-                    ),
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 18)),
-
-                // Section Header - Trending Now
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Trending Now: $_selectedCategory',
-                          style: Theme.of(context).textTheme.titleLarge,
+                children: [
+                  Expanded(
+                    child: CustomScrollView(
+                      slivers: [
+                        // Greeting Header
+                        const SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(16, 16, 16, 14),
+                            child: GreetingHeader(),
+                          ),
                         ),
-                        TextButton(
-                          onPressed: () => AppNavigation.goToAllProperties(context),
-                          child: const Text(
-                            'See All',
-                            style: TextStyle(
-                              color: AppColors.gold,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Cairo',
+
+                        // Search Row
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: SearchRow(
+                              onFilterTap: _showFiltersSheet,
+                              onChatTap: () => context.push('/ai-chat'),
                             ),
                           ),
                         ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 14)),
+
+                        // MAWSEM Card
+                        const SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: MawsemCard(),
+                          ),
+                        ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 14)),
+
+                        // Promo Banner
+                        const SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: PromoBanner(),
+                          ),
+                        ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 18)),
+
+                        // Category Chips
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: CategoryChips(
+                              onCategorySelected: _onCategoryChanged,
+                            ),
+                          ),
+                        ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 18)),
+
+                        // Section Header - Trending Now
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Trending Now: $_selectedCategory',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                TextButton(
+                                  onPressed: () => AppNavigation.goToAllProperties(context),
+                                  child: const Text(
+                                    'See All',
+                                    style: TextStyle(
+                                      color: AppColors.gold,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Cairo',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 4)),
+
+                        // Property Cards
+                        SliverList(
+                          key: ValueKey(_selectedCategory),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                                child: PropertyCard(property: _filteredProperties[index]),
+                              );
+                            },
+                            childCount: _filteredProperties.length > 4 ? 4 : _filteredProperties.length,
+                          ),
+                        ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 12)),
+
+                        // Explore North Coast Section
+                        SliverToBoxAdapter(
+                          child: _buildExploreSection(),
+                        ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 32)),
+
+                        // Referral Banner
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: _buildReferralBanner(),
+                          ),
+                        ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 48)),
+
+                        // Footer
+                        SliverToBoxAdapter(
+                          child: _buildFooter(),
+                        ),
+
+                        const SliverToBoxAdapter(child: SizedBox(height: 120)),
                       ],
                     ),
                   ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 4)),
-
-                // Property Cards
-                SliverList(
-                  key: ValueKey(_selectedCategory),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                        child: PropertyCard(property: _filteredProperties[index]),
-                      );
-                    },
-                    childCount: _filteredProperties.length > 4 ? 4 : _filteredProperties.length,
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 12)),
-
-                // Explore North Coast Section
-                SliverToBoxAdapter(
-                  child: _buildExploreSection(),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 32)),
-
-                // Referral Banner
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _buildReferralBanner(),
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 48)),
-
-                // Footer
-                SliverToBoxAdapter(
-                  child: _buildFooter(),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 120)),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-            ) 
-             );
+          ); 
+             ;
         },
       ),
     );

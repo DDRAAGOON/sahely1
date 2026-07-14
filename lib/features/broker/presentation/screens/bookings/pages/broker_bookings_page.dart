@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../bloc/broker_bookings_cubit.dart';
 import '../widgets/broker_bookings_header.dart';
@@ -28,9 +29,9 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F0E8),
-      body: SafeArea(
+    return Container(
+      color: AppColors.cream,
+      child: SafeArea(
         bottom: false,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,29 +89,26 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
                       guests: booking.guests,
                       imageUrl: booking.imageUrl,
                       onDigitalLockTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BrokerSmartLockScreen(
-                              propertyName: booking.propertyName,
-                              bookingRef: booking.orderNo,
-                              passcode: '8842',
-                              checkIn: booking.checkIn,
-                              checkOut: booking.checkOut,
-                              propertyLat: 31.0263,
-                              propertyLng: 28.9402,
-                            ),
-                          ),
+                        context.push(
+                          '/broker/smart-lock',
+                          extra: {
+                            'propertyName': booking.propertyName,
+                            'bookingRef': booking.orderNo,
+                            'passcode': '8842',
+                            'checkIn': booking.checkIn,
+                            'checkOut': booking.checkOut,
+                            'propertyLat': 31.0263,
+                            'propertyLng': 28.9402,
+                          },
                         );
                       },
                       onSOSTap: () {
-                        Navigator.pushNamed(context, '/broker/sos');
+                        context.push('/broker/sos');
                       },
                       onViewDetailsTap: () {
-                        Navigator.pushNamed(
-                          context, 
+                        context.push(
                           '/broker/booking-details',
-                          arguments: {
+                          extra: {
                             'propertyName': booking.propertyName,
                             'location': booking.area,
                             'imageUrl': booking.imageUrl,

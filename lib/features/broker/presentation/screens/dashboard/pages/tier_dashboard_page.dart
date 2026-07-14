@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/widgets/kit.dart';
@@ -75,7 +76,7 @@ class TierDashboardPage extends StatelessWidget {
           const SizedBox(height: 14),
           const InfoNote(text: 'Tiers & perks reset every season — re-earn your tier to keep the benefits. New rate applies to bookings after you upgrade.'),
           const SizedBox(height: 14),
-          GoldButton(label: 'Refer more · 45 to Elite (5%)', onTap: () => Navigator.pushNamed(context, '/broker/refer')),
+          GoldButton(label: 'Refer more · 45 to Elite (5%)', onTap: () => context.push('/broker/refer')),
         ],
       ),
     );

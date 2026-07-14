@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -35,7 +36,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => context.pop(),
+                  behavior: HitTestBehavior.opaque,
                   child: Container(
                     width: 34,
                     height: 34,
@@ -81,6 +83,7 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                               _searchController.clear();
                               setState(() => _query = '');
                             },
+                            behavior: HitTestBehavior.opaque,
                             child: const Icon(Icons.close, size: 16, color: AppColors.faint),
                           ),
                       ],
@@ -90,12 +93,13 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                 const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () async {
-                    final result = await Navigator.pushNamed(context, '/filters');
+                    final result = await context.push('/filters');
                     if (result is Map<String, dynamic> && context.mounted) {
                       // Optionally navigate to browse results with these filters
-                      Navigator.pushNamed(context, '/browse', arguments: result);
+                      context.push('/browse', extra: result);
                     }
                   },
+                  behavior: HitTestBehavior.opaque,
                   child: Container(
                     width: 44,
                     height: 44,
@@ -108,7 +112,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                 ),
                 const SizedBox(width: 8),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/ai-chat'),
+                  onTap: () => context.push('/ai-chat'),
+                  behavior: HitTestBehavior.opaque,
                   child: Stack(
                     children: [
                       Container(

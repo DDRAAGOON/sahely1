@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
@@ -176,7 +177,7 @@ class OwnerPastDetailScreen extends StatelessWidget {
                                 color: AppColors.navy,
                                 height: 52,
                                 radius: 14,
-                                onTap: () => Navigator.pushNamed(context, '/owner/rate-guest', arguments: prop),
+                                onTap: () => context.push('/owner/rate-guest', extra: prop),
                               ),
                             ],
                           ),
@@ -189,7 +190,7 @@ class OwnerPastDetailScreen extends StatelessWidget {
                           outline: true,
                           height: 52,
                           radius: 14,
-                          onTap: () => Navigator.pop(context),
+                          onTap: () => context.pop(),
                         ),
                         const SizedBox(height: 40),
                       ],
@@ -211,7 +212,8 @@ class OwnerPastDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => Navigator.maybePop(context),
+                        onTap: () => context.pop(),
+                        behavior: HitTestBehavior.opaque,
                         child: Container(
                           width: 42,
                           height: 42,

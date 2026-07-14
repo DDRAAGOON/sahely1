@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../data/models.dart';
@@ -142,7 +143,7 @@ class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage>
                             rating: 4.8,
                             reviews: 12,
                           );
-                          Navigator.pushNamed(context, '/property', arguments: p);
+                          context.push('/property', extra: p);
                         },
                       );
                     },

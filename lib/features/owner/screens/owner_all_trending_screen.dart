@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/property_card.dart';
@@ -20,7 +21,7 @@ class OwnerAllTrendingScreen extends StatelessWidget {
             separatorBuilder: (_, __) => const SizedBox(height: 16),
             itemBuilder: (ctx, i) => PropertyCard(
               property: Sample.allTrending[i],
-              onTap: () => Navigator.pushNamed(ctx, '/property', arguments: Sample.allTrending[i]),
+              onTap: () => ctx.push('/property', extra: Sample.allTrending[i]),
             ),
           ),
         ),

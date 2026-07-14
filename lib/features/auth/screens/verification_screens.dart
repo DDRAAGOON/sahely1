@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../data/role_state.dart';
 import '../../../data/models.dart';
 import '../../../core/providers/auth_provider.dart';
+import '../../../core/providers/profile_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
@@ -527,6 +528,17 @@ class VerificationCompleteScreen extends StatelessWidget {
                   Role role = Role.renter;
                   if (roleStr == 'Property Owner') role = Role.owner;
                   if (roleStr == 'Broker') role = Role.broker;
+
+                  // Update profile with user data from registration
+                  final name = args?['name'] as String?;
+                  final email = args?['email'] as String?;
+                  final phone = args?['phone'] as String?;
+
+                  context.read<ProfileProvider>().updateProfile(
+                        name: name,
+                        email: email,
+                        phone: phone,
+                      );
 
                   context.read<AuthProvider>().login(
                     token: 'dummy_success_token', // In a real app, this would come from a backend response

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -105,7 +106,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                                     color: AppColors.navy,
                                     height: 48,
                                     radius: 12,
-                                    onTap: () => Navigator.pushNamed(context, '/smart-lock'))),
+                                    onTap: () => context.push('/smart-lock'))),
                             const SizedBox(width: 10),
                             Expanded(
                                 child: WideButton(
@@ -114,18 +115,19 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                                     color: const Color(0xFFB22222),
                                     height: 48,
                                     radius: 12,
-                                    onTap: () => Navigator.pushNamed(context, '/sos'))),
+                                    onTap: () => context.push('/sos'))),
                           ]),
                           const SizedBox(height: 14),
                           Center(
                             child: GestureDetector(
-                              onTap: () => Navigator.pushNamed(context, '/booked-property', arguments: Sample.lagoon),
+                              onTap: () => context.push('/booked-property', extra: Sample.lagoon),
+                              behavior: HitTestBehavior.opaque,
                               child: Text('View booking details →',
                                   style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.gold)),
                             ),
                           ),
                           const SizedBox(height: 14),
-                          ReviewButton(onTap: () => Navigator.pushNamed(context, '/write-review', arguments: Sample.lagoon)),
+                          ReviewButton(onTap: () => context.push('/write-review', extra: Sample.lagoon)),
                         ],
                       ),
                     ),
@@ -141,7 +143,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   area: 'Hacienda Bay · North Coast',
                   dates: 'Jun 21 – 25 · 2 guests',
                   order: 'SHLY-8842',
-                  onTap: () => Navigator.pushNamed(context, '/booking-upcoming', arguments: Sample.azure)),
+                  onTap: () => context.push('/booking-upcoming', extra: Sample.azure)),
               const SizedBox(height: 16),
               const SectionLabel('PAST STAYS'),
               const SizedBox(height: 12),
@@ -154,7 +156,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   dates: 'May 18 – 22 · 2 guests',
                   order: 'SHLY-7120',
                   review: true,
-                  onTap: () => Navigator.pushNamed(context, '/booking-past', arguments: Sample.dunes)),
+                  onTap: () => context.push('/booking-past', extra: Sample.dunes)),
             ],
           ),
           if (widget.showNav) const FloatingNav(active: 2),
@@ -183,6 +185,7 @@ class _SmallBookingRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(

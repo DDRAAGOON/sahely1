@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ProfileProvider extends ChangeNotifier {
-  final String _name = 'Mariam Hassan';
-  final String _email = 'mariam@example.com';
-  final String _phone = '+20 100 123 4567';
+  String _name = 'Mariam Hassan';
+  String _email = 'mariam@example.com';
+  String _phone = '+20 100 123 4567';
   String _bio = 'Sun-chaser & North Coast regular. Always hunting the next great beachfront escape 🏖️';
   String? _instagram = '@mariam.h';
   String? _tiktok;
@@ -56,12 +56,18 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   void updateProfile({
+    String? name,
+    String? email,
+    String? phone,
     String? bio,
     String? instagram,
     String? tiktok,
     String? facebook,
     String? avatarPath,
   }) {
+    if (name != null) _name = name;
+    if (email != null) _email = email;
+    if (phone != null) _phone = phone;
     if (bio != null) _bio = bio;
     _instagram = instagram;
     _tiktok = tiktok;

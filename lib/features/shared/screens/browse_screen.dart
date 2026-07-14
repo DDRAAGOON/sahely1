@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
@@ -153,9 +154,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
               SearchHeaderWithInput(
                 controller: _searchController,
                 onSubmitted: (v) => setState(() => _appliedSearchQuery = v),
-                onBack: () => Navigator.pop(context),
+                onBack: () => context.pop(),
                 onFilter: () async {
-                  final result = await Navigator.pushNamed(context, '/filters');
+                  final result = await context.push('/filters');
                   if (result is Map<String, dynamic>) {
                     setState(() => _filters = result);
                   }
@@ -187,6 +188,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.muted)),
                   GestureDetector(
                     onTap: _showSortMenu,
+                    behavior: HitTestBehavior.opaque,
                     child: Row(children: [
                       Text('Sort: $_sortBy', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.navy)),
                       const Icon(Icons.keyboard_arrow_down, size: 16, color: AppColors.navy),
@@ -201,7 +203,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 for (var p in results) ...[
                   PropertyCard(
                     property: p,
-                    onTap: () => Navigator.pushNamed(context, '/property', arguments: p),
+                    onTap: () => context.push('/property', extra: p),
                   ),
                   const SizedBox(height: 16),
                 ],

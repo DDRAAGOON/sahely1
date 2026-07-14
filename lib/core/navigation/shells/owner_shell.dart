@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../widgets/floating_nav.dart';
+import '../../../features/owner/widgets/owner_bottom_nav.dart';
 import '../../theme/app_colors.dart';
 
 class OwnerShell extends StatelessWidget {
@@ -11,7 +11,7 @@ class OwnerShell extends StatelessWidget {
     required this.navigationShell,
   });
 
-  void _onTabChanged(int index, NavItem item) {
+  void _onTabChanged(int index) {
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,
@@ -28,10 +28,14 @@ class OwnerShell extends StatelessWidget {
           navigationShell,
           
           // The persistent floating navigation bar
-          FloatingNav(
-            active: navigationShell.currentIndex,
-            items: FloatingNav.ownerTabs,
-            onTap: _onTabChanged,
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: OwnerBottomNav(
+              activeIndex: navigationShell.currentIndex,
+              onTap: _onTabChanged,
+            ),
           ),
         ],
       ),

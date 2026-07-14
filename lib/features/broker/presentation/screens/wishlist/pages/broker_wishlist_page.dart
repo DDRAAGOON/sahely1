@@ -34,9 +34,9 @@ class _BrokerWishlistPageState extends State<BrokerWishlistPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.cream,
-      body: SafeArea(
+    return Container(
+      color: AppColors.cream,
+      child: SafeArea(
         child: BlocBuilder<BrokerWishlistCubit, BrokerWishlistState>(
           builder: (context, state) {
             if (state.status == BrokerWishlistStatus.loading && state.collections.isEmpty) {

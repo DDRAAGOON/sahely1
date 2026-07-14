@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/ui.dart';
@@ -43,7 +44,7 @@ class BrowseEmptyState extends StatelessWidget {
             child: NavyButton(
               label: 'Clear Filters',
               radius: 14,
-              onTap: () => Navigator.pushReplacementNamed(context, '/filters'),
+              onTap: () => context.pushReplacement('/filters'),
             ),
           ),
         ],

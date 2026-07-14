@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -131,7 +132,7 @@ class PastBookingDetailScreen extends StatelessWidget {
                               color: AppColors.navy, 
                               height: 52, 
                               radius: 14,
-                              onTap: () => Navigator.pushNamed(context, '/write-review', arguments: property),
+                              onTap: () => context.push('/write-review', extra: property),
                             ),
                           ],
                         ),
@@ -144,7 +145,7 @@ class PastBookingDetailScreen extends StatelessWidget {
                         outline: true, 
                         height: 52, 
                         radius: 14,
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => context.pop(),
                       ),
                       const SizedBox(height: 40),
                     ],
@@ -163,7 +164,8 @@ class PastBookingDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => Navigator.maybePop(context),
+                        onTap: () => context.pop(),
+                        behavior: HitTestBehavior.opaque,
                         child: Container(
                           width: 42, height: 42,
                           decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)]),

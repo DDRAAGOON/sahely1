@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -60,7 +61,7 @@ class CollectionInsideScreen extends StatelessWidget {
                     icon: Icons.chat_bubble_outline,
                     color: AppColors.navy,
                     height: 42,
-                    onTap: () => Navigator.pushNamed(context, '/collection-chat'))),
+                    onTap: () => context.push('/collection-chat'))),
             const SizedBox(width: 8),
             Expanded(
                 child: WideButton(
@@ -69,7 +70,7 @@ class CollectionInsideScreen extends StatelessWidget {
                     color: AppColors.gold,
                     textColor: AppColors.navy,
                     height: 42,
-                    onTap: () => Navigator.pushNamed(context, '/share-collection'))),
+                    onTap: () => context.push('/share-collection'))),
             const SizedBox(width: 8),
             Expanded(
                 child: WideButton(
@@ -78,7 +79,7 @@ class CollectionInsideScreen extends StatelessWidget {
                     color: AppColors.navy,
                     outline: true,
                     height: 42,
-                    onTap: () => Navigator.pushNamed(context, '/compare'))),
+                    onTap: () => context.push('/compare'))),
           ]),
           const SizedBox(height: 16),
           const CollabCard(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../data/sample_data.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
@@ -37,7 +38,8 @@ class BrokerPortfolioPage extends StatelessWidget {
   }
 
   Widget _refCard(BuildContext context, String img, String name, String area, double rating, int reviews, int price, List<String> tags) => GestureDetector(
-        onTap: () => Navigator.pushNamed(context, '/broker/referred-detail'),
+        onTap: () => context.push('/broker/referred-detail'),
+        behavior: HitTestBehavior.opaque,
         child: WhiteCard(
           padding: EdgeInsets.zero,
           radius: 18,

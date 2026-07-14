@@ -99,12 +99,7 @@ class _SignInScreenState extends State<SignInScreen> {
                  // If router provided a 'from' query param, go there; otherwise go to role home
                  final target = widget.from != null ? Uri.decodeComponent(widget.from!) : (resp.role == Role.broker ? '/broker/home' : (resp.role == Role.owner ? '/owner/home' : '/renter/home'));
 
-                 // Use GoRouter navigation (works when app uses MaterialApp.router)
-                 try {
-                   context.go(target);
-                 } catch (_) {
-                   Navigator.pushReplacementNamed(context, target);
-                 }
+                 context.go(target);
               }),
             const SizedBox(height: 24),
             Row(

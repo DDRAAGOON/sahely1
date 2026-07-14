@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/owner/data/datasources/mock_owner_data_source.dart';
 import 'package:sahely/features/owner/data/repositories/owner_repository_impl.dart';
 import 'package:sahely/features/owner/domain/entities/owner_dashboard.dart';
@@ -116,9 +117,8 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
           }
 
           final dashboard = _dashboard;
-          return PhoneScaffold(
-          child: Stack(children: [
-            ListView(
+          return SafeArea(
+            child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
               children: [
                 // 1. Header
@@ -135,7 +135,8 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
             Row(children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/browse'),
+                  onTap: () => context.push('/browse'),
+                  behavior: HitTestBehavior.opaque,
                   child: Container(
                     height: 52,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -160,11 +161,12 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
               const SizedBox(width: 10),
               GestureDetector(
                 onTap: () async {
-                  final result = await Navigator.pushNamed(context, '/filters');
+                  final result = await context.push('/filters');
                   if (result is Map<String, dynamic> && context.mounted) {
-                    Navigator.pushNamed(context, '/browse', arguments: result);
+                    context.push('/browse', extra: result);
                   }
                 },
+                behavior: HitTestBehavior.opaque,
                 child: Container(
                   width: 50, 
                   height: 50, 
@@ -174,7 +176,8 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
               ),
               const SizedBox(width: 10),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/owner/ai-chat'),
+                onTap: () => context.push('/owner/ai-chat'),
+                behavior: HitTestBehavior.opaque,
                 child: Container(
                   width: 50, 
                   height: 50, 
@@ -192,7 +195,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
             const SizedBox(height: 18),
 
             // 3. MAWSEM Card (Synced Design)
-            _MawsemOwnerCard(onTap: () => Navigator.pushNamed(context, '/mawsem')),
+            _MawsemOwnerCard(onTap: () => context.push('/mawsem')),
             const SizedBox(height: 16),
 
             // 4. Carousel Banners
@@ -227,15 +230,16 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                 Text('Dashboard Overview', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
                 const SizedBox(height: 12),
                 StatRow(cards: [
-                  StatCard(value: '${dashboard?.propertiesCount ?? 3}', label: 'Properties'),
-                  StatCard(value: '${dashboard?.bookingsCount ?? 7}', label: 'Bookings'),
-                  StatCard(value: '${dashboard?.monthlyEarnings ?? '68k'}', label: 'EGP/mo'),
+                  StatCard(value: '${dashboard?.propertiesCount ?? 3}', label: 'Properties', onTap: () => context.push('/owner/properties')),
+                  StatCard(value: '${dashboard?.bookingsCount ?? 7}', label: 'Bookings', onTap: () => context.push('/owner/bookings')),
+                  StatCard(value: '${dashboard?.monthlyEarnings ?? '68k'}', label: 'EGP/mo', onTap: () => context.push('/owner/earnings')),
                 ]),
             const SizedBox(height: 16),
 
             // 6. Action: List new property
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/owner/add-property'),
+              onTap: () => context.push('/owner/add-property'),
+              behavior: HitTestBehavior.opaque,
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -264,10 +268,10 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
             SectionHeader(
               title: 'Pending Requests', 
               action: 'View all · 2',
-              onAction: () => Navigator.pushNamed(context, '/owner/requests'),
+              onAction: () => context.push('/owner/requests'),
             ),
             const SizedBox(height: 12),
-            PendingRequestCard(onTap: () => Navigator.pushNamed(context, '/owner/request-detail')),
+            PendingRequestCard(onTap: () => context.push('/owner/request-detail')),
             const SizedBox(height: 24),
 
             // 8. Categories & Portfolio
@@ -300,7 +304,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                    Center(child: Padding(padding: const EdgeInsets.all(32), child: Text('No properties in this category', style: AppTheme.dm(color: AppColors.muted))))
                 else
                   for (var p in _filteredProperties) ...[
-                    PropertyCard(property: p, onTap: () => Navigator.pushNamed(context, '/owner/insights', arguments: p)),
+                    PropertyCard(property: p, onTap: () => context.push('/owner/insights', extra: p)),
                     const SizedBox(height: 14),
                   ],
 
@@ -310,7 +314,8 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
 
             const SizedBox(height: 12),
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/owner/portfolio'),
+              onTap: () => context.push('/owner/portfolio'),
+              behavior: HitTestBehavior.opaque,
               child: WhiteCard(
                 padding: const EdgeInsets.all(16),
                 child: Row(children: [
@@ -329,9 +334,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
             const SizedBox(height: 20),
               ],
             ),
-            const FloatingNav(active: 0),
-          ]),
-        );
+          );
         },
       ),
     );

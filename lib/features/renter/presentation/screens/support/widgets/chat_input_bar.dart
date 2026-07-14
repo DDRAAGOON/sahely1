@@ -95,11 +95,11 @@ class _ChatInputBarState extends State<ChatInputBar> {
                     Expanded(
                       child: TextField(
                         controller: _controller,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Describe your emergency...',
                           hintStyle: TextStyle(
                             fontSize: 13,
-                            color: AppColors.placeholder,
+                            color: AppColors.navy.withValues(alpha: 0.5),
                             fontFamily: 'DM Sans',
                           ),
                           border: InputBorder.none,

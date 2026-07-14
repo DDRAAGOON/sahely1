@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
@@ -128,7 +129,7 @@ class _OwnerActiveDetailScreenState extends State<OwnerActiveDetailScreen> {
                               textColor: AppColors.navy,
                               height: 56,
                               radius: 12,
-                              onTap: () => Navigator.pushNamed(context, '/owner/smart-lock'),
+                              onTap: () => context.push('/owner/smart-lock'),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -139,7 +140,7 @@ class _OwnerActiveDetailScreenState extends State<OwnerActiveDetailScreen> {
                               color: const Color(0xFFB3261E),
                               height: 56,
                               radius: 12,
-                              onTap: () => Navigator.pushNamed(context, '/sos-owner'),
+                              onTap: () => context.push('/sos-owner'),
                             ),
                           ),
                         ],
@@ -313,6 +314,7 @@ class _OwnerActiveDetailScreenState extends State<OwnerActiveDetailScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: _sendAiMessage,
+                                    behavior: HitTestBehavior.opaque,
                                     child: Container(
                                       width: 32,
                                       height: 32,
@@ -345,7 +347,8 @@ class _OwnerActiveDetailScreenState extends State<OwnerActiveDetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => Navigator.maybePop(context),
+                        onTap: () => context.pop(),
+                        behavior: HitTestBehavior.opaque,
                         child: Container(
                           width: 42,
                           height: 42,

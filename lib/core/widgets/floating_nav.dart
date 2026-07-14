@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
 import '../../data/models.dart';
 import '../../data/role_state.dart';
@@ -49,18 +50,7 @@ class FloatingNav extends StatelessWidget {
 
   void _defaultOnTap(BuildContext context, int index, NavItem item) {
     if (item.route != null) {
-      final currentRoute = ModalRoute.of(context)?.settings.name;
-      if (currentRoute == item.route) return;
-
-      if (index == 0) {
-        Navigator.popUntil(context, (r) => r.isFirst);
-      } else {
-        Navigator.pushNamedAndRemoveUntil(
-          context, 
-          item.route!, 
-          (route) => route.isFirst,
-        );
-      }
+      context.go(item.route!);
     }
   }
 

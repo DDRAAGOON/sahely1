@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
@@ -187,7 +188,8 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
 
                       // 8. AI Banner
                       GestureDetector(
-                        onTap: () => Navigator.pushNamed(context, '/ai-chat'),
+                        onTap: () => context.push('/ai-chat'),
+                        behavior: HitTestBehavior.opaque,
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(color: const Color(0xFF1B2744), borderRadius: BorderRadius.circular(16)),
@@ -232,7 +234,8 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => Navigator.maybePop(context),
+                        onTap: () => context.pop(),
+                        behavior: HitTestBehavior.opaque,
                         child: Container(
                           width: 42, 
                           height: 42, 
@@ -262,12 +265,12 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
         content: Text('Are you sure you want to cancel this booking? This action cannot be undone.', style: AppTheme.dm(size: 14, color: AppColors.muted)),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(ctx),
+            onPressed: () => context.pop(),
             child: Text('No, keep it', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.muted)),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(ctx);
+              context.pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Booking cancellation request sent'), backgroundColor: Color(0xFFB22222)),
               );

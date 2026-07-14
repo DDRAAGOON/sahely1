@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
@@ -86,11 +87,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           radius: 999,
                         )),
                     const SizedBox(height: 24),
-                    NavyButton(label: 'Send OTP', radius: 999, onTap: () => Navigator.pushNamed(context, '/reset-otp')),
+                    NavyButton(label: 'Send OTP', radius: 999, onTap: () => context.push('/reset-otp')),
                     const SizedBox(height: 16),
                     Center(
                       child: GestureDetector(
                         onTap: _secondsRemaining == 0 ? _startCountdown : null,
+                        behavior: HitTestBehavior.opaque,
                         child: RichText(
                           text: TextSpan(
                             text: _secondsRemaining == 0 ? "Resend code now" : "Didn't get it? Resend in ",
@@ -109,7 +111,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     const Spacer(),
                     Center(
                       child: GestureDetector(
-                        onTap: () => Navigator.popUntil(context, ModalRoute.withName('/signin')),
+                        onTap: () => context.go('/signin'),
+                        behavior: HitTestBehavior.opaque,
                         child: Text('Back to Sign In',
                             style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
                       ),
@@ -226,7 +229,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
             Text('Strong password', style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: AppColors.success)),
             const SizedBox(height: 30),
             NavyButton(
-                label: 'Update Password', radius: 999, onTap: () => Navigator.pushNamed(context, '/password-updated')),
+                label: 'Update Password', radius: 999, onTap: () => context.push('/password-updated')),
           ],
         ),
       ),
@@ -268,7 +271,7 @@ class PasswordUpdatedScreen extends StatelessWidget {
             const SizedBox(height: 34),
             NavyButton(
                 label: 'Sign In Now',
-                onTap: () => Navigator.popUntil(context, ModalRoute.withName('/signin'))),
+                onTap: () => context.go('/signin')),
           ],
         ),
       ),

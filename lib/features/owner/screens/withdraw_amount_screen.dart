@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -137,7 +138,8 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                       Text('Layla Mansour', style: AppTheme.dm(size: 11, color: AppColors.muted)),
                     ])),
                     GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/owner/payout'),
+                      onTap: () => context.push('/owner/payout'),
+                      behavior: HitTestBehavior.opaque,
                       child: Text('Change', style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: AppColors.gold)),
                     ),
                   ])),
@@ -152,7 +154,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
             listenable: _amountController,
             builder: (context, _) => NavyButton(
               label: 'Withdraw EGP ${_amountController.text}',
-              onTap: () => Navigator.pushReplacementNamed(context, '/owner/withdraw-receipt'),
+              onTap: () => context.pushReplacement('/owner/withdraw-receipt'),
             ),
           ),
         ),

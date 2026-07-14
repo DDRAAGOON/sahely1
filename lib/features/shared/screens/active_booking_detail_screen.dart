@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
@@ -127,7 +128,7 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
                               textColor: AppColors.navy,
                               height: 56,
                               radius: 12,
-                              onTap: () => Navigator.pushNamed(context, '/smart-lock', arguments: prop),
+                              onTap: () => context.push('/smart-lock', extra: prop),
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -138,7 +139,7 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
                               color: const Color(0xFFB3261E),
                               height: 56,
                               radius: 12,
-                              onTap: () => Navigator.pushNamed(context, '/sos'),
+                              onTap: () => context.push('/sos'),
                             ),
                           ),
                         ],
@@ -246,7 +247,7 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
                       // 8. Rate Stay
                       Text('Rate your stay', style: AppTheme.dm(size: 19, weight: FontWeight.w700, color: AppColors.navy)),
                       const SizedBox(height: 14),
-                      ReviewButton(onTap: () => Navigator.pushNamed(context, '/write-review', arguments: prop)),
+                      ReviewButton(onTap: () => context.push('/write-review', extra: prop)),
                       const SizedBox(height: 30),
 
                       // 9. AI Section
@@ -312,6 +313,7 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: _sendAiMessage,
+                                    behavior: HitTestBehavior.opaque,
                                     child: Container(
                                       width: 32,
                                       height: 32,
@@ -344,7 +346,8 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => Navigator.maybePop(context),
+                        onTap: () => context.pop(),
+                        behavior: HitTestBehavior.opaque,
                         child: Container(
                           width: 42,
                           height: 42,

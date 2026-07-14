@@ -15,6 +15,7 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   bool _agreed = false;
@@ -29,6 +30,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     super.dispose();
@@ -65,9 +67,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              const FieldGroup(
+              FieldGroup(
                 label: 'Full Name',
-                child: AppTextField(hintText: 'Your full name'),
+                child: AppTextField(
+                  controller: _nameController,
+                  hintText: 'Your full name',
+                ),
               ),
               const SizedBox(height: 11),
               FieldGroup(
@@ -194,6 +199,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     context.push(
                       '/verify-email', 
                       extra: {
+                        'name': _nameController.text,
                         'email': _emailController.text,
                         'phone': _phoneController.text,
                         'role': role,
