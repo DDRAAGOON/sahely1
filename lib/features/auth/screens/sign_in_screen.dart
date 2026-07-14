@@ -9,6 +9,7 @@ import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/ui.dart';
 import '../../../core/providers/auth_provider.dart';
 import '../mock_auth_service.dart';
+import '../../../core/utils/security_util.dart';
 
 class SignInScreen extends StatefulWidget {
   final String? from;
@@ -85,13 +86,27 @@ class _SignInScreenState extends State<SignInScreen> {
             NavyButton(
               label: 'Sign In',
               onTap: () async {
+                 final email = _emailController.text.trim();
+                 final password = _passwordController.text;
+
+                 if (email.isEmpty || !SecurityUtil.isValidEmail(email)) {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                     const SnackBar(content: Text('Please enter a valid email address')),
+                   );
+                   return;
+                 }
+                 if (password.isEmpty) {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                     const SnackBar(content: Text('Please enter your password')),
+                   );
+                   return;
+                 }
+
                  // TODO: replace with real auth logic
                  // Mark user authenticated and set default role for demo
                  final auth = context.read<AuthProvider>();
 
                  // Use the mock auth service while the real API is not available.
-                 final email = _emailController.text.trim();
-                 final password = _passwordController.text;
                  final resp = await MockAuthService().signIn(email, password);
 
                  await auth.login(token: resp.token, role: resp.role);
@@ -122,8 +137,8 @@ class _SignInScreenState extends State<SignInScreen> {
             _SocialButton(
               label: 'Continue with Google',
               dark: false,
-              leading: Image.network(
-                'https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png',
+              leading: Image.asset(
+                'assets/images/google_logo.png',
                 width: 22,
                 height: 22,
               ),

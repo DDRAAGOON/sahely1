@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,6 +14,7 @@ import '../../features/broker/broker_go_routes.dart';
 import '../../core/providers/auth_provider.dart';
 import '../../data/role_state.dart';
 import '../../data/models.dart';
+import '../../features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 
 import '../../features/renter/presentation/screens/home/pages/home_screen.dart';
 import '../../features/renter/presentation/screens/wishlist/pages/wishlist_screen.dart';
@@ -35,15 +37,15 @@ final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 /// redirects and route-guarding. Pass the application's AuthProvider instance
 /// so the router can listen to authentication changes and refresh.
 
-GoRouter createAppRouter(AuthProvider authProvider) {
-  // Small ChangeNotifier that listens to both authProvider and roleState
-  // and notifies GoRouter when either changes.
+GoRouter createAppRouter(AuthProvider authProvider, VerificationCubit verificationCubit, {String initialLocation = '/splash'}) {
+  // Small ChangeNotifier that listens to authProvider, roleState, and verificationCubit
+  // and notifies GoRouter when any changes.
   final roleState = RoleState();
-  final routerRefresh = _RouterRefresh(authProvider, roleState);
+  final routerRefresh = _RouterRefresh(authProvider, roleState, verificationCubit);
 
   return GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: '/splash',
+    initialLocation: initialLocation,
     debugLogDiagnostics: true, // Helpful for debugging routing issues during migration
     refreshListenable: routerRefresh,
 
@@ -51,7 +53,7 @@ GoRouter createAppRouter(AuthProvider authProvider) {
       final loc = state.uri.toString();
       final isAuth = authProvider.isAuthenticated;
 
-      // Public (unauthenticated) routes
+      // Public (unauthenticated) or verification-related routes
       const publicPrefixes = <String>[
         '/splash',
         '/welcome',
@@ -68,6 +70,8 @@ GoRouter createAppRouter(AuthProvider authProvider) {
         '/id-verification',
         '/facial-scan',
         '/verification-complete',
+        '/blocked-gate',
+        '/add-card',
       ];
 
       bool isPublic(String path) => publicPrefixes.any((p) => path == p || path.startsWith(p));
@@ -76,6 +80,14 @@ GoRouter createAppRouter(AuthProvider authProvider) {
       if (!isAuth && !isPublic(loc)) {
         final encoded = Uri.encodeComponent(loc);
         return '/signin?from=$encoded';
+      }
+
+      // If authenticated but not fully verified, block access to protected/gated pages and redirect to /blocked-gate
+      if (isAuth && !isPublic(loc)) {
+        final isVerified = verificationCubit.canPerformAction();
+        if (!isVerified) {
+          return '/blocked-gate';
+        }
       }
 
       // If authenticated and at an auth screen, send them to their role home
@@ -219,15 +231,18 @@ GoRouter createAppRouter(AuthProvider authProvider) {
   );
 }
 
-/// Small helper that merges [AuthProvider] and [RoleState] into a single
+/// Small helper that merges [AuthProvider], [RoleState], and [VerificationCubit] into a single
 /// ChangeNotifier that GoRouter can listen to for changes.
 class _RouterRefresh extends ChangeNotifier {
   final AuthProvider _auth;
   final RoleState _roleState;
+  final VerificationCubit _verificationCubit;
+  StreamSubscription? _sub;
 
-  _RouterRefresh(this._auth, this._roleState) {
+  _RouterRefresh(this._auth, this._roleState, this._verificationCubit) {
     _auth.addListener(_onNotify);
     _roleState.addListener(_onNotify);
+    _sub = _verificationCubit.stream.listen((_) => _onNotify());
   }
 
   void _onNotify() => notifyListeners();
@@ -236,6 +251,7 @@ class _RouterRefresh extends ChangeNotifier {
   void dispose() {
     _auth.removeListener(_onNotify);
     _roleState.removeListener(_onNotify);
+    _sub?.cancel();
     super.dispose();
   }
 }

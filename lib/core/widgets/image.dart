@@ -31,12 +31,24 @@ class BlendedImage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(
-              url,
-              fit: BoxFit.cover,
-              loadingBuilder: (c, child, p) => p == null ? child : const ColoredBox(color: AppColors.cardWarm),
-              errorBuilder: (_, __, ___) => const ColoredBox(color: AppColors.cardWarm),
-            ),
+            url.startsWith('http')
+                ? Image.network(
+                    url,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (c, child, p) => p == null ? child : const ColoredBox(color: AppColors.cardWarm),
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      'assets/images/placeholder_property.png',
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Image.asset(
+                    url,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      'assets/images/placeholder_property.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
             if (overlay)
               const DecoratedBox(
                 decoration: BoxDecoration(
@@ -88,18 +100,32 @@ class SahelyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final image = Image.network(
-      imageUrl,
-      height: height,
-      width: width,
-      fit: fit,
-      loadingBuilder: loadingBuilder,
-      errorBuilder: errorBuilder ?? (_, __, ___) => Container(
-        height: height ?? 150,
-        width: width ?? double.infinity,
-        color: AppColors.navy,
-      ),
-    );
+    final image = imageUrl.startsWith('http')
+        ? Image.network(
+            imageUrl,
+            height: height,
+            width: width,
+            fit: fit,
+            loadingBuilder: loadingBuilder,
+            errorBuilder: errorBuilder ?? (_, __, ___) => Image.asset(
+              'assets/images/placeholder_property.png',
+              height: height ?? 150,
+              width: width ?? double.infinity,
+              fit: fit,
+            ),
+          )
+        : Image.asset(
+            imageUrl,
+            height: height,
+            width: width,
+            fit: fit,
+            errorBuilder: (_, __, ___) => Image.asset(
+              'assets/images/placeholder_property.png',
+              height: height ?? 150,
+              width: width ?? double.infinity,
+              fit: fit,
+            ),
+          );
 
     Widget result = image;
 

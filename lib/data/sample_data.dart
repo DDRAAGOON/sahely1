@@ -10,7 +10,7 @@ class Sample {
   static const azure = Property(
     name: 'Azure Beach Villa',
     area: 'North Coast',
-    image: 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=1200&q=72&auto=format&fit=crop',
+    image: 'assets/images/placeholder_property.png',
     price: 4500,
     rating: 4.8,
     reviews: 124,
@@ -26,7 +26,7 @@ class Sample {
   static const lagoon = Property(
     name: 'Lagoon Retreat',
     area: 'Marassi',
-    image: 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=1200&q=72&auto=format&fit=crop',
+    image: 'assets/images/placeholder_property.png',
     price: 6200,
     rating: 4.9,
     reviews: 86,
@@ -42,7 +42,7 @@ class Sample {
   static const dunes = Property(
     name: 'Golden Dunes',
     area: 'Hacienda Bay',
-    image: 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=1200&q=72&auto=format&fit=crop',
+    image: 'assets/images/placeholder_property.png',
     price: 3800,
     rating: 4.7,
     reviews: 53,
@@ -57,7 +57,7 @@ class Sample {
   static const telal = Property(
     name: 'Telal Chalet',
     area: 'Telal',
-    image: 'https://images.unsplash.com/photo-1729808641871-8d8b5ade6bbe?w=1200&q=72&auto=format&fit=crop',
+    image: 'assets/images/placeholder_property.png',
     price: 3200,
     rating: 4.6,
     beds: 3,
@@ -102,9 +102,9 @@ class Sample {
   ];
 
   static const destinations = [
-    ('Marassi', 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=400&q=70&auto=format&fit=crop'),
-    ('Hacienda Bay', 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=400&q=70&auto=format&fit=crop'),
-    ('Telal', 'https://images.unsplash.com/photo-1729808641871-8d8b5ade6bbe?w=400&q=70&auto=format&fit=crop'),
+    ('Marassi', 'assets/images/placeholder_property.png'),
+    ('Hacienda Bay', 'assets/images/placeholder_property.png'),
+    ('Telal', 'assets/images/placeholder_property.png'),
   ];
 
   // AL MAWSEM renter tiers — exact thresholds from the Programs spec.

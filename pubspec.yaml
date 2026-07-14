@@ -55,3 +55,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/placeholder_property.png
+    - assets/images/onboarding_1.png
+    - assets/images/onboarding_2.png
+    - assets/images/onboarding_3.png
+    - assets/images/google_logo.png
