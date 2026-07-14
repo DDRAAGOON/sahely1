@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/ui.dart';
+import '../../../core/utils/security_util.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   final String? role;
@@ -15,8 +16,11 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _agreed = false;
 
   String? _selectedDay;
@@ -29,8 +33,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -65,9 +72,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              const FieldGroup(
+              FieldGroup(
                 label: 'Full Name',
-                child: AppTextField(hintText: 'Your full name'),
+                child: AppTextField(
+                  controller: _nameController,
+                  hintText: 'Your full name',
+                  validator: (v) {
+                    if (v == null || v.trim().isEmpty) return 'Please enter your full name';
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 11),
               FieldGroup(
@@ -76,12 +90,19 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   controller: _emailController,
                   hintText: 'you@example.com',
                   keyboardType: TextInputType.emailAddress,
+                  validator: (v) {
+                    if (v == null || !SecurityUtil.isValidEmail(v)) {
+                      return 'Please enter a valid email address';
+                    }
+                    return null;
+                  },
                 ),
               ),
               const SizedBox(height: 11),
               FieldGroup(
                 label: 'Phone Number',
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 78,
@@ -100,20 +121,46 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         controller: _phoneController,
                         hintText: '10 XXXX XXXX', 
                         keyboardType: TextInputType.phone,
+                        validator: (v) {
+                          if (v == null || !SecurityUtil.isValidEgyptianPhone(v)) {
+                            return 'Enter a valid Egyptian mobile number';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 11),
-              const FieldGroup(
+              FieldGroup(
                 label: 'Password',
-                child: AppTextField(hintText: '••••••••', obscureText: true),
+                child: AppTextField(
+                  controller: _passwordController,
+                  hintText: '••••••••',
+                  obscureText: true,
+                  validator: (v) {
+                    if (v == null || !SecurityUtil.isValidPassword(v)) {
+                      return 'Must be min 8 chars with at least one number';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 11),
-              const FieldGroup(
+              FieldGroup(
                 label: 'Confirm Password',
-                child: AppTextField(hintText: '••••••••', obscureText: true),
+                child: AppTextField(
+                  controller: _confirmPasswordController,
+                  hintText: '••••••••',
+                  obscureText: true,
+                  validator: (v) {
+                    if (v != _passwordController.text) {
+                      return 'Passwords do not match';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 11),
               FieldGroup(
@@ -186,12 +233,24 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               NavyButton(
                 label: 'Create Account',
                 onTap: () {
-                  if (_formKey.currentState!.validate() && _agreed) {
+                  if (_formKey.currentState!.validate()) {
+                    if (!_agreed) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('You must agree to the Terms & Privacy Policy')),
+                      );
+                      return;
+                    }
+
+                    // Sanitize inputs at UI level to prevent XSS/injection before passing
+                    final sanitizedName = SecurityUtil.sanitizeInput(_nameController.text);
+                    final sanitizedEmail = SecurityUtil.sanitizeInput(_emailController.text);
+                    final sanitizedPhone = SecurityUtil.sanitizeInput(_phoneController.text);
+
                     context.push(
                       '/verify-email', 
                       extra: {
-                        'email': _emailController.text,
-                        'phone': _phoneController.text,
+                        'email': sanitizedEmail,
+                        'phone': sanitizedPhone,
                         'role': role,
                       },
                     );

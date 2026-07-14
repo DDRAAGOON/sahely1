@@ -43,13 +43,14 @@ Then wire it into `android/app/build.gradle` (`signingConfigs.release` reading
 can't update the app, so back it up; or use Play App Signing and upload an `.aab`.)
 
 ### Build the Play Store bundle
+For production, always enable code obfuscation and debug info splitting to protect our business logic:
 ```bash
-flutter build appbundle --release
+flutter build appbundle --release --obfuscate --split-debug-info=build/app/outputs/symbols
 # output: build/app/outputs/bundle/release/app-release.aab
 ```
 For local testing on a device instead:
 ```bash
-flutter build apk --release        # build/app/outputs/flutter-apk/app-release.apk
+flutter build apk --release --obfuscate --split-debug-info=build/app/outputs/symbols        # build/app/outputs/flutter-apk/app-release.apk
 ```
 
 ### Upload
@@ -61,8 +62,9 @@ flutter build apk --release        # build/app/outputs/flutter-apk/app-release.a
 
 ## 2. iOS → App Store (on a Mac)
 
+For production, always enable code obfuscation and debug info splitting to protect our business logic:
 ```bash
-flutter build ipa --release
+flutter build ipa --release --obfuscate --split-debug-info=build/ios/symbols
 # or open the Xcode workspace and Archive from there:
 open ios/Runner.xcworkspace
 ```

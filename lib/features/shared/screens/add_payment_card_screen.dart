@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/ui.dart';
+import '../../renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 
 class AddPaymentCardScreen extends StatefulWidget {
   const AddPaymentCardScreen({super.key});
@@ -149,7 +151,67 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
             ],
           ),
         ),
-        Padding(padding: const EdgeInsets.all(16), child: GoldButton(label: 'Save Card & Complete Setup', onTap: () => Navigator.maybePop(context))),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GoldButton(
+                label: 'Save Card & Complete Setup',
+                onTap: () {
+                  final cardNumber = _cardNumberController.text.replaceAll(' ', '');
+                  final expiry = _expiryController.text.replaceAll(' ', '');
+                  final cvv = _cvvController.text.trim();
+                  final name = _nameController.text.trim();
+
+                  if (cardNumber.length < 16) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter a valid 16-digit card number')),
+                    );
+                    return;
+                  }
+                  if (expiry.length < 3) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter a valid expiry date (MM / YY)')),
+                    );
+                    return;
+                  }
+                  if (cvv.length < 3) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter a valid 3-digit CVV')),
+                    );
+                    return;
+                  }
+                  if (name.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter the cardholder name')),
+                    );
+                    return;
+                  }
+
+                  // Update the VerificationCubit status safely
+                  try {
+                    context.read<VerificationCubit>().updateCardAdded();
+                  } catch (_) {}
+
+                  // Card details are handled strictly securely. No raw card data is ever printed or logged.
+                  Navigator.maybePop(context);
+                }
+              ),
+              const SizedBox(height: 12),
+              GestureDetector(
+                onTap: () {
+                  // Skip for now during signup
+                  Navigator.maybePop(context);
+                },
+                child: Text(
+                  'Skip for now',
+                  style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold),
+                ),
+              ),
+            ],
+          )
+        ),
       ]),
     );
   }

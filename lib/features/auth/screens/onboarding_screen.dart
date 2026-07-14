@@ -19,17 +19,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<Map<String, String>> _slides = [
     {
-      'image': 'https://images.unsplash.com/photo-1765288116127-3c5a76fa2ba6?w=1200&q=75&auto=format&fit=crop',
+      'image': 'assets/images/onboarding_1.png',
       'title': 'Find Your Perfect Stay',
       'subtitle': 'Discover luxury villas, chalets, and beachfront properties.',
     },
     {
-      'image': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=75&auto=format&fit=crop',
+      'image': 'assets/images/onboarding_2.png',
       'title': 'Book with Confidence',
       'subtitle': 'Verified listings and secure payments for a chaos-free experience.',
     },
     {
-      'image': 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200&q=75&auto=format&fit=crop',
+      'image': 'assets/images/onboarding_3.png',
       'title': 'Enjoy Your Vacation',
       'subtitle': 'Experience luxury like never before with our premium services.',
     },
