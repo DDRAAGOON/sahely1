@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../features/renter/presentation/screens/home/widgets1/renter_bottom_nav.dart';
+import '../../../features/renter/presentation/screens/home/widgets/renter_bottom_nav.dart';
 import '../../theme/app_colors.dart';
 
 class RenterShell extends StatelessWidget {

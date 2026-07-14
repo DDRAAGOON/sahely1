@@ -1,0 +1,12 @@
+- [x] Fix navigation in Identity Verification flow
+    - [x] Update `IdVerificationScreen` to use `go_router`
+    - [x] Update `FacialScanScreen` to use `go_router`
+    - [x] Update `VerificationCompleteScreen` to use `go_router`
+- [x] Implement "Skip for now" functionality
+    - [x] Ensure "Skip for now" on ID Verify screen goes to Facial Scan
+    - [x] Add "Skip for now" on Facial Scan screen to go to Completion
+- [x] Fix "Explore Properties" authentication & redirection
+    - [x] Map role string to `Role` enum
+    - [x] Call `AuthProvider.login()` to persist authentication
+    - [x] Ensure correct home screen redirection
+- [x] Verify display in UI

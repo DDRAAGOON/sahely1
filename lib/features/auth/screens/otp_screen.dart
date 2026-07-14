@@ -18,6 +18,8 @@ class OtpScreen extends StatefulWidget {
     this.bottomText = 'Wrong email? Change it',
     this.onVerify,
     this.isPhone = false,
+    this.email,
+    this.phone,
   });
 
   final String title;
@@ -29,6 +31,8 @@ class OtpScreen extends StatefulWidget {
   final String bottomText;
   final VoidCallback? onVerify;
   final bool isPhone;
+  final String? email;
+  final String? phone;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -45,8 +49,6 @@ class _OtpScreenState extends State<OtpScreen> {
   void initState() {
     super.initState();
     _startCountdown();
-    // Pre-filled code removal: we won't pre-fill from widget.code if it's empty, 
-    // and we ensure the controllers are cleared.
     for (var c in _controllers) {
       c.clear();
     }
@@ -56,13 +58,15 @@ class _OtpScreenState extends State<OtpScreen> {
     _timer?.cancel();
     _secondsRemaining = 120;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_secondsRemaining > 0) {
-          _secondsRemaining--;
-        } else {
-          _timer?.cancel();
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (_secondsRemaining > 0) {
+            _secondsRemaining--;
+          } else {
+            _timer?.cancel();
+          }
+        });
+      }
     });
   }
 
@@ -70,6 +74,11 @@ class _OtpScreenState extends State<OtpScreen> {
     int mins = seconds ~/ 60;
     int secs = seconds % 60;
     return '$mins:${secs.toString().padLeft(2, '0')}';
+  }
+
+  String _formatPhone(String? phone) {
+    if (phone == null || phone.isEmpty) return '';
+    return '+20 $phone';
   }
 
   @override
@@ -86,10 +95,6 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final dynamicEmail = args?['email'] as String?;
-    final dynamicPhone = args?['phone'] as String?;
-
     return PhoneScaffold(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -129,8 +134,8 @@ class _OtpScreenState extends State<OtpScreen> {
                                 ),
                                 TextSpan(
                                   text: widget.isPhone 
-                                    ? (dynamicPhone != null ? '+20 $dynamicPhone' : '+20 100 ••• ••42')
-                                    : (dynamicEmail ?? 'mariam.hassan@gmail.com'),
+                                    ? _formatPhone(widget.phone)
+                                    : (widget.email ?? ''),
                                   style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF2D2D2D)),
                                 ),
                               ],

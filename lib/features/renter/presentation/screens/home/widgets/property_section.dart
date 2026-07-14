@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../../../core/theme/app_colors.dart';
-import '../widgets1/property_card.dart';
+import '../../../../../../core/widgets/property_card.dart';
 
 enum PropertyBadge { trending, discount, newlyAdded }
 

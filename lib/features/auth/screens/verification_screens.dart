@@ -1,7 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../../data/role_state.dart';
+import '../../../data/models.dart';
+import '../../../core/providers/auth_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
@@ -87,7 +91,7 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments;
+    final args = GoRouterState.of(context).extra;
 
     return PhoneScaffold(
       child: LayoutBuilder(
@@ -172,12 +176,12 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
                       NavyButton(
                         label: 'Continue', 
                         enabled: _selectedType == 1 ? _frontImage != null : (_frontImage != null && _backImage != null),
-                        onTap: () => Navigator.pushNamed(context, '/facial-scan', arguments: args)
+                        onTap: () => context.push('/facial-scan', extra: args)
                       ),
                       const SizedBox(height: 14),
                       Center(
                         child: GestureDetector(
-                          onTap: () => Navigator.pushNamed(context, '/facial-scan', arguments: args),
+                          onTap: () => context.push('/facial-scan', extra: args),
                           child: Text('Skip for now',
                               style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
                         ),
@@ -338,7 +342,7 @@ class _FacialScanScreenState extends State<FacialScanScreen> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments;
+    final args = GoRouterState.of(context).extra;
 
     return PhoneScaffold(
       child: Padding(
@@ -406,9 +410,17 @@ class _FacialScanScreenState extends State<FacialScanScreen> with SingleTickerPr
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: () => Navigator.pushReplacementNamed(context, '/verification-complete', arguments: args),
+              onTap: () => context.pushReplacement('/verification-complete', extra: args),
               child: Text('Simulate capture',
                   style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: AppColors.gold)),
+            ),
+            const SizedBox(height: 14),
+            Center(
+              child: GestureDetector(
+                onTap: () => context.pushReplacement('/verification-complete', extra: args),
+                child: Text('Skip for now',
+                    style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+              ),
             ),
           ],
         ),
@@ -478,7 +490,7 @@ class VerificationCompleteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args = GoRouterState.of(context).extra as Map<String, dynamic>?;
     final roleStr = args?['role'] as String? ?? 'Renter';
     
     // Set the global role state
@@ -510,7 +522,19 @@ class VerificationCompleteScreen extends StatelessWidget {
             const SizedBox(height: 34),
             GoldButton(
                 label: 'Explore Properties',
-                onTap: () => Navigator.pushNamedAndRemoveUntil(context, targetRoute, (r) => false)),
+                onTap: () {
+                  // Mark as authenticated
+                  Role role = Role.renter;
+                  if (roleStr == 'Property Owner') role = Role.owner;
+                  if (roleStr == 'Broker') role = Role.broker;
+
+                  context.read<AuthProvider>().login(
+                    token: 'dummy_success_token', // In a real app, this would come from a backend response
+                    role: role,
+                  );
+
+                  context.go(targetRoute);
+                }),
           ],
         ),
       ),

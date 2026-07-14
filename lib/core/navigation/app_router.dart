@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-// Auth & Core Screens
-import '../../features/auth/auth_screens.dart';
-import '../../features/notifications/notifications_screen.dart';
+import 'package:sahely/features/auth/auth_screens.dart';
+import 'package:sahely/features/notifications/notifications_screen.dart';
 
-import 'shells/renter_shell.dart';
-import 'shells/broker_shell.dart';
-import '../../features/shared/shared_go_routes.dart';
-import '../../features/owner/owner_go_routes.dart';
-import '../../features/broker/broker_go_routes.dart';
-import '../../core/providers/auth_provider.dart';
-import '../../data/role_state.dart';
-import '../../data/models.dart';
+import 'package:sahely/core/navigation/shells/renter_shell.dart';
+import 'package:sahely/core/navigation/shells/broker_shell.dart';
+import 'package:sahely/features/shared/shared_go_routes.dart';
+import 'package:sahely/features/owner/owner_go_routes.dart';
+import 'package:sahely/features/broker/broker_go_routes.dart';
+import 'package:sahely/core/providers/auth_provider.dart';
+import 'package:sahely/data/role_state.dart';
+import 'package:sahely/data/models.dart';
 
-import '../../features/renter/presentation/screens/home/pages/home_screen.dart';
-import '../../features/renter/presentation/screens/wishlist/pages/wishlist_screen.dart';
-import '../../features/renter/presentation/screens/bookings/pages/my_bookings_screen.dart';
-import '../../features/renter/presentation/screens/concierge/pages/concierge_screen.dart';
-import '../../features/renter/presentation/screens/profile/pages/profile_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/home/pages/home_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/pages/wishlist_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/pages/my_bookings_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/concierge/pages/concierge_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/profile/pages/profile_screen.dart';
 
-import '../../features/broker/presentation/screens/home/pages/broker_home_page.dart';
-import '../../features/broker/presentation/screens/wishlist/pages/broker_wishlist_page.dart';
-import '../../features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
-import '../../features/broker/presentation/screens/services/pages/broker_services_page.dart';
-import '../../features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
+import 'package:sahely/features/broker/presentation/screens/home/pages/broker_home_page.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_wishlist_page.dart';
+import 'package:sahely/features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
+import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
+import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
 
 /// The global navigator key for the main router.
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -113,38 +112,46 @@ GoRouter createAppRouter(AuthProvider authProvider) {
     GoRoute(path: '/signin', builder: (context, state) => SignInScreen(from: state.uri.queryParameters['from'])),
     GoRoute(
       path: '/verify-email',
-      builder: (context, state) => OtpScreen(
-        title: 'Verify Your Email',
-        icon: Icons.mail_outline,
-        hint: 'Check your inbox — and your spam folder',
-        cta: 'Verify Email',
-        onVerify: () {
-          context.push('/verify-phone', extra: state.extra);
-        },
-      ),
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return OtpScreen(
+          title: 'Verify Your Email',
+          email: extra?['email'],
+          icon: Icons.mail_outline,
+          hint: 'Check your inbox — and your spam folder',
+          cta: 'Verify Email',
+          onVerify: () {
+            context.push('/verify-phone', extra: extra);
+          },
+        );
+      },
     ),
     GoRoute(
       path: '/verify-phone',
-      builder: (context, state) => OtpScreen(
-        title: 'Verify Your Number',
-        icon: Icons.phone_iphone,
-        hint: 'Check your messages for the SMS code',
-        cta: 'Verify Number',
-        bottomText: 'Wrong number? Change it',
-        isPhone: true,
-        onVerify: () {
-          context.push('/id-verification', extra: state.extra);
-        },
-      ),
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return OtpScreen(
+          title: 'Verify Your Number',
+          phone: extra?['phone'],
+          icon: Icons.phone_iphone,
+          hint: 'Check your messages for the SMS code',
+          cta: 'Verify Number',
+          bottomText: 'Wrong number? Change it',
+          isPhone: true,
+          onVerify: () {
+            context.push('/id-verification', extra: extra);
+          },
+        );
+      },
     ),
     GoRoute(path: '/forgot', builder: (context, state) => const ForgotPasswordScreen()),
     GoRoute(
       path: '/reset-otp',
       builder: (context, state) => OtpScreen(
         title: 'Enter the code',
-        subtitleSpans: const [
-          TextSpan(text: 'Sent to '),
-          TextSpan(text: 'mariam@example.com', style: TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF2D2D2D))),
+        subtitleSpans: [
+          const TextSpan(text: 'Sent to '),
+          TextSpan(text: (state.extra as Map<String, dynamic>?)?['email'] ?? '', style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF2D2D2D))),
         ],
         icon: Icons.mail_outline,
         hint: 'Check your inbox — and your spam folder',
