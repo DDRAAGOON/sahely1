@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/auth_provider.dart';
@@ -85,7 +86,7 @@ class LogoutButton extends StatelessWidget {
                 Navigator.pop(context); // Close dialog
                 await context.read<AuthProvider>().logout();
                 if (context.mounted) {
-                  Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil('/signin', (route) => false);
+                  context.go('/signin');
                 }
               },
               style: ElevatedButton.styleFrom(

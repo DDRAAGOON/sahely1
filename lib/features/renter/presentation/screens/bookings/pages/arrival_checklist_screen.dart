@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/theme/app_colors.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import '../widgets/checklist_header_banner.dart';
 import '../widgets/checklist_item.dart';

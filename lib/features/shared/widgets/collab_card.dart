@@ -4,7 +4,6 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/avatars.dart';
 import '../../../core/widgets/cards.dart';
 import '../../../core/widgets/common.dart';
-import '../../../core/widgets/ui.dart';
 
 class CollabCard extends StatelessWidget {
   const CollabCard({
@@ -31,12 +30,18 @@ class CollabCard extends StatelessWidget {
       padding: EdgeInsets.zero,
       radius: 16,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        SahelyImage(
-          imageUrl: image,
-          height: 120,
+        ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          fadeHeight: 50,
-          enableViewer: false,
+          child: Image.network(
+            image,
+            height: 180,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            loadingBuilder: (c, child, p) => p == null
+                ? child
+                : Container(height: 180, color: const Color(0xFFE8E4DC)),
+            errorBuilder: (_, __, ___) => Container(height: 180, color: const Color(0xFFE8E4DC)),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(12),

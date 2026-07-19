@@ -14,7 +14,7 @@ class OwnerBottomNav extends StatelessWidget {
       _NavItem(activeIcon: Icons.favorite, inactiveIcon: Icons.favorite_border, label: 'Wishlist'),
       _NavItem(activeIcon: Icons.calendar_month, inactiveIcon: Icons.calendar_today_outlined, label: 'Bookings'),
       _NavItem(activeIcon: Icons.room_service, inactiveIcon: Icons.room_service_outlined, label: 'Services'),
-      _NavItem(activeIcon: Icons.person, inactiveIcon: Icons.person_outline, label: 'Profile'),
+      _NavItem(activeIcon: Icons.person, inactiveIcon: Icons.person_outline, label: 'Manage'),
     ];
 
     return Container(

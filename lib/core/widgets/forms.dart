@@ -23,6 +23,7 @@ class AppTextField extends StatefulWidget {
     this.borderWidth = 1.0,
     this.textAlign = TextAlign.start,
     this.inputFormatters,
+    this.textColor,
   });
 
   final TextEditingController? controller;
@@ -41,6 +42,7 @@ class AppTextField extends StatefulWidget {
   final double borderWidth;
   final TextAlign textAlign;
   final List<TextInputFormatter>? inputFormatters;
+  final Color? textColor;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -105,7 +107,7 @@ class _AppTextFieldState extends State<AppTextField> {
         inputFormatters: widget.inputFormatters,
         textAlignVertical: isMultiline ? TextAlignVertical.top : TextAlignVertical.center,
         maxLines: isMultiline ? null : 1,
-        style: AppTheme.dm(size: widget.fontSize, color: Colors.black, letterSpacing: widget.letterSpacing),
+        style: AppTheme.dm(size: widget.fontSize, color: widget.textColor ?? Colors.black, letterSpacing: widget.letterSpacing),
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: AppTheme.dm(size: widget.fontSize, color: const Color(0xFFA0A2A0)),

@@ -55,7 +55,6 @@ class BlendedImage extends StatelessWidget {
   }
 }
 
-/// Image with a soft bottom fade.
 class SahelyImage extends StatelessWidget {
   const SahelyImage({
     super.key,
@@ -64,8 +63,8 @@ class SahelyImage extends StatelessWidget {
     this.height,
     this.width,
     this.fit = BoxFit.cover,
-    this.fadeColor = AppColors.cream,
-    this.fadeHeight = 180,
+    this.fadeColor,
+    this.fadeHeight = 100,
     this.borderRadius,
     this.showFade = true,
     this.errorBuilder,
@@ -78,7 +77,7 @@ class SahelyImage extends StatelessWidget {
   final double? height;
   final double? width;
   final BoxFit fit;
-  final Color fadeColor;
+  final Color? fadeColor;
   final double fadeHeight;
   final BorderRadius? borderRadius;
   final bool showFade;
@@ -119,8 +118,7 @@ class SahelyImage extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, fadeColor],
-                  stops: const [0, 0.78],
+                  colors: [Colors.transparent, fadeColor ?? AppColors.white.withValues(alpha: 0.95)],
                 ),
               ),
             ),
@@ -188,16 +186,15 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
       _transformationController.value = Matrix4.identity();
       setState(() => _isZoomed = false);
     } else {
-      const double scale = 3.0;
+      const double scale = 2.5;
       final size = MediaQuery.of(context).size;
-      final double x = -(scale - 1) * size.width / 2;
-      final double y = -(scale - 1) * size.height / 2;
-      
-      final Matrix4 matrix = Matrix4.identity()
-        ..setTranslationRaw(x, y, 0.0)
-        ..scaleByDouble(scale, scale, 1.0, 1.0);
+      final double dx = -(scale - 1) * size.width / 2;
+      final double dy = -(scale - 1) * size.height / 2;
 
-      _transformationController.value = matrix;
+      _transformationController.value = Matrix4.identity()
+        ..translate(dx, dy)
+        ..scale(scale);
+
       setState(() => _isZoomed = true);
     }
   }

@@ -11,7 +11,7 @@ class ListingSubmittedScreen extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final name = propertyName ?? (ModalRoute.of(context)?.settings.arguments as String? ?? 'Your property');
+    final name = propertyName ?? 'Your property';
     
     return Scaffold(
       body: Container(

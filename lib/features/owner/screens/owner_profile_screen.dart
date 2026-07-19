@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/core/widgets/floating_nav.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import '../widgets/owner_profile_header.dart';
@@ -60,17 +59,19 @@ class OwnerProfileScreen extends StatelessWidget {
                   iconColor: AppColors.gold,
                   onTap: () => context.push('/owner/earnings'),
                 ),
-                const SettingsRow(
+                SettingsRow(
                   icon: Icons.credit_card_outlined,
                   label: 'Payment Card',
                   value: 'Visa ••42',
                   iconColor: AppColors.gold,
+                  onTap: () => context.push('/add-card'),
                 ),
-                const SettingsRow(
+                SettingsRow(
                   icon: Icons.star_outline,
                   label: 'My Reviews',
                   value: '★ 4.9',
                   iconColor: AppColors.gold,
+                  onTap: () => context.push('/my-reviews'),
                 ),
                 SettingsRow(
                   icon: Icons.account_balance_outlined,

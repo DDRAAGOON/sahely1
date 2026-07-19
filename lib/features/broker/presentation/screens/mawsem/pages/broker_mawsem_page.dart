@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/renter/presentation/screens/mawsem/widgets/referral_code_card.dart';
-import 'package:sahely/features/renter/presentation/screens/mawsem/widgets/mawsem_hero_card.dart';
+import '../../../../../shared/widgets/mawsem/mawsem_hero_card.dart';
+import '../../../../../shared/widgets/mawsem/referral_code_card.dart';
 import '../widgets/broker_mawsem_levels_list.dart';
 import '../widgets/broker_how_to_earn_section.dart';
 

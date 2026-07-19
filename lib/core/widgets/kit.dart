@@ -11,4 +11,3 @@ export 'avatars.dart';
 export 'calendar.dart';
 export 'tags.dart';
 export 'cream_background.dart';
-export 'top_bar.dart';

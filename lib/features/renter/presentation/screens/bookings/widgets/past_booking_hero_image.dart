@@ -40,18 +40,10 @@ class PastBookingHeroImage extends StatelessWidget {
           onTap: () => _openGallery(context),
           child: AspectRatio(
             aspectRatio: 1.15, // Height ratio to match Golden Dunes image
-            child: ColorFiltered(
-              colorFilter: const ColorFilter.matrix(<double>[
-                0.2126, 0.7152, 0.0722, 0, 0,
-                0.2126, 0.7152, 0.0722, 0, 0,
-                0.2126, 0.7152, 0.0722, 0, 0,
-                0, 0, 0, 1, 0,
-              ]),
               child: Image.network(
                 imageUrl,
                 fit: BoxFit.cover,
               ),
-            ),
           ),
         ),
 

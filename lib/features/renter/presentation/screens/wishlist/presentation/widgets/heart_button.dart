@@ -37,37 +37,21 @@ class _HeartButtonState extends State<HeartButton> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WishlistCubit, WishlistState>(
-      buildWhen: (previous, current) {
-        if (current is WishlistStatusLoaded) return current.propertyId == widget.propertyId;
-        if (current is WishlistToggled) return current.propertyId == widget.propertyId;
-        return false;
-      },
       builder: (context, state) {
-        bool isWishlisted = false;
-
-        if (state is WishlistStatusLoaded && state.propertyId == widget.propertyId) {
-          isWishlisted = state.isWishlisted;
-        } else if (state is WishlistToggled && state.propertyId == widget.propertyId) {
-          isWishlisted = state.isWishlisted;
-        }
+        final isWishlisted = state.items.any((item) => item.propertyId == widget.propertyId);
 
         return GestureDetector(
           onTap: () async {
             HapticFeedback.lightImpact();
 
-            // Toggle logic directly without dialog
-            context.read<WishlistCubit>().toggleWishlist(
-              propertyId: widget.propertyId,
-              propertyName: widget.propertyName,
-              propertyImage: widget.propertyImage,
-            );
-            
-            // Show sheet only when it was NOT wishlisted (adding scenario)
-            if (!isWishlisted) {
-              await Future.delayed(const Duration(milliseconds: 200));
-              if (context.mounted) {
-                _showAddToCollectionSheet(context);
-              }
+            if (!isWishlisted && state.collections.length > 1) {
+              _showAddToCollectionSheet(context);
+            } else {
+              context.read<WishlistCubit>().toggleWishlist(
+                propertyId: widget.propertyId,
+                propertyName: widget.propertyName,
+                propertyImage: widget.propertyImage,
+              );
             }
           },
           child: AnimatedSwitcher(
@@ -102,10 +86,13 @@ class _HeartButtonState extends State<HeartButton> {
   void _showAddToCollectionSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => AddToCollectionSheet(
         propertyId: widget.propertyId,
+        propertyName: widget.propertyName,
+        propertyImage: widget.propertyImage,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
@@ -13,7 +14,6 @@ import '../widgets/rate_your_stay_section.dart';
 import '../widgets/ask_sahely_ai_section.dart';
 import 'smart_lock_screen.dart';
 import 'arrival_checklist_screen.dart';
-import '../../support/pages/sos_chat_screen.dart';
 import '../../reviews/pages/write_review_screen.dart';
 
 class BookedPropertyScreen extends StatelessWidget {
@@ -106,15 +106,7 @@ class BookedPropertyScreen extends StatelessWidget {
                   );
                 },
                 onSOSTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SOSChatScreen(
-                        propertyName: booking!.propertyName,
-                        orderNumber: booking.orderNumber,
-                      ),
-                    ),
-                  );
+                  context.push('/sos');
                 },
               ),
             ),
@@ -212,8 +204,7 @@ class BookedPropertyScreen extends StatelessWidget {
               child: AskSahelyAiSection(),
             ),
           ),
-
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          const SliverToBoxAdapter(child: SizedBox(height: 8)),
         ],
       ),
     );

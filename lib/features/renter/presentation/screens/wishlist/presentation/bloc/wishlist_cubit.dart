@@ -44,38 +44,77 @@ class WishlistState {
 class WishlistStatusLoaded extends WishlistState {
   final String propertyId;
   final bool isWishlisted;
-  WishlistStatusLoaded(this.propertyId, this.isWishlisted, List<WishlistCollection> collections) 
-    : super(toggledPropertyId: propertyId, isToggledStatus: isWishlisted, collections: collections, status: WishlistStatus.loaded);
+  WishlistStatusLoaded(this.propertyId, this.isWishlisted, WishlistState previousState) 
+    : super(
+        toggledPropertyId: propertyId, 
+        isToggledStatus: isWishlisted, 
+        collections: previousState.collections,
+        items: previousState.items,
+        status: WishlistStatus.loaded
+      );
 }
 
 class WishlistToggled extends WishlistState {
   final String propertyId;
   final bool isWishlisted;
-  WishlistToggled(this.propertyId, this.isWishlisted, List<WishlistCollection> collections) 
-    : super(toggledPropertyId: propertyId, isToggledStatus: isWishlisted, collections: collections, status: WishlistStatus.loaded);
+  WishlistToggled(this.propertyId, this.isWishlisted, WishlistState previousState) 
+    : super(
+        toggledPropertyId: propertyId, 
+        isToggledStatus: isWishlisted, 
+        collections: previousState.collections,
+        items: previousState.items,
+        status: WishlistStatus.loaded
+      );
 }
 
 class CollectionsLoaded extends WishlistState {
   @override
   final List<WishlistCollection> collections;
-  CollectionsLoaded(this.collections) : super(collections: collections, status: WishlistStatus.loaded);
+  CollectionsLoaded(this.collections, WishlistState previousState) 
+    : super(
+        collections: collections, 
+        items: previousState.items,
+        toggledPropertyId: previousState.toggledPropertyId,
+        isToggledStatus: previousState.isToggledStatus,
+        status: WishlistStatus.loaded
+      );
 }
 
 class WishlistItemsLoaded extends WishlistState {
   @override
   final List<WishlistItem> items;
-  WishlistItemsLoaded(this.items, List<WishlistCollection> collections) 
-    : super(items: items, collections: collections, status: WishlistStatus.loaded);
+  WishlistItemsLoaded(this.items, WishlistState previousState) 
+    : super(
+        items: items, 
+        collections: previousState.collections,
+        toggledPropertyId: previousState.toggledPropertyId,
+        isToggledStatus: previousState.isToggledStatus,
+        status: WishlistStatus.loaded
+      );
 }
 
 class WishlistLoading extends WishlistState {
-  WishlistLoading(List<WishlistCollection> collections) : super(status: WishlistStatus.loading, collections: collections);
+  WishlistLoading(WishlistState previousState) 
+    : super(
+        status: WishlistStatus.loading, 
+        collections: previousState.collections,
+        items: previousState.items,
+        toggledPropertyId: previousState.toggledPropertyId,
+        isToggledStatus: previousState.isToggledStatus,
+      );
 }
 
 class WishlistError extends WishlistState {
   final String message;
-  WishlistError(this.message, List<WishlistCollection> collections) 
-    : super(errorMessage: message, status: WishlistStatus.error, collections: collections);
+  WishlistError(this.message, WishlistState previousState) 
+    : super(
+        errorMessage: message, 
+        status: WishlistStatus.error, 
+        collections: previousState.collections,
+        items: previousState.items,
+        toggledPropertyId: previousState.toggledPropertyId,
+        isToggledStatus: previousState.isToggledStatus,
+      );
 }
 
 class WishlistCubit extends Cubit<WishlistState> {
@@ -86,9 +125,9 @@ class WishlistCubit extends Cubit<WishlistState> {
   Future<void> checkStatus(String propertyId) async {
     try {
       final isWishlisted = await _repository.isWishlisted(propertyId);
-      emit(WishlistStatusLoaded(propertyId, isWishlisted, state.collections));
+      emit(WishlistStatusLoaded(propertyId, isWishlisted, state));
     } catch (e) {
-      emit(WishlistError('Error checking status', state.collections));
+      emit(WishlistError('Error checking status', state));
     }
   }
 
@@ -105,9 +144,45 @@ class WishlistCubit extends Cubit<WishlistState> {
       );
       
       final collections = await _repository.getCollections();
-      emit(WishlistToggled(propertyId, isWishlisted, collections));
+      
+      // Update our internal items list by doing a fresh fetch so UI responds
+      final items = await _repository.getAllWishlistItems(); 
+      
+      // We manually construct a new WishlistState to update items along with the toggle
+      final newState = state.copyWith(
+        collections: collections,
+        items: items, // Add this so CollectionInsideScreen gets the new item!
+      );
+
+      emit(WishlistToggled(propertyId, isWishlisted, newState));
     } catch (e) {
-      emit(WishlistError('Failed to toggle', state.collections));
+      emit(WishlistError('Failed to toggle', state));
+    }
+  }
+
+  Future<void> saveToSpecificCollection({
+    required String propertyId,
+    required String propertyName,
+    required String propertyImage,
+    required String collectionId,
+  }) async {
+    try {
+      await _repository.addToWishlist(
+        propertyId: propertyId,
+        propertyName: propertyName,
+        propertyImage: propertyImage,
+        collectionId: collectionId,
+      );
+      final collections = await _repository.getCollections();
+      final items = await _repository.getAllWishlistItems();
+      
+      final newState = state.copyWith(collections: collections, items: items);
+      emit(WishlistToggled(propertyId, true, newState));
+      
+      // We emit CollectionsLoaded to refresh the UI
+      emit(CollectionsLoaded(collections, newState));
+    } catch (e) {
+      emit(WishlistError('Failed to save to collection', state));
     }
   }
 
@@ -122,7 +197,7 @@ class WishlistCubit extends Cubit<WishlistState> {
       );
       await loadCollections();
     } catch (e) {
-      emit(WishlistError('Failed to add to collection', state.collections));
+      emit(WishlistError('Failed to add to collection', state));
     }
   }
 
@@ -131,27 +206,30 @@ class WishlistCubit extends Cubit<WishlistState> {
       await _repository.addCollection(name);
       await loadCollections();
     } catch (e) {
-      emit(WishlistError('Failed to create collection', state.collections));
+      emit(WishlistError('Failed to create collection', state));
     }
   }
 
   Future<void> loadCollections() async {
-    emit(WishlistLoading(state.collections));
+    emit(WishlistLoading(state));
     try {
       final collections = await _repository.getCollections();
-      emit(CollectionsLoaded(collections));
+      final items = await _repository.getAllWishlistItems();
+      
+      final newState = state.copyWith(collections: collections, items: items);
+      emit(CollectionsLoaded(collections, newState));
     } catch (e) {
-      emit(WishlistError('Failed to load collections', state.collections));
+      emit(WishlistError('Failed to load collections', state));
     }
   }
 
   Future<void> loadWishlistItems(String collectionId) async {
-    emit(WishlistLoading(state.collections));
+    emit(WishlistLoading(state));
     try {
       final items = await _repository.getWishlistItems(collectionId);
-      emit(WishlistItemsLoaded(items, state.collections));
+      emit(WishlistItemsLoaded(items, state));
     } catch (e) {
-      emit(WishlistError('Failed to load wishlist items', state.collections));
+      emit(WishlistError('Failed to load wishlist items', state));
     }
   }
 }

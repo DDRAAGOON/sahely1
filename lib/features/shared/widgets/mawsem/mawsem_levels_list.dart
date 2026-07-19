@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'mawsem_level_tile.dart';
-import '../../profile/widgets/level/level_detail_sheet.dart';
-import '../../profile/widgets/level/level_perk.dart';
+import 'level/level_detail_sheet.dart';
+import 'level/level_perk.dart';
 
 class MawsemLevelsList extends StatelessWidget {
   final int currentLevel;
@@ -32,7 +32,7 @@ class MawsemLevelsList extends StatelessWidget {
     );
   }
 
-  // Level data updated to match image colors and added detailed perks
+  // TODO: Fetch this levels list from backend API to support dynamic updates.
   static const List<Map<String, dynamic>> _levels = [
     {
       'number': 1,

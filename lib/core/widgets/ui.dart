@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../providers/auth_provider.dart';
 
 export 'buttons.dart';
 export 'forms.dart';
@@ -31,6 +33,9 @@ Future<void> showLogoutDialog(BuildContext context) async {
   );
 
   if (result == true && context.mounted) {
-    context.go('/role');
+    await context.read<AuthProvider>().logout();
+    if (context.mounted) {
+      context.go('/signin');
+    }
   }
 }

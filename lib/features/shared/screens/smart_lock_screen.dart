@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
 
 class SmartLockScreen extends StatelessWidget {
-  const SmartLockScreen({super.key, this.outOfRange = false});
+  final Property? property;
   final bool outOfRange;
+  const SmartLockScreen({super.key, this.property, this.outOfRange = false});
 
   @override
   Widget build(BuildContext context) {
-    final property = ModalRoute.of(context)?.settings.arguments as Property?;
     final name = property?.name ?? 'Lagoon Retreat';
 
     return PhoneScaffold(

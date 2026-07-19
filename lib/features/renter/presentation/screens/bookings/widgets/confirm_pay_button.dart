@@ -13,9 +13,6 @@ class ConfirmPayButton extends StatelessWidget {
     required this.onPressed,
   });
 
-  String _formatPrice(int piastres) {
-    return 'EGP ${(piastres / 100).toStringAsFixed(0)}';
-  }
 
   @override
   Widget build(BuildContext context) {

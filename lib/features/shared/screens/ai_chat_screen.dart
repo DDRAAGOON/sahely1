@@ -3,7 +3,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 
 class AiChatScreen extends StatefulWidget {
-  const AiChatScreen({super.key});
+  final String? initialMessage;
+  const AiChatScreen({super.key, this.initialMessage});
 
   @override
   State<AiChatScreen> createState() => _AiChatScreenState();
@@ -18,6 +19,16 @@ class _AiChatScreenState extends State<AiChatScreen> {
   ];
   final TextEditingController _controller = TextEditingController();
   bool _isTyping = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialMessage != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _send(widget.initialMessage!);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -94,12 +105,16 @@ class _AiChatScreenState extends State<AiChatScreen> {
             ),
           ),
           if (_messages.length == 1 && !_isTyping)
-            Padding(
+              Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              child: Wrap(spacing: 8, runSpacing: 8, children: [
-                _chip('How does the pool heater work?', () => _send('How does the pool heater work?')),
-                _chip('Checkout time?', () => _send('Checkout time?')),
-              ]),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(children: [
+                  _chip('How does the pool heater work?', () => _send('How does the pool heater work?')),
+                  const SizedBox(width: 8),
+                  _chip('Checkout time?', () => _send('Checkout time?')),
+                ]),
+              ),
             ),
           Container(
             color: AppColors.white,

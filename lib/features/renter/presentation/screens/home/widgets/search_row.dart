@@ -23,20 +23,20 @@ class SearchRow extends StatelessWidget {
                 borderRadius: BorderRadius.circular(27),
                 border: Border.all(color: AppColors.border, width: 1),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.search,
                     color: AppColors.gold,
                     size: 22,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       'Find your perfect stay',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.placeholder,
+                        color: AppColors.navy.withValues(alpha: 0.5),
                         fontFamily: 'Cairo',
                       ),
                     ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/renter/presentation/screens/mawsem/widgets/mawsem_level_tile.dart';
-import 'package:sahely/features/renter/presentation/screens/profile/widgets/level/level_detail_sheet.dart';
-import 'package:sahely/features/renter/presentation/screens/profile/widgets/level/level_perk.dart';
+
+import '../../../../../shared/widgets/mawsem/level/level_detail_sheet.dart';
+import '../../../../../shared/widgets/mawsem/level/level_perk.dart';
+import '../../../../../shared/widgets/mawsem/mawsem_level_tile.dart';
+
 class BrokerMawsemLevelsList extends StatelessWidget {
   final int currentLevel;
   final int currentStars;

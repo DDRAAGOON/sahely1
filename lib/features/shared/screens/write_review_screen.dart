@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -8,7 +7,8 @@ import '../../../core/widgets/ui.dart';
 
 
 class WriteReviewScreen extends StatefulWidget {
-  const WriteReviewScreen({super.key});
+  final Property? property;
+  const WriteReviewScreen({super.key, this.property});
 
   @override
   State<WriteReviewScreen> createState() => _WriteReviewScreenState();
@@ -26,7 +26,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final property = ModalRoute.of(context)?.settings.arguments as Property?;
+    final property = widget.property;
     final name = property?.name ?? 'Lagoon Retreat';
 
     return PhoneScaffold(
@@ -57,7 +57,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                 maxLines: 6,
                 decoration: InputDecoration(
                   hintText: 'What did you love? Anything we could improve?',
-                  hintStyle: AppTheme.dm(size: 14, color: AppColors.faint),
+                  hintStyle: AppTheme.dm(size: 14, color: AppColors.navy.withValues(alpha: 0.5)),
                   filled: true,
                   fillColor: AppColors.white,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: AppColors.border)),

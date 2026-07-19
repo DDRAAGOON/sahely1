@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../data/models.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'common.dart';
@@ -38,7 +36,6 @@ class PropertyCard extends StatelessWidget {
                 children: [
                   SahelyImage(
                     imageUrl: p.image,
-                    fadeColor: const Color(0x8CF5F0E8),
                     enableViewer: false,
                   ),
                   if (showGuestFav && p.guestFavourite)
@@ -62,7 +59,7 @@ class PropertyCard extends StatelessWidget {
                     bottom: 12,
                     child: Text(
                       p.name,
-                      style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.white),
+                      style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.navy),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

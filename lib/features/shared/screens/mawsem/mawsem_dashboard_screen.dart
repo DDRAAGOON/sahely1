@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
-import '../widgets/mawsem_hero_card.dart';
-import '../widgets/mawsem_levels_list.dart';
-import '../widgets/how_to_earn_section.dart';
-import '../widgets/referral_code_card.dart';
+import '../../widgets/mawsem/mawsem_hero_card.dart';
+import '../../widgets/mawsem/mawsem_levels_list.dart';
+import '../../widgets/mawsem/how_to_earn_section.dart';
+import '../../widgets/mawsem/referral_code_card.dart';
 
 class MawsemDashboardScreen extends StatelessWidget {
   const MawsemDashboardScreen({super.key});
@@ -96,10 +96,10 @@ class MawsemDashboardScreen extends StatelessWidget {
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
             // Referral Code Card
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 32),
-                child: ReferralCodeCard(referralCode: 'MARIAM-50'),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 120), // Added padding for floating bottom nav
+                child: ReferralCodeCard(referralCode: profile.referralCode),
               ),
             ),
           ],

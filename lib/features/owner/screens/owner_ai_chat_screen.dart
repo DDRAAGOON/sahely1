@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -86,20 +88,27 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
                   ],
                 );
               }
-              return _user(m['text']);
+              return _user(m);
             },
           ),
         ),
         if (_messages.length == 1 && !_isTyping)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            child: Wrap(spacing: 8, runSpacing: 8, children: [
-              _sugg('Suggest a nightly price', () => _send('Suggest a nightly price')),
-              _sugg('Why is my listing pending?', () => _send('Why is my listing pending?')),
-            ]),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: [
+                _sugg('Suggest a nightly price', () => _send('Suggest a nightly price')),
+                const SizedBox(width: 8),
+                _sugg('Why is my listing pending?', () => _send('Why is my listing pending?')),
+              ]),
+            ),
           ),
         Container(color: AppColors.white, padding: const EdgeInsets.fromLTRB(12, 8, 12, 12), child: Row(children: [
-          Container(width: 36, height: 36, decoration: const BoxDecoration(color: AppColors.cream, shape: BoxShape.circle), child: const Icon(Icons.add, size: 18, color: AppColors.navy)),
+          GestureDetector(
+            onTap: _pickImage,
+            child: Container(width: 36, height: 36, decoration: const BoxDecoration(color: AppColors.cream, shape: BoxShape.circle), child: const Icon(Icons.add, size: 18, color: AppColors.navy)),
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Container(
@@ -129,12 +138,93 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
     );
   }
 
+  void _pickImageSource(ImageSource source, BuildContext ctx) async {
+    Navigator.pop(ctx);
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _messages.add({'role': 'user', 'text': '', 'local_image': pickedFile.path});
+        _isTyping = true;
+      });
+      Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          _isTyping = false;
+          _messages.add({'role': 'ai', 'text': 'I see you uploaded a photo. How can I help you with it?', 'action': false});
+        });
+      });
+    }
+  }
+
+  void _pickImage() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        decoration: const BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(width: 36, height: 4, decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2))),
+            const SizedBox(height: 24),
+            Text('Upload Photo', style: AppTheme.dm(size: 17, weight: FontWeight.w700, color: AppColors.navy)),
+            const SizedBox(height: 24),
+            WideButton(
+              label: 'Choose from Gallery',
+              onTap: () => _pickImageSource(ImageSource.gallery, ctx),
+            ),
+            const SizedBox(height: 12),
+            WideButton(
+              label: 'Take a Photo',
+              outline: true,
+              color: AppColors.navy,
+              onTap: () => _pickImageSource(ImageSource.camera, ctx),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _ai(String t) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(width: 28, height: 28, decoration: BoxDecoration(gradient: const LinearGradient(colors: [AppColors.goldBright, AppColors.gold]), borderRadius: BorderRadius.circular(8)), child: const Icon(Icons.auto_awesome, size: 15, color: AppColors.navy)),
         const SizedBox(width: 8),
         Flexible(child: Container(padding: const EdgeInsets.all(11), decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(14)), child: Text(t, style: AppTheme.dm(size: 13, color: AppColors.ink, height: 1.4)))),
       ]));
-  Widget _user(String t) => Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [Flexible(child: Container(padding: const EdgeInsets.all(11), decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(14)), child: Text(t, style: AppTheme.dm(size: 13, color: Colors.white, height: 1.4))))]));
+      
+  Widget _user(Map<String, dynamic> m) {
+    if (m['local_image'] != null) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: Image.file(File(m['local_image']), width: 150, height: 150, fit: BoxFit.cover),
+            ),
+          ],
+        ),
+      );
+    }
+    if (m['image'] != null) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: Image.network(m['image'], width: 150, height: 150, fit: BoxFit.cover),
+            ),
+          ],
+        ),
+      );
+    }
+    return Padding(padding: const EdgeInsets.only(bottom: 12), child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [Flexible(child: Container(padding: const EdgeInsets.all(11), decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(14)), child: Text(m['text'] ?? '', style: AppTheme.dm(size: 13, color: Colors.white, height: 1.4))))]));
+  }
+
   Widget _sugg(String t, VoidCallback onTap) => GestureDetector(
     onTap: onTap,
     child: Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), decoration: BoxDecoration(border: Border.all(color: AppColors.gold), borderRadius: BorderRadius.circular(18)), child: Text(t, style: AppTheme.dm(size: 12, color: const Color(0xFF9A7A22))))

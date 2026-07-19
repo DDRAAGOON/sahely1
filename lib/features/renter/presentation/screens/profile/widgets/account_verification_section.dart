@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import '../../../verification/pages/add_payment_card_screen.dart';
 
 class AccountVerificationSection extends StatelessWidget {
   final bool emailConfirmed;
@@ -80,12 +80,7 @@ class AccountVerificationSection extends StatelessWidget {
                 label: 'Identity Verified',
                 status: VerificationStatus.pending,
                 actionLabel: 'Verify Now →',
-                onAction: () {
-                  // Navigate to ID Verification (Screen 10)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Navigate to ID Verification')),
-                  );
-                },
+                onAction: () => context.push('/id-verification'),
               ),
               _Divider(),
               // Payment Card
@@ -95,14 +90,7 @@ class AccountVerificationSection extends StatelessWidget {
                 label: 'Payment Card',
                 status: paymentCardAdded ? VerificationStatus.done : VerificationStatus.pending,
                 actionLabel: 'Add Card →',
-                onAction: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddPaymentCardScreen(),
-                    ),
-                  );
-                },
+                onAction: () => context.push('/add-card'),
               ),
             ],
           ),

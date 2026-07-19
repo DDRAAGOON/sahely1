@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
-import 'level/level_detail_sheet.dart';
-import 'level/level_perk.dart';
+import '../../../../../shared/widgets/mawsem/level/level_detail_sheet.dart';
+import '../../../../../shared/widgets/mawsem/level/level_perk.dart';
 
 class MawsemLevelBadge extends StatelessWidget {
   final String levelName;
@@ -17,7 +17,7 @@ class MawsemLevelBadge extends StatelessWidget {
 
   void _showLevelDetail(BuildContext context) {
     final profile = context.read<ProfileProvider>();
-    
+
     // Level Icons
     final Map<int, IconData> levelIcons = {
       1: Icons.directions_walk,
@@ -66,8 +66,10 @@ class MawsemLevelBadge extends StatelessWidget {
   List<LevelPerk> _getMockPerks(int level) {
     if (level == 5) {
       return const [
-        LevelPerk(title: 'Free Professional Cleaning', subtitle: 'Once per stay'),
-        LevelPerk(title: 'Early access (48h)', subtitle: 'For all season promos'),
+        LevelPerk(
+            title: 'Free Professional Cleaning', subtitle: 'Once per stay'),
+        LevelPerk(
+            title: 'Early access (48h)', subtitle: 'For all season promos'),
         LevelPerk(title: 'Everything from Coastal Regular'),
       ];
     }

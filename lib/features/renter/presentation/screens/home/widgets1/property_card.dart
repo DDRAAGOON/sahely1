@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 import '../../../../../../core/theme/app_colors.dart';
-import '../../property/page/property_detail_screen.dart';
 import '../../wishlist/presentation/widgets/heart_button.dart';
 
 class PropertyCard extends StatelessWidget {
@@ -27,20 +27,7 @@ class PropertyCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PropertyDetailScreen(
-              propertyId: id,
-              propertyName: name,
-              propertyImage: imageUrl,
-              location: location,
-              rating: rating,
-              reviewCount: reviews,
-              pricePerNight: priceInt,
-            ),
-          ),
-        );
+        context.push('/property', extra: prop);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),

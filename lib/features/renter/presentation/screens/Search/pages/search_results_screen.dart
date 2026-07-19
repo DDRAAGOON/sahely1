@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../../core/navigation/app_router.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../widgets/search_result_card.dart';
 import '../widgets/filter_chips.dart';
@@ -21,7 +22,6 @@ class SearchResultsScreen extends StatefulWidget {
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
   final String _selectedSort = 'Rating';
-  final List<String> _sortOptions = ['Rating', 'Price Low', 'Price High', 'Newest'];
   final TextEditingController _searchController = TextEditingController();
   String _activeChip = 'All';
   
@@ -204,8 +204,9 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
 
   void _showFiltersSheet() {
     showModalBottomSheet(
-      context: context,
+      context: rootNavigatorKey.currentContext ?? context,
       isScrollControlled: true,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
         return DraggableScrollableSheet(

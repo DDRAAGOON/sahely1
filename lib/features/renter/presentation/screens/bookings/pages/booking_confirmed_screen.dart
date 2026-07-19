@@ -182,7 +182,7 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
               const SizedBox(height: 32),
 
               BookingActionButtons(
-                onViewBookings: () => AppNavigation.goToRenterBookings(context),
+                onViewBookings: () => AppNavigation.goToMyBookings(context),
               ),
               
               const SizedBox(height: 24),

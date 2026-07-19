@@ -53,7 +53,6 @@ class _FeatureChip extends StatelessWidget {
         label,
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w500,
           color: isSpecial ? const Color(0xFF2E7D32) : AppColors.navy,
           fontFamily: 'DM Sans',
         ),

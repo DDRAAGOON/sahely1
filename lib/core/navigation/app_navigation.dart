@@ -1,144 +1,105 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import '../constants/app_routes.dart';
 
 class AppNavigation {
-  AppNavigation._();
+  AppNavigation._(); // Private constructor
 
-  // ═══════════════════════════════════════════════════════
-  // CORE ROUTING HELPERS (Phase 4.1 Bridge)
-  // ═══════════════════════════════════════════════════════
+  /// Safely pushes a route.
+  static void safePush(BuildContext context, String path) => context.push(path);
 
-  /// Safely pushes a route, trying GoRouter first.
-  static void safePush(BuildContext context, String path) {
-    context.push(path);
+  /// Safely replaces a route.
+  static void safeGo(BuildContext context, String path) => context.go(path);
+
+  // --------------------------------------------------------------------------
+  // Auth Navigation
+  // --------------------------------------------------------------------------
+  static void goToSplash(BuildContext context) => context.go(AppRoutes.splash);
+  static void goToWelcome(BuildContext context) => context.push(AppRoutes.welcome);
+  static void goToSignIn(BuildContext context, {String? from}) {
+    if (from != null) {
+      context.push('${AppRoutes.signIn}?from=$from');
+    } else {
+      context.push(AppRoutes.signIn);
+    }
   }
+  static void goToRegister(BuildContext context, {String? role}) => 
+      context.push(AppRoutes.createAccount, extra: role);
+  static void goToForgotPassword(BuildContext context) => context.push(AppRoutes.forgotPassword);
+  
+  // Verification
+  static void goToVerifyGate(BuildContext context) => context.push(AppRoutes.verifyGate);
+  static void goToVerifyEmail(BuildContext context, {Map<String, dynamic>? extra}) => 
+      context.push(AppRoutes.verifyEmail, extra: extra);
+  static void goToVerifyPhone(BuildContext context, {Map<String, dynamic>? extra}) => 
+      context.push(AppRoutes.verifyPhone, extra: extra);
+  static void goToIdVerification(BuildContext context, {Map<String, dynamic>? extra}) => 
+      context.push(AppRoutes.idVerification, extra: extra);
 
-  /// Safely replaces a route, trying GoRouter first.
-  static void safeGo(BuildContext context, String path) {
-    context.go(path);
+  // --------------------------------------------------------------------------
+  // Renter Navigation
+  // --------------------------------------------------------------------------
+  static void goToRenterHome(BuildContext context) => context.go(AppRoutes.renterHome);
+  static void goToRenterWishlist(BuildContext context) => context.push(AppRoutes.renterWishlist);
+  static void goToRenterBookings(BuildContext context) => context.push(AppRoutes.renterBookings);
+  static void goToRenterServices(BuildContext context) => context.push(AppRoutes.renterServices);
+  static void goToRenterProfile(BuildContext context) => context.push(AppRoutes.renterProfile);
+
+  // --------------------------------------------------------------------------
+  // Broker Navigation
+  // --------------------------------------------------------------------------
+  static void goToBrokerHome(BuildContext context) => context.go(AppRoutes.brokerHome);
+  static void goToBrokerDashboard(BuildContext context) => context.push(AppRoutes.brokerDashboard);
+  static void goToBrokerWallet(BuildContext context) => context.push(AppRoutes.wallet); // Note: using shared wallet route usually
+  static void goToBrokerPortfolio(BuildContext context) => context.push(AppRoutes.brokerReferredDetail); // Using referred detail for portfolio
+  static void goToBrokerRefer(BuildContext context) => context.push(AppRoutes.brokerRefer);
+  static void goToBrokerTier(BuildContext context) => context.push(AppRoutes.brokerTier);
+  static void goToBrokerTierUpgrade(BuildContext context) => context.push(AppRoutes.brokerTierUpgrade);
+  static void goToBrokerHistory(BuildContext context) => context.push(AppRoutes.brokerHistory);
+  static void goToBrokerProfile(BuildContext context) => context.push(AppRoutes.brokerProfile);
+  static void goToBrokerReferredDetail(BuildContext context) => context.push(AppRoutes.brokerReferredDetail);
+
+  // --------------------------------------------------------------------------
+  // Owner Navigation
+  // --------------------------------------------------------------------------
+  static void goToOwnerHome(BuildContext context) => context.go(AppRoutes.ownerHome);
+  static void goToOwnerListings(BuildContext context) => context.push(AppRoutes.ownerListings);
+  static void goToOwnerBookings(BuildContext context) => context.push(AppRoutes.ownerBookings);
+  static void goToOwnerProfile(BuildContext context) => context.push(AppRoutes.ownerProfile);
+
+  // --------------------------------------------------------------------------
+  // Multi-role Navigation
+  // --------------------------------------------------------------------------
+  static void goToMyBookings(BuildContext context) {
+    final role = RoleState().currentRole;
+    if (role == Role.owner) {
+      context.go('${AppRoutes.ownerBookings}?tab=stays');
+    } else if (role == Role.broker) {
+      context.go(AppRoutes.brokerBookings);
+    } else {
+      context.go(AppRoutes.renterBookings);
+    }
   }
-
-  // ═══════════════════════════════════════════════════════
-  // SHELL TAB ROUTES (Phase 4.4 — replaces NavigationProvider)
-  // ═══════════════════════════════════════════════════════
-
-  static const renterTabRoutes = <String>[
-    '/renter/home',
-    '/renter/wishlist',
-    '/renter/bookings',
-    '/renter/services',
-    '/renter/profile',
-  ];
-
-  static const brokerTabRoutes = <String>[
-    '/broker/home',
-    '/broker/wishlist',
-    '/broker/bookings',
-    '/broker/services',
-    '/broker/profile',
-  ];
-
-  /// Switches the Renter shell to the tab at [index] (0=Home … 4=Profile).
-  static void goToRenterTab(BuildContext context, int index) {
-    if (index < 0 || index >= renterTabRoutes.length) return;
-    safeGo(context, renterTabRoutes[index]);
-  }
-
-  /// Switches the Broker shell to the tab at [index] (0=Home … 4=Profile).
-  static void goToBrokerTab(BuildContext context, int index) {
-    if (index < 0 || index >= brokerTabRoutes.length) return;
-    safeGo(context, brokerTabRoutes[index]);
-  }
-
-  static void goToRenterBookings(BuildContext context) {
-    safeGo(context, '/renter/bookings');
-  }
-
-  static void goToRenterHome(BuildContext context) {
-    safeGo(context, '/renter/home');
-  }
-
-  // ═══════════════════════════════════════════════════════
-  // RENTER FLOW
-  // ═══════════════════════════════════════════════════════
-
+  // --------------------------------------------------------------------------
+  // Shared Navigation
+  // --------------------------------------------------------------------------
+  static void goToPropertyDetail(BuildContext context, dynamic propertyOrId) => 
+      context.push(AppRoutes.propertyDetail, extra: propertyOrId);
+      
+  static void goToBookingDetail(BuildContext context, dynamic bookingOrId) => 
+      context.push(AppRoutes.bookingDetail, extra: bookingOrId);
+      
+  static void goToSearch(BuildContext context) => context.push(AppRoutes.search);
+  
   static void goToSearchResults(BuildContext context, {String query = '', Map<String, dynamic>? filters}) {
-    context.push('/browse', extra: filters ?? query);
+    context.push(AppRoutes.browse, extra: filters ?? query);
   }
 
   static void goToAllProperties(BuildContext context, {Map<String, dynamic>? filters}) {
-    context.push('/all-properties', extra: filters);
+    context.push(AppRoutes.allProperties, extra: filters);
   }
 
-  // ═══════════════════════════════════════════════════════
-  // BROKER FLOW
-  // ═══════════════════════════════════════════════════════
-
-  static void goToBrokerHome(BuildContext context) {
-    safePush(context, '/broker/home');
-  }
-
-  static void goToBrokerRefer(BuildContext context) {
-    safePush(context, '/broker/refer');
-  }
-
-  static void goToBrokerHistory(BuildContext context) {
-    safePush(context, '/broker/history');
-  }
-
-  static void goToBrokerTier(BuildContext context) {
-    safePush(context, '/broker/tier');
-  }
-
-  static void goToBrokerReferredDetail(BuildContext context) {
-    safePush(context, '/broker/referred-detail');
-  }
-
-  static void goToBrokerReferralIssue(BuildContext context) {
-    safePush(context, '/broker/referral-issue');
-  }
-
-  static void goToBrokerWithdraw(BuildContext context) {
-    safePush(context, '/broker/withdraw');
-  }
-
-  static void goToBrokerPayout(BuildContext context) {
-    safePush(context, '/broker/payout');
-  }
-
-  // ═══════════════════════════════════════════════════════
-  // AUTH FLOW
-  // ═══════════════════════════════════════════════════════
-
-  static void goToWelcome(BuildContext context) {
-    safeGo(context, '/welcome');
-  }
-
-  static void goToSignIn(BuildContext context) {
-    safePush(context, '/signin');
-  }
-
-  static void goToSignUp(BuildContext context) {
-    safePush(context, '/create');
-  }
-
-  static void goToForgotPassword(BuildContext context) {
-    safePush(context, '/forgot');
-  }
-
-  static void goToRole(BuildContext context) {
-    safePush(context, '/role');
-  }
-
-  // ═══════════════════════════════════════════════════════
-  // UTILS
-  // ═══════════════════════════════════════════════════════
-
-  static void goBack(BuildContext context) {
-    if (context.canPop()) {
-      context.pop();
-    } else if (Navigator.canPop(context)) {
-      Navigator.pop(context);
-    }
-  }
+  static void goToMawsem(BuildContext context) => context.push(AppRoutes.mawsem);
+  static void goToWallet(BuildContext context) => context.push(AppRoutes.wallet);
+  static void goToNotifications(BuildContext context) => context.push(AppRoutes.notifications);
 }

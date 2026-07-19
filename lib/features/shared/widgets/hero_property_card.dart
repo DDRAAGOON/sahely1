@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/common.dart';
@@ -45,31 +44,14 @@ class HeroPropertyCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  grayscale
-                      ? ColorFiltered(
-                          colorFilter: const ColorFilter.matrix(<double>[
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0.2126, 0.7152, 0.0722, 0, 0,
-                            0,      0,      0,      1, 0,
-                          ]),
-                          child: SahelyImage(
-                            imageUrl: property.image,
-                            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                            showFade: true,
-                            fadeHeight: 60,
-                            fadeColor: AppColors.white,
-                            enableViewer: false,
-                          ),
-                        )
-                      : SahelyImage(
-                          imageUrl: property.image,
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                          showFade: true,
-                          fadeHeight: 60,
-                          fadeColor: AppColors.white,
-                          enableViewer: false,
-                        ),
+                  SahelyImage(
+                    imageUrl: property.image,
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    showFade: true,
+                    fadeHeight: 60,
+                    fadeColor: AppColors.white,
+                    enableViewer: false,
+                  ),
                   Positioned(
                     top: 12,
                     left: 12,

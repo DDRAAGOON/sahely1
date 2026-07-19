@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -11,7 +10,8 @@ import '../../../core/providers/bookings_provider.dart';
 import '../widgets/booking_screen_widgets.dart';
 
 class BookingScreen extends StatefulWidget {
-  const BookingScreen({super.key});
+  final Property? property;
+  const BookingScreen({super.key, this.property});
 
   @override
   State<BookingScreen> createState() => _BookingScreenState();
@@ -46,7 +46,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final property = ModalRoute.of(context)?.settings.arguments as Property?;
+    final property = widget.property;
     final pName = property?.name ?? 'Azure Beach Villa';
     final pPrice = property?.price ?? 4500;
     

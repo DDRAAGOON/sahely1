@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../widgets/wishlist_collection_card.dart';
 import '../widgets/new_collection_tile.dart';
 import '../widgets/create_collection_sheet.dart';
 import '../presentation/bloc/wishlist_cubit.dart';
-import 'collection_inside_shared_screen.dart';
 
 class WishlistScreen extends StatefulWidget {
   final bool showNav;
@@ -19,15 +19,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   void initState() {
     super.initState();
-    // Load collections only if they aren't loaded yet to avoid unnecessary loading indicators
-    if (context.read<WishlistCubit>().state.collections.isEmpty) {
-      context.read<WishlistCubit>().loadCollections();
-    }
+    // Always reload to get fresh items
+    context.read<WishlistCubit>().loadCollections();
   }
 
   Future<void> _createNewCollection() async {
     final result = await showModalBottomSheet<String>(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => const CreateCollectionSheet(),
@@ -101,13 +100,13 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         final collection = collections[index];
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => CollectionInsideSharedScreen(
-                              collectionId: collection.id,
-                              collectionName: collection.name,
-                              propertyCount: collection.itemCount,
-                              sharedWithCount: collection.isShared ? 3 : 0,
-                              memberNames: const ['Omar', 'Nour', 'Youssef'],
-                            )));
+                            context.push('/collection', extra: {
+                              'collectionId': collection.id,
+                              'collectionName': collection.name,
+                              'propertyCount': collection.itemCount,
+                              'sharedWithCount': collection.isShared ? 3 : 0,
+                              'memberNames': const ['Omar', 'Nour', 'Youssef'],
+                            });
                           },
                           child: WishlistCollectionCard(
                             name: collection.name,

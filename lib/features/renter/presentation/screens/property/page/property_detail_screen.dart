@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/core/theme/app_theme.dart';
-import '../../bookings/pages/booking_dates_guests_screen.dart';
 import '../widgets/property_image_gallery.dart';
 import '../widgets/property_info_section.dart';
 import '../widgets/feature_chips_section.dart';
@@ -39,7 +38,6 @@ class PropertyDetailScreen extends StatefulWidget {
 
 class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
   final ScrollController _scrollController = ScrollController();
-  final bool _isWishlisted = false;
 
   @override
   void dispose() {
@@ -122,17 +120,11 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
             child: StickyBottomBar(
               pricePerNight: widget.pricePerNight,
               onBookNowTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BookingDatesGuestsScreen(
-                      propertyName: widget.propertyName,
-                      propertyImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
-                      pricePerNight: widget.pricePerNight * 100, // Convert to piastres
-                      cleaningFee: 25000, // 250 EGP in piastres
-                    ),
-                  ),
-                );
+                context.push('/booking', extra: {
+                  'propertyName': widget.propertyName,
+                  'propertyImage': widget.propertyImage,
+                  'pricePerNight': widget.pricePerNight,
+                });
               },
             ),
           ),

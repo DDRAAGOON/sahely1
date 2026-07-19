@@ -7,11 +7,11 @@ import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.
 import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
+import '../../../../../shared/widgets/mawsem/mawsem_card.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/greeting_header.dart';
-import '../widgets/mawsem_card.dart';
-import '../widgets/promo_banner.dart';
 import '../widgets/search_row.dart';
+import '../widgets/promo_banner.dart';
 import '../widgets1/property_card.dart';
 import '../../Search/pages/search_filters_sheet.dart';
 
@@ -279,8 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-          ); 
-             ;
+          );
         },
       ),
     );

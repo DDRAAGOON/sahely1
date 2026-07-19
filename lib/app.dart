@@ -4,18 +4,33 @@ import 'core/theme/app_theme.dart';
 import 'core/navigation/app_router.dart';
 import 'core/providers/auth_provider.dart';
 
-class SahelyApp extends StatelessWidget {
+import 'package:go_router/go_router.dart';
+
+class SahelyApp extends StatefulWidget {
   const SahelyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final auth = Provider.of<AuthProvider>(context);
+  State<SahelyApp> createState() => _SahelyAppState();
+}
 
+class _SahelyAppState extends State<SahelyApp> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the router once to preserve state during Hot Reload.
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    _router = createAppRouter(auth);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Sahely',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
-      routerConfig: createAppRouter(auth),
+      routerConfig: _router,
     );
   }
 }

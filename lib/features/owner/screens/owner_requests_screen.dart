@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -22,7 +21,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
     return PhoneScaffold(
       child: Stack(children: [
         ListView(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
           children: [
             const Text('Requests',
                 style: TextStyle(
@@ -105,9 +104,9 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
             onTap: (i, _) {
               final routes = [
                 '/owner/home',
-                '/wishlist',
+                '/owner/wishlist',
                 '/owner/bookings',
-                '/services',
+                '/owner/services',
                 '/owner/profile'
               ];
               if (i == 0) {

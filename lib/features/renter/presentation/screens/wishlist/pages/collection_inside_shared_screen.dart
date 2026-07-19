@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../domain/models/wishlist_item.dart';
@@ -8,7 +9,6 @@ import '../widgets/collection_property_card.dart';
 import '../widgets/share_collection_sheet.dart';
 import '../presentation/bloc/wishlist_cubit.dart';
 import 'collection_compare_screen.dart';
-import '../../property/page/property_detail_screen.dart';
 
 class CollectionInsideSharedScreen extends StatefulWidget {
   final String collectionId;
@@ -140,20 +140,15 @@ class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScr
                           friendNote: 'Added recently',
                           friendAvatarColor: AppColors.navy,
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PropertyDetailScreen(
-                                  propertyId: item.propertyId,
-                                  propertyName: item.propertyName,
-                                  propertyImage: item.propertyImage,
-                                  location: 'North Coast',
-                                  rating: 4.8,
-                                  reviewCount: 12,
-                                  pricePerNight: 4500,
-                                ),
-                              ),
-                            );
+                            context.push('/property', extra: {
+                              'id': item.propertyId,
+                              'name': item.propertyName,
+                              'imageUrl': item.propertyImage,
+                              'location': 'North Coast',
+                              'rating': 4.8,
+                              'reviewCount': 12,
+                              'price': 4500,
+                            });
                           },
                         );
                       },

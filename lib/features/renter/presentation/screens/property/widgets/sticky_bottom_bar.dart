@@ -19,7 +19,7 @@ class StickyBottomBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.cream,
         boxShadow: [
           BoxShadow(
             color: AppColors.navy.withValues(alpha: 0.1),

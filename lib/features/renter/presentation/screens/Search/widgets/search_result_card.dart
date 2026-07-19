@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/utils/currency_formatter.dart';
 import '../../wishlist/presentation/widgets/heart_button.dart';
-import '../../property/page/property_detail_screen.dart';
 
 class SearchResultCard extends StatelessWidget {
   final Map<String, dynamic> property;
@@ -16,20 +16,7 @@ class SearchResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PropertyDetailScreen(
-              propertyId: property['id'],
-              propertyName: property['name'],
-              propertyImage: property['imageUrl'],
-              location: property['location'],
-              rating: (property['rating'] as num).toDouble(),
-              reviewCount: property['reviewCount'] ?? 0,
-              pricePerNight: (property['price'] as num).toInt() ~/ 100, // Search price is in piastres?
-            ),
-          ),
-        );
+        context.push('/property', extra: property);
       },
       child: Container(
         decoration: BoxDecoration(

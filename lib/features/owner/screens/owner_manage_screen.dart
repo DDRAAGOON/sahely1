@@ -86,7 +86,8 @@ class OwnerManageScreen extends StatelessWidget {
                       AppColors.navy,
                       AppColors.gold,
                       '/owner/bookings',
-                      badge: '2')),
+                      badge: '2',
+                      useGo: true)),
               const SizedBox(width: 10),
               Expanded(
                   child: _quickTile(
@@ -166,9 +167,9 @@ class OwnerManageScreen extends StatelessWidget {
 
   Widget _quickTile(BuildContext context, String label, IconData icon, Color bg,
       Color fg, String route,
-      {String? badge}) {
+      {String? badge, bool useGo = false}) {
     return GestureDetector(
-      onTap: () => context.push(route),
+      onTap: () => useGo ? context.go(route) : context.push(route),
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: 76,

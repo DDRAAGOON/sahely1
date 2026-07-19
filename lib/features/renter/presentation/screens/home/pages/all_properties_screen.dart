@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
 import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
 import '../../../../../../core/theme/app_colors.dart';
@@ -7,7 +8,6 @@ import '../widgets/filter_chips.dart';
 import '../widgets/property_section.dart';
 import '../../Search/pages/search_filters_sheet.dart';
 import '../../Search/pages/search_empty_state.dart';
-import '../../property/page/property_detail_screen.dart';
 
 class AllPropertiesScreen extends StatefulWidget {
   final Map<String, dynamic>? initialFilters;
@@ -90,20 +90,7 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
   }
 
   void _navigateToDetail(Map<String, dynamic> p) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PropertyDetailScreen(
-          propertyId: p['id'],
-          propertyName: p['name'],
-          propertyImage: p['imageUrl'],
-          location: p['location'],
-          rating: (p['rating'] as num).toDouble(),
-          reviewCount: p['reviewCount'] ?? 0,
-          pricePerNight: (p['price'] as num).toInt() ~/ 100,
-        ),
-      ),
-    );
+    context.push('/property', extra: p);
   }
 
   void _showFilters() {

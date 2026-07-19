@@ -57,8 +57,8 @@ class SearchHeaderWithInput extends StatelessWidget {
                     autofocus: false,
                     controller: controller,
                     decoration: InputDecoration(
-                      hintText: 'Search stay...',
-                      hintStyle: AppTheme.dm(size: 14, color: AppColors.faint),
+                      hintText: 'Search properties',
+                      hintStyle: AppTheme.dm(size: 13, color: AppColors.navy.withValues(alpha: 0.5)),
                       border: InputBorder.none,
                       isDense: true,
                     ),

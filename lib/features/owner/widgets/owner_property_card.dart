@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sahely/data/models.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/common.dart';
@@ -57,6 +56,7 @@ class OwnerPropertyCard extends StatelessWidget {
             SahelyImage(
               imageUrl: img,
               height: 160,
+              width: double.infinity,
               showFade: true,
               fadeHeight: 60,
               fadeColor: AppColors.white,

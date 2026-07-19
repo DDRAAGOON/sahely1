@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
@@ -37,7 +36,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInit) {
-      final args = ModalRoute.of(context)?.settings.arguments;
+      final args = GoRouterState.of(context).extra;
       if (args is String) {
         _searchController.text = args;
         _appliedSearchQuery = args;

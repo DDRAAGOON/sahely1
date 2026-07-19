@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -11,15 +10,16 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
 
 class PastBookingDetailScreen extends StatelessWidget {
-  const PastBookingDetailScreen({super.key});
+  final Property? property;
+  const PastBookingDetailScreen({super.key, this.property});
 
   @override
   Widget build(BuildContext context) {
-    final property = ModalRoute.of(context)?.settings.arguments as Property?;
     final img = property?.image ?? _dunes;
     final name = property?.name ?? 'Golden Dunes';
 
     return PhoneScaffold(
+      bottom: false,
       child: SafeArea(
         child: Stack(
           children: [
@@ -32,10 +32,7 @@ class PastBookingDetailScreen extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      ColorFiltered(
-                        colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.saturation),
-                        child: SahelyImage(imageUrl: img, enableViewer: true, fadeHeight: 120),
-                      ),
+                      SahelyImage(imageUrl: img, enableViewer: true, fadeHeight: 120),
                       const DecoratedBox(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -66,7 +63,7 @@ class PastBookingDetailScreen extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 100),
+                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -147,7 +144,6 @@ class PastBookingDetailScreen extends StatelessWidget {
                         radius: 14,
                         onTap: () => context.pop(),
                       ),
-                      const SizedBox(height: 40),
                     ],
                   ),
                 ),

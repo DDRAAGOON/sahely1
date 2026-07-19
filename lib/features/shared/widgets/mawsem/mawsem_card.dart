@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_colors.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
-import '../../mawsem/pages/mawsem_dashboard_screen.dart';
-import '../../profile/widgets/level/level_detail_sheet.dart';
-import '../../profile/widgets/level/level_perk.dart';
+import 'package:go_router/go_router.dart';
+import 'level/level_detail_sheet.dart';
+import 'level/level_perk.dart';
 
 class MawsemCard extends StatelessWidget {
   const MawsemCard({super.key});
@@ -49,10 +49,7 @@ class MawsemCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const MawsemDashboardScreen()),
-        );
+        context.push('/mawsem');
       },
       child: Container(
         padding: const EdgeInsets.all(16),

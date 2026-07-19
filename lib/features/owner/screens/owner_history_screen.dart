@@ -6,7 +6,8 @@ import '../../../core/widgets/ui.dart';
 import '../../../core/widgets/chips.dart';
 
 class OwnerHistoryScreen extends StatefulWidget {
-  const OwnerHistoryScreen({super.key});
+  final String? period;
+  const OwnerHistoryScreen({super.key, this.period});
 
   @override
   State<OwnerHistoryScreen> createState() => _OwnerHistoryScreenState();
@@ -17,7 +18,7 @@ class _OwnerHistoryScreenState extends State<OwnerHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final periodArg = ModalRoute.of(context)?.settings.arguments as String? ?? 'Month';
+    final periodArg = widget.period ?? 'Month';
     final periodLabel = periodArg == 'Month' ? 'MONTH' : (periodArg == 'Quarter' ? 'QUARTER' : 'YEAR');
 
     return PhoneScaffold(

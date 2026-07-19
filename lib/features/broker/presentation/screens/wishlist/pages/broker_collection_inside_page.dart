@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../../../../core/theme/app_colors.dart';
-import '../../../../../../data/models.dart';
 import '../../../../domain/models/broker_wishlist_item.dart';
 import '../widgets/broker_collection_header.dart';
 import '../widgets/broker_collection_members_actions.dart';

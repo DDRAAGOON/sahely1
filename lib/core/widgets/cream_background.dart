@@ -23,10 +23,14 @@ class SahelyPhoneScaffold extends StatelessWidget {
     super.key,
     required this.child,
     this.dark = false,
+    this.bottom = true,
+    this.top = true,
   });
 
   final Widget child;
   final bool dark;
+  final bool bottom;
+  final bool top;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +38,8 @@ class SahelyPhoneScaffold extends StatelessWidget {
       backgroundColor: AppColors.cream,
       body: CreamBackground(
         child: SafeArea(
+          top: top,
+          bottom: bottom,
           child: child,
         ),
       ),

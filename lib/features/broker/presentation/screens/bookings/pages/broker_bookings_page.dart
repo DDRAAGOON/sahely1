@@ -8,7 +8,6 @@ import '../widgets/broker_bookings_filter_tabs.dart';
 import '../widgets/broker_active_booking_card.dart';
 import '../widgets/broker_upcoming_booking_card.dart';
 import '../widgets/broker_past_stays_section.dart';
-import '../../smart_lock/pages/broker_smart_lock_screen.dart';
 
 class BrokerBookingsPage extends StatefulWidget {
   const BrokerBookingsPage({super.key});

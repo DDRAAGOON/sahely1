@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../data/models.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
 
 class PropertyReviewsScreen extends StatelessWidget {
-  const PropertyReviewsScreen({super.key});
+  final Property? property;
+  const PropertyReviewsScreen({super.key, this.property});
 
   @override
   Widget build(BuildContext context) {
-    final property = ModalRoute.of(context)?.settings.arguments as Property?;
     final pName = property?.name ?? 'Azure Beach Villa';
     final pRating = property?.rating ?? 4.8;
 

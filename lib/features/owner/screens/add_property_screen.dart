@@ -8,7 +8,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
-import '../../../data/models.dart';
 import '../../../data/sample_data.dart';
 import 'listing_submitted_screen.dart';
 
@@ -185,7 +184,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: _propertyType,
-                  hint: Text('Select type', style: AppTheme.dm(size: 14, color: AppColors.faint)),
+                  hint: Text('Select type', style: AppTheme.dm(size: 14, color: AppColors.navy)),
                   isExpanded: true,
                   icon: const Icon(Icons.keyboard_arrow_down, size: 18, color: AppColors.muted),
                   items: ['Villa', 'Chalet', 'Apartment'].map((e) => DropdownMenuItem(value: e, child: Text(e, style: AppTheme.dm(size: 14)))).toList(),
@@ -239,10 +238,11 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               ),
             ),
             child: AppTextField(
-              controller: _referralController, 
+              controller: _referralController,
               leading: const Icon(Icons.star, size: 16, color: AppColors.gold), 
-              backgroundColor: AppColors.goldSoft, 
-              hintText: ''
+              backgroundColor: AppColors.goldTint,
+              hintText: '',
+              textColor: const Color(0xFFaf944d),
             )
           ),
         ]),

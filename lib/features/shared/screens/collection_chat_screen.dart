@@ -65,7 +65,7 @@ class CollectionChatScreen extends StatelessWidget {
                         decoration: BoxDecoration(color: AppColors.cream, borderRadius: BorderRadius.circular(22)),
                         alignment: Alignment.centerLeft,
                         child: Text('Message or ask AI to compare…',
-                            style: AppTheme.dm(size: 13, color: AppColors.faint)))),
+                            style: AppTheme.dm(size: 13, color: AppColors.navy.withValues(alpha: 0.5))))),
                 const SizedBox(width: 8),
                 Container(
                     width: 40,

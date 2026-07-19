@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,6 @@ import '../widgets/guest_counter_row.dart';
 import '../widgets/guest_summary_note.dart';
 import '../widgets/price_breakdown.dart';
 import '../widgets/confirm_pay_button.dart';
-import 'booking_confirmed_screen.dart';
 
 class BookingDatesGuestsScreen extends StatefulWidget {
   final String propertyName;
@@ -156,20 +156,18 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
       
       setState(() => _isConfirming = false);
       
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BookingConfirmedScreen(
-            propertyName: widget.propertyName,
-            checkIn: _checkInDate!,
-            checkOut: _checkOutDate!,
-            adults: _adults,
-            unitInfo: 'Unit 8-214 · Floor 2', // Mock info
-            bookingRef: newBooking.orderNumber,
-            totalPaid: _total,
-            starsEarned: (_total / 100000).round(), // 1 star per 1000 EGP
-          ),
-        ),
+      context.push(
+        '/booking-confirmed',
+        extra: {
+          'propertyName': widget.propertyName,
+          'checkIn': _checkInDate!,
+          'checkOut': _checkOutDate!,
+          'guests': _adults,
+          'unitInfo': 'Unit 8-214 · Floor 2',
+          'bookingRef': newBooking.orderNumber,
+          'totalPaid': _total,
+          'starsEarned': (_total / 100000).round(),
+        },
       );
     }
   }

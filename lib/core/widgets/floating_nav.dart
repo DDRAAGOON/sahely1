@@ -35,7 +35,7 @@ class FloatingNav extends StatelessWidget {
     NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist', '/owner/wishlist'),
     NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings', '/owner/bookings'),
     NavItem(Icons.room_service_outlined, Icons.room_service, 'Services', '/owner/services'),
-    NavItem(Icons.person_outline, Icons.person, 'Profile', '/owner/profile'),
+    NavItem(Icons.person_outline, Icons.person, 'Manage', '/owner/profile'),
   ];
 
   static const brokerTabs = [

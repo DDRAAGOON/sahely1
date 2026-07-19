@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-
-import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
+
 
 class BookingCalendarCard extends StatefulWidget {
   final Function(DateTime? checkIn, DateTime? checkOut)? onDatesChanged;

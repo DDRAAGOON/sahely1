@@ -34,7 +34,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   int get _resultsCount {
     return Sample.allTrending.where((p) {
-      if (_propertyType != null && _propertyType != 'All' && p.type != _propertyType) return false;
+      if (_propertyType != null &&
+          _propertyType != 'All' &&
+          p.type != _propertyType) return false;
       if (_bedrooms != null && _bedrooms != 'Any') {
         final bedsStr = _bedrooms!.replaceAll('+', '');
         final filterBeds = int.tryParse(bedsStr) ?? 0;
@@ -45,8 +47,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
         }
       }
       if (_adults + _children > p.guests && p.guests != 0) return false;
-      if (p.price < _priceRange.start || p.price > _priceRange.end) return false;
-      if (_selectedAmenities.isNotEmpty && !_selectedAmenities.every((am) => p.tags.contains(am))) return false;
+      if (p.price < _priceRange.start || p.price > _priceRange.end)
+        return false;
+      if (_selectedAmenities.isNotEmpty &&
+          !_selectedAmenities.every((am) => p.tags.contains(am))) return false;
       if (_rules['Pets allowed'] == true && !p.petsOk) return false;
       return true;
     }).length;
@@ -69,7 +73,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
   Future<void> _selectDate(BuildContext context, bool isCheckIn) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: (isCheckIn ? _checkIn : _checkOut) ?? DateTime.now().add(const Duration(days: 1)),
+      initialDate: (isCheckIn ? _checkIn : _checkOut) ??
+          DateTime.now().add(const Duration(days: 1)),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
       builder: (context, child) {
@@ -128,52 +133,74 @@ class _FiltersScreenState extends State<FiltersScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Filters', style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.navy)),
+                          Text('Filters',
+                              style: AppTheme.dm(
+                                  size: 16,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy)),
                           GestureDetector(
                             onTap: _clearAll,
-                            child: Text('Clear All', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+                            child: Text('Clear All',
+                                style: AppTheme.dm(
+                                    size: 13,
+                                    weight: FontWeight.w600,
+                                    color: AppColors.gold)),
                           ),
                         ],
                       ),
                     ),
                     Expanded(
                       child: ListView(
-                        padding: const EdgeInsets.fromLTRB(22, 4, 22, 14),
+                        padding: const EdgeInsets.fromLTRB(22, 30, 22, 14),
                         children: [
                           _label('Dates'),
-                          const SizedBox(height: 8),
                           Row(children: [
                             Expanded(
                               child: FilterDateBox(
-                                _checkIn == null ? 'Check-in' : DateFormat('MMM d, yyyy').format(_checkIn!),
+                                _checkIn == null
+                                    ? 'Check-in'
+                                    : DateFormat('MMM d, yyyy')
+                                        .format(_checkIn!),
+
                                 onTap: () => _selectDate(context, true),
                               ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: FilterDateBox(
-                                _checkOut == null ? 'Check-out' : DateFormat('MMM d, yyyy').format(_checkOut!),
+                                _checkOut == null
+                                    ? 'Check-out'
+                                    : DateFormat('MMM d, yyyy')
+                                        .format(_checkOut!),
                                 onTap: () => _selectDate(context, false),
                               ),
                             ),
                           ]),
                           _label('PROPERTY TYPE'),
-                          const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
                             runSpacing: 10,
                             children: [
-                              for (var type in ['All', 'Villa', 'Chalet', 'Apartment'])
+                              for (var type in [
+                                'All',
+                                'Villa',
+                                'Chalet',
+                                'Apartment'
+                              ])
                                 ChoiceChipPill(
                                   type,
                                   selected: _propertyType == type,
                                   height: 30,
                                   horizontalPadding: 10,
+                                  borderWidth: 1,
                                   onTap: () => setState(() {
                                     if (type == 'All') {
-                                      _propertyType = (_propertyType == 'All') ? null : 'All';
+                                      _propertyType = (_propertyType == 'All')
+                                          ? null
+                                          : 'All';
                                     } else {
-                                      _propertyType = (_propertyType == type) ? null : type;
+                                      _propertyType =
+                                          (_propertyType == type) ? null : type;
                                     }
                                   }),
                                 ),
@@ -185,19 +212,23 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             runSpacing: 10,
                             children: [
                               for (var b in ['Any', '1', '2', '3', '4+'])
-                                ChoiceChipPill(
-                                  b,
-                                  selected: _bedrooms == b,
-                                  height: 40,
-                                  width: b.length > 2 ? null : 54,
-                                  horizontalPadding: b.length > 2 ? 18 : 0,
-                                  onTap: () => setState(() {
-                                    if (b == 'Any') {
-                                      _bedrooms = (_bedrooms == 'Any') ? null : 'Any';
-                                    } else {
-                                      _bedrooms = (_bedrooms == b) ? null : b;
-                                    }
-                                  }),
+                                SizedBox(
+                                  width: 55, // عرض ثابت لكل chip
+                                  child: ChoiceChipPill(
+                                    b,
+                                    selected: _bedrooms == b,
+                                    height: 40,
+                                    horizontalPadding: 8,
+                                    borderRadius: 10,
+                                    onTap: () => setState(() {
+                                      if (b == 'Any') {
+                                        _bedrooms =
+                                            (_bedrooms == 'Any') ? null : 'Any';
+                                      } else {
+                                        _bedrooms = (_bedrooms == b) ? null : b;
+                                      }
+                                    }),
+                                  ),
                                 ),
                             ],
                           ),
@@ -219,11 +250,16 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           RichText(
                             text: TextSpan(
                               text: 'Price Range · ',
-                              style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy),
+                              style: AppTheme.dm(
+                                  size: 13,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy),
                               children: [
                                 TextSpan(
-                                  text: 'EGP ${_priceRange.start.round()} – ${_priceRange.end.round()}',
-                                  style: AppTheme.dm(size: 13, color: AppColors.muted),
+                                  text:
+                                      'EGP ${_priceRange.start.round()} – ${_priceRange.end.round()}',
+                                  style: AppTheme.dm(
+                                      size: 13, color: AppColors.muted),
                                 )
                               ],
                             ),
@@ -232,6 +268,42 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           PriceSlider(
                             values: _priceRange,
                             onChanged: (v) => setState(() => _priceRange = v),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Min ',
+                                  style: AppTheme.dm(size: 11, color: AppColors.muted),
+                                  children: [
+                                    TextSpan(
+                                      text: 'EGP ${_priceRange.start.round().toString().replaceAllMapped(
+                                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                            (Match m) => '${m[1]},',
+                                      )}',
+                                      style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: AppColors.navy),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Max ',
+                                  style: AppTheme.dm(size: 11, color: AppColors.muted),
+                                  children: [
+                                    TextSpan(
+                                      text: 'EGP ${_priceRange.end.round().toString().replaceAllMapped(
+                                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                            (Match m) => '${m[1]},',
+                                      )}',
+                                      style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: AppColors.navy),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                           _label('House Rules'),
                           const SizedBox(height: 8),
@@ -243,24 +315,47 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             ),
                             padding: const EdgeInsets.symmetric(horizontal: 14),
                             child: Column(children: [
-                              for (var entry in _rules.entries) ...[
-                                RuleToggle(
-                                  entry.key,
-                                  entry.value,
-                                  onChanged: (v) => setState(() => _rules[entry.key] = v),
-                                ),
-                                if (entry.key != _rules.keys.last) const Divider(height: 1, color: Color(0xFFF4EFE7)),
-                              ],
+                              RuleToggle(
+                                'Party allowed',
+                                _rules['Party allowed']!,
+                                icon: Icons.celebration, // أيقونة الحفلة
+                                onChanged: (v) => setState(() => _rules['Party allowed'] = v),
+                              ),
+                              if ('Party allowed' != _rules.keys.last)
+                                const Divider(height: 1, color: Color(0xFFF4EFE7)),
+                              RuleToggle(
+                                'Pets allowed',
+                                _rules['Pets allowed']!,
+                                icon: Icons.pets, // أيقونة الحيوانات
+                                onChanged: (v) => setState(() => _rules['Pets allowed'] = v),
+                              ),
+                              if ('Pets allowed' != _rules.keys.last)
+                                const Divider(height: 1, color: Color(0xFFF4EFE7)),
+                              RuleToggle(
+                                'Mixed groups OK',
+                                _rules['Mixed groups OK']!,
+                                icon: Icons.groups, // أيقونة المجموعات
+                                onChanged: (v) => setState(() => _rules['Mixed groups OK'] = v),
+                              ),
                             ]),
                           ),
-                          const SizedBox(height: 20),
                           _label('AMENITIES'),
                           const SizedBox(height: 12),
                           Wrap(
                             spacing: 8,
                             runSpacing: 10,
                             children: [
-                              for (var am in ['Pool', 'WiFi', 'Beach', 'Smart Lock', 'AC', 'Sea View', 'Parking', 'BBQ', 'Garden'])
+                              for (var am in [
+                                'Pool',
+                                'WiFi',
+                                'Beach',
+                                'Smart Lock',
+                                'AC',
+                                'Sea View',
+                                'Parking',
+                                'BBQ',
+                                'Garden'
+                              ])
                                 ChoiceChipPill(
                                   am,
                                   selected: _selectedAmenities.contains(am),
@@ -289,13 +384,17 @@ class _FiltersScreenState extends State<FiltersScreen> {
                             'type': _propertyType,
                             'beds': _bedrooms,
                             'guests': _adults + _children,
-                            'price': 'EGP ${_priceRange.start.round()} – ${_priceRange.end.round()}',
+                            'price':
+                                'EGP ${_priceRange.start.round()} – ${_priceRange.end.round()}',
                             'minPrice': _priceRange.start,
                             'maxPrice': _priceRange.end,
                             'dates': _checkIn != null && _checkOut != null
                                 ? '${DateFormat("MMM d").format(_checkIn!)} – ${DateFormat("MMM d").format(_checkOut!)}'
                                 : null,
-                            'rules': _rules.entries.where((e) => e.value).map((e) => e.key).toList(),
+                            'rules': _rules.entries
+                                .where((e) => e.value)
+                                .map((e) => e.key)
+                                .toList(),
                             'amenities': _selectedAmenities.toList(),
                           };
                           Navigator.pop(context, filterSummary);
@@ -315,6 +414,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
   static Widget _label(String s) => Padding(
         padding: const EdgeInsets.only(top: 22, bottom: 8),
         child: Text(s.toUpperCase(),
-            style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.navy, letterSpacing: 0.5)),
+            style: AppTheme.dm(
+                size: 12,
+                weight: FontWeight.w700,
+                color: AppColors.navy,
+                letterSpacing: 0.5)),
       );
 }

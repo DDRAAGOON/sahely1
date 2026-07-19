@@ -30,7 +30,7 @@ class SettingsRow extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 6),
                 child: Text(value!, style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: valueColor ?? AppColors.muted)),
               ),
-            const Icon(Icons.chevron_right, size: 18, color: AppColors.faint),
+            const Icon(Icons.chevron_right, size: 18, color: AppColors.navy),
           ],
         ),
       ),

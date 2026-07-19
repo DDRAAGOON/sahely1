@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import '../../profile/widgets/level/level_detail_sheet.dart';
-import '../../profile/widgets/level/level_perk.dart';
+import 'level/level_detail_sheet.dart';
+import 'level/level_perk.dart';
 
+/// Hero card for AL MAWSEM dashboard.
+/// Displays current level, stars, and progress to next tier.
+/// TODO: Hook up real-time progress from backend API.
 class MawsemHeroCard extends StatelessWidget {
   final String levelName;
   final int levelNumber;

@@ -7,10 +7,14 @@ import '../../domain/models/wishlist_item.dart';
 
 class AddToCollectionSheet extends StatefulWidget {
   final String propertyId;
+  final String propertyName;
+  final String propertyImage;
 
   const AddToCollectionSheet({
     super.key,
     required this.propertyId,
+    required this.propertyName,
+    required this.propertyImage,
   });
 
   @override
@@ -106,7 +110,12 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                 width: double.infinity, height: 52,
                 child: ElevatedButton(
                   onPressed: _selectedCollectionId != null ? () {
-                    context.read<WishlistCubit>().addToCollection(propertyId: widget.propertyId, collectionId: _selectedCollectionId!);
+                    context.read<WishlistCubit>().saveToSpecificCollection(
+                          propertyId: widget.propertyId,
+                          propertyName: widget.propertyName,
+                          propertyImage: widget.propertyImage,
+                          collectionId: _selectedCollectionId!,
+                        );
                     Navigator.pop(context);
                   } : null,
                   style: ElevatedButton.styleFrom(
@@ -135,6 +144,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
   Future<void> _showCreateSheet(BuildContext context) async {
     final result = await showModalBottomSheet<String>(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => const CreateCollectionSheet(),

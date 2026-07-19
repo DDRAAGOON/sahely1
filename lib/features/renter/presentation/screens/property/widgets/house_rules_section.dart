@@ -88,7 +88,7 @@ class _RuleRow extends StatelessWidget {
             child: Text(
               label,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 color: AppColors.dark,
                 fontFamily: 'DM Sans',
               ),
@@ -115,7 +115,7 @@ class _RuleRow extends StatelessWidget {
             Text(
               value ?? '',
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: AppColors.dark,
                 fontFamily: 'DM Sans',

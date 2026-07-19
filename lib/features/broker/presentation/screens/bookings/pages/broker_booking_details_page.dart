@@ -10,9 +10,6 @@ import 'package:sahely/features/renter/presentation/screens/bookings/widgets/loc
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/arrival_checklist_section.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/rate_your_stay_section.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/ask_sahely_ai_section.dart';
-import 'package:sahely/features/broker/presentation/screens/smart_lock/pages/broker_smart_lock_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/reviews/pages/write_review_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/pages/arrival_checklist_screen.dart';
 
 class BrokerBookingDetailsPage extends StatelessWidget {
   final Map<String, dynamic> booking;

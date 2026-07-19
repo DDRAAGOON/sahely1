@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
-import 'package:sahely/features/renter/presentation/verification/presentation/widgets/blocked_action_gate.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import 'concierge_booking_screen.dart';
 
 class ConciergeScreen extends StatefulWidget {
   const ConciergeScreen({super.key});
@@ -15,11 +11,8 @@ class ConciergeScreen extends StatefulWidget {
 
 class _ConciergeScreenState extends State<ConciergeScreen> {
   final String _selectedCategory = 'All';
-  final List<String> _categories = ['All', 'Home', 'Dining', 'Transport'];
 
   // Mocked state for logic
-  final bool _hasActiveBooking = true;
-  final int _userMawsemLevel = 3;
 
   // قائمة الخدمات المتميزة مع التصنيفات
   final List<Map<String, dynamic>> _allPremiumServices = [
@@ -43,74 +36,15 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
     },
   ];
 
-  void _handleServiceRequest(String serviceName, {int? price}) {
-    final verificationCubit = context.read<VerificationCubit>();
-    if (!_hasActiveBooking) {
-      _showNoActiveBookingSheet();
-      return;
-    }
-    // Block action if not fully verified
-    if (!verificationCubit.canPerformAction()) {
-      _showBlockedActionSheet();
-      return;
-    }
-    _openBookingFlow(serviceName, price);
-  }
 
-  void _showNoActiveBookingSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => _InfoBottomSheet(
-        title: 'No Active Booking',
-        message: 'Concierge services are only available when you have an active booking or during the booking process.',
-        buttonText: 'Find a Property',
-        onButtonPressed: () => Navigator.pop(context),
-      ),
-    );
-  }
 
-  void _showBlockedActionSheet() {
-    final verificationCubit = context.read<VerificationCubit>();
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) {
-        final dataState = verificationCubit.currentDataState;
-        return BlockedActionGate(
-          emailVerified: dataState.emailVerified,
-          phoneVerified: dataState.phoneVerified,
-          idVerified: dataState.idVerified,
-          cardAdded: dataState.cardAdded,
-          onCompleteSetup: () {
-            Navigator.pop(context);
-            // Navigate to profile or specific verification step
-          },
-          onNotNow: () => Navigator.pop(context),
-        );
-      },
-    );
-  }
 
-  void _openBookingFlow(String serviceName, int? price) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ConciergeBookingScreen(
-          serviceName: serviceName,
-          basePrice: price,
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     // منطق الفلترة
-    final bool showHomeGrid = _selectedCategory == 'All' || _selectedCategory == 'Home';
-    
-    final List<Map<String, dynamic>> filteredPremiumServices = _allPremiumServices.where((service) {
+
+    _allPremiumServices.where((service) {
       if (_selectedCategory == 'All') return true;
       return service['category'] == _selectedCategory;
     }).toList();

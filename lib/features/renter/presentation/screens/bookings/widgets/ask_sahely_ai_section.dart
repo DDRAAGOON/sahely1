@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/theme/app_colors.dart';
-import '../../support/pages/sahely_ai_chat_screen.dart';
 
 class AskSahelyAiSection extends StatefulWidget {
   const AskSahelyAiSection({super.key});
@@ -13,14 +13,8 @@ class _AskSahelyAiSectionState extends State<AskSahelyAiSection> {
   final TextEditingController _controller = TextEditingController();
 
   void _goToChat([String? message]) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SahelyAiChatScreen(
-          initialMessage: message ?? (_controller.text.isNotEmpty ? _controller.text : null),
-        ),
-      ),
-    );
+    final msg = message ?? (_controller.text.isNotEmpty ? _controller.text : null);
+    context.push('/ai-chat', extra: msg);
     _controller.clear();
   }
 
@@ -104,19 +98,21 @@ class _AskSahelyAiSectionState extends State<AskSahelyAiSection> {
               ),
               const SizedBox(height: 12),
               // Quick Questions
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _QuickQuestionChip(
-                    label: 'How does the pool heater work?',
-                    onTap: () => _goToChat('How does the pool heater work?'),
-                  ),
-                  _QuickQuestionChip(
-                    label: 'Checkout time?',
-                    onTap: () => _goToChat('Checkout time?'),
-                  ),
-                ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _QuickQuestionChip(
+                      label: 'How does the pool heater work?',
+                      onTap: () => _goToChat('How does the pool heater work?'),
+                    ),
+                    const SizedBox(width: 8),
+                    _QuickQuestionChip(
+                      label: 'Checkout time?',
+                      onTap: () => _goToChat('Checkout time?'),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 12),
               // Input Field
@@ -133,11 +129,11 @@ class _AskSahelyAiSectionState extends State<AskSahelyAiSection> {
                       ),
                       child: TextField(
                         controller: _controller,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Ask about your stay...',
                           hintStyle: TextStyle(
                             fontSize: 13,
-                            color: AppColors.placeholder,
+                            color: AppColors.navy.withValues(alpha: 0.5),
                             fontFamily: 'DM Sans',
                           ),
                           border: InputBorder.none,

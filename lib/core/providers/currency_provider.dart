@@ -3,14 +3,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CurrencyProvider extends ChangeNotifier {
   String _selectedCurrency = 'EGP';
-  String _symbol = '£E';
+  String _symbol = 'EGP';
   final _storage = const FlutterSecureStorage();
 
   String get selectedCurrency => _selectedCurrency;
   String get symbol => _symbol;
 
   static const Map<String, String> _symbols = {
-    'EGP': '£E',
+    'EGP': 'EGP',
     'USD': '\$',
     'EUR': '€',
     'GBP': '£',
@@ -20,7 +20,7 @@ class CurrencyProvider extends ChangeNotifier {
 
   Future<void> loadCurrency() async {
     _selectedCurrency = await _storage.read(key: 'app_currency') ?? 'EGP';
-    _symbol = _symbols[_selectedCurrency] ?? '£E';
+    _symbol = _symbols[_selectedCurrency] ?? 'EGP';
     notifyListeners();
   }
 
@@ -30,7 +30,7 @@ class CurrencyProvider extends ChangeNotifier {
     _symbol = _symbols[currencyCode] ?? '';
     notifyListeners();
   }
-  
+
   // Helper to format price (Mock implementation for now)
   String formatPrice(double priceInEGP) {
     // In a real app, you'd have exchange rates here
@@ -38,7 +38,7 @@ class CurrencyProvider extends ChangeNotifier {
     double convertedPrice = priceInEGP;
     if (_selectedCurrency == 'USD') convertedPrice = priceInEGP / 50;
     if (_selectedCurrency == 'EUR') convertedPrice = priceInEGP / 54;
-    
+
     return '$symbol ${convertedPrice.toStringAsFixed(0)}';
   }
 }

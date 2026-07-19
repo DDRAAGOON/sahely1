@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import '../pages/edit_profile_screen.dart';
 
 class ProfileHeader extends StatelessWidget {
   final String name;
@@ -106,14 +106,7 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditProfileScreen(),
-                      ),
-                    );
-                  },
+                  onTap: () => context.push('/edit-profile'),
                   child: const Text(
                     'Edit Profile',
                     style: TextStyle(

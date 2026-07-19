@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
@@ -7,8 +8,6 @@ import 'package:sahely/features/renter/presentation/screens/bookings/widgets/boo
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/active_booking_card.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/upcoming_booking_card.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/past_stays_section.dart';
-import 'package:sahely/features/renter/presentation/screens/support/pages/sos_chat_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/reviews/pages/write_review_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/booked_property_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/past_booking_detail_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/smart_lock_screen.dart';
@@ -97,15 +96,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                     );
                   },
                   onSOSTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SOSChatScreen(
-                          propertyName: booking.propertyName,
-                          orderNumber: booking.orderNumber,
-                        ),
-                      ),
-                    );
+                    context.push('/sos');
                   },
                   onViewDetailsTap: () {
                     Navigator.push(

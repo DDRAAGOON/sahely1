@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'screens/add_payment_card_screen.dart';
 import 'screens/change_password_screen.dart';
@@ -19,28 +19,35 @@ import 'screens/all_properties_screen.dart';
 import 'screens/filters_screen.dart';
 import 'screens/property_reviews_screen.dart';
 import 'screens/services_screen.dart';
-import 'screens/mawsem_dashboard_screen.dart';
+import 'screens/mawsem/mawsem_dashboard_screen.dart';
 import 'screens/mawsem_level_screen.dart';
 import 'screens/stars_earned_screen.dart';
 import 'screens/star_nudges_screen.dart';
 import 'screens/level_up_screen.dart';
+import '../renter/presentation/screens/profile/pages/edit_profile_screen.dart';
 import '../renter/presentation/screens/wishlist/pages/wishlist_screen.dart' as complex;
 import '../renter/presentation/screens/property/page/property_detail_screen.dart' as renter_property;
-import '../renter/presentation/screens/bookings/pages/booking_dates_guests_screen.dart' as renter_booking;
-import '../renter/presentation/screens/bookings/pages/booking_confirmed_screen.dart' as renter_confirmed;
 import '../renter/presentation/screens/bookings/pages/my_bookings_screen.dart' as renter_bookings;
+import '../renter/presentation/screens/wallet/pages/wallet_screen.dart';
+import '../renter/presentation/screens/reviews/pages/my_reviews_screen.dart';
+import '../renter/presentation/screens/profile/pages/notification_settings_screen.dart';
 import 'screens/collection_inside_screen.dart';
 import 'screens/collection_chat_screen.dart';
 import 'screens/compare_screen.dart';
 import 'screens/share_collection_screen.dart';
 import 'screens/share_earn_screen.dart';
-import '../../../data/models.dart';
+import 'screens/booking_screen.dart';
+import 'screens/booking_confirmed_screen.dart';
 
 /// GoRouter definitions for the shared screens.
 final List<GoRoute> sharedGoRoutes = [
   // Browse / discovery
   GoRoute(path: '/browse', builder: (context, state) => const BrowseScreen()),
-  GoRoute(path: '/filters', builder: (context, state) => const FiltersScreen()),
+  GoRoute(
+    path: '/filters',
+    parentNavigatorKey: rootNavigatorKey,
+    builder: (context, state) => const FiltersScreen(),
+  ),
   GoRoute(path: '/all-properties', builder: (context, state) => const AllPropertiesScreen()),
   GoRoute(
     path: '/property',
@@ -48,7 +55,7 @@ final List<GoRoute> sharedGoRoutes = [
       final args = state.extra;
       if (args is Property) {
         return renter_property.PropertyDetailScreen(
-          propertyId: args.id,
+          propertyId: args.name, // Wishlist logic uses name as ID
           propertyName: args.name,
           propertyImage: args.image,
           location: args.area,
@@ -59,7 +66,7 @@ final List<GoRoute> sharedGoRoutes = [
       }
       if (args is Map<String, dynamic>) {
         return renter_property.PropertyDetailScreen(
-          propertyId: args['id']?.toString() ?? '1',
+          propertyId: args['name'] ?? 'Property', // Use name as ID
           propertyName: args['name'] ?? '',
           propertyImage: args['imageUrl'] ?? args['image'] ?? '',
           location: args['location'] ?? args['area'] ?? '',
@@ -69,7 +76,7 @@ final List<GoRoute> sharedGoRoutes = [
         );
       }
       return const renter_property.PropertyDetailScreen(
-        propertyId: '1',
+        propertyId: 'Property',
         propertyName: 'Property',
         location: 'North Coast',
         propertyImage: '',
@@ -79,65 +86,103 @@ final List<GoRoute> sharedGoRoutes = [
       );
     },
   ),
-  GoRoute(path: '/property-reviews', builder: (context, state) => const PropertyReviewsScreen()),
+  GoRoute(
+    path: '/property-reviews',
+    builder: (context, state) {
+      final args = state.extra;
+      if (args is Property) return PropertyReviewsScreen(property: args);
+      if (args is Map<String, dynamic>) return PropertyReviewsScreen(property: Property.fromMap(args));
+      return const PropertyReviewsScreen();
+    },
+  ),
 
-  // Booking
   GoRoute(
     path: '/booking',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) {
-        return renter_booking.BookingDatesGuestsScreen(
-          propertyName: args.name,
-          propertyImage: args.image,
-          pricePerNight: args.price * 100,
-          cleaningFee: 25000,
-        );
-      }
-      if (args is Map<String, dynamic>) {
-        return renter_booking.BookingDatesGuestsScreen(
-          propertyName: args['name'] ?? args['propertyName'] ?? '',
-          propertyImage: args['image'] ?? args['imageUrl'] ?? args['propertyImage'] ?? '',
-          pricePerNight: ((args['price'] ?? args['pricePerNight'] ?? 5000) as num).toInt() * 100,
-          cleaningFee: 25000,
-        );
-      }
-      return const renter_booking.BookingDatesGuestsScreen(
-        propertyName: '',
-        propertyImage: '',
-        pricePerNight: 500000,
-        cleaningFee: 25000,
-      );
+      if (args is Property) return BookingScreen(property: args);
+      if (args is Map<String, dynamic>) return BookingScreen(property: Property.fromMap(args));
+      return const BookingScreen();
     },
   ),
   GoRoute(
     path: '/booking-confirmed',
     builder: (context, state) {
       final args = state.extra as Map<String, dynamic>?;
-      return renter_confirmed.BookingConfirmedScreen(
-        propertyName: args?['propertyName'] ?? args?['property']?.name ?? 'Property',
-        checkIn: args?['checkIn'] ?? DateTime.now(),
-        checkOut: args?['checkOut'] ?? DateTime.now().add(const Duration(days: 4)),
-        adults: args?['adults'] ?? args?['guests'] ?? 2,
-        unitInfo: args?['unitInfo'] ?? 'Unit B-214',
-        bookingRef: args?['bookingRef'] ?? args?['orderNumber'] ?? 'SHLY-0000',
-        totalPaid: (args?['totalPaid'] ?? args?['total'] ?? 0).toInt(),
-        starsEarned: args?['starsEarned'] ?? 10,
-      );
+      return BookingConfirmedScreen(arguments: args);
     },
   ),
   GoRoute(path: '/bookings', builder: (context, state) => const renter_bookings.MyBookingsScreen()),
-  GoRoute(path: '/booking-upcoming', builder: (context, state) => const UpcomingBookingDetailScreen()),
-  GoRoute(path: '/booking-past', builder: (context, state) => const PastBookingDetailScreen()),
-  GoRoute(path: '/booked-property', builder: (context, state) => const ActiveBookingDetailScreen()),
-  GoRoute(path: '/smart-lock', builder: (context, state) => const SmartLockScreen()),
-  GoRoute(path: '/door-out', builder: (context, state) => const SmartLockScreen(outOfRange: true)),
+  GoRoute(
+    path: '/booking-upcoming',
+    builder: (context, state) {
+      final args = state.extra;
+      if (args is Property) return UpcomingBookingDetailScreen(property: args);
+      if (args is Map<String, dynamic>) return UpcomingBookingDetailScreen(property: Property.fromMap(args));
+      return const UpcomingBookingDetailScreen();
+    },
+  ),
+  GoRoute(
+    path: '/booking-past',
+    builder: (context, state) {
+      final args = state.extra;
+      if (args is Property) return PastBookingDetailScreen(property: args);
+      if (args is Map<String, dynamic>) return PastBookingDetailScreen(property: Property.fromMap(args));
+      return const PastBookingDetailScreen();
+    },
+  ),
+  GoRoute(
+    path: '/booked-property',
+    builder: (context, state) {
+      final args = state.extra;
+      if (args is Property) return ActiveBookingDetailScreen(property: args);
+      if (args is Map<String, dynamic>) return ActiveBookingDetailScreen(property: Property.fromMap(args));
+      return const ActiveBookingDetailScreen();
+    },
+  ),
+  GoRoute(
+    path: '/smart-lock',
+    builder: (context, state) {
+      final args = state.extra;
+      if (args is Property) return SmartLockScreen(property: args);
+      if (args is Map<String, dynamic>) return SmartLockScreen(property: Property.fromMap(args));
+      return const SmartLockScreen();
+    },
+  ),
+  GoRoute(
+    path: '/door-out',
+    builder: (context, state) {
+      final args = state.extra;
+      if (args is Property) return SmartLockScreen(property: args, outOfRange: true);
+      if (args is Map<String, dynamic>) return SmartLockScreen(property: Property.fromMap(args), outOfRange: true);
+      return const SmartLockScreen(outOfRange: true);
+    },
+  ),
   GoRoute(path: '/arrival-checklist', builder: (context, state) => const ArrivalChecklistScreen()),
-  GoRoute(path: '/write-review', builder: (context, state) => const WriteReviewScreen()),
+  GoRoute(
+    path: '/write-review',
+    builder: (context, state) {
+      final args = state.extra;
+      if (args is Property) return WriteReviewScreen(property: args);
+      if (args is Map<String, dynamic>) return WriteReviewScreen(property: Property.fromMap(args));
+      return const WriteReviewScreen();
+    },
+  ),
 
   // Wishlist / collections
   GoRoute(path: '/wishlist', builder: (context, state) => const complex.WishlistScreen()),
-  GoRoute(path: '/collection', builder: (context, state) => const CollectionInsideScreen()),
+  GoRoute(
+    path: '/collection',
+    builder: (context, state) {
+      final args = state.extra as Map<String, dynamic>? ?? {};
+      return CollectionInsideScreen(
+        collectionId: args['collectionId'] ?? 'all_saved',
+        collectionName: args['collectionName'] ?? 'All Saved',
+        sharedWithCount: args['sharedWithCount'] ?? 0,
+        memberNames: args['memberNames'] as List<String>? ?? const [],
+      );
+    },
+  ),
   GoRoute(path: '/collection-chat', builder: (context, state) => const CollectionChatScreen()),
   GoRoute(path: '/compare', builder: (context, state) => const CompareScreen()),
   GoRoute(path: '/share-collection', builder: (context, state) => const ShareCollectionScreen()),
@@ -145,11 +190,11 @@ final List<GoRoute> sharedGoRoutes = [
 
   // Services + AL MAWSEM
   GoRoute(path: '/services', builder: (context, state) => const ServicesScreen()),
-  GoRoute(path: '/mawsem', builder: (context, state) => const MawsemDashboardScreen()),
-  GoRoute(path: '/mawsem-level', builder: (context, state) => const MawsemLevelScreen()),
-  GoRoute(path: '/stars-earned', builder: (context, state) => const StarsEarnedScreen()),
-  GoRoute(path: '/star-nudges', builder: (context, state) => const StarNudgesScreen()),
-  GoRoute(path: '/level-up', builder: (context, state) => const LevelUpScreen()),
+  GoRoute(path: '/mawsem', parentNavigatorKey: rootNavigatorKey, builder: (context, state) => const MawsemDashboardScreen()),
+  GoRoute(path: '/mawsem-level', parentNavigatorKey: rootNavigatorKey, builder: (context, state) => const MawsemLevelScreen()),
+  GoRoute(path: '/stars-earned', parentNavigatorKey: rootNavigatorKey, builder: (context, state) => const StarsEarnedScreen()),
+  GoRoute(path: '/star-nudges', parentNavigatorKey: rootNavigatorKey, builder: (context, state) => const StarNudgesScreen()),
+  GoRoute(path: '/level-up', parentNavigatorKey: rootNavigatorKey, builder: (context, state) => const LevelUpScreen()),
 
   // Account utilities
   GoRoute(path: '/add-card', builder: (context, state) => const AddPaymentCardScreen()),
@@ -157,7 +202,14 @@ final List<GoRoute> sharedGoRoutes = [
   GoRoute(path: '/blocked-gate', builder: (context, state) => const BlockedGateScreen()),
   GoRoute(path: '/sos', builder: (context, state) => const SosScreen()),
   GoRoute(path: '/sos-owner', builder: (context, state) => const SosScreen(owner: true)),
-  GoRoute(path: '/ai-chat', builder: (context, state) => const AiChatScreen()),
+  GoRoute(
+    path: '/ai-chat',
+    builder: (context, state) => AiChatScreen(initialMessage: state.extra as String?),
+  ),
   GoRoute(path: '/currency', builder: (context, state) => const CurrencyScreen()),
   GoRoute(path: '/language', builder: (context, state) => const LanguageScreen()),
+  GoRoute(path: '/wallet', builder: (context, state) => const WalletScreen()),
+  GoRoute(path: '/my-reviews', builder: (context, state) => const MyReviewsScreen()),
+  GoRoute(path: '/notifications-settings', builder: (context, state) => const NotificationSettingsScreen()),
+  GoRoute(path: '/edit-profile', builder: (context, state) => const EditProfileScreen()),
 ];

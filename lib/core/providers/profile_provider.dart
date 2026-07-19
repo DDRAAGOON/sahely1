@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// TODO: Integrate with backend API for real profile and loyalty data.
 class ProfileProvider extends ChangeNotifier {
   String _name = 'Mariam Hassan';
   String _email = 'mariam@example.com';
@@ -15,6 +16,7 @@ class ProfileProvider extends ChangeNotifier {
   
   // AL MAWSEM Loyalty State
   int _stars = 47;
+  String _referralCode = 'MARIAM-50';
   
   final List<Map<String, dynamic>> _levelThresholds = [
     {'level': 1, 'name': 'Coastal Regular', 'stars': 0, 'icon': Icons.directions_walk, 'color': const Color(0xFF717171)},
@@ -36,6 +38,7 @@ class ProfileProvider extends ChangeNotifier {
   int get reviewsReceived => _reviewsReceived;
   
   int get stars => _stars;
+  String get referralCode => _referralCode;
   
   int get currentLevel {
     for (int i = _levelThresholds.length - 1; i >= 0; i--) {
@@ -53,6 +56,15 @@ class ProfileProvider extends ChangeNotifier {
       return _levelThresholds[currentLevel];
     }
     return null;
+  }
+
+  /// Fetches profile and loyalty data from the API.
+  Future<void> fetchProfileData() async {
+    // TODO: Implement API call to fetch:
+    // 1. Basic info (name, email, bio)
+    // 2. Loyalty stars and tier status
+    // 3. Review counts
+    notifyListeners();
   }
 
   void updateProfile({

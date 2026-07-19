@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import '../../wishlist/presentation/widgets/heart_button.dart';
@@ -22,6 +23,7 @@ class PropertyImageGallery extends StatefulWidget {
 class _PropertyImageGalleryState extends State<PropertyImageGallery> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  Timer? _autoSlideTimer;
 
   final List<String> _images = [
     'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
@@ -42,7 +44,26 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _startAutoSlide();
+  }
+
+  void _startAutoSlide() {
+    _autoSlideTimer = Timer.periodic(const Duration(seconds: 10), (_) {
+      if (!mounted) return;
+      final next = (_currentPage + 1) % _images.length;
+      _pageController.animateToPage(
+        next,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
   void dispose() {
+    _autoSlideTimer?.cancel();
     _pageController.dispose();
     super.dispose();
   }

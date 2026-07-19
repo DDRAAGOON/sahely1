@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
-import '../../../verification/pages/add_payment_card_screen.dart';
-import '../../reviews/pages/my_reviews_screen.dart';
-import '../../wallet/pages/wallet_screen.dart';
-import '../pages/language_selection_screen.dart';
 import '../pages/currency_selector_sheet.dart';
-import '../pages/change_password_screen.dart';
-import '../pages/notification_settings_screen.dart';
 
 class ProfileListRows extends StatelessWidget {
   final int walletBalance;
@@ -46,14 +41,7 @@ class ProfileListRows extends StatelessWidget {
                 fontFamily: 'Cairo',
               ),
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const WalletScreen(),
-                ),
-              );
-            },
+            onTap: () => context.push('/wallet'),
           ),
           _Divider(),
           // My Reviews
@@ -68,56 +56,28 @@ class ProfileListRows extends StatelessWidget {
                 fontFamily: 'Cairo',
               ),
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MyReviewsScreen(),
-                ),
-              );
-            },
+            onTap: () => context.push('/my-reviews'),
           ),
           _Divider(),
           // Payment Methods
           _ListRow(
             icon: Icons.credit_card_outlined,
             label: 'Payment Methods',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddPaymentCardScreen(),
-                ),
-              );
-            },
+            onTap: () => context.push('/add-card'),
           ),
           _Divider(),
           // Notifications
           _ListRow(
             icon: Icons.notifications_outlined,
             label: 'Notifications',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationSettingsScreen(),
-                ),
-              );
-            },
+            onTap: () => context.push('/notifications-settings'),
           ),
           _Divider(),
           // Change Password
           _ListRow(
             icon: Icons.lock_outline,
             label: 'Change Password',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ChangePasswordScreen(),
-                ),
-              );
-            },
+            onTap: () => context.push('/change-password'),
           ),
           _Divider(),
           // Language
@@ -125,21 +85,16 @@ class ProfileListRows extends StatelessWidget {
             icon: Icons.language,
             label: 'Language',
             trailing: Text(
-              context.watch<LocaleProvider>().locale.languageCode == 'ar' ? 'العربية' : 'English',
+              context.watch<LocaleProvider>().locale.languageCode == 'ar'
+                  ? 'العربية'
+                  : 'English',
               style: const TextStyle(
                 fontSize: 13,
                 color: AppColors.secondary,
                 fontFamily: 'Cairo',
               ),
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LanguageSelectionScreen(),
-                ),
-              );
-            },
+            onTap: () => context.push('/language'),
           ),
           _Divider(),
           // Currency
@@ -173,7 +128,7 @@ class ProfileListRows extends StatelessWidget {
 
 class _ListRow extends StatelessWidget {
   final IconData icon;
-  final Color? iconColor; // Added iconColor to match the image
+  final Color? iconColor;
   final String label;
   final Widget? trailing;
   final VoidCallback? onTap;
@@ -214,7 +169,7 @@ class _ListRow extends StatelessWidget {
             const Icon(
               Icons.chevron_right,
               size: 18,
-              color: AppColors.secondary,
+              color: AppColors.navy,
             ),
           ],
         ),

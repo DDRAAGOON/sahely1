@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/floating_nav.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
 
@@ -99,113 +98,98 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
     }
 
     return PhoneScaffold(
-      child: Stack(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
         children: [
-          ListView(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('Wallet', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
-                GestureDetector(
-                  onTap: () => _exportPDF(context),
-                  behavior: HitTestBehavior.opaque,
-                  child: Text('Export PDF', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
-                ),
-              ]),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 36,
-                child: SegmentTabs(
-                  tabs: const ['Month', 'Quarter', 'Year'],
-                  active: _activeTab,
-                  onTap: (index) {
-                    setState(() {
-                      _activeTab = index;
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 14),
-              Container(
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                    gradient: const LinearGradient(colors: [Color(0xFF22335A), AppColors.navy]),
-                    borderRadius: BorderRadius.circular(16)),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(periodLabel, style: AppTheme.dm(size: 13, color: const Color(0xFFCDD4E0))),
-                  const SizedBox(height: 6),
-                  Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                    Text(periodAmount, style: AppTheme.dm(size: 30, weight: FontWeight.w700, color: Colors.white)),
-                    const SizedBox(width: 10),
-                    Padding(
-                        padding: const EdgeInsets.only(bottom: 6),
-                        child: Text(periodChange,
-                            style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: const Color(0xFF7BE0A0)))),
-                  ]),
-                ]),
-              ),
-              const SizedBox(height: 14),
-              StatRow(cards: statCards),
-              const SizedBox(height: 16),
-              WhiteCard(child: Column(children: txns)),
-              const SizedBox(height: 10),
-              Center(
-                child: GestureDetector(
-                  onTap: () => context.push(
-                    '/owner/history',
-                    extra: _activeTab == 0 ? 'Month' : (_activeTab == 1 ? 'Quarter' : 'Year'),
-                  ),
-                  behavior: HitTestBehavior.opaque,
-                  child: Text(
-                    'View Full History →',
-                    style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              const InfoNote(
-                  text: 'Payouts are released 48h after guest check-in. Pending funds appear here until cleared.'),
-              const SizedBox(height: 14),
-              GestureDetector(
-                onTap: () => context.push('/owner/violations'),
-                behavior: HitTestBehavior.opaque,
-                child: WhiteCard(
-                    padding: const EdgeInsets.all(14),
-                    child: Row(children: [
-                      Container(
-                          width: 38,
-                          height: 38,
-                          decoration:
-                              BoxDecoration(color: const Color(0xFFFDECEC), borderRadius: BorderRadius.circular(10)),
-                          child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFB22222))),
-                      const SizedBox(width: 12),
-                      Expanded(
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text('Violations', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy)),
-                        Text('1 active · review details', style: AppTheme.dm(size: 12, color: AppColors.muted)),
-                      ])),
-                      const Icon(Icons.chevron_right, color: AppColors.faint),
-                    ])),
-              ),
-              const SizedBox(height: 20),
-              GoldButton(
-                label: 'Withdraw to Bank',
-                onTap: () => context.push('/owner/withdraw'),
-              ),
-              const SizedBox(height: 20),
-            ],
+          TopBar(
+            title: 'Wallet',
+            trailing: GestureDetector(
+              onTap: () => _exportPDF(context),
+              behavior: HitTestBehavior.opaque,
+              child: Text('Export PDF', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+            ),
           ),
-          FloatingNav(
-              active: 3,
-              items: FloatingNav.ownerTabs,
-              onTap: (i, _) {
-                final routes = ['/owner/home', '/wishlist', '/owner/bookings', '/services', '/owner/profile'];
-                if (i == 0) {
-                  context.go(routes[0]);
-                } else {
-                  context.go(routes[i]);
-                }
-              }),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 36,
+            child: SegmentTabs(
+              tabs: const ['Month', 'Quarter', 'Year'],
+              active: _activeTab,
+              onTap: (index) {
+                setState(() {
+                  _activeTab = index;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 14),
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+                gradient: const LinearGradient(colors: [Color(0xFF22335A), AppColors.navy]),
+                borderRadius: BorderRadius.circular(16)),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(periodLabel, style: AppTheme.dm(size: 13, color: const Color(0xFFCDD4E0))),
+              const SizedBox(height: 6),
+              Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                Text(periodAmount, style: AppTheme.dm(size: 30, weight: FontWeight.w700, color: Colors.white)),
+                const SizedBox(width: 10),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(periodChange,
+                        style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: const Color(0xFF7BE0A0)))),
+              ]),
+            ]),
+          ),
+          const SizedBox(height: 14),
+          StatRow(cards: statCards),
+          const SizedBox(height: 16),
+          WhiteCard(child: Column(children: txns)),
+          const SizedBox(height: 10),
+          Center(
+            child: GestureDetector(
+              onTap: () => context.push(
+                '/owner/history',
+                extra: _activeTab == 0 ? 'Month' : (_activeTab == 1 ? 'Quarter' : 'Year'),
+              ),
+              behavior: HitTestBehavior.opaque,
+              child: Text(
+                'View Full History →',
+                style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          const InfoNote(
+              text: 'Payouts are released 48h after guest check-in. Pending funds appear here until cleared.'),
+          const SizedBox(height: 14),
+          GestureDetector(
+            onTap: () => context.push('/owner/violations'),
+            behavior: HitTestBehavior.opaque,
+            child: WhiteCard(
+                padding: const EdgeInsets.all(14),
+                child: Row(children: [
+                  Container(
+                      width: 38,
+                      height: 38,
+                      decoration:
+                          BoxDecoration(color: const Color(0xFFFDECEC), borderRadius: BorderRadius.circular(10)),
+                      child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFB22222))),
+                  const SizedBox(width: 12),
+                  Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Text('Violations', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy)),
+                    Text('1 active · review details', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                  ])),
+                  const Icon(Icons.chevron_right, color: AppColors.faint),
+                ])),
+          ),
+          const SizedBox(height: 20),
+          GoldButton(
+            label: 'Withdraw to Bank',
+            onTap: () => context.push('/owner/withdraw'),
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );

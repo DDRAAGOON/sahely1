@@ -28,12 +28,12 @@ class SmartLockBadge extends StatelessWidget {
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.lock_outline, color: AppColors.navy, size: 20),
+                  Icon(Icons.lock_outline, color: AppColors.navy, size: 15),
                   SizedBox(width: 8),
                   Text(
                     'Smart Lock Enabled',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: AppColors.navy,
                       fontFamily: 'DM Sans',

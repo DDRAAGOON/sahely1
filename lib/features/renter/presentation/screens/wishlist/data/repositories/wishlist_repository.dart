@@ -102,4 +102,8 @@ class WishlistRepository {
   Future<List<WishlistItem>> getWishlistItems(String collectionId) async {
     return _wishlistItems.values.where((item) => item.collectionIds.contains(collectionId)).toList();
   }
+
+  Future<List<WishlistItem>> getAllWishlistItems() async {
+    return _wishlistItems.values.toList();
+  }
 }

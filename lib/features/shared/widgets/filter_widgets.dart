@@ -15,7 +15,7 @@ class FilterDateBox extends StatelessWidget {
           height: 46,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-            color: AppColors.goldSoft,
+            color: AppColors.goldTint,
             border: Border.all(color: AppColors.border),
             borderRadius: BorderRadius.circular(10),
           ),
@@ -159,10 +159,18 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
 }
 
 class RuleToggle extends StatelessWidget {
-  const RuleToggle(this.label, this.on, {super.key, required this.onChanged});
+  const RuleToggle(
+      this.label,
+      this.on, {
+        super.key,
+        required this.onChanged,
+        this.icon, // أضف هذا
+      });
+
   final String label;
   final bool on;
   final ValueChanged<bool> onChanged;
+  final IconData? icon; // أضف هذا
 
   @override
   Widget build(BuildContext context) {
@@ -171,17 +179,40 @@ class RuleToggle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: AppTheme.dm(size: 13)),
+          Row(
+            children: [
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 18,
+                  color: AppColors.muted,
+                ),
+                const SizedBox(width: 10),
+              ],
+              Text(label, style: AppTheme.dm(size: 13)),
+            ],
+          ),
           GestureDetector(
             onTap: () => onChanged(!on),
             child: Container(
               width: 42,
               height: 24,
-              decoration: BoxDecoration(color: on ? AppColors.success : AppColors.border, borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(
+                color: on ? AppColors.success : AppColors.border,
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: AnimatedAlign(
                 duration: const Duration(milliseconds: 200),
                 alignment: on ? Alignment.centerRight : Alignment.centerLeft,
-                child: Container(width: 20, height: 20, margin: const EdgeInsets.all(2), decoration: const BoxDecoration(color: AppColors.white, shape: BoxShape.circle)),
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  margin: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
               ),
             ),
           ),
