@@ -40,6 +40,7 @@ class AppRoutes {
   static const String brokerProfile = '/broker/profile';
   static const String brokerDashboard = '/broker/profile/dashboard';
   static const String brokerPortfolio = '/broker/profile/portfolio';
+  static const String brokerWallet = '/broker/wallet';
   
   static const String brokerReferredDetail = '/broker/referred-detail';
   static const String brokerReferralIssue = '/broker/referral-issue';

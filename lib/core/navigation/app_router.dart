@@ -9,10 +9,10 @@ import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/auth/auth_screens.dart';
 import 'package:sahely/features/broker/broker_go_routes.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
-import 'package:sahely/features/broker/presentation/screens/dashboard/pages/broker_dashboard_page.dart';
+import 'package:sahely/features/broker/presentation/screens/dashboard/pages/broker_dashboard_screen.dart';
 import 'package:sahely/features/broker/presentation/screens/home/pages/broker_home_page.dart';
 import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
-import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_page.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_screen.dart';
 import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_wishlist_page.dart';
 import 'package:sahely/features/notifications/notifications_screen.dart';
@@ -293,7 +293,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
                   builder: (context, state) => const BrokerServicesPage())
             ],
           ),
-          // ✅ Tab 5: My Role (Profile & Dashboard)
+          // ✅ Tab 5: My Role (Profile & Sub-pages)
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -302,11 +302,11 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
                 routes: [
                   GoRoute(
                     path: 'dashboard', // matches /broker/profile/dashboard
-                    builder: (context, state) => const BrokerDashboardPage(),
+                    builder: (context, state) => const BrokerDashboardScreen(),
                   ),
                   GoRoute(
                     path: 'portfolio', // matches /broker/profile/portfolio
-                    builder: (context, state) => const BrokerPortfolioPage(),
+                    builder: (context, state) => const BrokerPortfolioScreen(),
                   ),
                 ],
               ),

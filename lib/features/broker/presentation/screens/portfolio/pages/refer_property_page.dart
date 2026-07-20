@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../../core/theme/app_colors.dart';
-import '../../../../../../core/theme/app_theme.dart';
-import '../../../../../../core/widgets/cream_background.dart';
 import '../../../../../../core/widgets/kit.dart';
 import '../../../../../../core/widgets/ui.dart';
+import '../widgets/refer_property_header.dart';
+import '../widgets/refer_property_input.dart';
+import '../widgets/refer_property_dropdown.dart';
+import '../widgets/copy_referral_link_button.dart';
 
 class ReferPropertyPage extends StatefulWidget {
   const ReferPropertyPage({super.key});
@@ -14,129 +15,99 @@ class ReferPropertyPage extends StatefulWidget {
 }
 
 class _ReferPropertyPageState extends State<ReferPropertyPage> {
-  final _ownerController = TextEditingController();
+  final _ownerNameController = TextEditingController();
   final _phoneController = TextEditingController();
-  final _propertyController = TextEditingController();
+  final _propertyNameController = TextEditingController();
   String? _selectedArea;
+
+  final List<String> _areas = [
+    'Marassi',
+    'Hacienda Bay',
+    'Hacienda White',
+    'Seashell',
+    'Amwaj',
+    'Telal',
+    'Marina',
+  ];
 
   @override
   void dispose() {
-    _ownerController.dispose();
+    _ownerNameController.dispose();
     _phoneController.dispose();
-    _propertyController.dispose();
+    _propertyNameController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return PhoneScaffold(
-      child: Column(children: [
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(22, 14, 22, 16),
-            children: [
-              const Align(alignment: Alignment.centerLeft, child: BackChip()),
-              const SizedBox(height: 16),
-              Text('Refer a Property',
-                  style: AppTheme.dm(
-                      size: 22,
-                      weight: FontWeight.w700,
-                      color: AppColors.navy)),
-              const SizedBox(height: 6),
-              Text(
-                  'Refer a property owner and earn commissions on every booking',
-                  style: AppTheme.dm(size: 14, color: AppColors.muted)),
-              const SizedBox(height: 20),
-              FieldGroup(
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              children: [
+                const TopBar(title: ''),
+                const SizedBox(height: 8),
+                const ReferPropertyHeader(),
+                const SizedBox(height: 24),
+                
+                ReferPropertyInput(
                   label: 'Owner Name',
-                  child: AppTextField(
-                      controller: _ownerController,
-                      hintText: 'Full name',
-                      height: 50)),
-              const SizedBox(height: 14),
-              FieldGroup(
+                  hint: 'Full name',
+                  controller: _ownerNameController,
+                ),
+                const SizedBox(height: 16),
+                
+                ReferPropertyInput(
                   label: 'Phone',
-                  child: AppTextField(
-                      controller: _phoneController,
-                      hintText: '+20 ...',
-                      height: 50,
-                      keyboardType: TextInputType.phone)),
-              const SizedBox(height: 14),
-              FieldGroup(
+                  hint: '+20 ...',
+                  controller: _phoneController,
+                  keyboardType: TextInputType.phone,
+                ),
+                const SizedBox(height: 16),
+                
+                ReferPropertyInput(
                   label: 'Property Name',
-                  child: AppTextField(
-                      controller: _propertyController,
-                      hintText: 'Property name',
-                      height: 50)),
-              const SizedBox(height: 14),
-              FieldGroup(
-                label: 'Location Area',
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      border: Border.all(color: AppColors.border),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _selectedArea,
-                      hint: Text('Select area',
-                          style: AppTheme.dm(size: 14, color: AppColors.faint)),
-                      isExpanded: true,
-                      icon: const Icon(Icons.keyboard_arrow_down,
-                          size: 18, color: AppColors.muted),
-                      items: [
-                        'Marassi',
-                        'Hacienda Bay',
-                        'Telal',
-                        'Amwaj',
-                        'Seashell'
-                      ]
-                          .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e, style: AppTheme.dm(size: 14))))
-                          .toList(),
-                      onChanged: (v) => setState(() => _selectedArea = v),
-                    ),
-                  ),
+                  hint: 'Property name',
+                  controller: _propertyNameController,
                 ),
-              ),
-              const SizedBox(height: 18),
-              GestureDetector(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Referral link copied to clipboard')),
-                  );
-                },
-                child: Container(
-                  height: 52,
-                  decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(color: AppColors.gold, width: 1.5),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Center(
-                      child: Row(mainAxisSize: MainAxisSize.min, children: [
-                    const Icon(Icons.link, size: 18, color: AppColors.gold),
-                    const SizedBox(width: 8),
-                    Text('Copy My Referral Link',
-                        style: AppTheme.dm(
-                            size: 15,
-                            weight: FontWeight.w700,
-                            color: AppColors.gold)),
-                  ])),
+                const SizedBox(height: 16),
+                
+                ReferPropertyDropdown(
+                  label: 'Location Area',
+                  value: _selectedArea,
+                  items: _areas,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedArea = newValue;
+                    });
+                  },
                 ),
-              ),
-            ],
+                const SizedBox(height: 24),
+                
+                CopyReferralLinkButton(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Referral link copied to clipboard')),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(16),
-          child: NavyButton(
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: NavyButton(
               label: 'Submit Referral',
-              onTap: () => Navigator.maybePop(context)),
-        ),
-      ]),
+              onTap: () {
+                // Handle submission
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

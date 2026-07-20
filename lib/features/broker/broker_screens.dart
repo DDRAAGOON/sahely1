@@ -6,7 +6,7 @@ export 'presentation/screens/dashboard/pages/tier_dashboard_page.dart';
 export 'presentation/screens/dashboard/pages/tier_upgrade_page.dart';
 export 'presentation/screens/main/pages/broker_main_screen.dart';
 export 'presentation/screens/mawsem/pages/broker_mawsem_page.dart';
-export 'presentation/screens/portfolio/pages/refer_property_page.dart';
+export 'presentation/screens/portfolio/pages/referred_properties.dart';
 export 'presentation/screens/portfolio/pages/referral_issue_page.dart';
 export 'presentation/screens/portfolio/pages/referred_property_detail_page.dart';
 export 'presentation/screens/smart_lock/pages/broker_smart_lock_screen.dart';

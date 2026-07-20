@@ -1,5 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_routes.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/refer_property_page.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/referred_properties.dart';
+import 'package:sahely/features/broker/presentation/screens/wallet/pages/commission_wallet_screen.dart';
 
 import '../owner/screens/payout_bank_screen.dart';
 import '../owner/screens/withdraw_amount_screen.dart';
@@ -8,7 +11,6 @@ import 'presentation/screens/bookings/pages/broker_booking_details_page.dart';
 import 'presentation/screens/dashboard/pages/tier_dashboard_page.dart';
 import 'presentation/screens/dashboard/pages/tier_upgrade_page.dart';
 import 'presentation/screens/mawsem/pages/broker_mawsem_page.dart';
-import 'presentation/screens/portfolio/pages/refer_property_page.dart';
 import 'presentation/screens/portfolio/pages/referral_issue_page.dart';
 import 'presentation/screens/portfolio/pages/referred_property_detail_page.dart';
 import 'presentation/screens/smart_lock/pages/broker_smart_lock_screen.dart';
@@ -16,6 +18,9 @@ import 'presentation/screens/support/pages/broker_sos_chat_screen.dart';
 import 'presentation/screens/wallet/pages/broker_history_page.dart';
 
 final List<GoRoute> brokerGoRoutes = [
+  GoRoute(
+      path: AppRoutes.brokerWallet,
+      builder: (context, state) => const CommissionWalletScreen()),
   GoRoute(
       path: AppRoutes.brokerReferredDetail,
       builder: (context, state) => const ReferredPropertyDetailPage()),
@@ -25,6 +30,9 @@ final List<GoRoute> brokerGoRoutes = [
   GoRoute(
       path: AppRoutes.brokerRefer,
       builder: (context, state) => const ReferPropertyPage()),
+  GoRoute(
+      path: '/broker/referred-properties', // New route for the list
+      builder: (context, state) => const ReferredPropertiesScreen()),
   GoRoute(
       path: AppRoutes.brokerHistory,
       builder: (context, state) => const BrokerHistoryPage()),

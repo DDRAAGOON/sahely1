@@ -42,13 +42,16 @@ class AppNavigation {
   static void goToBrokerHome(BuildContext context) => context.go(AppRoutes.brokerHome);
   static void goToBrokerBookings(BuildContext context) => context.push(AppRoutes.brokerBookings);
   static void goToBrokerDashboard(BuildContext context) => context.push(AppRoutes.brokerDashboard);
-  static void goToBrokerWallet(BuildContext context) => context.push(AppRoutes.wallet); 
+  static void goToBrokerWallet(BuildContext context) => context.push(AppRoutes.brokerWallet);
   static void goToBrokerPortfolio(BuildContext context) => context.push(AppRoutes.brokerPortfolio); 
+  static void goToBrokerReferredProperties(BuildContext context) => context.push('/broker/referred-properties');
   static void goToBrokerRefer(BuildContext context) => context.push(AppRoutes.brokerRefer);
   static void goToBrokerTier(BuildContext context) => context.push(AppRoutes.brokerTier);
   static void goToBrokerTierUpgrade(BuildContext context) => context.push(AppRoutes.brokerTierUpgrade);
   static void goToBrokerHistory(BuildContext context) => context.push(AppRoutes.brokerHistory);
+  static void goToBrokerWithdraw(BuildContext context) => context.push(AppRoutes.brokerWithdraw);
   static void goToBrokerReferredDetail(BuildContext context) => context.push(AppRoutes.brokerReferredDetail);
+  static void goToBrokerReferralIssue(BuildContext context) => context.push(AppRoutes.brokerReferralIssue);
   static void goToBrokerSos(BuildContext context, {Object? extra}) => context.push(AppRoutes.brokerSos, extra: extra);
   static void goToBrokerSmartLock(BuildContext context, {Object? extra}) => context.push(AppRoutes.brokerSmartLock, extra: extra);
   static void goToBrokerPayout(BuildContext context) => context.push(AppRoutes.brokerPayout);
