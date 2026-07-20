@@ -1,12 +1,15 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../theme/app_colors.dart';
+
 import '../../data/models.dart';
 import '../../data/role_state.dart';
+import '../theme/app_colors.dart';
 
 class NavItem {
   const NavItem(this.icon, this.activeIcon, this.label, [this.route]);
+
   final IconData icon;
   final IconData activeIcon;
   final String label;
@@ -24,29 +27,37 @@ class FloatingNav extends StatelessWidget {
 
   static const renterTabs = [
     NavItem(Icons.home_outlined, Icons.home, 'Home', '/renter/home'),
-    NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist', '/renter/wishlist'),
-    NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings', '/renter/bookings'),
-    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services', '/renter/services'),
+    NavItem(
+        Icons.favorite_border, Icons.favorite, 'Wishlist', '/renter/wishlist'),
+    NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings',
+        '/renter/bookings'),
+    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services',
+        '/renter/services'),
     NavItem(Icons.person_outline, Icons.person, 'Profile', '/renter/profile'),
   ];
 
   static const ownerTabs = [
     NavItem(Icons.home_outlined, Icons.home, 'Home', '/owner/home'),
-    NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist', '/owner/wishlist'),
-    NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings', '/owner/bookings'),
-    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services', '/owner/services'),
-    NavItem(Icons.person_outline, Icons.person, 'Manage', '/owner/profile'),
+    NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist',
+        '/owner/wishlist'),
+    NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings',
+        '/owner/bookings'),
+    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services',
+        '/owner/services'),
+    NavItem(
+        Icons.person_outline, Icons.person, 'Manage', '/owner/profile'),
   ];
 
   static const brokerTabs = [
     NavItem(Icons.home_outlined, Icons.home, 'Home', '/broker/home'),
-    NavItem(Icons.workspace_premium_outlined, Icons.workspace_premium, 'My Role', '/broker/dashboard'),
-    NavItem(Icons.apartment_outlined, Icons.apartment, 'Referrals', '/broker/referred'),
-    NavItem(Icons.account_balance_wallet_outlined, Icons.account_balance_wallet, 'Wallet', '/broker/wallet'),
+    NavItem(Icons.workspace_premium_outlined, Icons.workspace_premium,
+        'My Role', '/broker/dashboard'),
+    NavItem(Icons.apartment_outlined, Icons.apartment, 'Referrals',
+        '/broker/referred'),
+    NavItem(Icons.account_balance_wallet_outlined, Icons.account_balance_wallet,
+        'Wallet', '/broker/wallet'),
     NavItem(Icons.person_outline, Icons.person, 'Profile', '/broker/profile'),
   ];
-
-
 
   void _defaultOnTap(BuildContext context, int index, NavItem item) {
     if (item.route != null) {
@@ -57,7 +68,10 @@ class FloatingNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final role = RoleState().currentRole;
-    final displayItems = items ?? (role == Role.owner ? ownerTabs : (role == Role.broker ? brokerTabs : renterTabs));
+    final displayItems = items ??
+        (role == Role.owner
+            ? ownerTabs
+            : (role == Role.broker ? brokerTabs : renterTabs));
 
     return Positioned(
       left: 14,
@@ -68,7 +82,8 @@ class FloatingNav extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
+          border:
+              Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -88,8 +103,8 @@ class FloatingNav extends StatelessWidget {
                   _NavButton(
                     item: displayItems[i],
                     selected: i == active,
-                    onTap: () => (onTap != null) 
-                        ? onTap!(i, displayItems[i]) 
+                    onTap: () => (onTap != null)
+                        ? onTap!(i, displayItems[i])
                         : _defaultOnTap(context, i, displayItems[i]),
                   ),
               ],
@@ -102,7 +117,9 @@ class FloatingNav extends StatelessWidget {
 }
 
 class _NavButton extends StatelessWidget {
-  const _NavButton({required this.item, required this.selected, required this.onTap});
+  const _NavButton(
+      {required this.item, required this.selected, required this.onTap});
+
   final NavItem item;
   final bool selected;
   final VoidCallback onTap;
@@ -116,17 +133,21 @@ class _NavButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            selected ? item.activeIcon : item.icon, 
-            size: 23, 
-            color: selected ? AppColors.navy : AppColors.navy.withValues(alpha: 0.4),
+            selected ? item.activeIcon : item.icon,
+            size: 23,
+            color: selected
+                ? AppColors.navy
+                : AppColors.navy.withValues(alpha: 0.4),
           ),
           const SizedBox(height: 4),
           Text(
-            item.label, 
+            item.label,
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: selected ? AppColors.navy : AppColors.navy.withValues(alpha: 0.4),
+              color: selected
+                  ? AppColors.navy
+                  : AppColors.navy.withValues(alpha: 0.4),
               fontFamily: 'Cairo',
             ),
           ),

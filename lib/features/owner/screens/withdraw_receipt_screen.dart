@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -19,16 +20,28 @@ class WithdrawReceiptScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Center(
                   child: Text('Withdrawal requested',
-                      style: AppTheme.dm(size: 24, weight: FontWeight.w700, color: AppColors.navy))),
+                      style: AppTheme.dm(
+                          size: 24,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy))),
               const SizedBox(height: 8),
               Center(
                   child: RichText(
                       textAlign: TextAlign.center,
-                      text: TextSpan(style: AppTheme.dm(size: 14, color: AppColors.muted, height: 1.5), children: const [
-                        TextSpan(text: 'EGP 20,000 is on its way. Expect it in your account within '),
-                        TextSpan(text: '2 working days', style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.ink)),
-                        TextSpan(text: '.')
-                      ]))),
+                      text: TextSpan(
+                          style: AppTheme.dm(
+                              size: 14, color: AppColors.muted, height: 1.5),
+                          children: const [
+                            TextSpan(
+                                text:
+                                    'EGP 20,000 is on its way. Expect it in your account within '),
+                            TextSpan(
+                                text: '2 working days',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.ink)),
+                            TextSpan(text: '.')
+                          ]))),
               const SizedBox(height: 20),
               const WhiteCard(
                   padding: EdgeInsets.all(16),
@@ -37,17 +50,27 @@ class WithdrawReceiptScreen extends StatelessWidget {
                     KeyValueRow('To', 'CIB ••4821'),
                     KeyValueRow('Reference', 'PO-4471-2026'),
                     KeyValueRow('Requested', 'Jun 18, 9:41 AM'),
-                    KeyValueRow('Est. arrival', 'Jun 20', valueColor: AppColors.success, bold: true, topBorder: true),
+                    KeyValueRow('Est. arrival', 'Jun 20',
+                        valueColor: AppColors.success,
+                        bold: true,
+                        topBorder: true),
                   ])),
               const SizedBox(height: 14),
-              const InfoNote(text: "We'll notify you when the transfer is sent to your bank.", icon: Icons.schedule),
+              const InfoNote(
+                  text:
+                      "We'll notify you when the transfer is sent to your bank.",
+                  icon: Icons.schedule),
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(16),
           child: Column(children: [
-            const WideButton(label: 'Download receipt', color: AppColors.navy, outline: true, height: 44),
+            const WideButton(
+                label: 'Download receipt',
+                color: AppColors.navy,
+                outline: true,
+                height: 44),
             const SizedBox(height: 10),
             NavyButton(
                 label: 'Done',

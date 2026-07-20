@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+
 import '../pages/gallery/photo_viewer_screen.dart';
 
 class PropertyPhotoGallery extends StatelessWidget {
@@ -60,7 +61,8 @@ class PropertyPhotoGallery extends StatelessWidget {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () => _openGallery(context, photoList.length > 1 ? 1 : 0),
+                onTap: () =>
+                    _openGallery(context, photoList.length > 1 ? 1 : 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
@@ -79,7 +81,8 @@ class PropertyPhotoGallery extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               GestureDetector(
-                onTap: () => _openGallery(context, photoList.length > 2 ? 2 : 0),
+                onTap: () =>
+                    _openGallery(context, photoList.length > 2 ? 2 : 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Stack(

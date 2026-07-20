@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'sample_data.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
+import 'sample_data.dart';
 
 class WishlistState extends ChangeNotifier {
   static final WishlistState _instance = WishlistState._internal();
+
   factory WishlistState() => _instance;
+
   WishlistState._internal();
 
   final Set<String> _savedPropertyNames = {};
 
-  bool isSaved(Property property) => _savedPropertyNames.contains(property.name);
+  bool isSaved(Property property) =>
+      _savedPropertyNames.contains(property.name);
 
   void toggleSave(Property property) {
     if (_savedPropertyNames.contains(property.name)) {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../../../../../core/theme/app_colors.dart';
 import 'package:gal/gal.dart';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerShareCollectionSheet extends StatelessWidget {
   final String collectionName;
@@ -35,7 +36,7 @@ class BrokerShareCollectionSheet extends StatelessWidget {
         }
       }
     } catch (e) {
-       if (context.mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),
         );
@@ -44,7 +45,8 @@ class BrokerShareCollectionSheet extends StatelessWidget {
   }
 
   void _shareViaWhatsApp(BuildContext context) {
-    final text = 'Check out my Sahely collection "$collectionName": $shareableLink';
+    final text =
+        'Check out my Sahely collection "$collectionName": $shareableLink';
     final url = 'whatsapp://send?text=${Uri.encodeComponent(text)}';
     _launchUrl(url, context);
   }
@@ -111,7 +113,8 @@ class BrokerShareCollectionSheet extends StatelessWidget {
           top: Radius.circular(32),
         ),
       ),
-      padding: EdgeInsets.fromLTRB(20, 12, 20, MediaQuery.of(context).padding.bottom + 20),
+      padding: EdgeInsets.fromLTRB(
+          20, 12, 20, MediaQuery.of(context).padding.bottom + 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -137,7 +140,9 @@ class BrokerShareCollectionSheet extends StatelessWidget {
                   height: 64,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    width: 64, height: 64, color: AppColors.border,
+                    width: 64,
+                    height: 64,
+                    color: AppColors.border,
                     child: const Icon(Icons.folder, color: AppColors.secondary),
                   ),
                 ),
@@ -200,7 +205,9 @@ class BrokerShareCollectionSheet extends StatelessWidget {
                     Clipboard.setData(ClipboardData(text: shareableLink));
                     HapticFeedback.mediumImpact();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Link copied to clipboard!'), duration: Duration(seconds: 2)),
+                      const SnackBar(
+                          content: Text('Link copied to clipboard!'),
+                          duration: Duration(seconds: 2)),
                     );
                   },
                   behavior: HitTestBehavior.opaque,
@@ -265,15 +272,21 @@ class BrokerShareCollectionSheet extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const Icon(Icons.person_add_alt_1_outlined, color: Color(0xFF1B6B3A), size: 20),
+                const Icon(Icons.person_add_alt_1_outlined,
+                    color: Color(0xFF1B6B3A), size: 20),
                 const SizedBox(width: 10),
                 const Expanded(
                   child: Text.rich(
                     TextSpan(
                       text: 'Invite friends to ',
-                      style: TextStyle(fontSize: 13, color: Color(0xFF1B2744), fontFamily: 'DM Sans'),
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF1B2744),
+                          fontFamily: 'DM Sans'),
                       children: [
-                        TextSpan(text: 'add & vote', style: TextStyle(fontWeight: FontWeight.w700)),
+                        TextSpan(
+                            text: 'add & vote',
+                            style: TextStyle(fontWeight: FontWeight.w700)),
                         TextSpan(text: ' on places'),
                       ],
                     ),
@@ -281,7 +294,7 @@ class BrokerShareCollectionSheet extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                     ScaffoldMessenger.of(context).showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Invite sent to contacts')),
                     );
                   },
@@ -367,18 +380,31 @@ class _SocialOption extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isMore ? Colors.white : (isInstagram ? null : color),
-              gradient: isInstagram 
-                ? const LinearGradient(
-                    colors: [Color(0xFF833AB4), Color(0xFFFD1D1D), Color(0xFFFCB045)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ) 
-                : null,
-              boxShadow: isMore ? [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 4, offset: const Offset(0, 2))] : null,
+              gradient: isInstagram
+                  ? const LinearGradient(
+                      colors: [
+                        Color(0xFF833AB4),
+                        Color(0xFFFD1D1D),
+                        Color(0xFFFCB045)
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+              boxShadow: isMore
+                  ? [
+                      BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2))
+                    ]
+                  : null,
             ),
             child: Icon(
-              label == 'WhatsApp' ? Icons.chat : (isInstagram ? Icons.camera_alt : icon), 
-              color: isMore ? const Color(0xFF1B2744) : Colors.white, 
+              label == 'WhatsApp'
+                  ? Icons.chat
+                  : (isInstagram ? Icons.camera_alt : icon),
+              color: isMore ? const Color(0xFF1B2744) : Colors.white,
               size: 28,
             ),
           ),

@@ -1,10 +1,13 @@
 import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 
 class FilterDateBox extends StatelessWidget {
   const FilterDateBox(this.label, {super.key, this.onTap});
+
   final String label;
   final VoidCallback? onTap;
 
@@ -21,7 +24,8 @@ class FilterDateBox extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.calendar_today_outlined, size: 15, color: AppColors.gold),
+              const Icon(Icons.calendar_today_outlined,
+                  size: 15, color: AppColors.gold),
               const SizedBox(width: 7),
               Expanded(
                 child: Text(
@@ -37,7 +41,9 @@ class FilterDateBox extends StatelessWidget {
 }
 
 class GuestStepRow extends StatelessWidget {
-  const GuestStepRow(this.title, this.sub, this.value, {super.key, required this.onChanged});
+  const GuestStepRow(this.title, this.sub, this.value,
+      {super.key, required this.onChanged});
+
   final String title;
   final String sub;
   final int value;
@@ -59,10 +65,13 @@ class GuestStepRow extends StatelessWidget {
           ),
           Row(
             children: [
-              StepBtn(filled: false, onTap: () => onChanged(value > 0 ? value - 1 : 0)),
+              StepBtn(
+                  filled: false,
+                  onTap: () => onChanged(value > 0 ? value - 1 : 0)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: Text('$value', style: AppTheme.dm(size: 15, weight: FontWeight.w700)),
+                child: Text('$value',
+                    style: AppTheme.dm(size: 15, weight: FontWeight.w700)),
               ),
               StepBtn(filled: true, onTap: () => onChanged(value + 1)),
             ],
@@ -75,6 +84,7 @@ class GuestStepRow extends StatelessWidget {
 
 class StepBtn extends StatelessWidget {
   const StepBtn({super.key, required this.filled, this.onTap});
+
   final bool filled;
   final VoidCallback? onTap;
 
@@ -87,16 +97,19 @@ class StepBtn extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: filled ? AppColors.navy : Colors.transparent,
-            border: filled ? null : Border.all(color: AppColors.navy, width: 1.5),
+            border:
+                filled ? null : Border.all(color: AppColors.navy, width: 1.5),
             shape: BoxShape.circle,
           ),
-          child: Icon(filled ? Icons.add : Icons.remove, size: 18, color: filled ? AppColors.white : AppColors.navy),
+          child: Icon(filled ? Icons.add : Icons.remove,
+              size: 18, color: filled ? AppColors.white : AppColors.navy),
         ),
       );
 }
 
 class PriceSlider extends StatelessWidget {
   const PriceSlider({super.key, required this.values, required this.onChanged});
+
   final RangeValues values;
   final ValueChanged<RangeValues> onChanged;
 
@@ -146,7 +159,8 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
       ..color = Colors.white
       ..style = PaintingStyle.fill;
 
-    final Path path = Path()..addOval(Rect.fromCircle(center: center, radius: 11));
+    final Path path = Path()
+      ..addOval(Rect.fromCircle(center: center, radius: 11));
     canvas.drawShadow(path, Colors.black, 3, true);
 
     canvas.drawCircle(center, 11, whitePaint);
@@ -160,12 +174,12 @@ class CustomRangeThumbShape extends RangeSliderThumbShape {
 
 class RuleToggle extends StatelessWidget {
   const RuleToggle(
-      this.label,
-      this.on, {
-        super.key,
-        required this.onChanged,
-        this.icon, // أضف هذا
-      });
+    this.label,
+    this.on, {
+    super.key,
+    required this.onChanged,
+    this.icon, // أضف هذا
+  });
 
   final String label;
   final bool on;

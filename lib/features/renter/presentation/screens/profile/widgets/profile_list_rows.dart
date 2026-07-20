@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+
 import '../pages/currency_selector_sheet.dart';
 
 class ProfileListRows extends StatelessWidget {
@@ -41,7 +42,7 @@ class ProfileListRows extends StatelessWidget {
                 fontFamily: 'Cairo',
               ),
             ),
-            onTap: () => context.push('/wallet'),
+            onTap: () => AppNavigation.goToWallet(context),
           ),
           _Divider(),
           // My Reviews
@@ -56,28 +57,28 @@ class ProfileListRows extends StatelessWidget {
                 fontFamily: 'Cairo',
               ),
             ),
-            onTap: () => context.push('/my-reviews'),
+            onTap: () => AppNavigation.goToMyReviews(context),
           ),
           _Divider(),
           // Payment Methods
           _ListRow(
             icon: Icons.credit_card_outlined,
             label: 'Payment Methods',
-            onTap: () => context.push('/add-card'),
+            onTap: () => AppNavigation.goToAddCard(context),
           ),
           _Divider(),
           // Notifications
           _ListRow(
             icon: Icons.notifications_outlined,
             label: 'Notifications',
-            onTap: () => context.push('/notifications-settings'),
+            onTap: () => AppNavigation.goToNotificationsSettings(context),
           ),
           _Divider(),
           // Change Password
           _ListRow(
             icon: Icons.lock_outline,
             label: 'Change Password',
-            onTap: () => context.push('/change-password'),
+            onTap: () => AppNavigation.goToChangePassword(context),
           ),
           _Divider(),
           // Language
@@ -94,12 +95,13 @@ class ProfileListRows extends StatelessWidget {
                 fontFamily: 'Cairo',
               ),
             ),
-            onTap: () => context.push('/language'),
+            onTap: () => AppNavigation.goToLanguage(context),
           ),
           _Divider(),
           // Currency
           _ListRow(
-            icon: Icons.help_outline, // Matching the gold icon in the image
+            icon: Icons.help_outline,
+            // Matching the gold icon in the image
             iconColor: AppColors.gold,
             label: 'Currency',
             trailing: Text(

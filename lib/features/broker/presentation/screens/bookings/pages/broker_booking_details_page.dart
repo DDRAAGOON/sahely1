@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/arrival_checklist_section.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/ask_sahely_ai_section.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booked_property_header.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_photo_gallery.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booking_info_chips.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/door_passcode_sos_buttons.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_details_card.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/location_map_section.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/arrival_checklist_section.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_details_card.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_photo_gallery.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/rate_your_stay_section.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/ask_sahely_ai_section.dart';
 
 class BrokerBookingDetailsPage extends StatelessWidget {
   final Map<String, dynamic> booking;
@@ -27,16 +28,17 @@ class BrokerBookingDetailsPage extends StatelessWidget {
     final String orderNumber = booking['orderNumber'] ?? '';
     final String dates = booking['dates'] ?? '';
     final String guests = booking['guests'] ?? '';
-    
+
     // Default checklist if not provided
-    final List<Map<String, dynamic>> checklist = booking['checklist'] ?? [
-      {'label': 'Key collection / Smart lock', 'completed': true},
-      {'label': 'WiFi connectivity', 'completed': true},
-      {'label': 'AC performance', 'completed': false},
-      {'label': 'Cleaning standard', 'completed': false},
-      {'label': 'Hot water availability', 'completed': false},
-      {'label': 'Pool access', 'completed': false},
-    ];
+    final List<Map<String, dynamic>> checklist = booking['checklist'] ??
+        [
+          {'label': 'Key collection / Smart lock', 'completed': true},
+          {'label': 'WiFi connectivity', 'completed': true},
+          {'label': 'AC performance', 'completed': false},
+          {'label': 'Cleaning standard', 'completed': false},
+          {'label': 'Hot water availability', 'completed': false},
+          {'label': 'Pool access', 'completed': false},
+        ];
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -82,21 +84,22 @@ class BrokerBookingDetailsPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: DoorPasscodeSosButtons(
                 onDoorPasscodeTap: () {
-                   context.push(
-                      '/broker/smart-lock',
-                      extra: {
-                        'propertyName': propertyName,
-                        'bookingRef': orderNumber,
-                        'passcode': '8842',
-                        'checkIn': booking['checkIn'] ?? DateTime.now(),
-                        'checkOut': booking['checkOut'] ?? DateTime.now().add(const Duration(days: 4)),
-                        'propertyLat': 31.0263,
-                        'propertyLng': 28.9402,
-                      },
-                    );
+                  AppNavigation.goToBrokerSmartLock(
+                    context,
+                    extra: {
+                      'propertyName': propertyName,
+                      'bookingRef': orderNumber,
+                      'passcode': '8842',
+                      'checkIn': booking['checkIn'] ?? DateTime.now(),
+                      'checkOut': booking['checkOut'] ??
+                          DateTime.now().add(const Duration(days: 4)),
+                      'propertyLat': 31.0263,
+                      'propertyLng': 28.9402,
+                    },
+                  );
                 },
                 onSOSTap: () {
-                  context.push('/broker/sos');
+                  AppNavigation.goToBrokerSos(context);
                 },
               ),
             ),
@@ -144,13 +147,14 @@ class BrokerBookingDetailsPage extends StatelessWidget {
                 },
                 onReportIssue: () {
                   context.push(
-                      '/broker/arrival-checklist',
-                      extra: {
-                        'bookingId': orderNumber,
-                        'checkInTime': booking['checkIn'] ?? DateTime.now(),
-                        'checklistItems': List<Map<String, dynamic>>.from(checklist),
-                      },
-                    );
+                    '/broker/arrival-checklist',
+                    extra: {
+                      'bookingId': orderNumber,
+                      'checkInTime': booking['checkIn'] ?? DateTime.now(),
+                      'checklistItems':
+                          List<Map<String, dynamic>>.from(checklist),
+                    },
+                  );
                 },
               ),
             ),
@@ -165,13 +169,13 @@ class BrokerBookingDetailsPage extends StatelessWidget {
               child: RateYourStaySection(
                 onAddReview: () {
                   context.push(
-                      '/write-review',
-                      extra: {
-                        'propertyName': propertyName,
-                        'propertyImage': imageUrl,
-                        'stayDates': dates,
-                      },
-                    );
+                    '/write-review',
+                    extra: {
+                      'propertyName': propertyName,
+                      'propertyImage': imageUrl,
+                      'stayDates': dates,
+                    },
+                  );
                 },
               ),
             ),

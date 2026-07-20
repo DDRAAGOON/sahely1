@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../data/repositories/broker_bookings_repository.dart';
 
 enum BrokerBookingsStatus { initial, loading, loaded, error }
@@ -36,9 +37,12 @@ class BrokerBookingsCubit extends Cubit<BrokerBookingsState> {
     emit(state.copyWith(status: BrokerBookingsStatus.loading));
     try {
       final bookings = await _repository.getBookings();
-      emit(state.copyWith(bookings: bookings, status: BrokerBookingsStatus.loaded));
+      emit(state.copyWith(
+          bookings: bookings, status: BrokerBookingsStatus.loaded));
     } catch (e) {
-      emit(state.copyWith(status: BrokerBookingsStatus.error, errorMessage: 'Failed to load bookings'));
+      emit(state.copyWith(
+          status: BrokerBookingsStatus.error,
+          errorMessage: 'Failed to load bookings'));
     }
   }
 }

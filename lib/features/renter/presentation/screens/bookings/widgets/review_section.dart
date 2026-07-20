@@ -37,14 +37,15 @@ class ReviewSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-
           if (hasReview && rating != null) ...[
             Row(
               children: List.generate(5, (index) {
                 return Icon(
                   index < rating! ? Icons.star : Icons.star,
                   size: 28,
-                  color: index < rating! ? AppColors.gold : const Color(0xFFEFE9DD),
+                  color: index < rating!
+                      ? AppColors.gold
+                      : const Color(0xFFEFE9DD),
                 );
               }),
             ),

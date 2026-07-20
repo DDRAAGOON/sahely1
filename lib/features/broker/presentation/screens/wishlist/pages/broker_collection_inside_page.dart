@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../domain/models/broker_wishlist_item.dart';
+import '../bloc/broker_wishlist_cubit.dart';
 import '../widgets/broker_collection_header.dart';
 import '../widgets/broker_collection_members_actions.dart';
 import '../widgets/broker_collection_property_card.dart';
 import '../widgets/broker_share_collection_sheet.dart';
-import '../bloc/broker_wishlist_cubit.dart';
 
 class BrokerCollectionInsidePage extends StatefulWidget {
   final String collectionId;
@@ -27,10 +28,12 @@ class BrokerCollectionInsidePage extends StatefulWidget {
   });
 
   @override
-  State<BrokerCollectionInsidePage> createState() => _BrokerCollectionInsidePageState();
+  State<BrokerCollectionInsidePage> createState() =>
+      _BrokerCollectionInsidePageState();
 }
 
-class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage> {
+class _BrokerCollectionInsidePageState
+    extends State<BrokerCollectionInsidePage> {
   @override
   void initState() {
     super.initState();
@@ -65,7 +68,10 @@ class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage>
                 final cubit = context.read<BrokerWishlistCubit>();
                 final collection = cubit.state.collections.firstWhere(
                   (c) => c.id == widget.collectionId,
-                  orElse: () => BrokerWishlistCollection(id: widget.collectionId, name: widget.collectionName, itemCount: widget.propertyCount),
+                  orElse: () => BrokerWishlistCollection(
+                      id: widget.collectionId,
+                      name: widget.collectionName,
+                      itemCount: widget.propertyCount),
                 );
 
                 showModalBottomSheet(
@@ -74,16 +80,18 @@ class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage>
                   isScrollControlled: true,
                   builder: (context) => BrokerShareCollectionSheet(
                     collectionName: widget.collectionName,
-                    collectionImage: collection.coverImage ?? 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+                    collectionImage: collection.coverImage ??
+                        'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
                     placesCount: collection.itemCount,
-                    shareableLink: 'sahely.app/broker/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
+                    shareableLink:
+                        'sahely.app/broker/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
                     isInviteOnly: false,
                   ),
                 );
               },
               onCompareTap: () {
                 // Navigate to comparison if needed, or show snackbar
-                 ScaffoldMessenger.of(context).showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Comparing properties...')),
                 );
               },
@@ -96,7 +104,9 @@ class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage>
               child: BlocBuilder<BrokerWishlistCubit, BrokerWishlistState>(
                 builder: (context, state) {
                   if (state.status == BrokerWishlistStatus.loading) {
-                    return const Center(child: CircularProgressIndicator(color: AppColors.gold));
+                    return const Center(
+                        child:
+                            CircularProgressIndicator(color: AppColors.gold));
                   }
 
                   if (state.items.isEmpty) {
@@ -104,11 +114,16 @@ class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.favorite_border, size: 64, color: AppColors.secondary.withValues(alpha: 0.3)),
+                          Icon(Icons.favorite_border,
+                              size: 64,
+                              color:
+                                  AppColors.secondary.withValues(alpha: 0.3)),
                           const SizedBox(height: 16),
                           const Text(
                             'No properties in this collection yet',
-                            style: TextStyle(color: AppColors.secondary, fontFamily: 'Cairo'),
+                            style: TextStyle(
+                                color: AppColors.secondary,
+                                fontFamily: 'Cairo'),
                           ),
                         ],
                       ),
@@ -118,12 +133,13 @@ class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage>
                   return ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: state.items.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 16),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16),
                     itemBuilder: (context, index) {
                       final item = state.items[index];
                       return BrokerCollectionPropertyCard(
                         propertyName: item.propertyName,
-                        location: 'North Coast, Egypt', 
+                        location: 'North Coast, Egypt',
                         propertyType: 'Villa',
                         beds: 3,
                         amenities: const ['Pool', 'WiFi'],
@@ -142,7 +158,7 @@ class _BrokerCollectionInsidePageState extends State<BrokerCollectionInsidePage>
                             rating: 4.8,
                             reviews: 12,
                           );
-                          context.push('/property', extra: p);
+                          AppNavigation.goToPropertyDetail(context, extra: p);
                         },
                       );
                     },

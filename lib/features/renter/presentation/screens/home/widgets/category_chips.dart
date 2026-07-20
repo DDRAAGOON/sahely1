@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class CategoryChips extends StatefulWidget {
   final Function(String)? onCategorySelected;
+
   const CategoryChips({super.key, this.onCategorySelected});
 
   @override
@@ -40,13 +42,15 @@ class _CategoryChipsState extends State<CategoryChips> {
                   color: AppColors.navy,
                   width: 1,
                 ),
-                boxShadow: isSelected ? [
-                  BoxShadow(
-                    color: AppColors.navy.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  )
-                ] : null,
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.navy.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        )
+                      ]
+                    : null,
               ),
               alignment: Alignment.center,
               child: Text(

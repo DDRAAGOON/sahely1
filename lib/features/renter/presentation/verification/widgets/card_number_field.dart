@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../../../../core/theme/app_colors.dart';
 
 class CardNumberField extends StatelessWidget {
@@ -111,8 +112,20 @@ class CardNumberField extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Positioned(left: 0, child: Container(width: 16, height: 16, decoration: const BoxDecoration(color: Color(0xFFEB001B), shape: BoxShape.circle))),
-            Positioned(right: 0, child: Container(width: 16, height: 16, decoration: const BoxDecoration(color: Color(0xFFF79E1B), shape: BoxShape.circle))),
+            Positioned(
+                left: 0,
+                child: Container(
+                    width: 16,
+                    height: 16,
+                    decoration: const BoxDecoration(
+                        color: Color(0xFFEB001B), shape: BoxShape.circle))),
+            Positioned(
+                right: 0,
+                child: Container(
+                    width: 16,
+                    height: 16,
+                    decoration: const BoxDecoration(
+                        color: Color(0xFFF79E1B), shape: BoxShape.circle))),
           ],
         ),
       );

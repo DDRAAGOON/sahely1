@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerActiveBookingCard extends StatelessWidget {
@@ -47,7 +48,8 @@ class BrokerActiveBookingCard extends StatelessWidget {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(15)),
                 child: AspectRatio(
                   aspectRatio: 1.8,
                   child: Image.network(
@@ -61,7 +63,8 @@ class BrokerActiveBookingCard extends StatelessWidget {
                 top: 12,
                 left: 12,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: const Color(0xFF1B6B3A),
                     borderRadius: BorderRadius.circular(20),
@@ -116,7 +119,8 @@ class BrokerActiveBookingCard extends StatelessWidget {
                       const SizedBox(height: 2),
                       Row(
                         children: [
-                          const Icon(Icons.location_on, color: Colors.white70, size: 12),
+                          const Icon(Icons.location_on,
+                              color: Colors.white70, size: 12),
                           const SizedBox(width: 4),
                           Text(
                             location,
@@ -134,7 +138,7 @@ class BrokerActiveBookingCard extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // Details Section
           Padding(
             padding: const EdgeInsets.all(16),
@@ -146,7 +150,7 @@ class BrokerActiveBookingCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 _buildRow('Guests', guests),
                 const SizedBox(height: 16),
-                
+
                 // Buttons Row
                 Row(
                   children: [
@@ -162,7 +166,8 @@ class BrokerActiveBookingCard extends StatelessWidget {
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.lock_outline, color: Color(0xFFC9A84C), size: 18),
+                              Icon(Icons.lock_outline,
+                                  color: Color(0xFFC9A84C), size: 18),
                               SizedBox(width: 8),
                               Text(
                                 'Digital Lock',
@@ -191,7 +196,8 @@ class BrokerActiveBookingCard extends StatelessWidget {
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.warning_amber_rounded, color: Colors.white, size: 18),
+                              Icon(Icons.warning_amber_rounded,
+                                  color: Colors.white, size: 18),
                               SizedBox(width: 8),
                               Text(
                                 'SOS',
@@ -209,9 +215,9 @@ class BrokerActiveBookingCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // View Details
                 GestureDetector(
                   onTap: onViewDetailsTap,

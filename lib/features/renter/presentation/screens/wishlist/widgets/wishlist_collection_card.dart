@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class WishlistCollectionCard extends StatelessWidget {
@@ -46,7 +47,8 @@ class WishlistCollectionCard extends StatelessWidget {
                     child: const Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.gold),
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppColors.gold),
                       ),
                     ),
                   ),

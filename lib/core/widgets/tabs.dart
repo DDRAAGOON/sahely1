@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
 class SegmentTabs extends StatelessWidget {
-  const SegmentTabs({super.key, required this.tabs, this.active = 0, this.onTap});
+  const SegmentTabs(
+      {super.key, required this.tabs, this.active = 0, this.onTap});
+
   final List<String> tabs;
   final int active;
   final void Function(int)? onTap;
@@ -21,11 +24,15 @@ class SegmentTabs extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: i == active ? AppColors.navy : AppColors.white,
-                  border: i == active ? null : Border.all(color: AppColors.navy),
+                  border:
+                      i == active ? null : Border.all(color: AppColors.navy),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(tabs[i],
-                    style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: i == active ? AppColors.white : AppColors.navy)),
+                    style: AppTheme.dm(
+                        size: 13,
+                        weight: FontWeight.w600,
+                        color: i == active ? AppColors.white : AppColors.navy)),
               ),
             ),
           ),

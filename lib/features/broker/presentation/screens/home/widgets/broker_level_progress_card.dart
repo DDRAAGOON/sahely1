@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerLevelProgressCard extends StatelessWidget {
@@ -20,6 +21,7 @@ class BrokerLevelProgressCard extends StatelessWidget {
   });
 
   int get _nextLevelThreshold => currentStars + starsToNextLevel;
+
   double get _progress => currentStars / _nextLevelThreshold;
 
   @override
@@ -95,7 +97,8 @@ class BrokerLevelProgressCard extends StatelessWidget {
                     value: value,
                     minHeight: 8,
                     backgroundColor: Colors.white.withValues(alpha: 0.2),
-                    valueColor: const AlwaysStoppedAnimation<Color>(AppColors.gold),
+                    valueColor:
+                        const AlwaysStoppedAnimation<Color>(AppColors.gold),
                   );
                 },
               ),

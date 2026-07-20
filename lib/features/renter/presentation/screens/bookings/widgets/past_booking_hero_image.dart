@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+
 import '../pages/gallery/photo_viewer_screen.dart';
 
 class PastBookingHeroImage extends StatelessWidget {
@@ -40,10 +41,10 @@ class PastBookingHeroImage extends StatelessWidget {
           onTap: () => _openGallery(context),
           child: AspectRatio(
             aspectRatio: 1.15, // Height ratio to match Golden Dunes image
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-              ),
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
 
@@ -52,7 +53,8 @@ class PastBookingHeroImage extends StatelessWidget {
           bottom: 0,
           left: 0,
           right: 0,
-          height: 140, // Tall enough to cover text area
+          height: 140,
+          // Tall enough to cover text area
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -82,7 +84,8 @@ class PastBookingHeroImage extends StatelessWidget {
                 propertyName,
                 style: const TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.w800, // Extra bold like in image
+                  fontWeight: FontWeight.w800,
+                  // Extra bold like in image
                   color: AppColors.navy,
                   fontFamily: 'DM Sans',
                   letterSpacing: -0.5,
@@ -92,8 +95,8 @@ class PastBookingHeroImage extends StatelessWidget {
               Row(
                 children: [
                   const Icon(
-                    Icons.location_on_outlined, 
-                    size: 14, 
+                    Icons.location_on_outlined,
+                    size: 14,
                     color: Color(0xFF717171),
                   ),
                   const SizedBox(width: 4),
@@ -132,7 +135,8 @@ class PastBookingHeroImage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Icon(Icons.chevron_left, color: AppColors.navy, size: 24),
+              child: const Icon(Icons.chevron_left,
+                  color: AppColors.navy, size: 24),
             ),
           ),
         ),

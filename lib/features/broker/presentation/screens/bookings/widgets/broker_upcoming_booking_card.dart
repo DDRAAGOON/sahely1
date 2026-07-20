@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerUpcomingBookingCard extends StatelessWidget {
@@ -70,7 +71,8 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xFF1B2744),
                           borderRadius: BorderRadius.circular(8),
@@ -90,7 +92,8 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.location_on, color: Color(0xFF9A9A9A), size: 12),
+                      const Icon(Icons.location_on,
+                          color: Color(0xFF9A9A9A), size: 12),
                       const SizedBox(width: 4),
                       Text(
                         location,
@@ -117,7 +120,10 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
                       children: [
                         const TextSpan(
                           text: 'Order no. ',
-                          style: TextStyle(color: Color(0xFF717171), fontSize: 11, fontFamily: 'DM Sans'),
+                          style: TextStyle(
+                              color: Color(0xFF717171),
+                              fontSize: 11,
+                              fontFamily: 'DM Sans'),
                         ),
                         TextSpan(
                           text: orderNumber,

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
 class RatingRow extends StatelessWidget {
-  const RatingRow({super.key, required this.rating, this.reviews, this.suffix, this.size = 13});
+  const RatingRow(
+      {super.key,
+      required this.rating,
+      this.reviews,
+      this.suffix,
+      this.size = 13});
+
   final double rating;
   final int? reviews;
   final String? suffix;
@@ -15,7 +22,8 @@ class RatingRow extends StatelessWidget {
       children: [
         Icon(Icons.star, size: size, color: AppColors.gold),
         const SizedBox(width: 5),
-        Text(rating.toString(), style: AppTheme.dm(size: size, weight: FontWeight.w700)),
+        Text(rating.toString(),
+            style: AppTheme.dm(size: size, weight: FontWeight.w700)),
         if (reviews != null || suffix != null)
           Flexible(
             child: Text(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
@@ -35,11 +36,15 @@ class NavyButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: outline ? Colors.transparent : AppColors.navy,
             foregroundColor: outline ? AppColors.navy : AppColors.white,
-            disabledBackgroundColor: outline ? Colors.transparent : AppColors.navy,
+            disabledBackgroundColor:
+                outline ? Colors.transparent : AppColors.navy,
             disabledForegroundColor: outline ? AppColors.navy : AppColors.white,
             elevation: 0,
-            side: outline ? const BorderSide(color: AppColors.navy, width: 1.5) : null,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+            side: outline
+                ? const BorderSide(color: AppColors.navy, width: 1.5)
+                : null,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radius)),
           ),
           child: Text(
             label,
@@ -76,7 +81,10 @@ class GoldButton extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius),
-          boxShadow: const [BoxShadow(color: Color(0x59C9A84C), blurRadius: 16, offset: Offset(0, 4))],
+          boxShadow: const [
+            BoxShadow(
+                color: Color(0x59C9A84C), blurRadius: 16, offset: Offset(0, 4))
+          ],
         ),
         child: ElevatedButton(
           onPressed: onTap,
@@ -84,9 +92,12 @@ class GoldButton extends StatelessWidget {
             backgroundColor: AppColors.gold,
             foregroundColor: AppColors.navy,
             elevation: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(radius)),
           ),
-          child: Text(label, style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+          child: Text(label,
+              style: AppTheme.dm(
+                  size: 15, weight: FontWeight.w700, color: AppColors.navy)),
         ),
       ),
     );
@@ -96,6 +107,7 @@ class GoldButton extends StatelessWidget {
 /// Rounded square "‹" back chip.
 class BackChip extends StatelessWidget {
   const BackChip({super.key, this.onTap});
+
   final VoidCallback? onTap;
 
   @override
@@ -118,12 +130,20 @@ class BackChip extends StatelessWidget {
 }
 
 class IconCircleButton extends StatelessWidget {
-  const IconCircleButton({super.key, required this.icon, this.onTap, this.bg = AppColors.white, this.fg = AppColors.navy, this.size = 34});
+  const IconCircleButton(
+      {super.key,
+      required this.icon,
+      this.onTap,
+      this.bg = AppColors.white,
+      this.fg = AppColors.navy,
+      this.size = 34});
+
   final IconData icon;
   final VoidCallback? onTap;
   final Color bg;
   final Color fg;
   final double size;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -133,7 +153,9 @@ class IconCircleButton extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           color: bg,
-          border: bg == AppColors.white ? Border.all(color: AppColors.border) : null,
+          border: bg == AppColors.white
+              ? Border.all(color: AppColors.border)
+              : null,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(icon, size: 18, color: fg),

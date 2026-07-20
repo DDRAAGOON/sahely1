@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+
 import 'level/level_detail_sheet.dart';
 import 'level/level_perk.dart';
 
@@ -89,7 +90,8 @@ class MawsemHeroCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20), // Reduced horizontal padding
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
+            // Reduced horizontal padding
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -100,7 +102,8 @@ class MawsemHeroCard extends StatelessWidget {
                     const Text(
                       'AL MAWSEM',
                       style: TextStyle(
-                        fontSize: 20, // Restored original size
+                        fontSize: 20,
+                        // Restored original size
                         fontWeight: FontWeight.w700,
                         color: AppColors.gold,
                         fontFamily: 'Cairo',
@@ -108,7 +111,8 @@ class MawsemHeroCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.mawsemDark, // Background #424446
                         borderRadius: BorderRadius.circular(10),
@@ -140,7 +144,8 @@ class MawsemHeroCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(18),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.mawsemTeal.withValues(alpha: 0.3), // Toned down glow
+                            color: AppColors.mawsemTeal.withValues(alpha: 0.3),
+                            // Toned down glow
                             blurRadius: 12,
                             spreadRadius: 1,
                           )
@@ -227,7 +232,8 @@ class MawsemHeroCard extends StatelessWidget {
                         child: LinearProgressIndicator(
                           value: progress.clamp(0.0, 1.0),
                           backgroundColor: Colors.white.withValues(alpha: 0.1),
-                          valueColor: const AlwaysStoppedAnimation<Color>(AppColors.mawsemProgress),
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              AppColors.mawsemProgress),
                           minHeight: 10,
                         ),
                       ),
@@ -238,21 +244,47 @@ class MawsemHeroCard extends StatelessWidget {
                         children: [
                           RichText(
                             text: TextSpan(
-                              style: const TextStyle(fontSize: 13, color: Colors.white, fontFamily: 'Cairo'),
+                              style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontFamily: 'Cairo'),
                               children: [
-                                TextSpan(text: '$starsToNext', style: const TextStyle(fontWeight: FontWeight.w900)),
-                                const TextSpan(text: ' ★', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
-                                const TextSpan(text: ' to ', style: TextStyle(color: Color(0xFFB8C4E0))),
-                                TextSpan(text: nextLevelName, style: const TextStyle(color: Color(0xFFB8C4E0))),
+                                TextSpan(
+                                    text: '$starsToNext',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w900)),
+                                const TextSpan(
+                                    text: ' ★',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white)),
+                                const TextSpan(
+                                    text: ' to ',
+                                    style: TextStyle(color: Color(0xFFB8C4E0))),
+                                TextSpan(
+                                    text: nextLevelName,
+                                    style: const TextStyle(
+                                        color: Color(0xFFB8C4E0))),
                               ],
                             ),
                           ),
                           RichText(
                             text: TextSpan(
-                              style: const TextStyle(fontSize: 13, color: Color(0xFFB8C4E0), fontFamily: 'Cairo'),
+                              style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Color(0xFFB8C4E0),
+                                  fontFamily: 'Cairo'),
                               children: [
-                                TextSpan(text: '$nextLevelThreshold', style: const TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
-                                const TextSpan(text: ' ★', style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white)),
+                                TextSpan(
+                                    text: '$nextLevelThreshold',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white)),
+                                const TextSpan(
+                                    text: ' ★',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white)),
                               ],
                             ),
                           ),
@@ -302,7 +334,8 @@ class _InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.mawsemDark.withValues(alpha: 0.3), // Background #424446
+        color: AppColors.mawsemDark.withValues(alpha: 0.3),
+        // Background #424446
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.05),

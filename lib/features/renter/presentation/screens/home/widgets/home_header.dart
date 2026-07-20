@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class HomeHeader extends StatelessWidget {
@@ -55,8 +56,10 @@ class HomeHeader extends StatelessWidget {
                 style: const TextStyle(fontSize: 13, fontFamily: 'DM Sans'),
                 decoration: const InputDecoration(
                   hintText: 'Search properties',
-                  hintStyle: TextStyle(color: AppColors.secondary, fontSize: 13),
-                  prefixIcon: Icon(Icons.search, size: 18, color: AppColors.secondary),
+                  hintStyle:
+                      TextStyle(color: AppColors.secondary, fontSize: 13),
+                  prefixIcon:
+                      Icon(Icons.search, size: 18, color: AppColors.secondary),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 10),
                 ),

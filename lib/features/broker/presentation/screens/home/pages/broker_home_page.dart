@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/broker/data/datasources/mock_broker_data_source.dart';
 import 'package:sahely/features/broker/data/repositories/broker_repository_impl.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_cubit.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_state.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../features/shared/properties/domain/entities/property.dart';
+import '../widgets/broker_dashboard_section.dart';
+import '../widgets/broker_filter_chips.dart';
 import '../widgets/broker_header.dart';
-import '../widgets/broker_search_bar.dart';
 import '../widgets/broker_level_progress_card.dart';
 import '../widgets/broker_promo_banner.dart';
-import '../widgets/broker_filter_chips.dart';
-import '../widgets/broker_dashboard_section.dart';
-import '../widgets/upcoming_checkins_section.dart';
-import '../widgets/refer_property_banner.dart';
 import '../widgets/broker_property_card.dart';
+import '../widgets/broker_search_bar.dart';
+import '../widgets/refer_property_banner.dart';
+import '../widgets/upcoming_checkins_section.dart';
 
 class BrokerHomePage extends StatefulWidget {
   const BrokerHomePage({super.key});
@@ -43,7 +44,8 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
           child: BlocBuilder<BrokerHomeCubit, BrokerHomeState>(
             builder: (context, state) {
               if (state is BrokerHomeLoading || state is BrokerHomeInitial) {
-                return const Center(child: CircularProgressIndicator(color: AppColors.gold));
+                return const Center(
+                    child: CircularProgressIndicator(color: AppColors.gold));
               }
 
               if (state is BrokerHomeError) {
@@ -68,9 +70,9 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                         ),
                         const SizedBox(height: 16),
                         BrokerSearchBar(
-                          onSearchTap: () => context.push('/browse'),
-                          onFilterTap: () => context.push('/filters'),
-                          onChatTap: () => context.push('/ai-chat'),
+                          onSearchTap: () => AppNavigation.goToBrowse(context),
+                          onFilterTap: () => AppNavigation.goToFilters(context),
+                          onChatTap: () => AppNavigation.goToAiChat(context),
                         ),
                         const SizedBox(height: 16),
                         Padding(
@@ -81,7 +83,7 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                             currentStars: dashboard.currentStars,
                             starsToNextLevel: dashboard.starsToNextLevel,
                             nextLevelName: dashboard.nextLevelName,
-                            onTap: () => context.push('/broker/mawsem'),
+                            onTap: () => AppNavigation.goToMawsem(context),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -116,7 +118,8 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () => context.push('/all-properties'),
+                                onTap: () =>
+                                    AppNavigation.goToAllProperties(context),
                                 behavior: HitTestBehavior.opaque,
                                 child: const Text(
                                   'See All',
@@ -136,11 +139,15 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                           duration: const Duration(milliseconds: 400),
                           child: Column(
                             key: ValueKey(_selectedFilter),
-                            children: List<Map<String, dynamic>>.from(dashboard.trendingProperties)
-                                .where((p) => _selectedFilter == 'All' || p['type'] == _selectedFilter)
+                            children: List<Map<String, dynamic>>.from(
+                                    dashboard.trendingProperties)
+                                .where((p) =>
+                                    _selectedFilter == 'All' ||
+                                    p['type'] == _selectedFilter)
                                 .map((property) {
                               return Padding(
-                                padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+                                padding: const EdgeInsets.only(
+                                    bottom: 16, left: 16, right: 16),
                                 child: BrokerPropertyCard(
                                   property: property,
                                   onTap: () {
@@ -148,12 +155,14 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                                       name: property['name'],
                                       area: property['location'],
                                       image: property['imageUrl'],
-                                      price: (property['pricePerNight'] / 100).toInt(),
+                                      price: (property['pricePerNight'] / 100)
+                                          .toInt(),
                                       rating: property['rating'],
                                       reviews: property['reviews'],
                                       type: property['type'],
                                     );
-                                    context.push('/property', extra: p);
+                                    AppNavigation.goToPropertyDetail(context,
+                                        extra: p);
                                   },
                                   onWishlistTap: () {},
                                 ),
@@ -167,12 +176,14 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                           thisMonthEarnings: dashboard.thisMonthEarnings,
                           liveProps: dashboard.liveProps,
                           needHelp: dashboard.needHelp,
-                          onReferOwnerTap: () => context.push('/broker/refer'),
+                          onReferOwnerTap: () =>
+                              AppNavigation.goToBrokerRefer(context),
                         ),
                         const SizedBox(height: 24),
                         // 3. Upcoming Check-ins
                         UpcomingCheckinsSection(
-                          checkins: List<Map<String, dynamic>>.from(dashboard.upcomingCheckins),
+                          checkins: List<Map<String, dynamic>>.from(
+                              dashboard.upcomingCheckins),
                           onCheckinTap: (checkin) {},
                         ),
                         const SizedBox(height: 24),
@@ -180,7 +191,7 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: ReferPropertyBanner(
-                            onTap: () => context.push('/broker/refer'),
+                            onTap: () => AppNavigation.goToBrokerRefer(context),
                           ),
                         ),
                         const SizedBox(height: 120),

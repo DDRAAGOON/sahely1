@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+
+import 'level_done_button.dart';
 import 'level_header.dart';
+import 'level_perk.dart';
 import 'level_progress_bar.dart';
 import 'season_perks_section.dart';
 import 'unlock_reward_card.dart';
-import 'level_done_button.dart';
-import 'level_perk.dart';
 
 class LevelDetailSheet extends StatelessWidget {
   final String levelName;
@@ -85,8 +86,7 @@ class LevelDetailSheet extends StatelessWidget {
           const SizedBox(height: 24),
 
           // Unlock Reward
-          if (unlockReward != null)
-            UnlockRewardCard(reward: unlockReward!),
+          if (unlockReward != null) UnlockRewardCard(reward: unlockReward!),
 
           const SizedBox(height: 24),
 

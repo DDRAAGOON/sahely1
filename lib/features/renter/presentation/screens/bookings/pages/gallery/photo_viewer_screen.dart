@@ -1,8 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:gal/gal.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:gal/gal.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 
@@ -110,7 +111,8 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
     final response = await http.get(Uri.parse(url));
     final bytes = response.bodyBytes;
     final tempDir = await getTemporaryDirectory();
-    final path = '${tempDir.path}/sahely_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final path =
+        '${tempDir.path}/sahely_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final file = File(path);
     await file.writeAsBytes(bytes);
     await Gal.putImage(path);
@@ -120,7 +122,11 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(children: [
-          const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)),
+          const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                  strokeWidth: 2, color: Colors.white)),
           const SizedBox(width: 12),
           Text('Saving to gallery...', style: AppTheme.dm(color: Colors.white)),
         ]),
@@ -133,7 +139,8 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Image saved to gallery!', style: AppTheme.dm(color: Colors.white)),
+            content: Text('Image saved to gallery!',
+                style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.success,
           ),
         );
@@ -142,7 +149,8 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to save. Check your connection.', style: AppTheme.dm(color: Colors.white)),
+            content: Text('Failed to save. Check your connection.',
+                style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.danger,
           ),
         );
@@ -154,9 +162,14 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(children: [
-          const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)),
+          const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                  strokeWidth: 2, color: Colors.white)),
           const SizedBox(width: 12),
-          Text('Downloading all ${widget.photos.length} photos...', style: AppTheme.dm(color: Colors.white)),
+          Text('Downloading all ${widget.photos.length} photos...',
+              style: AppTheme.dm(color: Colors.white)),
         ]),
         duration: const Duration(seconds: 3),
         backgroundColor: AppColors.navy,
@@ -169,7 +182,8 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('All ${widget.photos.length} photos saved!', style: AppTheme.dm(color: Colors.white)),
+            content: Text('All ${widget.photos.length} photos saved!',
+                style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.success,
           ),
         );
@@ -178,7 +192,8 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to save. Check your connection.', style: AppTheme.dm(color: Colors.white)),
+            content: Text('Failed to save. Check your connection.',
+                style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.danger,
           ),
         );

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
+import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
-import '../widgets/profile_header.dart';
+import '../widgets/account_verification_section.dart';
 import '../widgets/bio_card.dart';
+import '../widgets/logout_button.dart';
 import '../widgets/mawsem_level_badge.dart';
 import '../widgets/mawsem_season_pass_card.dart';
-import '../widgets/account_verification_section.dart';
+import '../widgets/profile_header.dart';
 import '../widgets/profile_list_rows.dart';
-import '../widgets/logout_button.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -20,7 +21,8 @@ class ProfileScreen extends StatelessWidget {
 
     return BlocBuilder<VerificationCubit, VerificationCubitState>(
       builder: (context, state) {
-        final verificationData = context.read<VerificationCubit>().currentDataState;
+        final verificationData =
+            context.read<VerificationCubit>().currentDataState;
 
         return Container(
           color: AppColors.cream,

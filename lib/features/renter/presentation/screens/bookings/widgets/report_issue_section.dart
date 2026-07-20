@@ -1,5 +1,7 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class ReportIssueSection extends StatelessWidget {
@@ -30,7 +32,8 @@ class ReportIssueSection extends StatelessWidget {
           // Header
           const Row(
             children: [
-              Icon(Icons.warning_amber_rounded, color: Color(0xFF991B1B), size: 20),
+              Icon(Icons.warning_amber_rounded,
+                  color: Color(0xFF991B1B), size: 20),
               SizedBox(width: 8),
               Text(
                 'Report an issue',
@@ -62,7 +65,11 @@ class ReportIssueSection extends StatelessWidget {
             child: TextField(
               controller: controller,
               maxLines: 3,
-              style: const TextStyle(fontSize: 13, color: Color(0xFF4B5563), fontFamily: 'DM Sans', height: 1.5),
+              style: const TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF4B5563),
+                  fontFamily: 'DM Sans',
+                  height: 1.5),
               decoration: const InputDecoration(
                 hintText: 'e.g. Microwave doesn\'t turn on...',
                 hintStyle: TextStyle(color: Color(0xFF9CA3AF)),
@@ -71,7 +78,7 @@ class ReportIssueSection extends StatelessWidget {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 16),
           // Photo Row
           SingleChildScrollView(
@@ -79,14 +86,16 @@ class ReportIssueSection extends StatelessWidget {
             child: Row(
               children: [
                 ...photos.map((photoPath) => Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: photoPath.startsWith('http') 
-                      ? Image.network(photoPath, width: 80, height: 80, fit: BoxFit.cover)
-                      : Image.file(File(photoPath), width: 80, height: 80, fit: BoxFit.cover),
-                  ),
-                )),
+                      padding: const EdgeInsets.only(right: 10),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: photoPath.startsWith('http')
+                            ? Image.network(photoPath,
+                                width: 80, height: 80, fit: BoxFit.cover)
+                            : Image.file(File(photoPath),
+                                width: 80, height: 80, fit: BoxFit.cover),
+                      ),
+                    )),
                 // Add Photo Button
                 GestureDetector(
                   onTap: onAddPhoto,
@@ -94,7 +103,10 @@ class ReportIssueSection extends StatelessWidget {
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.gold, width: 1, style: BorderStyle.solid),
+                      border: Border.all(
+                          color: AppColors.gold,
+                          width: 1,
+                          style: BorderStyle.solid),
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.transparent,
                     ),
@@ -103,7 +115,11 @@ class ReportIssueSection extends StatelessWidget {
                       children: [
                         Icon(Icons.add, color: AppColors.gold, size: 24),
                         SizedBox(height: 4),
-                        Text('Photo', style: TextStyle(color: AppColors.gold, fontSize: 11, fontWeight: FontWeight.w600)),
+                        Text('Photo',
+                            style: TextStyle(
+                                color: AppColors.gold,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
@@ -7,6 +8,7 @@ import '../../../core/widgets/ui.dart';
 
 class RoleSelectionScreen extends StatefulWidget {
   const RoleSelectionScreen({super.key});
+
   @override
   State<RoleSelectionScreen> createState() => _RoleSelectionScreenState();
 }
@@ -42,10 +44,12 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
             const SizedBox(height: 14),
             Text('How will you use Sahely?',
                 textAlign: TextAlign.center,
-                style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                style: AppTheme.dm(
+                    size: 22, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 8),
             Text('You can always access everything from your account',
-                textAlign: TextAlign.center, style: AppTheme.dm(size: 14, color: AppColors.muted)),
+                textAlign: TextAlign.center,
+                style: AppTheme.dm(size: 14, color: AppColors.muted)),
             const SizedBox(height: 28),
             for (var i = 0; i < roles.length; i++) ...[
               _RoleCard(
@@ -80,6 +84,7 @@ class _RoleCard extends StatelessWidget {
     required this.selected,
     required this.onTap,
   });
+
   final String title;
   final String subtitle;
   final IconData iconData;
@@ -97,7 +102,8 @@ class _RoleCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: selected ? AppColors.goldSoft : AppColors.white,
               border: Border.all(
-                  color: selected ? AppColors.gold : AppColors.border, width: selected ? 2 : 1),
+                  color: selected ? AppColors.gold : AppColors.border,
+                  width: selected ? 2 : 1),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
@@ -126,7 +132,10 @@ class _RoleCard extends StatelessWidget {
                           title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.navy),
+                          style: AppTheme.dm(
+                              size: 16,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy),
                         ),
                         const SizedBox(height: 2),
                         Text(
@@ -149,8 +158,10 @@ class _RoleCard extends StatelessWidget {
               child: Container(
                 width: 22,
                 height: 22,
-                decoration: const BoxDecoration(color: AppColors.navy, shape: BoxShape.circle),
-                child: const Icon(Icons.check, size: 13, color: AppColors.white),
+                decoration: const BoxDecoration(
+                    color: AppColors.navy, shape: BoxShape.circle),
+                child:
+                    const Icon(Icons.check, size: 13, color: AppColors.white),
               ),
             ),
         ],

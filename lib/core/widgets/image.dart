@@ -1,8 +1,10 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:gal/gal.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'package:gal/gal.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'buttons.dart';
@@ -16,6 +18,7 @@ class BlendedImage extends StatelessWidget {
     this.radius = 16,
     this.overlay = true,
   });
+
   final String url;
   final double height;
   final double radius;
@@ -34,8 +37,11 @@ class BlendedImage extends StatelessWidget {
             Image.network(
               url,
               fit: BoxFit.cover,
-              loadingBuilder: (c, child, p) => p == null ? child : const ColoredBox(color: AppColors.cardWarm),
-              errorBuilder: (_, __, ___) => const ColoredBox(color: AppColors.cardWarm),
+              loadingBuilder: (c, child, p) => p == null
+                  ? child
+                  : const ColoredBox(color: AppColors.cardWarm),
+              errorBuilder: (_, __, ___) =>
+                  const ColoredBox(color: AppColors.cardWarm),
             ),
             if (overlay)
               const DecoratedBox(
@@ -43,7 +49,11 @@ class BlendedImage extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0x0A1B2744), Colors.transparent, Color(0x8CF5F0E8)],
+                    colors: [
+                      Color(0x0A1B2744),
+                      Colors.transparent,
+                      Color(0x8CF5F0E8)
+                    ],
                     stops: [0, 0.5, 1],
                   ),
                 ),
@@ -93,11 +103,12 @@ class SahelyImage extends StatelessWidget {
       width: width,
       fit: fit,
       loadingBuilder: loadingBuilder,
-      errorBuilder: errorBuilder ?? (_, __, ___) => Container(
-        height: height ?? 150,
-        width: width ?? double.infinity,
-        color: AppColors.navy,
-      ),
+      errorBuilder: errorBuilder ??
+          (_, __, ___) => Container(
+                height: height ?? 150,
+                width: width ?? double.infinity,
+                color: AppColors.navy,
+              ),
     );
 
     Widget result = image;
@@ -118,7 +129,10 @@ class SahelyImage extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, fadeColor ?? AppColors.white.withValues(alpha: 0.95)],
+                  colors: [
+                    Colors.transparent,
+                    fadeColor ?? AppColors.white.withValues(alpha: 0.95)
+                  ],
                 ),
               ),
             ),
@@ -153,7 +167,9 @@ class SahelyImage extends StatelessWidget {
 }
 
 class SahelyImageViewer extends StatefulWidget {
-  const SahelyImageViewer({super.key, required this.images, this.initialIndex = 0});
+  const SahelyImageViewer(
+      {super.key, required this.images, this.initialIndex = 0});
+
   final List<String> images;
   final int initialIndex;
 
@@ -163,7 +179,8 @@ class SahelyImageViewer extends StatefulWidget {
 
 class _SahelyImageViewerState extends State<SahelyImageViewer> {
   late final PageController _pageController;
-  final TransformationController _transformationController = TransformationController();
+  final TransformationController _transformationController =
+      TransformationController();
   late int _currentIndex;
   bool _isZoomed = false;
 
@@ -203,7 +220,8 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
     final response = await http.get(Uri.parse(url));
     final bytes = response.bodyBytes;
     final tempDir = await getTemporaryDirectory();
-    final path = '${tempDir.path}/sahely_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final path =
+        '${tempDir.path}/sahely_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
     final file = File(path);
     await file.writeAsBytes(bytes);
     await Gal.putImage(path);
@@ -214,14 +232,23 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
-        decoration: const BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+        decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(width: 36, height: 4, decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2))),
+            Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2))),
             const SizedBox(height: 24),
-            Text('Download Options', style: AppTheme.dm(size: 17, weight: FontWeight.w700, color: AppColors.navy)),
+            Text('Download Options',
+                style: AppTheme.dm(
+                    size: 17, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 24),
             NavyButton(
               label: 'Download Current Image',
@@ -254,9 +281,17 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
         SnackBar(
           content: Row(
             children: [
-              const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)),
+              const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: Colors.white)),
               const SizedBox(width: 12),
-              Text(multiple ? 'Downloading all images...' : 'Saving to gallery...', style: AppTheme.dm(color: Colors.white)),
+              Text(
+                  multiple
+                      ? 'Downloading all images...'
+                      : 'Saving to gallery...',
+                  style: AppTheme.dm(color: Colors.white)),
             ],
           ),
           duration: const Duration(seconds: 1),
@@ -271,7 +306,11 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(multiple ? 'All images saved successfully!' : 'Image saved successfully!', style: AppTheme.dm(color: Colors.white)),
+            content: Text(
+                multiple
+                    ? 'All images saved successfully!'
+                    : 'Image saved successfully!',
+                style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.success,
           ),
         );
@@ -280,7 +319,8 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to save. Please check your connection.', style: AppTheme.dm(color: Colors.white)),
+            content: Text('Failed to save. Please check your connection.',
+                style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.danger,
           ),
         );
@@ -296,7 +336,9 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
         children: [
           PageView.builder(
             controller: _pageController,
-            physics: _isZoomed ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+            physics: _isZoomed
+                ? const NeverScrollableScrollPhysics()
+                : const BouncingScrollPhysics(),
             onPageChanged: (i) {
               setState(() {
                 _currentIndex = i;
@@ -309,7 +351,8 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
               return GestureDetector(
                 onDoubleTap: _handleDoubleTap,
                 child: InteractiveViewer(
-                  transformationController: i == _currentIndex ? _transformationController : null,
+                  transformationController:
+                      i == _currentIndex ? _transformationController : null,
                   panEnabled: true,
                   minScale: 1.0,
                   maxScale: 5.0,
@@ -317,7 +360,8 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
                     if (!_isZoomed) setState(() => _isZoomed = true);
                   },
                   onInteractionEnd: (details) {
-                    if (_transformationController.value.getMaxScaleOnAxis() <= 1.01) {
+                    if (_transformationController.value.getMaxScaleOnAxis() <=
+                        1.01) {
                       setState(() => _isZoomed = false);
                     }
                   },
@@ -338,14 +382,16 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
               right: 0,
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.navy.withValues(alpha: 0.7),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     '${_currentIndex + 1} / ${widget.images.length}',
-                    style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: Colors.white),
+                    style: AppTheme.dm(
+                        size: 13, weight: FontWeight.w600, color: Colors.white),
                   ),
                 ),
               ),
@@ -361,8 +407,14 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
                     child: Container(
                       width: 40,
                       height: 40,
-                      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)]),
-                      child: const Icon(Icons.close, color: AppColors.navy, size: 24),
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 4)
+                          ]),
+                      child: const Icon(Icons.close,
+                          color: AppColors.navy, size: 24),
                     ),
                   ),
                   GestureDetector(
@@ -370,8 +422,14 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
                     child: Container(
                       width: 40,
                       height: 40,
-                      decoration: const BoxDecoration(color: AppColors.gold, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)]),
-                      child: const Icon(Icons.download_rounded, color: AppColors.navy, size: 24),
+                      decoration: const BoxDecoration(
+                          color: AppColors.gold,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 4)
+                          ]),
+                      child: const Icon(Icons.download_rounded,
+                          color: AppColors.navy, size: 24),
                     ),
                   ),
                 ],

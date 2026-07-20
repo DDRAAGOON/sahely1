@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../data/sample_data.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/chips.dart';
 import '../../../core/widgets/common.dart';
 import '../../../core/widgets/ui.dart';
+import '../../../data/sample_data.dart';
 import '../widgets/filter_widgets.dart';
 
 class FiltersScreen extends StatefulWidget {
@@ -161,7 +162,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                     ? 'Check-in'
                                     : DateFormat('MMM d, yyyy')
                                         .format(_checkIn!),
-
                                 onTap: () => _selectDate(context, true),
                               ),
                             ),
@@ -276,14 +276,20 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               RichText(
                                 text: TextSpan(
                                   text: 'Min ',
-                                  style: AppTheme.dm(size: 11, color: AppColors.muted),
+                                  style: AppTheme.dm(
+                                      size: 11, color: AppColors.muted),
                                   children: [
                                     TextSpan(
-                                      text: 'EGP ${_priceRange.start.round().toString().replaceAllMapped(
-                                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                                            (Match m) => '${m[1]},',
-                                      )}',
-                                      style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: AppColors.navy),
+                                      text:
+                                          'EGP ${_priceRange.start.round().toString().replaceAllMapped(
+                                                RegExp(
+                                                    r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                                (Match m) => '${m[1]},',
+                                              )}',
+                                      style: AppTheme.dm(
+                                          size: 11,
+                                          weight: FontWeight.w600,
+                                          color: AppColors.navy),
                                     ),
                                   ],
                                 ),
@@ -291,14 +297,20 @@ class _FiltersScreenState extends State<FiltersScreen> {
                               RichText(
                                 text: TextSpan(
                                   text: 'Max ',
-                                  style: AppTheme.dm(size: 11, color: AppColors.muted),
+                                  style: AppTheme.dm(
+                                      size: 11, color: AppColors.muted),
                                   children: [
                                     TextSpan(
-                                      text: 'EGP ${_priceRange.end.round().toString().replaceAllMapped(
-                                        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-                                            (Match m) => '${m[1]},',
-                                      )}',
-                                      style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: AppColors.navy),
+                                      text:
+                                          'EGP ${_priceRange.end.round().toString().replaceAllMapped(
+                                                RegExp(
+                                                    r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+                                                (Match m) => '${m[1]},',
+                                              )}',
+                                      style: AppTheme.dm(
+                                          size: 11,
+                                          weight: FontWeight.w600,
+                                          color: AppColors.navy),
                                     ),
                                   ],
                                 ),
@@ -310,7 +322,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
                           Container(
                             decoration: BoxDecoration(
                               color: AppColors.white,
-                              border: Border.all(color: const Color(0xFFF0EBE2)),
+                              border:
+                                  Border.all(color: const Color(0xFFF0EBE2)),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -319,23 +332,28 @@ class _FiltersScreenState extends State<FiltersScreen> {
                                 'Party allowed',
                                 _rules['Party allowed']!,
                                 icon: Icons.celebration, // أيقونة الحفلة
-                                onChanged: (v) => setState(() => _rules['Party allowed'] = v),
+                                onChanged: (v) =>
+                                    setState(() => _rules['Party allowed'] = v),
                               ),
                               if ('Party allowed' != _rules.keys.last)
-                                const Divider(height: 1, color: Color(0xFFF4EFE7)),
+                                const Divider(
+                                    height: 1, color: Color(0xFFF4EFE7)),
                               RuleToggle(
                                 'Pets allowed',
                                 _rules['Pets allowed']!,
                                 icon: Icons.pets, // أيقونة الحيوانات
-                                onChanged: (v) => setState(() => _rules['Pets allowed'] = v),
+                                onChanged: (v) =>
+                                    setState(() => _rules['Pets allowed'] = v),
                               ),
                               if ('Pets allowed' != _rules.keys.last)
-                                const Divider(height: 1, color: Color(0xFFF4EFE7)),
+                                const Divider(
+                                    height: 1, color: Color(0xFFF4EFE7)),
                               RuleToggle(
                                 'Mixed groups OK',
                                 _rules['Mixed groups OK']!,
                                 icon: Icons.groups, // أيقونة المجموعات
-                                onChanged: (v) => setState(() => _rules['Mixed groups OK'] = v),
+                                onChanged: (v) => setState(
+                                    () => _rules['Mixed groups OK'] = v),
                               ),
                             ]),
                           ),

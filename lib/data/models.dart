@@ -17,9 +17,9 @@ extension RoleX on Role {
       };
 }
 
-
 class ServiceItem {
   const ServiceItem(this.name, this.fromPrice, this.gradient);
+
   final String name;
   final String fromPrice;
   final List<Color> gradient;

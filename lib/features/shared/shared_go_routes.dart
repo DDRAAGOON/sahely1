@@ -1,19 +1,20 @@
 import 'package:go_router/go_router.dart';
+
 import 'package:sahely/core/navigation/app_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'screens/add_payment_card_screen.dart';
-import 'screens/change_password_screen.dart';
+import '../renter/presentation/screens/profile/pages/change_password_screen.dart';
 import 'screens/blocked_gate_screen.dart';
 import 'screens/sos_screen.dart';
 import 'screens/ai_chat_screen.dart';
 import 'screens/currency_screen.dart';
 import 'screens/language_screen.dart';
-import 'screens/upcoming_booking_detail_screen.dart';
-import 'screens/past_booking_detail_screen.dart';
+import '../renter/presentation/screens/bookings/pages/upcoming_booking_detail_screen.dart';
+import '../renter/presentation/screens/bookings/pages/past_booking_detail_screen.dart';
 import 'screens/active_booking_detail_screen.dart';
-import 'screens/smart_lock_screen.dart';
+import '../renter/presentation/screens/bookings/pages/smart_lock_screen.dart';
 import 'screens/arrival_checklist_screen.dart';
-import 'screens/write_review_screen.dart';
+import '../renter/presentation/screens/reviews/pages/write_review_screen.dart';
 import 'screens/browse_screen.dart';
 import 'screens/all_properties_screen.dart';
 import 'screens/filters_screen.dart';
@@ -112,23 +113,21 @@ final List<GoRoute> sharedGoRoutes = [
       return BookingConfirmedScreen(arguments: args);
     },
   ),
-  GoRoute(path: '/bookings', builder: (context, state) => const renter_bookings.MyBookingsScreen()),
+  GoRoute(path: '/renter/bookings', builder: (context, state) => const renter_bookings.MyBookingsScreen()),
   GoRoute(
     path: '/booking-upcoming',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) return UpcomingBookingDetailScreen(property: args);
-      if (args is Map<String, dynamic>) return UpcomingBookingDetailScreen(property: Property.fromMap(args));
-      return const UpcomingBookingDetailScreen();
+      if (args is Map<String, dynamic>) return UpcomingBookingDetailScreen(booking: args);
+      return const UpcomingBookingDetailScreen(booking: {});
     },
   ),
   GoRoute(
     path: '/booking-past',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) return PastBookingDetailScreen(property: args);
-      if (args is Map<String, dynamic>) return PastBookingDetailScreen(property: Property.fromMap(args));
-      return const PastBookingDetailScreen();
+      if (args is Map<String, dynamic>) return PastBookingDetailScreen(booking: args);
+      return const PastBookingDetailScreen(booking: {});
     },
   ),
   GoRoute(
@@ -144,18 +143,52 @@ final List<GoRoute> sharedGoRoutes = [
     path: '/smart-lock',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) return SmartLockScreen(property: args);
-      if (args is Map<String, dynamic>) return SmartLockScreen(property: Property.fromMap(args));
-      return const SmartLockScreen();
+      if (args is Map<String, dynamic>) {
+        return SmartLockScreen(
+          propertyName: args['propertyName'] ?? 'Property',
+          bookingRef: args['bookingRef'] ?? '',
+          passcode: args['passcode'] ?? '',
+          checkIn: args['checkIn'] ?? DateTime.now(),
+          checkOut: args['checkOut'] ?? DateTime.now().add(const Duration(days: 1)),
+          propertyLat: args['propertyLat'] ?? 0.0,
+          propertyLng: args['propertyLng'] ?? 0.0,
+        );
+      }
+      return SmartLockScreen(
+          propertyName: 'Property',
+          bookingRef: '',
+          passcode: '',
+          checkIn: DateTime.now(),
+          checkOut: DateTime.now().add(const Duration(days: 1)),
+          propertyLat: 0.0,
+          propertyLng: 0.0,
+      );
     },
   ),
   GoRoute(
     path: '/door-out',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) return SmartLockScreen(property: args, outOfRange: true);
-      if (args is Map<String, dynamic>) return SmartLockScreen(property: Property.fromMap(args), outOfRange: true);
-      return const SmartLockScreen(outOfRange: true);
+      if (args is Map<String, dynamic>) {
+        return SmartLockScreen(
+          propertyName: args['propertyName'] ?? 'Property',
+          bookingRef: args['bookingRef'] ?? '',
+          passcode: args['passcode'] ?? '',
+          checkIn: args['checkIn'] ?? DateTime.now(),
+          checkOut: args['checkOut'] ?? DateTime.now().add(const Duration(days: 1)),
+          propertyLat: args['propertyLat'] ?? 0.0,
+          propertyLng: args['propertyLng'] ?? 0.0,
+        );
+      }
+      return SmartLockScreen(
+          propertyName: 'Property',
+          bookingRef: '',
+          passcode: '',
+          checkIn: DateTime.now(),
+          checkOut: DateTime.now().add(const Duration(days: 1)),
+          propertyLat: 0.0,
+          propertyLng: 0.0,
+      );
     },
   ),
   GoRoute(path: '/arrival-checklist', builder: (context, state) => const ArrivalChecklistScreen()),
@@ -163,14 +196,19 @@ final List<GoRoute> sharedGoRoutes = [
     path: '/write-review',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) return WriteReviewScreen(property: args);
-      if (args is Map<String, dynamic>) return WriteReviewScreen(property: Property.fromMap(args));
-      return const WriteReviewScreen();
+      if (args is Map<String, dynamic>) {
+        return WriteReviewScreen(
+          propertyName: args['propertyName'] ?? 'Property',
+          propertyImage: args['propertyImage'] ?? '',
+          stayDates: args['stayDates'] ?? '',
+        );
+      }
+      return const WriteReviewScreen(propertyName: 'Property', propertyImage: '', stayDates: '');
     },
   ),
 
   // Wishlist / collections
-  GoRoute(path: '/wishlist', builder: (context, state) => const complex.WishlistScreen()),
+  GoRoute(path: '/renter/wishlist', builder: (context, state) => const complex.WishlistScreen()),
   GoRoute(
     path: '/collection',
     builder: (context, state) {

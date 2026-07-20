@@ -14,7 +14,8 @@ class ArrivalChecklistSection extends StatefulWidget {
   });
 
   @override
-  State<ArrivalChecklistSection> createState() => _ArrivalChecklistSectionState();
+  State<ArrivalChecklistSection> createState() =>
+      _ArrivalChecklistSectionState();
 }
 
 class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
@@ -47,12 +48,15 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
     }
   }
 
-  int get _completedCount => _checklist.where((item) => item['completed'] == true).length;
+  int get _completedCount =>
+      _checklist.where((item) => item['completed'] == true).length;
+
   int get _totalCount => _checklist.length;
 
   void _toggleItem(int index) {
     setState(() {
-      _checklist[index]['completed'] = !(_checklist[index]['completed'] ?? false);
+      _checklist[index]['completed'] =
+          !(_checklist[index]['completed'] ?? false);
     });
     widget.onChecklistChanged?.call(_checklist);
   }
@@ -125,7 +129,8 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
                     onTap: () => _toggleItem(index),
                     child: Container(
                       color: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 14),
                       child: Row(
                         children: [
                           // Checkbox
@@ -133,10 +138,14 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
                             width: 24,
                             height: 24,
                             decoration: BoxDecoration(
-                              color: isCompleted ? AppColors.green : Colors.transparent,
+                              color: isCompleted
+                                  ? AppColors.green
+                                  : Colors.transparent,
                               borderRadius: BorderRadius.circular(6),
                               border: Border.all(
-                                color: isCompleted ? AppColors.green : AppColors.border,
+                                color: isCompleted
+                                    ? AppColors.green
+                                    : AppColors.border,
                                 width: 2,
                               ),
                             ),
@@ -155,7 +164,9 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
                               item['label'] ?? '',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: isCompleted ? AppColors.secondary : AppColors.dark,
+                                color: isCompleted
+                                    ? AppColors.secondary
+                                    : AppColors.dark,
                                 fontFamily: 'DM Sans',
                               ),
                             ),
@@ -166,7 +177,9 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: isCompleted ? AppColors.green : AppColors.gold,
+                              color: isCompleted
+                                  ? AppColors.green
+                                  : AppColors.gold,
                               fontFamily: 'DM Sans',
                             ),
                           ),

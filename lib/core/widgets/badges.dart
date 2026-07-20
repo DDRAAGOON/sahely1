@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+
 import '../../data/models.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-enum BadgeKind { navy, green, greenSoft, gray, red, redSoft, orange, gold, renterLight }
+enum BadgeKind {
+  navy,
+  green,
+  greenSoft,
+  gray,
+  red,
+  redSoft,
+  orange,
+  gold,
+  renterLight
+}
 
 class StatusBadge extends StatelessWidget {
-  const StatusBadge(this.label, {super.key, this.kind = BadgeKind.navy, this.dot = false});
+  const StatusBadge(this.label,
+      {super.key, this.kind = BadgeKind.navy, this.dot = false});
+
   final String label;
   final BadgeKind kind;
   final bool dot;
@@ -26,15 +39,20 @@ class StatusBadge extends StatelessWidget {
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999)),
+      decoration:
+          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (dot) ...[
-            Container(width: 6, height: 6, decoration: BoxDecoration(color: fg, shape: BoxShape.circle)),
+            Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(color: fg, shape: BoxShape.circle)),
             const SizedBox(width: 5),
           ],
-          Text(label, style: AppTheme.dm(size: 11, weight: FontWeight.w700, color: fg)),
+          Text(label,
+              style: AppTheme.dm(size: 11, weight: FontWeight.w700, color: fg)),
         ],
       ),
     );
@@ -44,24 +62,39 @@ class StatusBadge extends StatelessWidget {
 /// Coloured role chip — Renter (navy) · Owner (green) · Broker (gold).
 class RoleBadge extends StatelessWidget {
   const RoleBadge({super.key, required this.role});
+
   final Role role;
 
   @override
   Widget build(BuildContext context) {
     final (bg, fg, icon) = switch (role) {
-      Role.renter => (const Color(0xFFE6EAF2), AppColors.navy, Icons.person_outline),
-      Role.owner => (const Color(0xFFDCEFE2), AppColors.owner, Icons.apartment_outlined),
-      Role.broker => (const Color(0xFFF6EAC9), const Color(0xFF8A6D1E), Icons.handshake_outlined),
+      Role.renter => (
+          const Color(0xFFE6EAF2),
+          AppColors.navy,
+          Icons.person_outline
+        ),
+      Role.owner => (
+          const Color(0xFFDCEFE2),
+          AppColors.owner,
+          Icons.apartment_outlined
+        ),
+      Role.broker => (
+          const Color(0xFFF6EAC9),
+          const Color(0xFF8A6D1E),
+          Icons.handshake_outlined
+        ),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
+      decoration:
+          BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: fg),
           const SizedBox(width: 6),
-          Text(role.shortLabel, style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: fg)),
+          Text(role.shortLabel,
+              style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: fg)),
         ],
       ),
     );

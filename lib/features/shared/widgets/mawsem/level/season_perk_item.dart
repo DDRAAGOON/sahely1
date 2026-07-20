@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'level_perk.dart';
 
 class SeasonPerkItem extends StatelessWidget {

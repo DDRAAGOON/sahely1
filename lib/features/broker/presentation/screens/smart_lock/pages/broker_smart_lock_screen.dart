@@ -1,15 +1,17 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../widgets/broker_lock_status_badge.dart';
+
+import '../widgets/broker_check_in_out_footer.dart';
+import '../widgets/broker_get_directions_button.dart';
 import '../widgets/broker_lock_icon_widget.dart';
-import '../widgets/broker_passcode_display.dart';
 import '../widgets/broker_lock_info_cards.dart';
 import '../widgets/broker_lock_info_text.dart';
-import '../widgets/broker_get_directions_button.dart';
-import '../widgets/broker_check_in_out_footer.dart';
+import '../widgets/broker_lock_status_badge.dart';
+import '../widgets/broker_passcode_display.dart';
 
 class BrokerSmartLockScreen extends StatefulWidget {
   final String propertyName;
@@ -82,7 +84,9 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
         distanceFilter: 10,
       );
 
-      _positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+      _positionStream =
+          Geolocator.getPositionStream(locationSettings: locationSettings)
+              .listen(
         (Position position) => _updateDistance(position),
       );
 
@@ -95,11 +99,12 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
 
   void _updateDistance(Position position) {
     final distance = Geolocator.distanceBetween(
-      position.latitude,
-      position.longitude,
-      widget.propertyLat,
-      widget.propertyLng,
-    ) / 1000;
+          position.latitude,
+          position.longitude,
+          widget.propertyLat,
+          widget.propertyLng,
+        ) /
+        1000;
 
     if (mounted) {
       setState(() {
@@ -134,8 +139,9 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
 
   bool get _isActive {
     final now = DateTime.now();
-    return (now.isAtSameMomentAs(widget.checkIn) || now.isAfter(widget.checkIn)) &&
-           now.isBefore(widget.checkOut);
+    return (now.isAtSameMomentAs(widget.checkIn) ||
+            now.isAfter(widget.checkIn)) &&
+        now.isBefore(widget.checkOut);
   }
 
   bool get _isPast => DateTime.now().isAfter(widget.checkOut);
@@ -160,7 +166,8 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: _isLoading
-              ? const Center(child: CircularProgressIndicator(color: Color(0xFFC49F45)))
+              ? const Center(
+                  child: CircularProgressIndicator(color: Color(0xFFC49F45)))
               : SingleChildScrollView(
                   child: Column(
                     children: [
@@ -169,9 +176,11 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
                       BrokerLockIconWidget(isInRange: canUnlock),
                       const SizedBox(height: 24),
                       Text(
-                        isExpired 
-                            ? 'Access Expired' 
-                            : (canUnlock ? 'Your Door Passcode' : 'Passcode Locked'),
+                        isExpired
+                            ? 'Access Expired'
+                            : (canUnlock
+                                ? 'Your Door Passcode'
+                                : 'Passcode Locked'),
                         style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w700,
@@ -181,12 +190,14 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        isExpired 
+                        isExpired
                             ? 'Your stay has ended'
                             : '${widget.propertyName} · Keypad',
                         style: TextStyle(
                           fontSize: 15,
-                          color: isExpired ? Colors.redAccent : const Color(0xFFC49F45),
+                          color: isExpired
+                              ? Colors.redAccent
+                              : const Color(0xFFC49F45),
                           fontFamily: 'DM Sans',
                         ),
                       ),
@@ -203,7 +214,8 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
                           child: Text(
                             'Smart Lock access is only available during your active booking period.',
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white70, fontSize: 13),
+                            style:
+                                TextStyle(color: Colors.white70, fontSize: 13),
                           ),
                         )
                       else
@@ -215,9 +227,11 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
                       const SizedBox(height: 24),
                       if (!isExpired) BrokerLockInfoText(isInRange: canUnlock),
                       const SizedBox(height: 40),
-                      if (!canUnlock && !isExpired) BrokerGetDirectionsButton(onTap: _getDirections),
+                      if (!canUnlock && !isExpired)
+                        BrokerGetDirectionsButton(onTap: _getDirections),
                       const SizedBox(height: 48),
-                      BrokerCheckInOutFooter(checkIn: widget.checkIn, checkOut: widget.checkOut),
+                      BrokerCheckInOutFooter(
+                          checkIn: widget.checkIn, checkOut: widget.checkOut),
                       const SizedBox(height: 32),
                     ],
                   ),
@@ -242,7 +256,8 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
                 color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.chevron_left, color: Colors.white, size: 24),
+              child:
+                  const Icon(Icons.chevron_left, color: Colors.white, size: 24),
             ),
           ),
           BrokerLockStatusBadge(isInRange: _isInRange, distance: _distance),

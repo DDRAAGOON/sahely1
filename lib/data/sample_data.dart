@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
 import 'models.dart';
 
 /// Static sample content lifted from the design board. Unsplash URLs are kept
@@ -10,7 +11,8 @@ class Sample {
   static const azure = Property(
     name: 'Azure Beach Villa',
     area: 'North Coast',
-    image: 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=1200&q=72&auto=format&fit=crop',
+    image:
+        'https://images.unsplash.com/photo-1776762893024-890728937eab?w=1200&q=72&auto=format&fit=crop',
     price: 4500,
     rating: 4.8,
     reviews: 124,
@@ -26,7 +28,8 @@ class Sample {
   static const lagoon = Property(
     name: 'Lagoon Retreat',
     area: 'Marassi',
-    image: 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=1200&q=72&auto=format&fit=crop',
+    image:
+        'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=1200&q=72&auto=format&fit=crop',
     price: 6200,
     rating: 4.9,
     reviews: 86,
@@ -42,7 +45,8 @@ class Sample {
   static const dunes = Property(
     name: 'Golden Dunes',
     area: 'Hacienda Bay',
-    image: 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=1200&q=72&auto=format&fit=crop',
+    image:
+        'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=1200&q=72&auto=format&fit=crop',
     price: 3800,
     rating: 4.7,
     reviews: 53,
@@ -57,7 +61,8 @@ class Sample {
   static const telal = Property(
     name: 'Telal Chalet',
     area: 'Telal',
-    image: 'https://images.unsplash.com/photo-1729808641871-8d8b5ade6bbe?w=1200&q=72&auto=format&fit=crop',
+    image:
+        'https://images.unsplash.com/photo-1729808641871-8d8b5ade6bbe?w=1200&q=72&auto=format&fit=crop',
     price: 3200,
     rating: 4.6,
     beds: 3,
@@ -69,13 +74,19 @@ class Sample {
   );
 
   static const trending = [azure, lagoon, dunes, telal];
-  
+
   // Expanded list for "See All" with 50 items to make filtering feel real
   static final List<Property> allTrending = List.generate(50, (index) {
     final base = trending[index % trending.length];
     final types = ['Villa', 'Chalet', 'Apartment'];
-    final areas = ['Marassi', 'Hacienda Bay', 'Telal', 'Seashell', 'Hacienda Red'];
-    
+    final areas = [
+      'Marassi',
+      'Hacienda Bay',
+      'Telal',
+      'Seashell',
+      'Hacienda Red'
+    ];
+
     return Property(
       name: '${base.name.split(' ')[0]} ${index + 1}',
       area: areas[index % areas.length],
@@ -86,7 +97,8 @@ class Sample {
       type: types[index % types.length],
       beds: (index % 4) + 1,
       guests: (index % 6) + 2,
-      tags: base.tags, // Keep base tags for now
+      tags: base.tags,
+      // Keep base tags for now
       petsOk: index % 2 == 0,
       guestFavourite: index % 5 == 0,
       saved: index % 8 == 0,
@@ -96,15 +108,27 @@ class Sample {
   static const searchResults = [lagoon, dunes, azure, telal];
 
   static const services = [
-    ServiceItem('Private Chef', 'From EGP 1,200', [Color(0xFFB9543E), Color(0xFF7D2F23)]),
-    ServiceItem('Airport Transfer', 'From EGP 800', [Color(0xFF3A6EA5), Color(0xFF1F3F63)]),
-    ServiceItem('Beach Setup', 'From EGP 400', [Color(0xFF3A9B8E), Color(0xFF1F5D4A)]),
+    ServiceItem('Private Chef', 'From EGP 1,200',
+        [Color(0xFFB9543E), Color(0xFF7D2F23)]),
+    ServiceItem('Airport Transfer', 'From EGP 800',
+        [Color(0xFF3A6EA5), Color(0xFF1F3F63)]),
+    ServiceItem(
+        'Beach Setup', 'From EGP 400', [Color(0xFF3A9B8E), Color(0xFF1F5D4A)]),
   ];
 
   static const destinations = [
-    ('Marassi', 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=400&q=70&auto=format&fit=crop'),
-    ('Hacienda Bay', 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=400&q=70&auto=format&fit=crop'),
-    ('Telal', 'https://images.unsplash.com/photo-1729808641871-8d8b5ade6bbe?w=400&q=70&auto=format&fit=crop'),
+    (
+      'Marassi',
+      'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=400&q=70&auto=format&fit=crop'
+    ),
+    (
+      'Hacienda Bay',
+      'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=400&q=70&auto=format&fit=crop'
+    ),
+    (
+      'Telal',
+      'https://images.unsplash.com/photo-1729808641871-8d8b5ade6bbe?w=400&q=70&auto=format&fit=crop'
+    ),
   ];
 
   // AL MAWSEM renter tiers — exact thresholds from the Programs spec.

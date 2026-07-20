@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class WalletBalanceCard extends StatelessWidget {
@@ -17,7 +18,8 @@ class WalletBalanceCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      clipBehavior: Clip.antiAlias, // To ensure the circle is clipped by the card corners
+      clipBehavior: Clip.antiAlias,
+      // To ensure the circle is clipped by the card corners
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
@@ -49,7 +51,7 @@ class WalletBalanceCard extends StatelessWidget {
               ),
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(24),
             child: Column(

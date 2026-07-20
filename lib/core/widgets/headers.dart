@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
 class SectionHeader extends StatelessWidget {
-  const SectionHeader({super.key, required this.title, this.action = 'See All', this.onAction, this.size = 18});
+  const SectionHeader(
+      {super.key,
+      required this.title,
+      this.action = 'See All',
+      this.onAction,
+      this.size = 18});
+
   final String title;
   final String? action;
   final VoidCallback? onAction;
@@ -17,7 +24,8 @@ class SectionHeader extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: AppTheme.dm(size: size, weight: FontWeight.w600, color: AppColors.navy),
+            style: AppTheme.dm(
+                size: size, weight: FontWeight.w600, color: AppColors.navy),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -26,7 +34,9 @@ class SectionHeader extends StatelessWidget {
           const SizedBox(width: 12),
           GestureDetector(
             onTap: onAction,
-            child: Text(action!, style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+            child: Text(action!,
+                style: AppTheme.dm(
+                    size: 13, weight: FontWeight.w600, color: AppColors.gold)),
           ),
         ],
       ],

@@ -5,6 +5,7 @@ import '../../data/models.dart';
 class AuthResponse {
   final String token;
   final Role role;
+
   AuthResponse({required this.token, required this.role});
 }
 

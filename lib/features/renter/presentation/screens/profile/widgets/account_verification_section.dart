@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class AccountVerificationSection extends StatelessWidget {
@@ -80,17 +80,21 @@ class AccountVerificationSection extends StatelessWidget {
                 label: 'Identity Verified',
                 status: VerificationStatus.pending,
                 actionLabel: 'Verify Now →',
-                onAction: () => context.push('/id-verification'),
+                onAction: () => AppNavigation.goToIdVerification(context),
               ),
               _Divider(),
               // Payment Card
               _VerificationRow(
-                icon: paymentCardAdded ? Icons.check_circle : Icons.error_outline,
-                iconColor: paymentCardAdded ? AppColors.green : AppColors.warning,
+                icon:
+                    paymentCardAdded ? Icons.check_circle : Icons.error_outline,
+                iconColor:
+                    paymentCardAdded ? AppColors.green : AppColors.warning,
                 label: 'Payment Card',
-                status: paymentCardAdded ? VerificationStatus.done : VerificationStatus.pending,
+                status: paymentCardAdded
+                    ? VerificationStatus.done
+                    : VerificationStatus.pending,
                 actionLabel: 'Add Card →',
-                onAction: () => context.push('/add-card'),
+                onAction: () => AppNavigation.goToAddCard(context),
               ),
             ],
           ),

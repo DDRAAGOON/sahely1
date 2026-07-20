@@ -1,6 +1,8 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/avatars.dart';
@@ -17,7 +19,8 @@ class OwnerEditBioScreen extends StatefulWidget {
 
 class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
   final _bioController = TextEditingController(
-      text: 'Hosting beachfront villas across Marassi & Hacienda Bay. Superhost since 2023 🏖');
+      text:
+          'Hosting beachfront villas across Marassi & Hacienda Bay. Superhost since 2023 🏖');
   final _instaController = TextEditingController(text: '@layla.stays');
   final _tiktokController = TextEditingController();
   final _fbController = TextEditingController();
@@ -47,9 +50,16 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(width: 36, height: 4, decoration: BoxDecoration(color: AppColors.border, borderRadius: BorderRadius.circular(2))),
+            Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2))),
             const SizedBox(height: 24),
-            Text('Change Photo', style: AppTheme.dm(size: 17, weight: FontWeight.w700, color: AppColors.navy)),
+            Text('Change Photo',
+                style: AppTheme.dm(
+                    size: 17, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -59,8 +69,10 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                     label: 'Camera',
                     onTap: () async {
                       Navigator.pop(ctx);
-                      final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-                      if (photo != null) setState(() => _imageFile = File(photo.path));
+                      final XFile? photo =
+                          await _picker.pickImage(source: ImageSource.camera);
+                      if (photo != null)
+                        setState(() => _imageFile = File(photo.path));
                     },
                   ),
                 ),
@@ -71,8 +83,10 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                     label: 'Gallery',
                     onTap: () async {
                       Navigator.pop(ctx);
-                      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-                      if (image != null) setState(() => _imageFile = File(image.path));
+                      final XFile? image =
+                          await _picker.pickImage(source: ImageSource.gallery);
+                      if (image != null)
+                        setState(() => _imageFile = File(image.path));
                     },
                   ),
                 ),
@@ -84,7 +98,10 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
     );
   }
 
-  Widget _sourceButton({required IconData icon, required String label, required VoidCallback onTap}) {
+  Widget _sourceButton(
+      {required IconData icon,
+      required String label,
+      required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -98,7 +115,9 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
           children: [
             Icon(icon, size: 28, color: AppColors.navy),
             const SizedBox(height: 8),
-            Text(label, style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.navy)),
+            Text(label,
+                style: AppTheme.dm(
+                    size: 14, weight: FontWeight.w600, color: AppColors.navy)),
           ],
         ),
       ),
@@ -117,7 +136,11 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
               children: [
                 const BackChip(),
                 const SizedBox(width: 12),
-                Text('Edit Bio', style: AppTheme.dm(size: 20, weight: FontWeight.w700, color: AppColors.navy)),
+                Text('Edit Bio',
+                    style: AppTheme.dm(
+                        size: 20,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy)),
               ],
             ),
           ),
@@ -142,13 +165,18 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                                 color: const Color(0xFFD8B98A),
                                 shape: BoxShape.circle,
                                 image: _imageFile != null
-                                    ? DecorationImage(image: FileImage(_imageFile!), fit: BoxFit.cover)
+                                    ? DecorationImage(
+                                        image: FileImage(_imageFile!),
+                                        fit: BoxFit.cover)
                                     : null,
                               ),
                               child: _imageFile == null
                                   ? const AvatarCircle(
                                       size: 100,
-                                      colors: [Color(0xFFD8B98A), Color(0xFF7D5A2C)],
+                                      colors: [
+                                        Color(0xFFD8B98A),
+                                        Color(0xFF7D5A2C)
+                                      ],
                                     )
                                   : null,
                             ),
@@ -161,16 +189,21 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                                 decoration: BoxDecoration(
                                   color: AppColors.gold,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.white, width: 2),
+                                  border: Border.all(
+                                      color: AppColors.white, width: 2),
                                 ),
-                                child: const Icon(Icons.camera_alt, size: 16, color: AppColors.navy),
+                                child: const Icon(Icons.camera_alt,
+                                    size: 16, color: AppColors.navy),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 10),
                         Text('Change photo',
-                            style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.gold)),
+                            style: AppTheme.dm(
+                                size: 13,
+                                weight: FontWeight.w700,
+                                color: AppColors.gold)),
                       ],
                     ),
                   ),
@@ -178,7 +211,11 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                 const SizedBox(height: 32),
 
                 // About You Section
-                Text('About you', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy)),
+                Text('About you',
+                    style: AppTheme.dm(
+                        size: 14,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy)),
                 const SizedBox(height: 8),
                 AppTextField(
                   controller: _bioController,
@@ -198,12 +235,18 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                 // Social Accounts Section
                 RichText(
                   text: TextSpan(
-                    style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy),
+                    style: AppTheme.dm(
+                        size: 14,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy),
                     children: [
                       const TextSpan(text: 'Link social accounts '),
                       TextSpan(
                         text: '· optional',
-                        style: AppTheme.dm(size: 14, weight: FontWeight.w500, color: AppColors.gold),
+                        style: AppTheme.dm(
+                            size: 14,
+                            weight: FontWeight.w500,
+                            color: AppColors.gold),
                       ),
                     ],
                   ),
@@ -277,17 +320,25 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                 children: [
                   Icon(icon, size: 20, color: AppColors.gold),
                   const SizedBox(width: 8),
-                  Text(name, style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy)),
+                  Text(name,
+                      style: AppTheme.dm(
+                          size: 14,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy)),
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: statusColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(status,
-                    style: AppTheme.dm(size: 11, weight: FontWeight.w700, color: statusTextColor)),
+                    style: AppTheme.dm(
+                        size: 11,
+                        weight: FontWeight.w700,
+                        color: statusTextColor)),
               ),
             ],
           ),
@@ -298,7 +349,9 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
             height: 48,
             radius: 10,
             backgroundColor: const Color(0xFFF5F0E8),
-            borderColor: controller.text.isNotEmpty ? AppColors.gold : Colors.transparent,
+            borderColor: controller.text.isNotEmpty
+                ? AppColors.gold
+                : Colors.transparent,
           ),
         ],
       ),

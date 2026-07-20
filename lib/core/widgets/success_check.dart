@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 
 class SuccessCheck extends StatefulWidget {
-  const SuccessCheck({super.key, this.color = const Color(0xFF1B6B3A), this.size = 96, this.gold = false});
+  const SuccessCheck(
+      {super.key,
+      this.color = const Color(0xFF1B6B3A),
+      this.size = 96,
+      this.gold = false});
+
   final Color color;
   final double size;
   final bool gold;
@@ -11,8 +17,11 @@ class SuccessCheck extends StatefulWidget {
   State<SuccessCheck> createState() => _SuccessCheckState();
 }
 
-class _SuccessCheckState extends State<SuccessCheck> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
+class _SuccessCheckState extends State<SuccessCheck>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 1800))
+    ..repeat();
 
   @override
   void dispose() {
@@ -36,7 +45,8 @@ class _SuccessCheckState extends State<SuccessCheck> with SingleTickerProviderSt
               height: widget.size * (0.75 + _c.value * 1.3),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: c.withValues(alpha: 0.5 * (1 - _c.value)), width: 3),
+                border: Border.all(
+                    color: c.withValues(alpha: 0.5 * (1 - _c.value)), width: 3),
               ),
             ),
           ),
@@ -46,9 +56,18 @@ class _SuccessCheckState extends State<SuccessCheck> with SingleTickerProviderSt
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: widget.gold
-                  ? const RadialGradient(center: Alignment(0, -0.2), colors: [AppColors.goldBright, AppColors.gold])
-                  : RadialGradient(center: const Alignment(0, -0.2), colors: [c, Color.lerp(c, Colors.black, 0.18)!]),
-              boxShadow: [BoxShadow(color: c.withValues(alpha: 0.4), blurRadius: 30, offset: const Offset(0, 12))],
+                  ? const RadialGradient(
+                      center: Alignment(0, -0.2),
+                      colors: [AppColors.goldBright, AppColors.gold])
+                  : RadialGradient(
+                      center: const Alignment(0, -0.2),
+                      colors: [c, Color.lerp(c, Colors.black, 0.18)!]),
+              boxShadow: [
+                BoxShadow(
+                    color: c.withValues(alpha: 0.4),
+                    blurRadius: 30,
+                    offset: const Offset(0, 12))
+              ],
             ),
             child: const Icon(Icons.check, color: AppColors.white, size: 46),
           ),

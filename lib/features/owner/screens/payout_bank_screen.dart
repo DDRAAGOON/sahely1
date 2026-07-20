@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -42,8 +43,11 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
                 child: Container(
                   width: 64,
                   height: 64,
-                  decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(18)),
-                  child: const Icon(Icons.account_balance, color: AppColors.gold, size: 30),
+                  decoration: BoxDecoration(
+                      color: AppColors.navy,
+                      borderRadius: BorderRadius.circular(18)),
+                  child: const Icon(Icons.account_balance,
+                      color: AppColors.gold, size: 30),
                 ),
               ),
               const SizedBox(height: 14),
@@ -105,13 +109,16 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
               ),
               const SizedBox(height: 20),
               const InfoNote(
-                  text: 'Your bank details are encrypted and used only for payouts.', icon: Icons.lock_outline),
+                  text:
+                      'Your bank details are encrypted and used only for payouts.',
+                  icon: Icons.lock_outline),
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(16),
-          child: NavyButton(label: 'Save Account', onTap: () => Navigator.maybePop(context)),
+          child: NavyButton(
+              label: 'Save Account', onTap: () => Navigator.maybePop(context)),
         ),
       ]),
     );

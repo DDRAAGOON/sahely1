@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 
 class PropertyCircleBtn extends StatelessWidget {
   const PropertyCircleBtn({super.key, required this.icon, this.onTap});
+
   final IconData icon;
   final VoidCallback? onTap;
 
@@ -15,7 +17,9 @@ class PropertyCircleBtn extends StatelessWidget {
         width: 38,
         height: 38,
         alignment: Alignment.center,
-        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.92), shape: BoxShape.circle),
+        decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.92),
+            shape: BoxShape.circle),
         child: Icon(icon, size: 20, color: AppColors.navy),
       ),
     );
@@ -24,6 +28,7 @@ class PropertyCircleBtn extends StatelessWidget {
 
 class PropertyMetaChip extends StatelessWidget {
   const PropertyMetaChip({super.key, required this.icon, required this.label});
+
   final IconData icon;
   final String label;
 
@@ -31,7 +36,8 @@ class PropertyMetaChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: AppColors.cardWarm, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+          color: AppColors.cardWarm, borderRadius: BorderRadius.circular(8)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -46,6 +52,7 @@ class PropertyMetaChip extends StatelessWidget {
 
 class PropertyFeature extends StatelessWidget {
   const PropertyFeature({super.key, required this.icon, required this.label});
+
   final IconData icon;
   final String label;
 

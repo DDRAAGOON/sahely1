@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../domain/models/broker_wishlist_item.dart';
+
 import '../../../../data/repositories/broker_wishlist_repository.dart';
+import '../../../../domain/models/broker_wishlist_item.dart';
 
 enum BrokerWishlistStatus { initial, loading, loaded, error }
 
@@ -44,21 +45,35 @@ class BrokerWishlistState {
 class BrokerWishlistStatusLoaded extends BrokerWishlistState {
   final String propertyId;
   final bool isWishlisted;
-  BrokerWishlistStatusLoaded(this.propertyId, this.isWishlisted, List<BrokerWishlistCollection> collections) 
-    : super(toggledPropertyId: propertyId, isToggledStatus: isWishlisted, collections: collections, status: BrokerWishlistStatus.loaded);
+
+  BrokerWishlistStatusLoaded(this.propertyId, this.isWishlisted,
+      List<BrokerWishlistCollection> collections)
+      : super(
+            toggledPropertyId: propertyId,
+            isToggledStatus: isWishlisted,
+            collections: collections,
+            status: BrokerWishlistStatus.loaded);
 }
 
 class BrokerWishlistToggled extends BrokerWishlistState {
   final String propertyId;
   final bool isWishlisted;
-  BrokerWishlistToggled(this.propertyId, this.isWishlisted, List<BrokerWishlistCollection> collections) 
-    : super(toggledPropertyId: propertyId, isToggledStatus: isWishlisted, collections: collections, status: BrokerWishlistStatus.loaded);
+
+  BrokerWishlistToggled(this.propertyId, this.isWishlisted,
+      List<BrokerWishlistCollection> collections)
+      : super(
+            toggledPropertyId: propertyId,
+            isToggledStatus: isWishlisted,
+            collections: collections,
+            status: BrokerWishlistStatus.loaded);
 }
 
 class BrokerCollectionsLoaded extends BrokerWishlistState {
   @override
   final List<BrokerWishlistCollection> collections;
-  BrokerCollectionsLoaded(this.collections) : super(collections: collections, status: BrokerWishlistStatus.loaded);
+
+  BrokerCollectionsLoaded(this.collections)
+      : super(collections: collections, status: BrokerWishlistStatus.loaded);
 }
 
 class BrokerWishlistCubit extends Cubit<BrokerWishlistState> {
@@ -69,9 +84,12 @@ class BrokerWishlistCubit extends Cubit<BrokerWishlistState> {
   Future<void> checkStatus(String propertyId) async {
     try {
       final isWishlisted = await _repository.isWishlisted(propertyId);
-      emit(BrokerWishlistStatusLoaded(propertyId, isWishlisted, state.collections));
+      emit(BrokerWishlistStatusLoaded(
+          propertyId, isWishlisted, state.collections));
     } catch (e) {
-      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Error checking status'));
+      emit(state.copyWith(
+          status: BrokerWishlistStatus.error,
+          errorMessage: 'Error checking status'));
     }
   }
 
@@ -86,11 +104,13 @@ class BrokerWishlistCubit extends Cubit<BrokerWishlistState> {
         propertyName: propertyName,
         propertyImage: propertyImage,
       );
-      
+
       final collections = await _repository.getCollections();
       emit(BrokerWishlistToggled(propertyId, isWishlisted, collections));
     } catch (e) {
-      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Failed to toggle'));
+      emit(state.copyWith(
+          status: BrokerWishlistStatus.error,
+          errorMessage: 'Failed to toggle'));
     }
   }
 
@@ -105,7 +125,9 @@ class BrokerWishlistCubit extends Cubit<BrokerWishlistState> {
       );
       await loadCollections();
     } catch (e) {
-      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Failed to add to collection'));
+      emit(state.copyWith(
+          status: BrokerWishlistStatus.error,
+          errorMessage: 'Failed to add to collection'));
     }
   }
 
@@ -115,7 +137,9 @@ class BrokerWishlistCubit extends Cubit<BrokerWishlistState> {
       final collections = await _repository.getCollections();
       emit(BrokerCollectionsLoaded(collections));
     } catch (e) {
-      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Failed to load collections'));
+      emit(state.copyWith(
+          status: BrokerWishlistStatus.error,
+          errorMessage: 'Failed to load collections'));
     }
   }
 
@@ -124,17 +148,21 @@ class BrokerWishlistCubit extends Cubit<BrokerWishlistState> {
       await _repository.addCollection(name);
       await loadCollections();
     } catch (e) {
-      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Failed to create collection'));
+      emit(state.copyWith(
+          status: BrokerWishlistStatus.error,
+          errorMessage: 'Failed to create collection'));
     }
   }
-  
+
   Future<void> loadWishlistItems(String collectionId) async {
     emit(state.copyWith(status: BrokerWishlistStatus.loading));
     try {
       final items = await _repository.getWishlistItems(collectionId);
       emit(state.copyWith(items: items, status: BrokerWishlistStatus.loaded));
     } catch (e) {
-      emit(state.copyWith(status: BrokerWishlistStatus.error, errorMessage: 'Failed to load items'));
+      emit(state.copyWith(
+          status: BrokerWishlistStatus.error,
+          errorMessage: 'Failed to load items'));
     }
   }
 }

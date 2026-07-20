@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
@@ -29,7 +30,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
     // Initialize with current locale
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        _tempSelectedLocale = context.read<LocaleProvider>().locale.languageCode;
+        _tempSelectedLocale =
+            context.read<LocaleProvider>().locale.languageCode;
       });
     });
   }
@@ -37,7 +39,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     final localeProvider = context.read<LocaleProvider>();
-    
+
     return Scaffold(
       backgroundColor: AppColors.cream,
       appBar: AppBar(
@@ -104,8 +106,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                       children: _languages.asMap().entries.map((entry) {
                         final index = entry.key;
                         final language = entry.value;
-                        final isSelected = _tempSelectedLocale == language['code'];
-  
+                        final isSelected =
+                            _tempSelectedLocale == language['code'];
+
                         return Column(
                           children: [
                             GestureDetector(
@@ -125,7 +128,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                     // Language Name
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             language['nativeName']!,
@@ -148,7 +152,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                         ],
                                       ),
                                     ),
-  
+
                                     // Radio Button
                                     Container(
                                       width: 22,
@@ -164,22 +168,22 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                       ),
                                       child: isSelected
                                           ? Center(
-                                        child: Container(
-                                          width: 12,
-                                          height: 12,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: AppColors.navy,
-                                          ),
-                                        ),
-                                      )
+                                              child: Container(
+                                                width: 12,
+                                                height: 12,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: AppColors.navy,
+                                                ),
+                                              ),
+                                            )
                                           : null,
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-  
+
                             // Divider (except last item)
                             if (index < _languages.length - 1)
                               const Divider(

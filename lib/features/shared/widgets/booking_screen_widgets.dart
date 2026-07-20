@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_theme.dart';
 
 class BookingCalendarCard extends StatefulWidget {
   final Function(DateTime? checkIn, DateTime? checkOut)? onDatesChanged;
+
   const BookingCalendarCard({super.key, this.onDatesChanged});
 
   @override
@@ -43,13 +44,21 @@ class _BookingCalendarCardState extends State<BookingCalendarCard> {
         headerStyle: const HeaderStyle(
           formatButtonVisible: false,
           titleCentered: true,
-          titleTextStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'DM Sans'),
-          leftChevronIcon: Icon(Icons.chevron_left, color: AppColors.navy, size: 20),
-          rightChevronIcon: Icon(Icons.chevron_right, color: AppColors.navy, size: 20),
+          titleTextStyle: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: AppColors.navy,
+              fontFamily: 'DM Sans'),
+          leftChevronIcon:
+              Icon(Icons.chevron_left, color: AppColors.navy, size: 20),
+          rightChevronIcon:
+              Icon(Icons.chevron_right, color: AppColors.navy, size: 20),
         ),
         daysOfWeekStyle: const DaysOfWeekStyle(
-          weekdayStyle: TextStyle(fontSize: 11, color: AppColors.secondary, fontFamily: 'DM Sans'),
-          weekendStyle: TextStyle(fontSize: 11, color: AppColors.secondary, fontFamily: 'DM Sans'),
+          weekdayStyle: TextStyle(
+              fontSize: 11, color: AppColors.secondary, fontFamily: 'DM Sans'),
+          weekendStyle: TextStyle(
+              fontSize: 11, color: AppColors.secondary, fontFamily: 'DM Sans'),
         ),
         calendarBuilders: CalendarBuilders(
           prioritizedBuilder: (context, day, focusedDay) {
@@ -90,7 +99,8 @@ class _BookingCalendarCardState extends State<BookingCalendarCard> {
         onDaySelected: (selectedDay, focusedDay) {
           setState(() {
             _focusedDay = focusedDay;
-            if (_rangeStart == null || (_rangeStart != null && _rangeEnd != null)) {
+            if (_rangeStart == null ||
+                (_rangeStart != null && _rangeEnd != null)) {
               _rangeStart = selectedDay;
               _rangeEnd = null;
             } else if (selectedDay.isAfter(_rangeStart!)) {
@@ -109,6 +119,7 @@ class _BookingCalendarCardState extends State<BookingCalendarCard> {
 
 class BookingCheckCol extends StatelessWidget {
   const BookingCheckCol(this.label, this.value, {super.key});
+
   final String label;
   final String value;
 
@@ -118,14 +129,18 @@ class BookingCheckCol extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTheme.dm(size: 11, color: AppColors.muted)),
-        Text(value, style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.navy)),
+        Text(value,
+            style: AppTheme.dm(
+                size: 14, weight: FontWeight.w600, color: AppColors.navy)),
       ],
     );
   }
 }
 
 class BookingGuestRow extends StatelessWidget {
-  const BookingGuestRow(this.title, this.sub, this.value, {super.key, this.onMinus, this.onPlus});
+  const BookingGuestRow(this.title, this.sub, this.value,
+      {super.key, this.onMinus, this.onPlus});
+
   final String title;
   final String sub;
   final int value;
@@ -148,10 +163,12 @@ class BookingGuestRow extends StatelessWidget {
           ),
           Row(
             children: [
-              _circleBtn(Icons.remove, filled: false, enabled: onMinus != null, onTap: onMinus),
+              _circleBtn(Icons.remove,
+                  filled: false, enabled: onMinus != null, onTap: onMinus),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: Text('$value', style: AppTheme.dm(size: 15, weight: FontWeight.w700)),
+                child: Text('$value',
+                    style: AppTheme.dm(size: 15, weight: FontWeight.w700)),
               ),
               _circleBtn(Icons.add, filled: true, onTap: onPlus),
             ],
@@ -161,7 +178,9 @@ class BookingGuestRow extends StatelessWidget {
     );
   }
 
-  Widget _circleBtn(IconData icon, {required bool filled, bool enabled = true, VoidCallback? onTap}) => GestureDetector(
+  Widget _circleBtn(IconData icon,
+          {required bool filled, bool enabled = true, VoidCallback? onTap}) =>
+      GestureDetector(
         onTap: enabled ? onTap : null,
         child: Container(
           width: 30,
@@ -169,10 +188,18 @@ class BookingGuestRow extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: filled ? AppColors.navy : Colors.transparent,
-            border: filled ? null : Border.all(color: enabled ? AppColors.navy : AppColors.border, width: 1.5),
+            border: filled
+                ? null
+                : Border.all(
+                    color: enabled ? AppColors.navy : AppColors.border,
+                    width: 1.5),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, size: 18, color: filled ? AppColors.white : (enabled ? AppColors.navy : const Color(0xFFBBBBBB))),
+          child: Icon(icon,
+              size: 18,
+              color: filled
+                  ? AppColors.white
+                  : (enabled ? AppColors.navy : const Color(0xFFBBBBBB))),
         ),
       );
 }

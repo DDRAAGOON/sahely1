@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/theme/app_colors.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
-import 'package:go_router/go_router.dart';
+
+import '../../../../core/theme/app_colors.dart';
 import 'level/level_detail_sheet.dart';
 import 'level/level_perk.dart';
 
 class MawsemCard extends StatelessWidget {
   const MawsemCard({super.key});
 
-  void _showNextLevelDetail(BuildContext context, Map<String, dynamic> nextLevel, int currentStars) {
+  void _showNextLevelDetail(
+      BuildContext context, Map<String, dynamic> nextLevel, int currentStars) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -36,10 +38,11 @@ class MawsemCard extends StatelessWidget {
     final profile = context.watch<ProfileProvider>();
     final levelData = profile.levelData;
     final nextLevel = profile.nextLevelData;
-    
+
     final int currentStars = profile.stars;
-    final int starsToNext = nextLevel != null ? nextLevel['stars'] - currentStars : 0;
-    
+    final int starsToNext =
+        nextLevel != null ? nextLevel['stars'] - currentStars : 0;
+
     // Using the logic: Progress = currentStars / nextLevelThreshold
     double progress = 1.0;
     if (nextLevel != null) {
@@ -49,14 +52,15 @@ class MawsemCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.push('/mawsem');
+        AppNavigation.goToMawsem(context);
       },
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: AppColors.navy,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.gold.withValues(alpha: 0.3), width: 1),
+          border: Border.all(
+              color: AppColors.gold.withValues(alpha: 0.3), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,15 +132,16 @@ class MawsemCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: progress,
                       backgroundColor: Colors.white.withValues(alpha: 0.2),
-                      valueColor: const AlwaysStoppedAnimation<Color>(AppColors.gold),
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(AppColors.gold),
                       minHeight: 8,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    nextLevel != null 
-                      ? '$starsToNext ★ to ${nextLevel['name']}'
-                      : 'Max level reached!',
+                    nextLevel != null
+                        ? '$starsToNext ★ to ${nextLevel['name']}'
+                        : 'Max level reached!',
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.white70,

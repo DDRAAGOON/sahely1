@@ -45,7 +45,10 @@ class OwnerPropertyCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10, offset: Offset(0, 4))],
+        boxShadow: const [
+          BoxShadow(
+              color: Color(0x1F000000), blurRadius: 10, offset: Offset(0, 4))
+        ],
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -91,7 +94,8 @@ class OwnerPropertyCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    StatusBadge(status, kind: badgeKind, dot: badgeKind == BadgeKind.green),
+                    StatusBadge(status,
+                        kind: badgeKind, dot: badgeKind == BadgeKind.green),
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -122,7 +126,10 @@ class OwnerPropertyCard extends StatelessWidget {
                   const SizedBox(height: 10),
                   Text(
                     note!,
-                    style: AppTheme.dm(size: 12, color: const Color(0xFFD2760A), weight: FontWeight.w600),
+                    style: AppTheme.dm(
+                        size: 12,
+                        color: const Color(0xFFD2760A),
+                        weight: FontWeight.w600),
                   ),
                 ],
               ],
@@ -139,14 +146,22 @@ class OwnerPropertyCard extends StatelessWidget {
                   color: AppColors.navy,
                   onTap: onPrimaryAction,
                 ),
-                const VerticalDivider(width: 1, color: Color(0x33000000), indent: 12, endIndent: 12),
+                const VerticalDivider(
+                    width: 1,
+                    color: Color(0x33000000),
+                    indent: 12,
+                    endIndent: 12),
                 _actionButton(
                   label: secondaryActionLabel,
                   color: AppColors.navy,
                   onTap: onSecondaryAction,
                 ),
                 if (onSosAction != null || stats.isNotEmpty) ...[
-                  const VerticalDivider(width: 1, color: Color(0x33000000), indent: 12, endIndent: 12),
+                  const VerticalDivider(
+                      width: 1,
+                      color: Color(0x33000000),
+                      indent: 12,
+                      endIndent: 12),
                   _actionButton(
                     label: 'SOS',
                     color: const Color(0xFFB22222),

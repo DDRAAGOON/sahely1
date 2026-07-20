@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/bookings_header.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/bookings_filter_tabs.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/active_booking_card.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/upcoming_booking_card.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/past_stays_section.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/booked_property_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/past_booking_detail_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/smart_lock_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/upcoming_booking_detail_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/active_booking_card.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/bookings_filter_tabs.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/bookings_header.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/past_stays_section.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/upcoming_booking_card.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({super.key});
@@ -65,104 +65,130 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
         children: [
           if (_selectedTab == 'Active') ...[
             if (bookingsProvider.activeBookings.isEmpty)
-              const Center(child: Padding(
+              const Center(
+                  child: Padding(
                 padding: EdgeInsets.only(top: 60),
-                child: Text('No active bookings found', style: TextStyle(color: AppColors.secondary, fontFamily: 'DM Sans')),
+                child: Text('No active bookings found',
+                    style: TextStyle(
+                        color: AppColors.secondary, fontFamily: 'DM Sans')),
               ))
             else
               ...bookingsProvider.activeBookings.map((booking) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: ActiveBookingCard(
-                  propertyName: booking.propertyName,
-                  location: booking.location,
-                  orderNumber: booking.orderNumber,
-                  dates: booking.dates,
-                  guests: booking.guests,
-                  imageUrl: booking.imageUrl,
-                  onDigitalLockTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SmartLockScreen(
-                          propertyName: booking.propertyName,
-                          bookingRef: booking.orderNumber,
-                          passcode: '8842',
-                          checkIn: booking.checkIn,
-                          checkOut: booking.checkOut,
-                          propertyLat: 31.0263,
-                          propertyLng: 28.9402,
-                        ),
-                      ),
-                    );
-                  },
-                  onSOSTap: () {
-                    context.push('/sos');
-                  },
-                  onViewDetailsTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BookedPropertyScreen(
-                          bookingId: booking.id,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )),
-          ] 
-          else if (_selectedTab == 'Upcoming') ...[
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: ActiveBookingCard(
+                      propertyName: booking.propertyName,
+                      location: booking.location,
+                      orderNumber: booking.orderNumber,
+                      dates: booking.dates,
+                      guests: booking.guests,
+                      imageUrl: booking.imageUrl,
+                      onDigitalLockTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SmartLockScreen(
+                              propertyName: booking.propertyName,
+                              bookingRef: booking.orderNumber,
+                              passcode: '8842',
+                              checkIn: booking.checkIn,
+                              checkOut: booking.checkOut,
+                              propertyLat: 31.0263,
+                              propertyLng: 28.9402,
+                            ),
+                          ),
+                        );
+                      },
+                      onSOSTap: () {
+                        AppNavigation.goToSos(context);
+                      },
+                      onViewDetailsTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BookedPropertyScreen(
+                              bookingId: booking.id,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )),
+          ] else if (_selectedTab == 'Upcoming') ...[
             if (bookingsProvider.upcomingBookings.isEmpty)
-              const Center(child: Padding(
+              const Center(
+                  child: Padding(
                 padding: EdgeInsets.only(top: 60),
-                child: Text('No upcoming bookings found', style: TextStyle(color: AppColors.secondary, fontFamily: 'DM Sans')),
+                child: Text('No upcoming bookings found',
+                    style: TextStyle(
+                        color: AppColors.secondary, fontFamily: 'DM Sans')),
               ))
             else
               ...bookingsProvider.upcomingBookings.map((booking) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: UpcomingBookingCard(
-                  propertyName: booking.propertyName,
-                  location: booking.location,
-                  dates: booking.dates,
-                  orderNumber: booking.orderNumber,
-                  imageUrl: booking.imageUrl,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UpcomingBookingDetailScreen(
-                          booking: {
-                            'propertyName': booking.propertyName,
-                            'location': booking.location,
-                            'imageUrl': booking.imageUrl,
-                            'orderNumber': booking.orderNumber,
-                            'checkIn': booking.checkIn,
-                            'checkOut': booking.checkOut,
-                            'guests': booking.guests,
-                            'total': booking.totalPaid,
-                            'nights': booking.checkOut.difference(booking.checkIn).inDays,
-                            'daysUntilCheckIn': booking.checkIn.difference(DateTime.now()).inDays,
-                            'photos': [booking.imageUrl, booking.imageUrl, booking.imageUrl],
-                            'description': 'A beautiful stay in the heart of ${booking.location}. Enjoy world-class amenities and breathtaking views.',
-                            'amenities': const ['Wi-Fi', 'Pool', 'Parking', 'Kitchen'],
-                            'included': const ['Breakfast', 'Free Cleaning', 'Airport Transfer'],
-                            'latitude': 31.0263,
-                            'longitude': 28.9402,
-                            'pricePerNight': 2500,
-                            'cleaningVat': 150,
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )),
-          ] 
-          else ...[
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: UpcomingBookingCard(
+                      propertyName: booking.propertyName,
+                      location: booking.location,
+                      dates: booking.dates,
+                      orderNumber: booking.orderNumber,
+                      imageUrl: booking.imageUrl,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UpcomingBookingDetailScreen(
+                              booking: {
+                                'propertyName': booking.propertyName,
+                                'location': booking.location,
+                                'imageUrl': booking.imageUrl,
+                                'orderNumber': booking.orderNumber,
+                                'checkIn': booking.checkIn,
+                                'checkOut': booking.checkOut,
+                                'guests': booking.guests,
+                                'total': booking.totalPaid,
+                                'nights': booking.checkOut
+                                    .difference(booking.checkIn)
+                                    .inDays,
+                                'daysUntilCheckIn': booking.checkIn
+                                    .difference(DateTime.now())
+                                    .inDays,
+                                'photos': [
+                                  booking.imageUrl,
+                                  booking.imageUrl,
+                                  booking.imageUrl
+                                ],
+                                'description':
+                                    'A beautiful stay in the heart of ${booking.location}. Enjoy world-class amenities and breathtaking views.',
+                                'amenities': const [
+                                  'Wi-Fi',
+                                  'Pool',
+                                  'Parking',
+                                  'Kitchen'
+                                ],
+                                'included': const [
+                                  'Breakfast',
+                                  'Free Cleaning',
+                                  'Airport Transfer'
+                                ],
+                                'latitude': 31.0263,
+                                'longitude': 28.9402,
+                                'pricePerNight': 2500,
+                                'cleaningVat': 150,
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )),
+          ] else ...[
             if (bookingsProvider.pastBookings.isEmpty)
-              const Center(child: Padding(
+              const Center(
+                  child: Padding(
                 padding: EdgeInsets.only(top: 60),
-                child: Text('No past stays found', style: TextStyle(color: AppColors.secondary, fontFamily: 'DM Sans')),
+                child: Text('No past stays found',
+                    style: TextStyle(
+                        color: AppColors.secondary, fontFamily: 'DM Sans')),
               ))
             else
               PastStaysSection(
@@ -181,14 +207,27 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                           'checkOut': booking.checkOut,
                           'guests': booking.guests,
                           'total': booking.totalPaid,
-                          'nights': booking.checkOut.difference(booking.checkIn).inDays,
-                          'photos': [booking.imageUrl, booking.imageUrl, booking.imageUrl],
-                          'description': 'Your wonderful stay at ${booking.propertyName} in ${booking.location}. We hope to see you again!',
-                          'amenities': const ['Wi-Fi', 'Pool', 'Parking', 'Kitchen'],
+                          'nights': booking.checkOut
+                              .difference(booking.checkIn)
+                              .inDays,
+                          'photos': [
+                            booking.imageUrl,
+                            booking.imageUrl,
+                            booking.imageUrl
+                          ],
+                          'description':
+                              'Your wonderful stay at ${booking.propertyName} in ${booking.location}. We hope to see you again!',
+                          'amenities': const [
+                            'Wi-Fi',
+                            'Pool',
+                            'Parking',
+                            'Kitchen'
+                          ],
                           'included': const ['Breakfast', 'Free Cleaning'],
                           'pricePerNight': 2500,
                           'cleaningVat': 150,
-                          'hasReview': false, // Logic could check if a review exists
+                          'hasReview': false,
+                          // Logic could check if a review exists
                         },
                       ),
                     ),

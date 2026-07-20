@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../bloc/broker_wishlist_cubit.dart';
 import '../widgets/broker_wishlist_widgets.dart';
@@ -39,12 +40,15 @@ class _BrokerWishlistPageState extends State<BrokerWishlistPage> {
       child: SafeArea(
         child: BlocBuilder<BrokerWishlistCubit, BrokerWishlistState>(
           builder: (context, state) {
-            if (state.status == BrokerWishlistStatus.loading && state.collections.isEmpty) {
-              return const Center(child: CircularProgressIndicator(color: AppColors.gold));
+            if (state.status == BrokerWishlistStatus.loading &&
+                state.collections.isEmpty) {
+              return const Center(
+                  child: CircularProgressIndicator(color: AppColors.gold));
             }
 
             final collections = state.collections;
-            final totalPlaces = collections.fold<int>(0, (sum, col) => sum + col.itemCount);
+            final totalPlaces =
+                collections.fold<int>(0, (sum, col) => sum + col.itemCount);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,8 +84,11 @@ class _BrokerWishlistPageState extends State<BrokerWishlistPage> {
                       GestureDetector(
                         onTap: _createNewCollection,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                          decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(20)),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                              color: AppColors.navy,
+                              borderRadius: BorderRadius.circular(20)),
                           child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -108,7 +115,8 @@ class _BrokerWishlistPageState extends State<BrokerWishlistPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: GridView.builder(
                       padding: const EdgeInsets.only(bottom: 120),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         crossAxisSpacing: 12,
                         mainAxisSpacing: 12,
@@ -117,7 +125,8 @@ class _BrokerWishlistPageState extends State<BrokerWishlistPage> {
                       itemCount: collections.length + 1,
                       itemBuilder: (context, index) {
                         if (index == collections.length) {
-                          return BrokerNewCollectionTile(onTap: _createNewCollection);
+                          return BrokerNewCollectionTile(
+                              onTap: _createNewCollection);
                         }
                         final collection = collections[index];
                         return GestureDetector(
@@ -125,12 +134,17 @@ class _BrokerWishlistPageState extends State<BrokerWishlistPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => BrokerCollectionInsidePage(
+                                builder: (context) =>
+                                    BrokerCollectionInsidePage(
                                   collectionId: collection.id,
                                   collectionName: collection.name,
                                   propertyCount: collection.itemCount,
                                   sharedWithCount: collection.isShared ? 3 : 0,
-                                  memberNames: const ['Omar', 'Nour', 'Youssef'],
+                                  memberNames: const [
+                                    'Omar',
+                                    'Nour',
+                                    'Youssef'
+                                  ],
                                 ),
                               ),
                             );

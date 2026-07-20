@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -79,5 +80,6 @@ class ProfileBottomNav extends StatelessWidget {
 class _NavItem {
   final IconData icon;
   final String label;
+
   _NavItem({required this.icon, required this.label});
 }

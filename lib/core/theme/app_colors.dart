@@ -95,26 +95,45 @@ class AppColors {
   );
 
   static const LinearGradient navyGradient = LinearGradient(
-    begin: Alignment.topLeft, end: Alignment.bottomRight,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
     colors: [navy, Color(0xFF141D33)],
   );
 
   static const LinearGradient goldGradient = LinearGradient(
-    begin: Alignment.topLeft, end: Alignment.bottomRight,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
     colors: [Color(0xFFE4C56A), Color(0xFFC9A84C)],
   );
 
   // ==================== SHADOWS ====================
-  static List<BoxShadow> get cardShadow => [_shadow(navy, 0.08, 12, const Offset(0, 2))];
-  static List<BoxShadow> get goldButtonShadow => [_shadow(gold, 0.25, 16, const Offset(0, 4))];
-  static List<BoxShadow> get bottomNavShadow => [_shadow(navy, 0.10, 12, const Offset(0, -2))];
-  static List<BoxShadow> get modalShadow => [_shadow(navy, 0.15, 24, const Offset(0, -4))];
-  static List<BoxShadow> get floatingShadow => [_shadow(navy, 0.20, 12, const Offset(0, 4))];
-  static List<BoxShadow> get inputFocusShadow => [
-    BoxShadow(color: gold.withValues(alpha: 0.30), blurRadius: 0, spreadRadius: 3),
-  ];
+  static List<BoxShadow> get cardShadow =>
+      [_shadow(navy, 0.08, 12, const Offset(0, 2))];
 
-  static BoxShadow _shadow(Color color, double opacity, double blur, Offset offset) {
-    return BoxShadow(color: color.withValues(alpha: opacity), blurRadius: blur, offset: offset);
+  static List<BoxShadow> get goldButtonShadow =>
+      [_shadow(gold, 0.25, 16, const Offset(0, 4))];
+
+  static List<BoxShadow> get bottomNavShadow =>
+      [_shadow(navy, 0.10, 12, const Offset(0, -2))];
+
+  static List<BoxShadow> get modalShadow =>
+      [_shadow(navy, 0.15, 24, const Offset(0, -4))];
+
+  static List<BoxShadow> get floatingShadow =>
+      [_shadow(navy, 0.20, 12, const Offset(0, 4))];
+
+  static List<BoxShadow> get inputFocusShadow => [
+        BoxShadow(
+            color: gold.withValues(alpha: 0.30),
+            blurRadius: 0,
+            spreadRadius: 3),
+      ];
+
+  static BoxShadow _shadow(
+      Color color, double opacity, double blur, Offset offset) {
+    return BoxShadow(
+        color: color.withValues(alpha: opacity),
+        blurRadius: blur,
+        offset: offset);
   }
 }

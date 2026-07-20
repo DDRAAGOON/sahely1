@@ -21,7 +21,8 @@ class EditProfileForm extends StatelessWidget {
       context: context,
       initialDate: selectedDob ?? DateTime(now.year - 18),
       firstDate: DateTime(1950),
-      lastDate: now.subtract(const Duration(days: 365 * 13)), // Min 13 years
+      lastDate: now.subtract(const Duration(days: 365 * 13)),
+      // Min 13 years
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -190,9 +191,7 @@ class EditProfileForm extends StatelessWidget {
               color: AppColors.white,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: selectedDob != null
-                    ? AppColors.gold
-                    : AppColors.border,
+                color: selectedDob != null ? AppColors.gold : AppColors.border,
                 width: selectedDob != null ? 2 : 1,
               ),
             ),

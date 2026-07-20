@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../../core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
-import '../widgets/verification_progress_indicator.dart';
+
+import '../../../../../core/theme/app_colors.dart';
 import '../widgets/card_number_field.dart';
-import '../widgets/expiry_cvv_fields.dart';
 import '../widgets/cardholder_name_field.dart';
+import '../widgets/expiry_cvv_fields.dart';
 import '../widgets/save_card_button.dart';
+import '../widgets/verification_progress_indicator.dart';
 
 class AddPaymentCardScreen extends StatefulWidget {
   final String? legalName; // From ID verification
@@ -70,7 +71,9 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Verification failed: $e'), backgroundColor: AppColors.red),
+          SnackBar(
+              content: Text('Verification failed: $e'),
+              backgroundColor: AppColors.red),
         );
       }
     } finally {
@@ -99,7 +102,8 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: AppColors.border),
                 ),
-                child: const Icon(Icons.chevron_left, color: AppColors.navy, size: 22),
+                child: const Icon(Icons.chevron_left,
+                    color: AppColors.navy, size: 22),
               ),
             ),
           ),
@@ -121,7 +125,8 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
             return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight - 20),
+                constraints:
+                    BoxConstraints(minHeight: constraints.maxHeight - 20),
                 child: IntrinsicHeight(
                   child: Form(
                     key: _formKey,
@@ -129,7 +134,6 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                       children: [
                         const VerificationProgressIndicator(currentStep: 4),
                         const SizedBox(height: 30),
-                        
                         const Text(
                           'Add Payment Card',
                           style: TextStyle(
@@ -150,29 +154,24 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        
                         _buildSecurityStrip(),
                         const SizedBox(height: 30),
-                
                         CardNumberField(
                           controller: _cardNumberController,
                           cardType: _cardType,
                           onChanged: _onCardNumberChanged,
                         ),
                         const SizedBox(height: 16),
-                        
                         ExpiryCvvFields(
                           expiryController: _expiryController,
                           cvvController: _cvvController,
                         ),
                         const SizedBox(height: 16),
-                        
                         CardholderNameField(
                           controller: _nameController,
                           legalName: widget.legalName,
                         ),
                         const SizedBox(height: 12),
-                        
                         const Text(
                           'Your card is used for identity verification only and will not be charged without your approval.',
                           textAlign: TextAlign.center,
@@ -183,10 +182,8 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                             fontStyle: FontStyle.italic,
                           ),
                         ),
-                        
                         const Spacer(),
                         const SizedBox(height: 20),
-                        
                         SaveCardButton(
                           isLoading: _isVerifying,
                           onSave: _saveCard,
@@ -216,7 +213,10 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
         const SizedBox(width: 10),
         const Text(
           'Secured by Sahely',
-          style: TextStyle(fontSize: 12, color: AppColors.secondary, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              fontSize: 12,
+              color: AppColors.secondary,
+              fontWeight: FontWeight.w500),
         ),
       ],
     );
@@ -225,10 +225,12 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
   Widget _buildSmallLogo(String text, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3)),
+      decoration:
+          BoxDecoration(color: color, borderRadius: BorderRadius.circular(3)),
       child: Text(
         text,
-        style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w900, color: Colors.white),
+        style: const TextStyle(
+            fontSize: 8, fontWeight: FontWeight.w900, color: Colors.white),
       ),
     );
   }
@@ -239,8 +241,20 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
       height: 14,
       child: Stack(
         children: [
-          Positioned(left: 0, child: Container(width: 12, height: 12, decoration: const BoxDecoration(color: Color(0xFFEB001B), shape: BoxShape.circle))),
-          Positioned(right: 0, child: Container(width: 12, height: 12, decoration: const BoxDecoration(color: Color(0xFFF79E1B), shape: BoxShape.circle))),
+          Positioned(
+              left: 0,
+              child: Container(
+                  width: 12,
+                  height: 12,
+                  decoration: const BoxDecoration(
+                      color: Color(0xFFEB001B), shape: BoxShape.circle))),
+          Positioned(
+              right: 0,
+              child: Container(
+                  width: 12,
+                  height: 12,
+                  decoration: const BoxDecoration(
+                      color: Color(0xFFF79E1B), shape: BoxShape.circle))),
         ],
       ),
     );

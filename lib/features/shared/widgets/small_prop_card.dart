@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/ui.dart';
@@ -22,7 +23,8 @@ class SmallPropCard extends StatelessWidget {
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
-          BoxShadow(color: Color(0x0F1B2744), blurRadius: 10, offset: Offset(0, 2))
+          BoxShadow(
+              color: Color(0x0F1B2744), blurRadius: 10, offset: Offset(0, 2))
         ],
       ),
       child: Column(
@@ -43,18 +45,24 @@ class SmallPropCard extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy),
+                  style: AppTheme.dm(
+                      size: 13, weight: FontWeight.w700, color: AppColors.navy),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
-                Text('EGP $price/night', style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: AppColors.gold)),
+                Text('EGP $price/night',
+                    style: AppTheme.dm(
+                        size: 11,
+                        weight: FontWeight.w600,
+                        color: AppColors.gold)),
                 const SizedBox(height: 6),
                 Row(
                   children: [
                     const Icon(Icons.star, size: 10, color: AppColors.gold),
                     const SizedBox(width: 3),
-                    Text(rating, style: AppTheme.dm(size: 10, weight: FontWeight.w700)),
+                    Text(rating,
+                        style: AppTheme.dm(size: 10, weight: FontWeight.w700)),
                   ],
                 ),
               ],

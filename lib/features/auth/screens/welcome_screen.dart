@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/brand.dart';
@@ -16,7 +17,8 @@ class WelcomeScreen extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           const SahelyImage(
-            imageUrl: 'https://images.unsplash.com/photo-1777919541977-16d7271ac96e?w=1200&q=72&auto=format&fit=crop',
+            imageUrl:
+                'https://images.unsplash.com/photo-1777919541977-16d7271ac96e?w=1200&q=72&auto=format&fit=crop',
             fadeColor: Color(0xC71B2744),
             fadeHeight: 500,
             enableViewer: false,
@@ -27,37 +29,49 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 children: [
                   const Column(
-                    children: [SahelyLogo(size: 56), SizedBox(height: 2), Wordmark(size: 24)],
+                    children: [
+                      SahelyLogo(size: 56),
+                      SizedBox(height: 2),
+                      Wordmark(size: 24)
+                    ],
                   ),
                   const Spacer(),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text('Verified Chalets.\nZero Chaos.',
                         style: AppTheme.dm(
-                            size: 30, weight: FontWeight.w700, color: AppColors.white, height: 1.15)),
+                            size: 30,
+                            weight: FontWeight.w700,
+                            color: AppColors.white,
+                            height: 1.15)),
                   ),
                   const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text('Discover and book premium properties',
-                        style: AppTheme.dm(size: 15, color: AppColors.goldLight)),
+                        style:
+                            AppTheme.dm(size: 15, color: AppColors.goldLight)),
                   ),
                   const SizedBox(height: 26),
                   GoldButton(
                     label: 'Get Started',
-                    onTap: () => context.push('/onboarding'),
+                    onTap: () => AppNavigation.goToOnboarding(context),
                   ),
                   const SizedBox(height: 18),
                   GestureDetector(
-                    onTap: () => context.push('/signin'),
+                    onTap: () => AppNavigation.goToSignIn(context),
                     child: RichText(
                       text: TextSpan(
                         text: 'Already have an account? ',
-                        style: AppTheme.dm(size: 13, color: AppColors.goldLight),
+                        style:
+                            AppTheme.dm(size: 13, color: AppColors.goldLight),
                         children: [
                           TextSpan(
                               text: 'Sign In',
-                              style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.white)),
+                              style: AppTheme.dm(
+                                  size: 13,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.white)),
                         ],
                       ),
                     ),

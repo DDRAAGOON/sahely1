@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
@@ -39,9 +41,10 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> _controllers =
+      List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
-  
+
   Timer? _timer;
   int _secondsRemaining = 120; // 2 minutes
 
@@ -106,7 +109,8 @@ class _OtpScreenState extends State<OtpScreen> {
                   padding: const EdgeInsets.fromLTRB(28, 30, 28, 34),
                   child: Column(
                     children: [
-                      const Align(alignment: Alignment.centerLeft, child: BackChip()),
+                      const Align(
+                          alignment: Alignment.centerLeft, child: BackChip()),
                       const SizedBox(height: 28),
                       Container(
                         width: 78,
@@ -114,29 +118,41 @@ class _OtpScreenState extends State<OtpScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.navy,
                           borderRadius: BorderRadius.circular(20),
-                          boxShadow: const [BoxShadow(color: Color(0x4D1B2744), blurRadius: 26, offset: Offset(0, 10))],
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color(0x4D1B2744),
+                                blurRadius: 26,
+                                offset: Offset(0, 10))
+                          ],
                         ),
-                        child: Icon(widget.icon, color: AppColors.gold, size: 36),
+                        child:
+                            Icon(widget.icon, color: AppColors.gold, size: 36),
                       ),
                       const SizedBox(height: 22),
-                      Text(widget.title, style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                      Text(widget.title,
+                          style: AppTheme.dm(
+                              size: 22,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy)),
                       const SizedBox(height: 8),
                       RichText(
                         textAlign: TextAlign.center,
                         text: TextSpan(
-                          style: AppTheme.dm(size: 14, color: AppColors.muted, height: 1.5),
+                          style: AppTheme.dm(
+                              size: 14, color: AppColors.muted, height: 1.5),
                           children: widget.subtitleSpans ??
                               [
                                 TextSpan(
-                                  text: widget.isPhone 
-                                    ? 'We sent a 6-digit code to\n' 
-                                    : 'Enter the 6-digit code we emailed to\n'
-                                ),
+                                    text: widget.isPhone
+                                        ? 'We sent a 6-digit code to\n'
+                                        : 'Enter the 6-digit code we emailed to\n'),
                                 TextSpan(
-                                  text: widget.isPhone 
-                                    ? _formatPhone(widget.phone)
-                                    : (widget.email ?? ''),
-                                  style: const TextStyle(fontWeight: FontWeight.w700, color: Color(0xFF2D2D2D)),
+                                  text: widget.isPhone
+                                      ? _formatPhone(widget.phone)
+                                      : (widget.email ?? ''),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: Color(0xFF2D2D2D)),
                                 ),
                               ],
                         ),
@@ -166,9 +182,13 @@ class _OtpScreenState extends State<OtpScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.mail_outline, size: 15, color: AppColors.gold),
+                          const Icon(Icons.mail_outline,
+                              size: 15, color: AppColors.gold),
                           const SizedBox(width: 8),
-                          Flexible(child: Text(widget.hint, style: AppTheme.dm(size: 13, color: AppColors.muted))),
+                          Flexible(
+                              child: Text(widget.hint,
+                                  style: AppTheme.dm(
+                                      size: 13, color: AppColors.muted))),
                         ],
                       ),
                       const SizedBox(height: 24),
@@ -178,13 +198,19 @@ class _OtpScreenState extends State<OtpScreen> {
                         onTap: _secondsRemaining == 0 ? _startCountdown : null,
                         child: RichText(
                           text: TextSpan(
-                            text: _secondsRemaining == 0 ? 'Resend code now' : 'Resend code in ',
-                            style: AppTheme.dm(size: 13, color: AppColors.muted),
+                            text: _secondsRemaining == 0
+                                ? 'Resend code now'
+                                : 'Resend code in ',
+                            style:
+                                AppTheme.dm(size: 13, color: AppColors.muted),
                             children: [
                               if (_secondsRemaining > 0)
                                 TextSpan(
                                   text: _formatTime(_secondsRemaining),
-                                  style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.ink),
+                                  style: AppTheme.dm(
+                                      size: 13,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.ink),
                                 )
                             ],
                           ),
@@ -196,7 +222,10 @@ class _OtpScreenState extends State<OtpScreen> {
                         onTap: () => Navigator.pop(context),
                         child: Text(
                           widget.bottomText,
-                          style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold),
+                          style: AppTheme.dm(
+                              size: 13,
+                              weight: FontWeight.w600,
+                              color: AppColors.gold),
                         ),
                       ),
                     ],
@@ -242,7 +271,8 @@ class _OtpInputBox extends StatelessWidget {
           LengthLimitingTextInputFormatter(1),
           FilteringTextInputFormatter.digitsOnly,
         ],
-        style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy),
+        style: AppTheme.dm(
+            size: 22, weight: FontWeight.w700, color: AppColors.navy),
         decoration: const InputDecoration(
           border: InputBorder.none,
           counterText: '',

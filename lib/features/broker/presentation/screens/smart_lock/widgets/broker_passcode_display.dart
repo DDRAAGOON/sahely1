@@ -41,7 +41,9 @@ class BrokerPasscodeDisplay extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(6, (index) {
-              String digit = (isInRange && index < passcode.length) ? passcode[index] : '•';
+              String digit = (isInRange && index < passcode.length)
+                  ? passcode[index]
+                  : '•';
               return Container(
                 width: 42,
                 height: 58,
@@ -60,7 +62,9 @@ class BrokerPasscodeDisplay extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: isInRange ? Colors.white : Colors.white.withValues(alpha: 0.2),
+                      color: isInRange
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.2),
                       fontFamily: 'DM Sans',
                     ),
                   ),

@@ -1,16 +1,19 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../../data/role_state.dart';
-import '../../../data/models.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../core/providers/auth_provider.dart';
 import '../../../core/providers/profile_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/ui.dart';
+import '../../../data/models.dart';
+import '../../../data/role_state.dart';
 import '../widgets/auth_success_badge.dart';
 
 // ===================================================== 10 · ID Verification
@@ -54,20 +57,30 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (ctx) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(_selectedType == 1 ? 'Upload Passport' : 'Upload ${isFront ? 'Front' : 'Back'} Side',
-                style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+              Text(
+                  _selectedType == 1
+                      ? 'Upload Passport'
+                      : 'Upload ${isFront ? 'Front' : 'Back'} Side',
+                  style: AppTheme.dm(
+                      size: 18,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
               const SizedBox(height: 20),
               ListTile(
-                leading: const Icon(Icons.camera_alt_outlined, color: AppColors.gold),
-                title: Text('Take a photo', style: AppTheme.dm(size: 15, weight: FontWeight.w600)),
-                subtitle: Text('Capture with your camera', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                leading: const Icon(Icons.camera_alt_outlined,
+                    color: AppColors.gold),
+                title: Text('Take a photo',
+                    style: AppTheme.dm(size: 15, weight: FontWeight.w600)),
+                subtitle: Text('Capture with your camera',
+                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
                 onTap: () {
                   Navigator.pop(ctx);
                   _pickImage(ImageSource.camera, isFront);
@@ -75,9 +88,12 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
               ),
               const Divider(color: AppColors.border, indent: 20, endIndent: 20),
               ListTile(
-                leading: const Icon(Icons.photo_library_outlined, color: AppColors.gold),
-                title: Text('Upload from gallery', style: AppTheme.dm(size: 15, weight: FontWeight.w600)),
-                subtitle: Text('Choose an existing photo', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                leading: const Icon(Icons.photo_library_outlined,
+                    color: AppColors.gold),
+                title: Text('Upload from gallery',
+                    style: AppTheme.dm(size: 15, weight: FontWeight.w600)),
+                subtitle: Text('Choose an existing photo',
+                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
                 onTap: () {
                   Navigator.pop(ctx);
                   _pickImage(ImageSource.gallery, isFront);
@@ -108,29 +124,66 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
                     children: [
                       const _StepBar(active: 1),
                       const SizedBox(height: 24),
-                      Text('Verify Your Identity', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                      Text('Verify Your Identity',
+                          style: AppTheme.dm(
+                              size: 22,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy)),
                       const SizedBox(height: 8),
                       RichText(
                         text: TextSpan(
                           text: 'Upload your ',
                           style: AppTheme.dm(size: 14, color: AppColors.muted),
                           children: [
-                            TextSpan(text: 'National ID', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.ink)),
-                            TextSpan(text: ', ', style: AppTheme.dm(size: 14, color: AppColors.muted)),
-                            TextSpan(text: 'Passport', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.ink)),
-                            TextSpan(text: ', or ', style: AppTheme.dm(size: 14, color: AppColors.muted)),
-                            TextSpan(text: 'Driving Licence', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.ink)),
+                            TextSpan(
+                                text: 'National ID',
+                                style: AppTheme.dm(
+                                    size: 14,
+                                    weight: FontWeight.w700,
+                                    color: AppColors.ink)),
+                            TextSpan(
+                                text: ', ',
+                                style: AppTheme.dm(
+                                    size: 14, color: AppColors.muted)),
+                            TextSpan(
+                                text: 'Passport',
+                                style: AppTheme.dm(
+                                    size: 14,
+                                    weight: FontWeight.w700,
+                                    color: AppColors.ink)),
+                            TextSpan(
+                                text: ', or ',
+                                style: AppTheme.dm(
+                                    size: 14, color: AppColors.muted)),
+                            TextSpan(
+                                text: 'Driving Licence',
+                                style: AppTheme.dm(
+                                    size: 14,
+                                    weight: FontWeight.w700,
+                                    color: AppColors.ink)),
                           ],
                         ),
                       ),
                       const SizedBox(height: 14),
                       Row(
                         children: [
-                          Expanded(child: _DocTypeChip('National ID', selected: _selectedType == 0, onTap: () => setState(() => _selectedType = 0))),
+                          Expanded(
+                              child: _DocTypeChip('National ID',
+                                  selected: _selectedType == 0,
+                                  onTap: () =>
+                                      setState(() => _selectedType = 0))),
                           const SizedBox(width: 8),
-                          Expanded(child: _DocTypeChip('Passport', selected: _selectedType == 1, onTap: () => setState(() => _selectedType = 1))),
+                          Expanded(
+                              child: _DocTypeChip('Passport',
+                                  selected: _selectedType == 1,
+                                  onTap: () =>
+                                      setState(() => _selectedType = 1))),
                           const SizedBox(width: 8),
-                          Expanded(child: _DocTypeChip('Driving Licence', selected: _selectedType == 2, onTap: () => setState(() => _selectedType = 2))),
+                          Expanded(
+                              child: _DocTypeChip('Driving Licence',
+                                  selected: _selectedType == 2,
+                                  onTap: () =>
+                                      setState(() => _selectedType = 2))),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -142,7 +195,9 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
                           uploaded: _frontImage != null,
                           image: _frontImage,
                           icon: Icons.image_outlined,
-                          label: _frontImage != null ? 'Passport photo uploaded' : 'Tap to upload passport',
+                          label: _frontImage != null
+                              ? 'Passport photo uploaded'
+                              : 'Tap to upload passport',
                           onTap: () => _showPicker(context, true),
                         ),
                         const SizedBox(height: 40),
@@ -153,7 +208,9 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
                           uploaded: _frontImage != null,
                           image: _frontImage,
                           icon: Icons.image_outlined,
-                          label: _frontImage != null ? 'Front side uploaded' : 'Tap to upload front',
+                          label: _frontImage != null
+                              ? 'Front side uploaded'
+                              : 'Tap to upload front',
                           onTap: () => _showPicker(context, true),
                         ),
                         const SizedBox(height: 12),
@@ -162,29 +219,39 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
                           uploaded: _backImage != null,
                           image: _backImage,
                           icon: Icons.notes_outlined,
-                          label: _backImage != null ? 'Back side uploaded' : 'Tap to upload back',
-                          onTap: _frontImage != null ? () => _showPicker(context, false) : null,
+                          label: _backImage != null
+                              ? 'Back side uploaded'
+                              : 'Tap to upload back',
+                          onTap: _frontImage != null
+                              ? () => _showPicker(context, false)
+                              : null,
                         ),
                       ],
                       const SizedBox(height: 10),
                       Text(
-                          _selectedType == 1 
-                            ? 'JPG, PNG or PDF · Max 10MB · Upload the photo page only'
-                            : 'JPG, PNG or PDF · Max 10MB',
+                          _selectedType == 1
+                              ? 'JPG, PNG or PDF · Max 10MB · Upload the photo page only'
+                              : 'JPG, PNG or PDF · Max 10MB',
                           style: AppTheme.dm(size: 12, color: AppColors.muted)),
                       const Spacer(),
                       const SizedBox(height: 24),
                       NavyButton(
-                        label: 'Continue', 
-                        enabled: _selectedType == 1 ? _frontImage != null : (_frontImage != null && _backImage != null),
-                        onTap: () => context.push('/facial-scan', extra: args)
-                      ),
+                          label: 'Continue',
+                          enabled: _selectedType == 1
+                              ? _frontImage != null
+                              : (_frontImage != null && _backImage != null),
+                          onTap: () => AppNavigation.goToFacialScan(context,
+                              extra: args)),
                       const SizedBox(height: 14),
                       Center(
                         child: GestureDetector(
-                          onTap: () => context.push('/facial-scan', extra: args),
+                          onTap: () => AppNavigation.goToFacialScan(context,
+                              extra: args),
                           child: Text('Skip for now',
-                              style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+                              style: AppTheme.dm(
+                                  size: 13,
+                                  weight: FontWeight.w600,
+                                  color: AppColors.gold)),
                         ),
                       ),
                     ],
@@ -202,13 +269,17 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
 class _StepBar extends StatelessWidget {
   const _StepBar({required this.active}); // 0=personal,1=id,2=selfie
   final int active;
+
   @override
   Widget build(BuildContext context) {
     Widget node(int i, String label) {
       final done = i < active;
       final cur = i == active;
-      final bg = done || cur ? (done ? AppColors.gold : AppColors.navy) : AppColors.border;
-      final fg = done ? AppColors.navy : (cur ? AppColors.white : AppColors.muted);
+      final bg = done || cur
+          ? (done ? AppColors.gold : AppColors.navy)
+          : AppColors.border;
+      final fg =
+          done ? AppColors.navy : (cur ? AppColors.white : AppColors.muted);
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -227,7 +298,9 @@ class _StepBar extends StatelessWidget {
                 style: AppTheme.dm(
                     size: 12,
                     weight: FontWeight.w600,
-                    color: cur ? AppColors.navy : (done ? AppColors.gold : AppColors.faint))),
+                    color: cur
+                        ? AppColors.navy
+                        : (done ? AppColors.gold : AppColors.faint))),
           ],
         ],
       );
@@ -236,9 +309,17 @@ class _StepBar extends StatelessWidget {
     return Row(
       children: [
         node(0, 'Personal'),
-        Expanded(child: Container(height: 2, margin: const EdgeInsets.symmetric(horizontal: 8), color: active >= 1 ? AppColors.gold : AppColors.border)),
+        Expanded(
+            child: Container(
+                height: 2,
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                color: active >= 1 ? AppColors.gold : AppColors.border)),
         node(1, 'ID Verify'),
-        Expanded(child: Container(height: 2, margin: const EdgeInsets.symmetric(horizontal: 8), color: active >= 2 ? AppColors.gold : AppColors.border)),
+        Expanded(
+            child: Container(
+                height: 2,
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                color: active >= 2 ? AppColors.gold : AppColors.border)),
         node(2, ''),
       ],
     );
@@ -247,9 +328,11 @@ class _StepBar extends StatelessWidget {
 
 class _DocTypeChip extends StatelessWidget {
   const _DocTypeChip(this.label, {this.selected = false, this.onTap});
+
   final String label;
   final bool selected;
   final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -264,7 +347,10 @@ class _DocTypeChip extends StatelessWidget {
         ),
         child: Text(label,
             textAlign: TextAlign.center,
-            style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: selected ? AppColors.white : AppColors.navy)),
+            style: AppTheme.dm(
+                size: 11,
+                weight: FontWeight.w600,
+                color: selected ? AppColors.white : AppColors.navy)),
       ),
     );
   }
@@ -272,19 +358,21 @@ class _DocTypeChip extends StatelessWidget {
 
 class _UploadBox extends StatelessWidget {
   const _UploadBox({
-    required this.active, 
-    required this.icon, 
-    required this.label, 
+    required this.active,
+    required this.icon,
+    required this.label,
     this.onTap,
     this.uploaded = false,
     this.image,
   });
+
   final bool active;
   final bool uploaded;
   final File? image;
   final IconData icon;
   final String label;
   final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -292,29 +380,42 @@ class _UploadBox extends StatelessWidget {
       child: Opacity(
         opacity: active ? 1.0 : 0.5,
         child: DottedBorder(
-          color: uploaded ? AppColors.success : (active ? AppColors.gold : AppColors.border),
+          color: uploaded
+              ? AppColors.success
+              : (active ? AppColors.gold : AppColors.border),
           child: Container(
             height: 132,
             decoration: BoxDecoration(
-              color: uploaded ? AppColors.goldSoft.withValues(alpha: 0.5) : (active ? AppColors.goldSoft : AppColors.white),
+              color: uploaded
+                  ? AppColors.goldSoft.withValues(alpha: 0.5)
+                  : (active ? AppColors.goldSoft : AppColors.white),
               borderRadius: BorderRadius.circular(14),
-              image: image != null ? DecorationImage(
-                image: FileImage(image!),
-                fit: BoxFit.cover,
-                opacity: 0.3,
-              ) : null,
+              image: image != null
+                  ? DecorationImage(
+                      image: FileImage(image!),
+                      fit: BoxFit.cover,
+                      opacity: 0.3,
+                    )
+                  : null,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (!uploaded) Icon(icon, size: 34, color: active ? AppColors.gold : AppColors.faint),
-                if (uploaded) const Icon(Icons.check_circle, size: 34, color: AppColors.success),
+                if (!uploaded)
+                  Icon(icon,
+                      size: 34,
+                      color: active ? AppColors.gold : AppColors.faint),
+                if (uploaded)
+                  const Icon(Icons.check_circle,
+                      size: 34, color: AppColors.success),
                 const SizedBox(height: 10),
                 Text(label,
                     style: AppTheme.dm(
-                        size: 14, 
-                        weight: FontWeight.w600, 
-                        color: uploaded ? AppColors.success : (active ? AppColors.navy : AppColors.muted))),
+                        size: 14,
+                        weight: FontWeight.w600,
+                        color: uploaded
+                            ? AppColors.success
+                            : (active ? AppColors.navy : AppColors.muted))),
               ],
             ),
           ),
@@ -327,13 +428,16 @@ class _UploadBox extends StatelessWidget {
 // ======================================================== 11 · Facial Scan
 class FacialScanScreen extends StatefulWidget {
   const FacialScanScreen({super.key});
+
   @override
   State<FacialScanScreen> createState() => _FacialScanScreenState();
 }
 
-class _FacialScanScreenState extends State<FacialScanScreen> with SingleTickerProviderStateMixin {
-  late final AnimationController _c =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 2200))..repeat(reverse: true);
+class _FacialScanScreenState extends State<FacialScanScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 2200))
+    ..repeat(reverse: true);
 
   @override
   void dispose() {
@@ -352,7 +456,9 @@ class _FacialScanScreenState extends State<FacialScanScreen> with SingleTickerPr
           children: [
             _SelfieStepBar(),
             const SizedBox(height: 18),
-            Text('Take a Live Selfie', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+            Text('Take a Live Selfie',
+                style: AppTheme.dm(
+                    size: 22, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 6),
             Text("We'll match your face to your ID — live only",
                 style: AppTheme.dm(size: 13, color: AppColors.muted)),
@@ -365,7 +471,8 @@ class _FacialScanScreenState extends State<FacialScanScreen> with SingleTickerPr
                 children: [
                   Container(
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.elliptical(252, 372)),
+                      borderRadius:
+                          BorderRadius.all(Radius.elliptical(252, 372)),
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -377,11 +484,13 @@ class _FacialScanScreenState extends State<FacialScanScreen> with SingleTickerPr
                     animation: _c,
                     builder: (_, child) => Container(
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.elliptical(252, 372)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.elliptical(252, 372)),
                         border: Border.all(color: AppColors.gold, width: 3),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.gold.withValues(alpha: 0.35 + 0.35 * _c.value),
+                            color: AppColors.gold
+                                .withValues(alpha: 0.35 + 0.35 * _c.value),
                             blurRadius: 14 + 16 * _c.value,
                             spreadRadius: 2 + 7 * _c.value,
                           ),
@@ -395,7 +504,8 @@ class _FacialScanScreenState extends State<FacialScanScreen> with SingleTickerPr
             ),
             const Spacer(),
             Text('Hold still — capture happens automatically, live only',
-                textAlign: TextAlign.center, style: AppTheme.dm(size: 13, color: AppColors.muted)),
+                textAlign: TextAlign.center,
+                style: AppTheme.dm(size: 13, color: AppColors.muted)),
             const SizedBox(height: 12),
             const Wrap(
               spacing: 8,
@@ -411,16 +521,24 @@ class _FacialScanScreenState extends State<FacialScanScreen> with SingleTickerPr
             ),
             const SizedBox(height: 10),
             GestureDetector(
-              onTap: () => context.pushReplacement('/verification-complete', extra: args),
+              onTap: () => context.pushReplacement('/verification-complete',
+                  extra: args),
               child: Text('Simulate capture',
-                  style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: AppColors.gold)),
+                  style: AppTheme.dm(
+                      size: 12,
+                      weight: FontWeight.w600,
+                      color: AppColors.gold)),
             ),
             const SizedBox(height: 14),
             Center(
               child: GestureDetector(
-                onTap: () => context.pushReplacement('/verification-complete', extra: args),
+                onTap: () => context.pushReplacement('/verification-complete',
+                    extra: args),
                 child: Text('Skip for now',
-                    style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+                    style: AppTheme.dm(
+                        size: 13,
+                        weight: FontWeight.w600,
+                        color: AppColors.gold)),
               ),
             ),
           ],
@@ -437,24 +555,37 @@ class _SelfieStepBar extends StatelessWidget {
           width: 22,
           height: 22,
           alignment: Alignment.center,
-          decoration: const BoxDecoration(color: AppColors.gold, shape: BoxShape.circle),
+          decoration: const BoxDecoration(
+              color: AppColors.gold, shape: BoxShape.circle),
           child: const Icon(Icons.check, size: 11, color: AppColors.navy),
         );
     return Row(
       children: [
         done(),
-        Expanded(child: Container(height: 2, margin: const EdgeInsets.symmetric(horizontal: 8), color: AppColors.gold)),
+        Expanded(
+            child: Container(
+                height: 2,
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                color: AppColors.gold)),
         done(),
-        Expanded(child: Container(height: 2, margin: const EdgeInsets.symmetric(horizontal: 8), color: AppColors.gold)),
+        Expanded(
+            child: Container(
+                height: 2,
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                color: AppColors.gold)),
         Container(
           width: 22,
           height: 22,
           alignment: Alignment.center,
-          decoration: const BoxDecoration(color: AppColors.navy, shape: BoxShape.circle),
-          child: Text('3', style: AppTheme.dm(size: 11, color: AppColors.white)),
+          decoration: const BoxDecoration(
+              color: AppColors.navy, shape: BoxShape.circle),
+          child:
+              Text('3', style: AppTheme.dm(size: 11, color: AppColors.white)),
         ),
         const SizedBox(width: 6),
-        Text('Selfie', style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: AppColors.navy)),
+        Text('Selfie',
+            style: AppTheme.dm(
+                size: 12, weight: FontWeight.w600, color: AppColors.navy)),
       ],
     );
   }
@@ -462,7 +593,9 @@ class _SelfieStepBar extends StatelessWidget {
 
 class _SelfieTip extends StatelessWidget {
   const _SelfieTip(this.label);
+
   final String label;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -475,7 +608,11 @@ class _SelfieTip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.gold, shape: BoxShape.circle)),
+          Container(
+              width: 6,
+              height: 6,
+              decoration: const BoxDecoration(
+                  color: AppColors.gold, shape: BoxShape.circle)),
           const SizedBox(width: 6),
           Text(label, style: AppTheme.dm(size: 12, color: AppColors.ink)),
         ],
@@ -483,7 +620,6 @@ class _SelfieTip extends StatelessWidget {
     );
   }
 }
-
 
 // ================================================= 12 · Verification Complete
 class VerificationCompleteScreen extends StatelessWidget {
@@ -493,7 +629,7 @@ class VerificationCompleteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = GoRouterState.of(context).extra as Map<String, dynamic>?;
     final roleStr = args?['role'] as String? ?? 'Renter';
-    
+
     // Set the global role state
     RoleState().setRoleFromString(roleStr);
 
@@ -509,16 +645,25 @@ class VerificationCompleteScreen extends StatelessWidget {
           children: [
             const AuthSuccessBadge(navy: true),
             const SizedBox(height: 28),
-            Text('Verified!', style: AppTheme.dm(size: 26, weight: FontWeight.w700, color: AppColors.navy)),
+            Text('Verified!',
+                style: AppTheme.dm(
+                    size: 26, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 10),
             Text('Your identity is confirmed.\nYou now have full access.',
-                textAlign: TextAlign.center, style: AppTheme.dm(size: 15, color: AppColors.muted, height: 1.5)),
+                textAlign: TextAlign.center,
+                style:
+                    AppTheme.dm(size: 15, color: AppColors.muted, height: 1.5)),
             const SizedBox(height: 18),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
-              decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(
+                  color: AppColors.gold,
+                  borderRadius: BorderRadius.circular(20)),
               child: Text('You earned 5 Sahel Stars ★ on AL MAWSEM!',
-                  style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy)),
+                  style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
             ),
             const SizedBox(height: 34),
             GoldButton(
@@ -541,9 +686,10 @@ class VerificationCompleteScreen extends StatelessWidget {
                       );
 
                   context.read<AuthProvider>().login(
-                    token: 'dummy_success_token', // In a real app, this would come from a backend response
-                    role: role,
-                  );
+                        token: 'dummy_success_token',
+                        // In a real app, this would come from a backend response
+                        role: role,
+                      );
 
                   context.go(targetRoute);
                 }),

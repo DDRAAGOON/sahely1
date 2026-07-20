@@ -32,7 +32,8 @@ class BrokerBookingsRepository {
       id: '1',
       propertyName: 'Azure Beach Villa',
       area: 'Hacienda Bay',
-      imageUrl: 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800',
       dates: 'Jun 21 – 25 · 4 nights',
       guests: '2 adults',
       orderNo: 'SHLY-8842',
@@ -45,7 +46,8 @@ class BrokerBookingsRepository {
       id: '2',
       propertyName: 'Lagoon Retreat',
       area: 'Marassi',
-      imageUrl: 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800',
       dates: 'Jun 14 – 18 · 4 nights',
       guests: '4 adults',
       orderNo: 'SHLY-7741',
@@ -58,7 +60,8 @@ class BrokerBookingsRepository {
       id: '3',
       propertyName: 'Sunset Chalet',
       area: 'Amwaj',
-      imageUrl: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800',
       dates: 'May 10 – 14 · 4 nights',
       guests: '4 adults',
       orderNo: 'SHLY-9910',

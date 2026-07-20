@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import '../../../data/models.dart';
+import 'package:provider/provider.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
+import '../../../core/providers/auth_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
 import '../../../core/widgets/ui.dart';
-import '../../../core/providers/auth_provider.dart';
+import '../../../data/models.dart';
 import '../mock_auth_service.dart';
 
 class SignInScreen extends StatefulWidget {
   final String? from;
+
   const SignInScreen({super.key, this.from});
 
   @override
@@ -56,7 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
             FieldGroup(
               label: 'Password',
               trailingLabel: GestureDetector(
-                onTap: () => context.push('/forgot'),
+                onTap: () => AppNavigation.goToForgotPassword(context),
                 child: Text('Forgot Password?',
                     style: AppTheme.dm(
                         size: 13,
@@ -73,7 +76,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 trailing: GestureDetector(
                   onTap: () => setState(() => _obscure = !_obscure),
                   child: Icon(
-                    _obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    _obscure
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
                     size: 20,
                     color: AppColors.muted,
                   ),
@@ -82,24 +87,30 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             const SizedBox(height: 22),
             NavyButton(
-              label: 'Sign In',
-              onTap: () async {
-                 // TODO: replace with real auth logic
-                 // Mark user authenticated and set default role for demo
-                 final auth = context.read<AuthProvider>();
+                label: 'Sign In',
+                onTap: () async {
+                  // TODO: replace with real auth logic
+                  // Mark user authenticated and set default role for demo
+                  final auth = context.read<AuthProvider>();
 
-                 // Use the mock auth service while the real API is not available.
-                 final email = _emailController.text.trim();
-                 final password = _passwordController.text;
-                 final resp = await MockAuthService().signIn(email, password);
+                  // Use the mock auth service while the real API is not available.
+                  final email = _emailController.text.trim();
+                  final password = _passwordController.text;
+                  final resp = await MockAuthService().signIn(email, password);
 
-                 await auth.login(token: resp.token, role: resp.role);
+                  await auth.login(token: resp.token, role: resp.role);
 
-                 // If router provided a 'from' query param, go there; otherwise go to role home
-                 final target = widget.from != null ? Uri.decodeComponent(widget.from!) : (resp.role == Role.broker ? '/broker/home' : (resp.role == Role.owner ? '/owner/home' : '/renter/home'));
+                  // If router provided a 'from' query param, go there; otherwise go to role home
+                  final target = widget.from != null
+                      ? Uri.decodeComponent(widget.from!)
+                      : (resp.role == Role.broker
+                          ? '/broker/home'
+                          : (resp.role == Role.owner
+                              ? '/owner/home'
+                              : '/renter/home'));
 
-                 context.go(target);
-              }),
+                  context.go(target);
+                }),
             const SizedBox(height: 24),
             Row(
               children: [
@@ -130,7 +141,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             const SizedBox(height: 22),
             GestureDetector(
-              onTap: () => context.push('/role'),
+              onTap: () => AppNavigation.goToRoleSelection(context),
               child: Center(
                 child: RichText(
                   text: TextSpan(
@@ -158,6 +169,7 @@ class _SignInScreenState extends State<SignInScreen> {
 class _SocialButton extends StatelessWidget {
   const _SocialButton(
       {required this.label, required this.dark, required this.leading});
+
   final String label;
   final bool dark;
   final Widget leading;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
 
+import '../../../../../../core/theme/app_colors.dart';
 import '../pages/gallery/photo_viewer_screen.dart';
 
 class BookingHeroImage extends StatelessWidget {

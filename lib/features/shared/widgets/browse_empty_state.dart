@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/ui.dart';
@@ -27,7 +28,8 @@ class BrowseEmptyState extends StatelessWidget {
           Text(
             'No properties match your search',
             textAlign: TextAlign.center,
-            style: AppTheme.dm(size: 20, weight: FontWeight.w700, color: AppColors.navy),
+            style: AppTheme.dm(
+                size: 20, weight: FontWeight.w700, color: AppColors.navy),
           ),
           const SizedBox(height: 12),
           Padding(
@@ -44,7 +46,7 @@ class BrowseEmptyState extends StatelessWidget {
             child: NavyButton(
               label: 'Clear Filters',
               radius: 14,
-              onTap: () => context.pushReplacement('/filters'),
+              onTap: () => AppNavigation.goToFilters(context),
             ),
           ),
         ],

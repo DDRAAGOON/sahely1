@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
@@ -69,14 +69,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     Container(
                       width: 64,
                       height: 64,
-                      decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(18)),
-                      child: const Icon(Icons.lock_outline, color: AppColors.gold, size: 30),
+                      decoration: BoxDecoration(
+                          color: AppColors.navy,
+                          borderRadius: BorderRadius.circular(18)),
+                      child: const Icon(Icons.lock_outline,
+                          color: AppColors.gold, size: 30),
                     ),
                     const SizedBox(height: 22),
-                    Text('Reset Your Access', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                    Text('Reset Your Access',
+                        style: AppTheme.dm(
+                            size: 22,
+                            weight: FontWeight.w700,
+                            color: AppColors.navy)),
                     const SizedBox(height: 8),
                     Text("Enter your email and we'll send a 6-digit OTP",
-                        style: AppTheme.dm(size: 14, color: AppColors.muted, height: 1.5)),
+                        style: AppTheme.dm(
+                            size: 14, color: AppColors.muted, height: 1.5)),
                     const SizedBox(height: 24),
                     FieldGroup(
                         label: 'Email Address',
@@ -87,7 +95,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           radius: 999,
                         )),
                     const SizedBox(height: 24),
-                    NavyButton(label: 'Send OTP', radius: 999, onTap: () => context.push('/reset-otp')),
+                    NavyButton(
+                        label: 'Send OTP',
+                        radius: 999,
+                        onTap: () => AppNavigation.goToResetOtp(context)),
                     const SizedBox(height: 16),
                     Center(
                       child: GestureDetector(
@@ -95,14 +106,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         behavior: HitTestBehavior.opaque,
                         child: RichText(
                           text: TextSpan(
-                            text: _secondsRemaining == 0 ? "Resend code now" : "Didn't get it? Resend in ",
-                            style: AppTheme.dm(size: 13, color: AppColors.muted),
+                            text: _secondsRemaining == 0
+                                ? "Resend code now"
+                                : "Didn't get it? Resend in ",
+                            style:
+                                AppTheme.dm(size: 13, color: AppColors.muted),
                             children: [
                               if (_secondsRemaining > 0)
                                 TextSpan(
-                                  text: _formatTime(_secondsRemaining),
-                                  style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.ink)
-                                )
+                                    text: _formatTime(_secondsRemaining),
+                                    style: AppTheme.dm(
+                                        size: 13,
+                                        weight: FontWeight.w700,
+                                        color: AppColors.ink))
                             ],
                           ),
                         ),
@@ -111,10 +127,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     const Spacer(),
                     Center(
                       child: GestureDetector(
-                        onTap: () => context.go('/signin'),
+                        onTap: () =>
+                            AppNavigation.safeGo(context, '/signin'),
                         behavior: HitTestBehavior.opaque,
                         child: Text('Back to Sign In',
-                            style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+                            style: AppTheme.dm(
+                                size: 13,
+                                weight: FontWeight.w600,
+                                color: AppColors.gold)),
                       ),
                     ),
                   ],
@@ -163,16 +183,23 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               child: Container(
                 width: 64,
                 height: 64,
-                decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(18)),
-                child: const Icon(Icons.lock_outline, color: AppColors.gold, size: 30),
+                decoration: BoxDecoration(
+                    color: AppColors.navy,
+                    borderRadius: BorderRadius.circular(18)),
+                child: const Icon(Icons.lock_outline,
+                    color: AppColors.gold, size: 30),
               ),
             ),
             const SizedBox(height: 20),
             Text('Set a new password',
-                textAlign: TextAlign.center, style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                textAlign: TextAlign.center,
+                style: AppTheme.dm(
+                    size: 22, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 8),
             Text('At least 8 characters with letters, numbers & a symbol',
-                textAlign: TextAlign.center, style: AppTheme.dm(size: 13, color: AppColors.muted, height: 1.5)),
+                textAlign: TextAlign.center,
+                style:
+                    AppTheme.dm(size: 13, color: AppColors.muted, height: 1.5)),
             const SizedBox(height: 14),
             FieldGroup(
               label: 'New Password',
@@ -187,9 +214,11 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 trailing: GestureDetector(
                   onTap: () => setState(() => _obscure1 = !_obscure1),
                   child: Icon(
-                    _obscure1 ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                    size: 20, color: AppColors.muted
-                  ),
+                      _obscure1
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      size: 20,
+                      color: AppColors.muted),
                 ),
               ),
             ),
@@ -207,9 +236,11 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 trailing: GestureDetector(
                   onTap: () => setState(() => _obscure2 = !_obscure2),
                   child: Icon(
-                    _obscure2 ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                    size: 20, color: AppColors.muted
-                  ),
+                      _obscure2
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      size: 20,
+                      color: AppColors.muted),
                 ),
               ),
             ),
@@ -226,10 +257,16 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               ],
             ),
             const SizedBox(height: 6),
-            Text('Strong password', style: AppTheme.dm(size: 11, weight: FontWeight.w600, color: AppColors.success)),
+            Text('Strong password',
+                style: AppTheme.dm(
+                    size: 11,
+                    weight: FontWeight.w600,
+                    color: AppColors.success)),
             const SizedBox(height: 30),
             NavyButton(
-                label: 'Update Password', radius: 999, onTap: () => context.push('/password-updated')),
+                label: 'Update Password',
+                radius: 999,
+                onTap: () => AppNavigation.goToPasswordUpdated(context)),
           ],
         ),
       ),
@@ -239,7 +276,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
 class _StrengthBar extends StatelessWidget {
   const _StrengthBar({required this.on});
+
   final bool on;
+
   @override
   Widget build(BuildContext context) => Container(
         height: 5,
@@ -264,14 +303,18 @@ class PasswordUpdatedScreen extends StatelessWidget {
           children: [
             const AuthSuccessBadge(navy: false),
             const SizedBox(height: 30),
-            Text('Password Updated', style: AppTheme.dm(size: 26, weight: FontWeight.w700, color: AppColors.navy)),
+            Text('Password Updated',
+                style: AppTheme.dm(
+                    size: 26, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 10),
             Text('Your password has been reset.\nSign in to continue.',
-                textAlign: TextAlign.center, style: AppTheme.dm(size: 15, color: AppColors.muted, height: 1.5)),
+                textAlign: TextAlign.center,
+                style:
+                    AppTheme.dm(size: 15, color: AppColors.muted, height: 1.5)),
             const SizedBox(height: 34),
             NavyButton(
                 label: 'Sign In Now',
-                onTap: () => context.go('/signin')),
+                onTap: () => AppNavigation.safeGo(context, '/signin')),
           ],
         ),
       ),

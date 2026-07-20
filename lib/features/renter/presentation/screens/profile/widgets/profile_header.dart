@@ -1,6 +1,7 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -106,7 +107,7 @@ class ProfileHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 GestureDetector(
-                  onTap: () => context.push('/edit-profile'),
+                  onTap: () => AppNavigation.goToEditProfile(context),
                   child: const Text(
                     'Edit Profile',
                     style: TextStyle(
@@ -127,7 +128,8 @@ class ProfileHeader extends StatelessWidget {
 
   Widget _buildImage() {
     if (localAvatarPath != null) {
-      return ClipOval(child: Image.file(File(localAvatarPath!), fit: BoxFit.cover));
+      return ClipOval(
+          child: Image.file(File(localAvatarPath!), fit: BoxFit.cover));
     }
     if (avatarUrl != null) {
       return ClipOval(child: Image.network(avatarUrl!, fit: BoxFit.cover));

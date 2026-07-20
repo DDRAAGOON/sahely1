@@ -21,7 +21,8 @@ class LevelDoneButton extends StatelessWidget {
             backgroundColor: const Color(0xFF1B2744), // Navy
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(28), // Rounded ends as in some buttons
+              borderRadius:
+                  BorderRadius.circular(28), // Rounded ends as in some buttons
             ),
             elevation: 0,
           ),

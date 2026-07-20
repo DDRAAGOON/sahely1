@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../verification/pages/add_payment_card_screen.dart';
-import '../widgets/payment_method_tile.dart';
 import '../widgets/payment_instructions_card.dart';
+import '../widgets/payment_method_tile.dart';
 
 class AddCreditSheet extends StatefulWidget {
   /// الطرق المسجلة للمستخدم (من البروفايل)
@@ -129,7 +130,8 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
     // TODO: Navigate to payment flow based on selected method
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Proceeding with $_selectedMethod for EGP $_selectedAmount'),
+        content:
+            Text('Proceeding with $_selectedMethod for EGP $_selectedAmount'),
         backgroundColor: AppColors.green,
       ),
     );
@@ -265,13 +267,15 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const AddPaymentCardScreen(),
+                                      builder: (context) =>
+                                          const AddPaymentCardScreen(),
                                     ),
                                   );
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('Registration for ${method.name} coming soon'),
+                                      content: Text(
+                                          'Registration for ${method.name} coming soon'),
                                     ),
                                   );
                                 }
@@ -506,7 +510,8 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
                 });
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: isSelected ? AppColors.navy : AppColors.white,
                   borderRadius: BorderRadius.circular(20),

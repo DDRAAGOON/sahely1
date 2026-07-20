@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
@@ -11,6 +12,7 @@ class Pill extends StatelessWidget {
     this.border,
     this.radius = 8,
   });
+
   final String text;
   final Color? bg;
   final Color fg;

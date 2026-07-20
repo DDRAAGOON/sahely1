@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'common.dart';
@@ -7,7 +8,13 @@ import 'ui.dart';
 
 /// Large hero property card (Trending Now / Browse results).
 class PropertyCard extends StatelessWidget {
-  const PropertyCard({super.key, required this.property, this.onTap, this.imageHeight = 150, this.showGuestFav = false});
+  const PropertyCard(
+      {super.key,
+      required this.property,
+      this.onTap,
+      this.imageHeight = 150,
+      this.showGuestFav = false});
+
   final Property property;
   final VoidCallback? onTap;
   final double imageHeight;
@@ -23,7 +30,10 @@ class PropertyCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: const [BoxShadow(color: Color(0x141B2744), blurRadius: 12, offset: Offset(0, 2))],
+          boxShadow: const [
+            BoxShadow(
+                color: Color(0x141B2744), blurRadius: 12, offset: Offset(0, 2))
+          ],
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -43,13 +53,17 @@ class PropertyCard extends StatelessWidget {
                       top: 12,
                       left: 12,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
                           color: AppColors.navy.withValues(alpha: 0.55),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text('★ Guest favourite',
-                            style: AppTheme.dm(size: 10, weight: FontWeight.w700, color: AppColors.white)),
+                            style: AppTheme.dm(
+                                size: 10,
+                                weight: FontWeight.w700,
+                                color: AppColors.white)),
                       ),
                     ),
                   Positioned(top: 12, right: 12, child: SaveHeart(property: p)),
@@ -59,7 +73,10 @@ class PropertyCard extends StatelessWidget {
                     bottom: 12,
                     child: Text(
                       p.name,
-                      style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.navy),
+                      style: AppTheme.dm(
+                          size: 16,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -81,12 +98,14 @@ class PropertyCard extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.location_on_outlined, size: 13, color: AppColors.muted),
+                                const Icon(Icons.location_on_outlined,
+                                    size: 13, color: AppColors.muted),
                                 const SizedBox(width: 4),
                                 Expanded(
                                   child: Text(
                                     p.area,
-                                    style: AppTheme.dm(size: 13, color: AppColors.muted),
+                                    style: AppTheme.dm(
+                                        size: 13, color: AppColors.muted),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -109,11 +128,14 @@ class PropertyCard extends StatelessWidget {
                       spacing: 7,
                       runSpacing: 7,
                       children: [
-                        for (final t in p.tags) Pill(t, border: AppColors.navy, fg: AppColors.navy),
+                        for (final t in p.tags)
+                          Pill(t, border: AppColors.navy, fg: AppColors.navy),
                         if (p.petsOk)
-                          const Pill('🐾 Pets OK', bg: Color(0xFFD7EEDD), fg: AppColors.success)
+                          const Pill('🐾 Pets OK',
+                              bg: Color(0xFFD7EEDD), fg: AppColors.success)
                         else
-                          const Pill('No pets', bg: Color(0xFFFDECEC), fg: Color(0xFFB22222)),
+                          const Pill('No pets',
+                              bg: Color(0xFFFDECEC), fg: Color(0xFFB22222)),
                       ],
                     ),
                   ),
@@ -130,6 +152,7 @@ class PropertyCard extends StatelessWidget {
 /// Compact list card (Lagoon/Golden Dunes rows on the home feed).
 class PropertyMiniCard extends StatelessWidget {
   const PropertyMiniCard({super.key, required this.property, this.onTap});
+
   final Property property;
   final VoidCallback? onTap;
 
@@ -143,7 +166,10 @@ class PropertyMiniCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: const [BoxShadow(color: Color(0x141B2744), blurRadius: 12, offset: Offset(0, 2))],
+          boxShadow: const [
+            BoxShadow(
+                color: Color(0x141B2744), blurRadius: 12, offset: Offset(0, 2))
+          ],
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -177,19 +203,24 @@ class PropertyMiniCard extends StatelessWidget {
                           children: [
                             Text(
                               p.name,
-                              style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy),
+                              style: AppTheme.dm(
+                                  size: 15,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(height: 2),
                             Row(
                               children: [
-                                const Icon(Icons.location_on_outlined, size: 11, color: AppColors.muted),
+                                const Icon(Icons.location_on_outlined,
+                                    size: 11, color: AppColors.muted),
                                 const SizedBox(width: 4),
                                 Expanded(
                                   child: Text(
                                     p.area,
-                                    style: AppTheme.dm(size: 12, color: AppColors.muted),
+                                    style: AppTheme.dm(
+                                        size: 12, color: AppColors.muted),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -208,7 +239,9 @@ class PropertyMiniCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.star, size: 12, color: AppColors.gold),
                       const SizedBox(width: 4),
-                      Text(p.rating.toString(), style: AppTheme.dm(size: 12, weight: FontWeight.w700)),
+                      Text(p.rating.toString(),
+                          style:
+                              AppTheme.dm(size: 12, weight: FontWeight.w700)),
                       Expanded(
                         child: Text(
                           '  ·  ${p.beds} beds · ${p.type}',
@@ -224,8 +257,11 @@ class PropertyMiniCard extends StatelessWidget {
                     spacing: 6,
                     runSpacing: 6,
                     children: [
-                      for (final t in p.tags) Pill(t, bg: AppColors.cream, fg: AppColors.ink),
-                      if (p.petsOk) const Pill('🐾 Pets OK', bg: Color(0xFFD7EEDD), fg: AppColors.success),
+                      for (final t in p.tags)
+                        Pill(t, bg: AppColors.cream, fg: AppColors.ink),
+                      if (p.petsOk)
+                        const Pill('🐾 Pets OK',
+                            bg: Color(0xFFD7EEDD), fg: AppColors.success),
                     ],
                   ),
                 ],

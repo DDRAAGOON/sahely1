@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'earn_star_row.dart';
 
 class HowToEarnSection extends StatelessWidget {
@@ -134,7 +135,8 @@ class HowToEarnSection extends StatelessWidget {
                 color: const Color(0xFF9A7A22),
                 bgColor: const Color(0xFFBC9B43),
                 rowBgColor: const Color(0xFFFBF3DE),
-                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+                borderRadius:
+                    const BorderRadius.vertical(bottom: Radius.circular(16)),
                 isLast: true,
               ),
             ],
@@ -173,7 +175,8 @@ class HowToEarnSection extends StatelessWidget {
               ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
-                  final Uri url = Uri.parse('https://www.instagram.com/sahelyeg/');
+                  final Uri url =
+                      Uri.parse('https://www.instagram.com/sahelyeg/');
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   }

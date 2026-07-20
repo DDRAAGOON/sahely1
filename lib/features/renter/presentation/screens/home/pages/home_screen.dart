@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../../../../core/navigation/app_navigation.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
 import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
+
+import '../../../../../../core/theme/app_colors.dart';
+import '../../../../../shared/properties/domain/entities/property.dart';
 import '../../../../../shared/widgets/mawsem/mawsem_card.dart';
+import '../../Search/pages/search_filters_sheet.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/greeting_header.dart';
-import '../widgets/search_row.dart';
 import '../widgets/promo_banner.dart';
-import '../widgets1/property_card.dart';
-import '../../Search/pages/search_filters_sheet.dart';
+import '../widgets/search_row.dart';
+import 'package:sahely/core/widgets/property_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -56,7 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // Map category to a filter or search query
     Map<String, dynamic> filters = Map.from(_appliedFilters);
     if (category == 'Pool' || category == 'Beachfront') {
-      List<String> currentAmenities = List<String>.from(filters['amenities'] ?? []);
+      List<String> currentAmenities =
+          List<String>.from(filters['amenities'] ?? []);
       if (!currentAmenities.contains(category)) {
         currentAmenities.add(category);
       }
@@ -72,20 +74,25 @@ class _HomeScreenState extends State<HomeScreen> {
     // Filter by Category Chip
     if (_selectedCategory != 'All') {
       results = results.where((p) {
-        if (_selectedCategory == 'Pool') return (p['features'] as List).contains('Pool');
-        if (_selectedCategory == 'Beachfront') return (p['features'] as List).contains('Beachfront');
+        if (_selectedCategory == 'Pool')
+          return (p['features'] as List).contains('Pool');
+        if (_selectedCategory == 'Beachfront')
+          return (p['features'] as List).contains('Beachfront');
         return true;
       }).toList();
     }
 
     // Filter by Bottom Sheet Filters
     if (_appliedFilters['propertyType'] != 'All') {
-      results = results.where((p) => p['type'] == _appliedFilters['propertyType']).toList();
+      results = results
+          .where((p) => p['type'] == _appliedFilters['propertyType'])
+          .toList();
     }
 
     results = results.where((p) {
       double priceEgp = (p['price'] as num).toDouble() / 100;
-      return priceEgp >= _appliedFilters['minPrice'] && priceEgp <= _appliedFilters['maxPrice'];
+      return priceEgp >= _appliedFilters['minPrice'] &&
+          priceEgp <= _appliedFilters['maxPrice'];
     }).toList();
 
     setState(() {
@@ -109,7 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
               allProperties: _allProperties,
               onApplyFilters: (newFilters) {
                 // Return to original agreement: Filter from Home goes to AllProperties (See All)
-                AppNavigation.goToAllProperties(this.context, filters: newFilters);
+                AppNavigation.goToAllProperties(this.context,
+                    filters: newFilters);
               },
             );
           },
@@ -137,7 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         builder: (context, state) {
           if (state is RenterHomeLoading || state is RenterHomeInitial) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.gold));
+            return const Center(
+                child: CircularProgressIndicator(color: AppColors.gold));
           }
           if (state is RenterHomeError) {
             return Center(child: Text(state.message));
@@ -166,7 +175,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: SearchRow(
                               onFilterTap: _showFiltersSheet,
-                              onChatTap: () => context.push('/ai-chat'),
+                              onChatTap: () =>
+                                  AppNavigation.goToAiChat(context),
                             ),
                           ),
                         ),
@@ -217,7 +227,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                                 TextButton(
-                                  onPressed: () => AppNavigation.goToAllProperties(context),
+                                  onPressed: () =>
+                                      AppNavigation.goToAllProperties(context),
                                   child: const Text(
                                     'See All',
                                     style: TextStyle(
@@ -240,11 +251,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                                child: PropertyCard(property: _filteredProperties[index]),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 4),
+                                child: PropertyCard(
+                                    property: Property.fromMap(_filteredProperties[index])),
                               );
                             },
-                            childCount: _filteredProperties.length > 4 ? 4 : _filteredProperties.length,
+                            childCount: _filteredProperties.length > 4
+                                ? 4
+                                : _filteredProperties.length,
                           ),
                         ),
 
@@ -287,9 +302,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildExploreSection() {
     final locations = [
-      {'name': 'Marassi', 'image': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400'},
-      {'name': 'Hacienda Bay', 'image': 'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400'},
-      {'name': 'Telal', 'image': 'https://images.unsplash.com/photo-1506929194765-410711158975?w=400'},
+      {
+        'name': 'Marassi',
+        'image':
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400'
+      },
+      {
+        'name': 'Hacienda Bay',
+        'image':
+            'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400'
+      },
+      {
+        'name': 'Telal',
+        'image':
+            'https://images.unsplash.com/photo-1506929194765-410711158975?w=400'
+      },
     ];
 
     return Column(
@@ -297,7 +324,12 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Text('Explore North Coast', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'Cairo')),
+          child: Text('Explore North Coast',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.navy,
+                  fontFamily: 'Cairo')),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -323,14 +355,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
-                      colors: [Colors.black.withValues(alpha: 0.6), Colors.transparent],
+                      colors: [
+                        Colors.black.withValues(alpha: 0.6),
+                        Colors.transparent
+                      ],
                     ),
                   ),
                   padding: const EdgeInsets.all(12),
                   alignment: Alignment.bottomLeft,
                   child: Text(
                     locations[index]['name']!,
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14),
                   ),
                 ),
               );
@@ -352,16 +390,23 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(12)),
-            child: const Icon(Icons.person_add_alt_1, color: AppColors.navy, size: 24),
+            decoration: BoxDecoration(
+                color: AppColors.gold, borderRadius: BorderRadius.circular(12)),
+            child: const Icon(Icons.person_add_alt_1,
+                color: AppColors.navy, size: 24),
           ),
           const SizedBox(width: 16),
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Invite friends, earn 15 ★', style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w700)),
-                Text('When they book & complete a stay', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                Text('Invite friends, earn 15 ★',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700)),
+                Text('When they book & complete a stay',
+                    style: TextStyle(color: Colors.white70, fontSize: 12)),
               ],
             ),
           ),
@@ -376,17 +421,23 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         const Text(
           'S A H E L Y',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: AppColors.navy, letterSpacing: 4),
+          style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
+              color: AppColors.navy,
+              letterSpacing: 4),
         ),
         const SizedBox(height: 8),
         const Text(
           'Verified Chalets. Zero Chaos.',
-          style: TextStyle(fontSize: 14, color: AppColors.gold, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              fontSize: 14, color: AppColors.gold, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 16),
         Text(
           'You\'ve reached the end · North Coast, Egypt',
-          style: TextStyle(fontSize: 12, color: AppColors.secondary.withValues(alpha: 0.6)),
+          style: TextStyle(
+              fontSize: 12, color: AppColors.secondary.withValues(alpha: 0.6)),
         ),
       ],
     );

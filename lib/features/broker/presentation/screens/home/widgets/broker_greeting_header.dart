@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/theme/app_theme.dart';
 import '../../../../../../core/widgets/kit.dart';
@@ -28,7 +29,8 @@ class BrokerGreetingHeader extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 'Karim Adel',
-                style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy),
+                style: AppTheme.dm(
+                    size: 22, weight: FontWeight.w700, color: AppColors.navy),
               ),
             ],
           ),

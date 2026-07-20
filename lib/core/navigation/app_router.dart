@@ -1,60 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sahely/features/auth/auth_screens.dart';
-import 'package:sahely/features/notifications/notifications_screen.dart';
-import 'package:sahely/core/navigation/shells/renter_shell.dart';
 import 'package:sahely/core/navigation/shells/broker_shell.dart';
 import 'package:sahely/core/navigation/shells/owner_shell.dart';
-import 'package:sahely/features/shared/shared_go_routes.dart';
-import 'package:sahely/features/owner/owner_go_routes.dart';
-import 'package:sahely/features/broker/broker_go_routes.dart';
+import 'package:sahely/core/navigation/shells/renter_shell.dart';
 import 'package:sahely/core/providers/auth_provider.dart';
-import 'package:sahely/data/role_state.dart';
 import 'package:sahely/data/models.dart';
-import 'package:sahely/features/renter/presentation/screens/home/pages/home_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/pages/wishlist_screen.dart';
+import 'package:sahely/data/role_state.dart';
+import 'package:sahely/features/auth/auth_screens.dart';
+import 'package:sahely/features/broker/broker_go_routes.dart';
+import 'package:sahely/features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
+import 'package:sahely/features/broker/presentation/screens/dashboard/pages/broker_dashboard_page.dart';
+import 'package:sahely/features/broker/presentation/screens/home/pages/broker_home_page.dart';
+import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_page.dart';
+import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_wishlist_page.dart';
+import 'package:sahely/features/notifications/notifications_screen.dart';
+import 'package:sahely/features/owner/owner_go_routes.dart';
+import 'package:sahely/features/owner/screens/owner_bookings_screen.dart';
+import 'package:sahely/features/owner/screens/owner_home_screen.dart';
+import 'package:sahely/features/owner/screens/owner_profile_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/my_bookings_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/concierge/pages/concierge_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/home/pages/home_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/profile/pages/profile_screen.dart';
-import 'package:sahely/features/broker/presentation/screens/home/pages/broker_home_page.dart';
-import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_wishlist_page.dart';
-import 'package:sahely/features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
-import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
-import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
-import 'package:sahely/features/owner/screens/owner_home_screen.dart';
-import 'package:sahely/features/owner/screens/owner_bookings_screen.dart';
-import 'package:sahely/features/owner/screens/owner_profile_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/pages/wishlist_screen.dart';
 import 'package:sahely/features/shared/screens/services_screen.dart';
+import 'package:sahely/features/shared/shared_go_routes.dart';
 
-import '../constants/app_routes.dart';
+import 'app_routes.dart';
 
 /// The global navigator key for the main router.
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 /// Creates the centralized router configuration using go_router.
-///
-/// The router depends on [AuthProvider] (and role state) to perform global
-/// redirects and route-guarding. Pass the application's AuthProvider instance
-/// so the router can listen to authentication changes and refresh.
-
-GoRouter createAppRouter(AuthProvider authProvider) {
-  // Small ChangeNotifier that listens to both authProvider and roleState
-  // and notifies GoRouter when either changes.
-  final roleState = RoleState();
+GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
   final routerRefresh = _RouterRefresh(authProvider, roleState);
 
   return GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: AppRoutes.splash,
-    debugLogDiagnostics:
-        true, // Helpful for debugging routing issues during migration
+    debugLogDiagnostics: false,
     refreshListenable: routerRefresh,
-
     redirect: (BuildContext context, GoRouterState state) {
       final loc = state.uri.toString();
       final isAuth = authProvider.isAuthenticated;
+      final isVerified = authProvider.isVerified;
+      final role = roleState.currentRole;
 
-      // Public (unauthenticated) routes
+      // Public (unauthenticated) routes using constants
       final publicPrefixes = <String>[
         AppRoutes.splash,
         AppRoutes.welcome,
@@ -71,6 +65,7 @@ GoRouter createAppRouter(AuthProvider authProvider) {
         AppRoutes.idVerification,
         AppRoutes.facialScan,
         AppRoutes.verificationComplete,
+        AppRoutes.verifyGate,
       ];
 
       bool isPublic(String path) =>
@@ -79,7 +74,7 @@ GoRouter createAppRouter(AuthProvider authProvider) {
       // If not authenticated and trying to access a protected route -> send to signin
       if (!isAuth && !isPublic(loc)) {
         final encoded = Uri.encodeComponent(loc);
-        return '/signin?from=$encoded';
+        return '${AppRoutes.signIn}?from=$encoded';
       }
 
       // If authenticated and at an auth screen, send them to their role home
@@ -88,7 +83,6 @@ GoRouter createAppRouter(AuthProvider authProvider) {
               loc == AppRoutes.welcome ||
               loc == AppRoutes.createAccount ||
               loc == AppRoutes.roleSelection)) {
-        final role = roleState.currentRole;
         return switch (role) {
           Role.broker => AppRoutes.brokerHome,
           Role.owner => AppRoutes.ownerHome,
@@ -96,9 +90,26 @@ GoRouter createAppRouter(AuthProvider authProvider) {
         };
       }
 
+      // Verification Gate: Renter-only guard.
+      final verifyGateRoutes = <String>[
+        AppRoutes.verifyGate,
+        AppRoutes.addCard,
+        AppRoutes.blockedGate,
+      ];
+      final isOnVerifyRoute = verifyGateRoutes.any(
+        (r) => loc == r || loc.startsWith(r),
+      );
+
+      if (isAuth &&
+          role == Role.renter &&
+          !isVerified &&
+          !isOnVerifyRoute &&
+          !isPublic(loc)) {
+        return AppRoutes.verifyGate;
+      }
+
       // Role-based guarding: prevent access to broker/owner sections if role mismatches
       if (isAuth) {
-        final role = roleState.currentRole;
         if (loc.startsWith('/broker') && role != Role.broker) {
           return role == Role.owner ? AppRoutes.ownerHome : AppRoutes.renterHome;
         }
@@ -113,13 +124,14 @@ GoRouter createAppRouter(AuthProvider authProvider) {
       // No redirect
       return null;
     },
-
     routes: [
       // ---- Auth ----
       GoRoute(
-          path: AppRoutes.splash, builder: (context, state) => const SplashScreen()),
+          path: AppRoutes.splash,
+          builder: (context, state) => const SplashScreen()),
       GoRoute(
-          path: AppRoutes.welcome, builder: (context, state) => const WelcomeScreen()),
+          path: AppRoutes.welcome,
+          builder: (context, state) => const WelcomeScreen()),
       GoRoute(
           path: AppRoutes.onboarding,
           builder: (context, state) => const OnboardingScreen()),
@@ -281,11 +293,23 @@ GoRouter createAppRouter(AuthProvider authProvider) {
                   builder: (context, state) => const BrokerServicesPage())
             ],
           ),
+          // ✅ Tab 5: My Role (Profile & Dashboard)
           StatefulShellBranch(
             routes: [
               GoRoute(
-                  path: AppRoutes.brokerProfile,
-                  builder: (context, state) => const BrokerProfilePage())
+                path: AppRoutes.brokerProfile,
+                builder: (context, state) => const BrokerProfilePage(),
+                routes: [
+                  GoRoute(
+                    path: 'dashboard', // matches /broker/profile/dashboard
+                    builder: (context, state) => const BrokerDashboardPage(),
+                  ),
+                  GoRoute(
+                    path: 'portfolio', // matches /broker/profile/portfolio
+                    builder: (context, state) => const BrokerPortfolioPage(),
+                  ),
+                ],
+              ),
             ],
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class PromoBanner extends StatefulWidget {
@@ -88,7 +89,8 @@ class _PromoBannerState extends State<PromoBanner> {
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: _slides.length,
-                  onPageChanged: (index) => setState(() => _currentPage = index),
+                  onPageChanged: (index) =>
+                      setState(() => _currentPage = index),
                   itemBuilder: (context, index) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,7 +122,7 @@ class _PromoBannerState extends State<PromoBanner> {
             ],
           ),
         ),
-        
+
         const SizedBox(height: 12),
 
         // Pagination Dots - Now Outside the Container

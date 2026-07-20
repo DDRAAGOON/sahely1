@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../domain/models/wishlist_item.dart';
+import '../presentation/bloc/wishlist_cubit.dart';
 import '../widgets/collection_header.dart';
 import '../widgets/collection_members_actions.dart';
 import '../widgets/collection_property_card.dart';
 import '../widgets/share_collection_sheet.dart';
-import '../presentation/bloc/wishlist_cubit.dart';
 import 'collection_compare_screen.dart';
 
 class CollectionInsideSharedScreen extends StatefulWidget {
@@ -27,10 +28,12 @@ class CollectionInsideSharedScreen extends StatefulWidget {
   });
 
   @override
-  State<CollectionInsideSharedScreen> createState() => _CollectionInsideSharedScreenState();
+  State<CollectionInsideSharedScreen> createState() =>
+      _CollectionInsideSharedScreenState();
 }
 
-class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScreen> {
+class _CollectionInsideSharedScreenState
+    extends State<CollectionInsideSharedScreen> {
   @override
   void initState() {
     super.initState();
@@ -65,7 +68,10 @@ class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScr
                 final cubit = context.read<WishlistCubit>();
                 final collection = cubit.state.collections.firstWhere(
                   (c) => c.id == widget.collectionId,
-                  orElse: () => WishlistCollection(id: widget.collectionId, name: widget.collectionName, itemCount: widget.propertyCount),
+                  orElse: () => WishlistCollection(
+                      id: widget.collectionId,
+                      name: widget.collectionName,
+                      itemCount: widget.propertyCount),
                 );
 
                 showModalBottomSheet(
@@ -76,7 +82,8 @@ class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScr
                     collectionName: widget.collectionName,
                     collectionImage: collection.coverImage ?? '',
                     placesCount: collection.itemCount,
-                    shareableLink: 'sahely.app/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
+                    shareableLink:
+                        'sahely.app/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
                     isInviteOnly: false,
                   ),
                 );
@@ -101,7 +108,9 @@ class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScr
               child: BlocBuilder<WishlistCubit, WishlistState>(
                 builder: (context, state) {
                   if (state is WishlistLoading) {
-                    return const Center(child: CircularProgressIndicator(color: AppColors.gold));
+                    return const Center(
+                        child:
+                            CircularProgressIndicator(color: AppColors.gold));
                   }
 
                   if (state is WishlistItemsLoaded) {
@@ -110,11 +119,16 @@ class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScr
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.favorite_border, size: 64, color: AppColors.secondary.withValues(alpha: 0.3)),
+                            Icon(Icons.favorite_border,
+                                size: 64,
+                                color:
+                                    AppColors.secondary.withValues(alpha: 0.3)),
                             const SizedBox(height: 16),
                             const Text(
                               'No properties in this collection yet',
-                              style: TextStyle(color: AppColors.secondary, fontFamily: 'Cairo'),
+                              style: TextStyle(
+                                  color: AppColors.secondary,
+                                  fontFamily: 'Cairo'),
                             ),
                           ],
                         ),
@@ -124,14 +138,18 @@ class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScr
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: state.items.length,
-                      separatorBuilder: (context, index) => const SizedBox(height: 16),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 16),
                       itemBuilder: (context, index) {
                         final item = state.items[index];
                         return CollectionPropertyCard(
                           propertyName: item.propertyName,
-                          location: 'North Coast, Egypt', // Default if not in model
-                          propertyType: 'Villa', // Default
-                          beds: 3, // Default
+                          location: 'North Coast, Egypt',
+                          // Default if not in model
+                          propertyType: 'Villa',
+                          // Default
+                          beds: 3,
+                          // Default
                           amenities: const ['Pool', 'WiFi'],
                           rating: 4.8,
                           reviewCount: 12,
@@ -140,7 +158,7 @@ class _CollectionInsideSharedScreenState extends State<CollectionInsideSharedScr
                           friendNote: 'Added recently',
                           friendAvatarColor: AppColors.navy,
                           onTap: () {
-                            context.push('/property', extra: {
+                            AppNavigation.goToPropertyDetail(context, extra: {
                               'id': item.propertyId,
                               'name': item.propertyName,
                               'imageUrl': item.propertyImage,

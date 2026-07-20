@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../bloc/broker_wishlist_cubit.dart';
 import 'broker_add_to_collection_sheet.dart';
@@ -38,16 +39,20 @@ class _BrokerHeartButtonState extends State<BrokerHeartButton> {
   Widget build(BuildContext context) {
     return BlocBuilder<BrokerWishlistCubit, BrokerWishlistState>(
       buildWhen: (previous, current) {
-        if (current is BrokerWishlistStatusLoaded) return current.propertyId == widget.propertyId;
-        if (current is BrokerWishlistToggled) return current.propertyId == widget.propertyId;
+        if (current is BrokerWishlistStatusLoaded)
+          return current.propertyId == widget.propertyId;
+        if (current is BrokerWishlistToggled)
+          return current.propertyId == widget.propertyId;
         return false;
       },
       builder: (context, state) {
         bool isWishlisted = false;
 
-        if (state is BrokerWishlistStatusLoaded && state.propertyId == widget.propertyId) {
+        if (state is BrokerWishlistStatusLoaded &&
+            state.propertyId == widget.propertyId) {
           isWishlisted = state.isWishlisted;
-        } else if (state is BrokerWishlistToggled && state.propertyId == widget.propertyId) {
+        } else if (state is BrokerWishlistToggled &&
+            state.propertyId == widget.propertyId) {
           isWishlisted = state.isWishlisted;
         }
 
@@ -57,11 +62,11 @@ class _BrokerHeartButtonState extends State<BrokerHeartButton> {
 
             // Toggle logic
             context.read<BrokerWishlistCubit>().toggleWishlist(
-              propertyId: widget.propertyId,
-              propertyName: widget.propertyName,
-              propertyImage: widget.propertyImage,
-            );
-            
+                  propertyId: widget.propertyId,
+                  propertyName: widget.propertyName,
+                  propertyImage: widget.propertyImage,
+                );
+
             // Show sheet only when it was NOT wishlisted (adding scenario)
             if (!isWishlisted) {
               await Future.delayed(const Duration(milliseconds: 200));

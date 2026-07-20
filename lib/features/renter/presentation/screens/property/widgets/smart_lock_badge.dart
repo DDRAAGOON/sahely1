@@ -15,7 +15,8 @@ class SmartLockBadge extends StatelessWidget {
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Smart Lock: Code will be sent 24h before check-in.'),
+                  content: Text(
+                      'Smart Lock: Code will be sent 24h before check-in.'),
                 ),
               );
             },

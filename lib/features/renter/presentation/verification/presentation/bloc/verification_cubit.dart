@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/models/verification_state.dart';
+import 'package:sahely/core/providers/auth_provider.dart';
+
 import '../../data/repositories/verification_repository.dart';
+import '../../domain/models/verification_state.dart';
 
 // UI States
 abstract class VerificationCubitState {}
@@ -24,7 +26,8 @@ class VerificationError extends VerificationCubitState {
 // Cubit
 class VerificationCubit extends Cubit<VerificationCubitState> {
   final VerificationRepository _repository;
-  
+  final AuthProvider? _authProvider;
+
   // Internal data state tracking
   VerificationState _currentState = const VerificationState(
     emailVerified: false,
@@ -33,7 +36,15 @@ class VerificationCubit extends Cubit<VerificationCubitState> {
     cardAdded: false,
   );
 
-  VerificationCubit(this._repository) : super(VerificationInitial());
+  VerificationCubit(this._repository, {AuthProvider? authProvider})
+      : _authProvider = authProvider,
+        super(VerificationInitial());
+
+  /// Synchronizes verification completeness into [AuthProvider] so GoRouter
+  /// can react to it via its [refreshListenable].
+  void _syncVerified() {
+    _authProvider?.setVerified(_currentState.isComplete);
+  }
 
   // Load verification status
   Future<void> loadVerificationStatus() async {
@@ -42,6 +53,7 @@ class VerificationCubit extends Cubit<VerificationCubitState> {
       final status = await _repository.getVerificationStatus();
       _currentState = status;
       emit(VerificationLoaded(status));
+      _syncVerified();
     } catch (e) {
       emit(VerificationError('Failed to load verification status: $e'));
     }
@@ -53,6 +65,7 @@ class VerificationCubit extends Cubit<VerificationCubitState> {
       await _repository.markEmailAsVerified();
       _currentState = _currentState.copyWith(emailVerified: true);
       emit(VerificationLoaded(_currentState));
+      _syncVerified();
     } catch (e) {
       emit(VerificationError('Failed to verify email: $e'));
     }
@@ -64,6 +77,7 @@ class VerificationCubit extends Cubit<VerificationCubitState> {
       await _repository.markPhoneAsVerified();
       _currentState = _currentState.copyWith(phoneVerified: true);
       emit(VerificationLoaded(_currentState));
+      _syncVerified();
     } catch (e) {
       emit(VerificationError('Failed to verify phone: $e'));
     }
@@ -75,17 +89,18 @@ class VerificationCubit extends Cubit<VerificationCubitState> {
       await _repository.markIdAsVerified();
       _currentState = _currentState.copyWith(idVerified: true);
       emit(VerificationLoaded(_currentState));
+      _syncVerified();
     } catch (e) {
       emit(VerificationError('Failed to verify ID: $e'));
     }
   }
 
-  // Update card added
   Future<void> updateCardAdded() async {
     try {
       await _repository.markCardAsAdded();
       _currentState = _currentState.copyWith(cardAdded: true);
       emit(VerificationLoaded(_currentState));
+      _syncVerified();
     } catch (e) {
       emit(VerificationError('Failed to add payment card: $e'));
     }

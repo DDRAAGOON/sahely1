@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../../../../../core/theme/app_colors.dart';
 
 class ExpiryCvvFields extends StatefulWidget {
@@ -65,7 +66,8 @@ class _ExpiryCvvFieldsState extends State<ExpiryCvvFields> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.gold, width: 2),
+                    borderSide:
+                        const BorderSide(color: AppColors.gold, width: 2),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 14,
@@ -136,7 +138,8 @@ class _ExpiryCvvFieldsState extends State<ExpiryCvvFields> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.gold, width: 2),
+                    borderSide:
+                        const BorderSide(color: AppColors.gold, width: 2),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 14,

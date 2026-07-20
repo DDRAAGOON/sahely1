@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/navigation/app_router.dart';
 import 'core/providers/auth_provider.dart';
-
-import 'package:go_router/go_router.dart';
+import 'data/role_state.dart';
 
 class SahelyApp extends StatefulWidget {
   const SahelyApp({super.key});
@@ -20,8 +20,9 @@ class _SahelyAppState extends State<SahelyApp> {
   void initState() {
     super.initState();
     // Initialize the router once to preserve state during Hot Reload.
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    _router = createAppRouter(auth);
+    final authProvider = context.read<AuthProvider>();
+    final roleState = context.read<RoleState>();
+    _router = createAppRouter(authProvider, roleState);
   }
 
   @override
@@ -34,4 +35,3 @@ class _SahelyAppState extends State<SahelyApp> {
     );
   }
 }
-

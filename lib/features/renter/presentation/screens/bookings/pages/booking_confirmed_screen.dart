@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
-import '../widgets/animated_checkmark.dart';
-import '../widgets/booking_details_card.dart';
-import '../widgets/stars_earned_card.dart';
-import '../widgets/smart_lock_card.dart';
-import '../widgets/booking_action_buttons.dart';
-import '../widgets/stars/stars_earned_dialog.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+
 import '../../mawsem/celebration/pages/level_up_celebration_screen.dart';
+import '../widgets/animated_checkmark.dart';
+import '../widgets/booking_action_buttons.dart';
+import '../widgets/booking_details_card.dart';
+import '../widgets/smart_lock_card.dart';
+import '../widgets/stars/stars_earned_dialog.dart';
+import '../widgets/stars_earned_card.dart';
 import 'smart_lock_screen.dart';
 
 class BookingConfirmedScreen extends StatefulWidget {
@@ -63,7 +64,8 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
         propertyName: widget.propertyName,
         previousTotal: previousStars,
         newTotal: profile.stars,
-        starsToNextLevel: nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
+        starsToNextLevel:
+            nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
         nextLevelName: nextLevel != null ? nextLevel['name'] : 'Max Level',
         onKeepEarning: () {
           Navigator.pop(context); // Close dialog
@@ -92,7 +94,8 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
           unlockRewardTitle: 'Level Reward',
           unlockRewardDescription: 'Exclusive Digital Badge',
           currentSeasonStars: profile.stars,
-          starsToNextLevel: nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
+          starsToNextLevel:
+              nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
           onShare: () {
             // Share achievement
           },
@@ -114,11 +117,8 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
           child: Column(
             children: [
               const SizedBox(height: 10),
-              
               const Center(child: AnimatedCheckmark()),
-
               const SizedBox(height: 16),
-
               const Text(
                 "You're All Set!",
                 textAlign: TextAlign.center,
@@ -129,9 +129,7 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
                   fontFamily: 'DM Sans',
                 ),
               ),
-
               const SizedBox(height: 8),
-
               Text(
                 'Your booking at ${widget.propertyName}\nis confirmed.',
                 textAlign: TextAlign.center,
@@ -142,9 +140,7 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
                   height: 1.4,
                 ),
               ),
-
               const SizedBox(height: 24),
-
               BookingDetailsCard(
                 checkIn: widget.checkIn,
                 checkOut: widget.checkOut,
@@ -153,13 +149,9 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
                 bookingRef: widget.bookingRef,
                 totalPaid: widget.totalPaid,
               ),
-
               const SizedBox(height: 12),
-
               StarsEarnedCard(starsEarned: widget.starsEarned),
-
               const SizedBox(height: 12),
-
               SmartLockCard(
                 onTap: () {
                   Navigator.push(
@@ -168,23 +160,22 @@ class _BookingConfirmedScreenState extends State<BookingConfirmedScreen> {
                       builder: (context) => SmartLockScreen(
                         propertyName: widget.propertyName,
                         bookingRef: widget.bookingRef,
-                        passcode: '8842', // Mock passcode
+                        passcode: '8842',
+                        // Mock passcode
                         checkIn: widget.checkIn,
                         checkOut: widget.checkOut,
-                        propertyLat: 31.0263, // Mock Lat
+                        propertyLat: 31.0263,
+                        // Mock Lat
                         propertyLng: 28.9402, // Mock Lng
                       ),
                     ),
                   );
                 },
               ),
-
               const SizedBox(height: 32),
-
               BookingActionButtons(
                 onViewBookings: () => AppNavigation.goToMyBookings(context),
               ),
-              
               const SizedBox(height: 24),
             ],
           ),

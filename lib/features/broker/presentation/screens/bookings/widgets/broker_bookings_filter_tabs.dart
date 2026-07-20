@@ -31,7 +31,9 @@ class BrokerBookingsFilterTabs extends StatelessWidget {
                   color: isSelected ? const Color(0xFF1B2744) : Colors.white,
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(
-                    color: isSelected ? const Color(0xFF1B2744) : const Color(0xFFE0D8CC),
+                    color: isSelected
+                        ? const Color(0xFF1B2744)
+                        : const Color(0xFFE0D8CC),
                     width: 1,
                   ),
                 ),
@@ -40,8 +42,10 @@ class BrokerBookingsFilterTabs extends StatelessWidget {
                     tab,
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                      color: isSelected ? Colors.white : const Color(0xFF1B2744),
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w500,
+                      color:
+                          isSelected ? Colors.white : const Color(0xFF1B2744),
                       fontFamily: 'DM Sans',
                     ),
                   ),

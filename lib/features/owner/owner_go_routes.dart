@@ -1,26 +1,27 @@
 import 'package:go_router/go_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import 'screens/owner_manage_screen.dart';
-import 'screens/owner_properties_screen.dart';
+
 import 'screens/add_property_screen.dart';
 import 'screens/listing_submitted_screen.dart';
-import 'screens/team_review_screen.dart';
+import 'screens/owner_active_detail_screen.dart';
+import 'screens/owner_ai_chat_screen.dart';
 import 'screens/owner_all_trending_screen.dart';
-import 'screens/owner_requests_screen.dart';
 import 'screens/owner_earnings_screen.dart';
+import 'screens/owner_edit_bio_screen.dart';
+import 'screens/owner_history_screen.dart';
+import 'screens/owner_manage_screen.dart';
+import 'screens/owner_notification_settings_screen.dart';
+import 'screens/owner_past_detail_screen.dart';
+import 'screens/owner_portfolio_screen.dart';
+import 'screens/owner_properties_screen.dart';
+import 'screens/owner_property_detail_screens.dart';
+import 'screens/owner_requests_screen.dart';
+import 'screens/owner_smart_lock_screen.dart';
+import 'screens/owner_upcoming_detail_screen.dart';
+import 'screens/payout_bank_screen.dart';
+import 'screens/team_review_screen.dart';
 import 'screens/withdraw_amount_screen.dart';
 import 'screens/withdraw_receipt_screen.dart';
-import 'screens/payout_bank_screen.dart';
-import 'screens/owner_property_detail_screens.dart';
-import 'screens/owner_smart_lock_screen.dart';
-import 'screens/owner_history_screen.dart';
-import 'screens/owner_portfolio_screen.dart';
-import 'screens/owner_ai_chat_screen.dart';
-import 'screens/owner_notification_settings_screen.dart';
-import 'screens/owner_edit_bio_screen.dart';
-import 'screens/owner_upcoming_detail_screen.dart';
-import 'screens/owner_active_detail_screen.dart';
-import 'screens/owner_past_detail_screen.dart';
 
 final List<GoRoute> ownerGoRoutes = [
   GoRoute(

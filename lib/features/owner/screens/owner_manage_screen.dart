@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/floating_nav.dart';
@@ -33,8 +34,7 @@ class OwnerManageScreen extends StatelessWidget {
                         style: AppTheme.dm(size: 13, color: AppColors.muted)),
                   ])),
               GestureDetector(
-                onTap: () =>
-                    context.push('/owner/add-property'),
+                onTap: () => AppNavigation.goToOwnerAddProperty(context),
                 behavior: HitTestBehavior.opaque,
                 child: Container(
                     width: 40,
@@ -100,7 +100,7 @@ class OwnerManageScreen extends StatelessWidget {
             ]),
             const SizedBox(height: 16),
             GestureDetector(
-              onTap: () => context.push('/owner/properties'),
+              onTap: () => AppNavigation.goToOwnerProperties(context),
               behavior: HitTestBehavior.opaque,
               child: WhiteCard(
                   padding: const EdgeInsets.all(14),
@@ -146,7 +146,7 @@ class OwnerManageScreen extends StatelessWidget {
                       weight: FontWeight.w700,
                       color: AppColors.navy)),
               GestureDetector(
-                  onTap: () => context.push('/owner/requests'),
+                  onTap: () => AppNavigation.goToOwnerRequests(context),
                   behavior: HitTestBehavior.opaque,
                   child: Text('View All · 2',
                       style: AppTheme.dm(
@@ -156,8 +156,7 @@ class OwnerManageScreen extends StatelessWidget {
             ]),
             const SizedBox(height: 12),
             PendingRequestCard(
-                onTap: () =>
-                    context.push('/owner/request-detail')),
+                onTap: () => AppNavigation.goToOwnerRequestDetail(context)),
           ],
         ),
         const FloatingNav(active: 4),
@@ -169,7 +168,9 @@ class OwnerManageScreen extends StatelessWidget {
       Color fg, String route,
       {String? badge, bool useGo = false}) {
     return GestureDetector(
-      onTap: () => useGo ? context.go(route) : context.push(route),
+      onTap: () => useGo
+          ? AppNavigation.safeGo(context, route)
+          : AppNavigation.safePush(context, route),
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: 76,
@@ -210,7 +211,7 @@ class OwnerManageScreen extends StatelessWidget {
   Widget _gradientCta(BuildContext context, String title, String sub,
       IconData icon, String route, List<Color> colors) {
     return GestureDetector(
-      onTap: () => context.push(route),
+      onTap: () => AppNavigation.safePush(context, route),
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.all(14),

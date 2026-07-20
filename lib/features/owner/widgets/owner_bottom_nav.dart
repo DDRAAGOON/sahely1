@@ -1,20 +1,39 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
+
 import '../../../../core/theme/app_colors.dart';
 
 class OwnerBottomNav extends StatelessWidget {
   final int activeIndex;
   final Function(int) onTap;
-  const OwnerBottomNav({super.key, required this.activeIndex, required this.onTap});
+
+  const OwnerBottomNav(
+      {super.key, required this.activeIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final items = [
-      _NavItem(activeIcon: Icons.home_filled, inactiveIcon: Icons.home_outlined, label: 'Home'),
-      _NavItem(activeIcon: Icons.favorite, inactiveIcon: Icons.favorite_border, label: 'Wishlist'),
-      _NavItem(activeIcon: Icons.calendar_month, inactiveIcon: Icons.calendar_today_outlined, label: 'Bookings'),
-      _NavItem(activeIcon: Icons.room_service, inactiveIcon: Icons.room_service_outlined, label: 'Services'),
-      _NavItem(activeIcon: Icons.person, inactiveIcon: Icons.person_outline, label: 'Manage'),
+      _NavItem(
+          activeIcon: Icons.home_filled,
+          inactiveIcon: Icons.home_outlined,
+          label: 'Home'),
+      _NavItem(
+          activeIcon: Icons.favorite,
+          inactiveIcon: Icons.favorite_border,
+          label: 'Wishlist'),
+      _NavItem(
+          activeIcon: Icons.calendar_month,
+          inactiveIcon: Icons.calendar_today_outlined,
+          label: 'Bookings'),
+      _NavItem(
+          activeIcon: Icons.room_service,
+          inactiveIcon: Icons.room_service_outlined,
+          label: 'Services'),
+      _NavItem(
+          activeIcon: Icons.person,
+          inactiveIcon: Icons.person_outline,
+          label: 'Manage'),
     ];
 
     return Container(
@@ -23,7 +42,8 @@ class OwnerBottomNav extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
+        border:
+            Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -48,7 +68,9 @@ class OwnerBottomNav extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        isActive ? items[index].activeIcon : items[index].inactiveIcon,
+                        isActive
+                            ? items[index].activeIcon
+                            : items[index].inactiveIcon,
                         size: 23,
                         color: isActive
                             ? AppColors.navy
@@ -82,5 +104,9 @@ class _NavItem {
   final IconData activeIcon;
   final IconData inactiveIcon;
   final String label;
-  _NavItem({required this.activeIcon, required this.inactiveIcon, required this.label});
+
+  _NavItem(
+      {required this.activeIcon,
+      required this.inactiveIcon,
+      required this.label});
 }

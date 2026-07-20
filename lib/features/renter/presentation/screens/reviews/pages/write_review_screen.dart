@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/theme/app_colors.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
+
+import '../../../../../../core/theme/app_colors.dart';
 import '../../bookings/widgets/stars/stars_earned_dialog.dart';
 import '../../mawsem/celebration/pages/level_up_celebration_screen.dart';
 import '../widgets/review_property_card.dart';
-import '../widgets/star_rating_widget.dart';
 import '../widgets/review_text_field.dart';
+import '../widgets/star_rating_widget.dart';
 import '../widgets/submit_review_button.dart';
 
 class WriteReviewScreen extends StatefulWidget {
@@ -76,11 +77,12 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
           propertyName: widget.propertyName,
           previousTotal: previousStars,
           newTotal: profile.stars,
-          starsToNextLevel: nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
+          starsToNextLevel:
+              nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
           nextLevelName: nextLevel != null ? nextLevel['name'] : 'Max Level',
           onKeepEarning: () {
             Navigator.pop(context); // Close dialog
-            
+
             if (newLevel != null) {
               _showLevelUpCelebration(context, newLevel);
             } else {
@@ -109,7 +111,8 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
           unlockRewardTitle: 'Level Reward',
           unlockRewardDescription: 'Exclusive Digital Badge',
           currentSeasonStars: profile.stars,
-          starsToNextLevel: nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
+          starsToNextLevel:
+              nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
           onShare: () {
             // Share achievement logic
           },

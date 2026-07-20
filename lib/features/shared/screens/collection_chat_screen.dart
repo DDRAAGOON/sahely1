@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/avatars.dart';
@@ -16,17 +17,28 @@ class CollectionChatScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               decoration: const BoxDecoration(
-                  color: AppColors.white, border: Border(bottom: BorderSide(color: AppColors.border))),
+                  color: AppColors.white,
+                  border: Border(bottom: BorderSide(color: AppColors.border))),
               child: Row(children: [
                 GestureDetector(
-                    onTap: () => Navigator.maybePop(context), child: const Icon(Icons.chevron_left, color: AppColors.navy)),
+                    onTap: () => Navigator.maybePop(context),
+                    child:
+                        const Icon(Icons.chevron_left, color: AppColors.navy)),
                 const SizedBox(width: 8),
                 Expanded(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Beach Trip 2026', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
-                  Text('You, Omar, Nour, Sara', style: AppTheme.dm(size: 11, color: AppColors.muted)),
-                ])),
-                const AvatarCircle(size: 26, colors: [Color(0xFFD8B98A), Color(0xFF7D5A2C)]),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Text('Beach Trip 2026',
+                          style: AppTheme.dm(
+                              size: 15,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy)),
+                      Text('You, Omar, Nour, Sara',
+                          style: AppTheme.dm(size: 11, color: AppColors.muted)),
+                    ])),
+                const AvatarCircle(
+                    size: 26, colors: [Color(0xFFD8B98A), Color(0xFF7D5A2C)]),
               ]),
             ),
             Container(
@@ -37,7 +49,10 @@ class CollectionChatScreen extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text('VS',
-                        style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.faint))),
+                        style: AppTheme.dm(
+                            size: 12,
+                            weight: FontWeight.w700,
+                            color: AppColors.faint))),
                 Expanded(child: _vsCard('Lagoon', '4.9 · 6,200')),
               ]),
             ),
@@ -62,16 +77,23 @@ class CollectionChatScreen extends StatelessWidget {
                     child: Container(
                         height: 44,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(color: AppColors.cream, borderRadius: BorderRadius.circular(22)),
+                        decoration: BoxDecoration(
+                            color: AppColors.cream,
+                            borderRadius: BorderRadius.circular(22)),
                         alignment: Alignment.centerLeft,
                         child: Text('Message or ask AI to compare…',
-                            style: AppTheme.dm(size: 13, color: AppColors.navy.withValues(alpha: 0.5))))),
+                            style: AppTheme.dm(
+                                size: 13,
+                                color:
+                                    AppColors.navy.withValues(alpha: 0.5))))),
                 const SizedBox(width: 8),
                 Container(
                     width: 40,
                     height: 40,
-                    decoration: const BoxDecoration(color: AppColors.gold, shape: BoxShape.circle),
-                    child: const Icon(Icons.auto_awesome, size: 18, color: AppColors.navy)),
+                    decoration: const BoxDecoration(
+                        color: AppColors.gold, shape: BoxShape.circle),
+                    child: const Icon(Icons.auto_awesome,
+                        size: 18, color: AppColors.navy)),
               ]),
             ),
           ],
@@ -82,9 +104,13 @@ class CollectionChatScreen extends StatelessWidget {
 
   Widget _vsCard(String name, String meta) => Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(border: Border.all(color: AppColors.border), borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(
+            border: Border.all(color: AppColors.border),
+            borderRadius: BorderRadius.circular(10)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(name, style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy)),
+          Text(name,
+              style: AppTheme.dm(
+                  size: 13, weight: FontWeight.w700, color: AppColors.navy)),
           Text(meta, style: AppTheme.dm(size: 11, color: AppColors.muted)),
         ]),
       );
@@ -104,7 +130,9 @@ class CollectionChatScreen extends StatelessWidget {
                           topRight: Radius.circular(14),
                           bottomLeft: Radius.circular(14),
                           bottomRight: Radius.circular(14))),
-                  child: Text(text, style: AppTheme.dm(size: 13, color: AppColors.ink, height: 1.4)))),
+                  child: Text(text,
+                      style: AppTheme.dm(
+                          size: 13, color: AppColors.ink, height: 1.4)))),
         ]),
       );
 
@@ -115,9 +143,11 @@ class CollectionChatScreen extends StatelessWidget {
               width: 28,
               height: 28,
               decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [AppColors.goldBright, AppColors.gold]),
+                  gradient: const LinearGradient(
+                      colors: [AppColors.goldBright, AppColors.gold]),
                   borderRadius: BorderRadius.circular(8)),
-              child: const Icon(Icons.auto_awesome, size: 15, color: AppColors.navy)),
+              child: const Icon(Icons.auto_awesome,
+                  size: 15, color: AppColors.navy)),
           const SizedBox(width: 8),
           Flexible(
               child: Container(
@@ -127,10 +157,15 @@ class CollectionChatScreen extends StatelessWidget {
                       border: Border.all(color: const Color(0xFFEAD9A8)),
                       borderRadius: BorderRadius.circular(12)),
                   child: RichText(
-                      text: TextSpan(style: AppTheme.dm(size: 13, color: AppColors.ink, height: 1.4), children: [
-                    const TextSpan(text: 'Quick compare: ', style: TextStyle(fontWeight: FontWeight.w700)),
-                    TextSpan(text: text.substring(15))
-                  ])))),
+                      text: TextSpan(
+                          style: AppTheme.dm(
+                              size: 13, color: AppColors.ink, height: 1.4),
+                          children: [
+                        const TextSpan(
+                            text: 'Quick compare: ',
+                            style: TextStyle(fontWeight: FontWeight.w700)),
+                        TextSpan(text: text.substring(15))
+                      ])))),
         ]),
       );
 }

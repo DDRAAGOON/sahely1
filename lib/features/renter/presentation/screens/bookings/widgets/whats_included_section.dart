@@ -34,14 +34,19 @@ class WhatsIncludedSection extends StatelessWidget {
             children: includedList.map((item) {
               final text = item.toString();
               final isPets = text.contains('Pets') || text.contains('Pets OK');
-              
+
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
-                  color: isPets ? const Color(0xFFE8F5E9) : const Color(0xFFF3EFE7),
+                  color: isPets
+                      ? const Color(0xFFE8F5E9)
+                      : const Color(0xFFF3EFE7),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: isPets ? const Color(0xFF2E7D32) : AppColors.navy.withValues(alpha: 0.8),
+                    color: isPets
+                        ? const Color(0xFF2E7D32)
+                        : AppColors.navy.withValues(alpha: 0.8),
                     width: 1,
                   ),
                 ),
@@ -49,7 +54,8 @@ class WhatsIncludedSection extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (isPets) ...[
-                      const Icon(Icons.pets, size: 14, color: Color(0xFF2E7D32)),
+                      const Icon(Icons.pets,
+                          size: 14, color: Color(0xFF2E7D32)),
                       const SizedBox(width: 4),
                     ],
                     Text(
@@ -57,7 +63,8 @@ class WhatsIncludedSection extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
-                        color: isPets ? const Color(0xFF2E7D32) : AppColors.navy,
+                        color:
+                            isPets ? const Color(0xFF2E7D32) : AppColors.navy,
                         fontFamily: 'DM Sans',
                       ),
                     ),

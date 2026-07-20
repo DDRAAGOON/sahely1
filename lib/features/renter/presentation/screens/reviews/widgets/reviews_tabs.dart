@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class ReviewsTabs extends StatelessWidget {
@@ -37,7 +38,8 @@ class ReviewsTabs extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: selectedTab == 0 ? AppColors.white : AppColors.navy,
+                      color:
+                          selectedTab == 0 ? AppColors.white : AppColors.navy,
                       fontFamily: 'DM Sans',
                     ),
                   ),
@@ -68,7 +70,8 @@ class ReviewsTabs extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: selectedTab == 1 ? AppColors.white : AppColors.navy,
+                      color:
+                          selectedTab == 1 ? AppColors.white : AppColors.navy,
                       fontFamily: 'DM Sans',
                     ),
                   ),

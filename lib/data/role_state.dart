@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'models.dart';
 
 class RoleState extends ChangeNotifier {
   static final RoleState _instance = RoleState._internal();
+
   factory RoleState() => _instance;
+
   RoleState._internal();
 
   Role _currentRole = Role.renter;

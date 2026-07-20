@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -36,7 +37,7 @@ class ReferralCodeCard extends StatelessWidget {
               ),
             ),
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -80,7 +81,8 @@ class ReferralCodeCard extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 18),
                           alignment: Alignment.centerLeft,
                           decoration: BoxDecoration(
-                            color: AppColors.referralBoxBg, // Background #323d57
+                            color: AppColors.referralBoxBg,
+                            // Background #323d57
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -97,7 +99,7 @@ class ReferralCodeCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    
+
                     // Copy Button
                     GestureDetector(
                       onTap: () {
@@ -140,22 +142,26 @@ class ReferralCodeCard extends StatelessWidget {
                       TextSpan(text: 'Share it — when a friend you refer '),
                       TextSpan(
                         text: 'books & completes a stay',
-                        style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, color: Colors.white),
                       ),
                       TextSpan(text: ' you earn '),
                       TextSpan(
                         text: '+15★',
-                        style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w800, color: AppColors.gold),
                       ),
                       TextSpan(text: '. Refer an '),
                       TextSpan(
                         text: 'owner who lists',
-                        style: TextStyle(fontWeight: FontWeight.w700, color: Colors.white),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, color: Colors.white),
                       ),
                       TextSpan(text: ' and earn '),
                       TextSpan(
                         text: '+50★',
-                        style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.gold),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w800, color: AppColors.gold),
                       ),
                       TextSpan(text: '. No stars for signups alone.'),
                     ],
@@ -189,7 +195,8 @@ class DashedRectPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final Path path = Path()
-      ..addRRect(RRect.fromLTRBR(0, 0, size.width, size.height, const Radius.circular(12)));
+      ..addRRect(RRect.fromLTRBR(
+          0, 0, size.width, size.height, const Radius.circular(12)));
 
     // Drawing dashed path
     final Path dashedPath = Path();

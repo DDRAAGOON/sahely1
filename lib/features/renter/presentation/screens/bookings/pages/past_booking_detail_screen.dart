@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import '../widgets/past_booking_hero_image.dart';
-import '../widgets/reservation_details_card.dart';
-import '../widgets/whats_included_section.dart';
-import '../widgets/price_breakdown_card.dart';
-import '../widgets/review_section.dart';
-import '../widgets/book_again_button.dart';
-import 'package:sahely/features/renter/presentation/screens/reviews/pages/write_review_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/property/page/property_detail_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/reviews/pages/write_review_screen.dart';
+
+import '../widgets/book_again_button.dart';
+import '../widgets/past_booking_hero_image.dart';
+import '../widgets/price_breakdown_card.dart';
+import '../widgets/reservation_details_card.dart';
+import '../widgets/review_section.dart';
+import '../widgets/whats_included_section.dart';
 
 class PastBookingDetailScreen extends StatelessWidget {
   final Map<String, dynamic> booking;
@@ -26,7 +27,7 @@ class PastBookingDetailScreen extends StatelessWidget {
       } else if (date is String) {
         parsed = DateTime.tryParse(date);
       }
-      
+
       if (parsed != null) {
         return DateFormat('MMM d · h:mm a').format(parsed);
       }
@@ -39,18 +40,25 @@ class PastBookingDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Data extraction with safety
-    final String propertyName = (booking['propertyName'] ?? 'Property').toString();
+    final String propertyName =
+        (booking['propertyName'] ?? 'Property').toString();
     final String location = (booking['location'] ?? 'Location').toString();
     final String imageUrl = (booking['imageUrl'] ?? '').toString();
     final String orderNumber = (booking['orderNumber'] ?? '').toString();
     final String guests = (booking['guests'] ?? '2 adults').toString();
-    
-    final int nights = (booking['nights'] is num) ? (booking['nights'] as num).toInt() : 1;
-    final int pricePerNight = (booking['pricePerNight'] is num) ? (booking['pricePerNight'] as num).toInt() : 0;
-    final int cleaningVat = (booking['cleaningVat'] is num) ? (booking['cleaningVat'] as num).toInt() : 0;
-    final int total = (booking['total'] is num) ? (booking['total'] as num).toInt() : 0;
 
-    final List<String> photos = (booking['photos'] is List) 
+    final int nights =
+        (booking['nights'] is num) ? (booking['nights'] as num).toInt() : 1;
+    final int pricePerNight = (booking['pricePerNight'] is num)
+        ? (booking['pricePerNight'] as num).toInt()
+        : 0;
+    final int cleaningVat = (booking['cleaningVat'] is num)
+        ? (booking['cleaningVat'] as num).toInt()
+        : 0;
+    final int total =
+        (booking['total'] is num) ? (booking['total'] as num).toInt() : 0;
+
+    final List<String> photos = (booking['photos'] is List)
         ? (booking['photos'] as List).map((e) => e.toString()).toList()
         : [];
     final List<String> included = (booking['included'] is List)
@@ -85,8 +93,13 @@ class PastBookingDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Reservation',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'DM Sans'),
+                  const Text(
+                    'Reservation',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.navy,
+                        fontFamily: 'DM Sans'),
                   ),
                   const SizedBox(height: 12),
                   ReservationDetailsCard(
@@ -123,8 +136,13 @@ class PastBookingDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Price',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'DM Sans'),
+                  const Text(
+                    'Price',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.navy,
+                        fontFamily: 'DM Sans'),
                   ),
                   const SizedBox(height: 12),
                   PriceBreakdownCard(
@@ -155,7 +173,8 @@ class PastBookingDetailScreen extends StatelessWidget {
                       builder: (context) => WriteReviewScreen(
                         propertyName: propertyName,
                         propertyImage: imageUrl,
-                        stayDates: '${_formatReservationDate(booking['checkIn'])} - ${_formatReservationDate(booking['checkOut'])}',
+                        stayDates:
+                            '${_formatReservationDate(booking['checkIn'])} - ${_formatReservationDate(booking['checkOut'])}',
                       ),
                     ),
                   );

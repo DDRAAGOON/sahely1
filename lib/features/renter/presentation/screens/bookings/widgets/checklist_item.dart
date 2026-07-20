@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class ChecklistItem extends StatelessWidget {
@@ -38,9 +39,12 @@ class ChecklistItem extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontSize: 14,
-                      color: isCompleted ? AppColors.secondary : const Color(0xFF1B2744),
+                      color: isCompleted
+                          ? AppColors.secondary
+                          : const Color(0xFF1B2744),
                       fontFamily: 'DM Sans',
-                      fontWeight: isCompleted ? FontWeight.w400 : FontWeight.w600,
+                      fontWeight:
+                          isCompleted ? FontWeight.w400 : FontWeight.w600,
                     ),
                   ),
                   if (issueReported)

@@ -7,6 +7,7 @@ class CurrencyProvider extends ChangeNotifier {
   final _storage = const FlutterSecureStorage();
 
   String get selectedCurrency => _selectedCurrency;
+
   String get symbol => _symbol;
 
   static const Map<String, String> _symbols = {

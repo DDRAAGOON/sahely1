@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerCollectionPropertyCard extends StatelessWidget {
@@ -33,7 +34,7 @@ class BrokerCollectionPropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final egpPrice = pricePerNight.toString(); 
+    final egpPrice = pricePerNight.toString();
 
     return GestureDetector(
       onTap: onTap,
@@ -145,7 +146,8 @@ class BrokerCollectionPropertyCard extends StatelessWidget {
                       _buildChip('$beds beds'),
                       ...amenities.map((amenity) => _buildChip(
                             amenity,
-                            isSpecial: amenity == 'Pets' || amenity == 'No pets',
+                            isSpecial:
+                                amenity == 'Pets' || amenity == 'No pets',
                             isPositive: amenity == 'Pets',
                           )),
                     ],
@@ -253,7 +255,8 @@ class BrokerCollectionPropertyCard extends StatelessWidget {
     );
   }
 
-  Widget _buildChip(String label, {bool isSpecial = false, bool isPositive = true}) {
+  Widget _buildChip(String label,
+      {bool isSpecial = false, bool isPositive = true}) {
     Color bgColor = AppColors.cream;
     Color textColor = AppColors.navy;
     Color borderColor = AppColors.navy;

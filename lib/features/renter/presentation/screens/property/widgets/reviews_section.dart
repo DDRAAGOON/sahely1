@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class ReviewsSection extends StatelessWidget {
@@ -59,7 +59,7 @@ class ReviewsSection extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    context.push('/property-reviews');
+                    AppNavigation.goToPropertyReviews(context);
                   },
                   child: const Text(
                     'See All',

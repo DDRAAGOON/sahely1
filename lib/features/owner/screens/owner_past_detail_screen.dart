@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/sample_data.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
+import '../../../data/sample_data.dart';
 
 class OwnerPastDetailScreen extends StatelessWidget {
   final Property? property;
+
   const OwnerPastDetailScreen({super.key, this.property});
 
   @override
@@ -16,8 +18,9 @@ class OwnerPastDetailScreen extends StatelessWidget {
     final prop = property ?? Sample.dunes;
 
     return Scaffold(
-      backgroundColor: AppColors.cream, // ✅ ده اللون الصح
+      backgroundColor: AppColors.cream, 
       body: SafeArea(
+        bottom: false,
         child: Stack(
           children: [
             ListView(
@@ -44,7 +47,7 @@ class OwnerPastDetailScreen extends StatelessWidget {
                             colors: [
                               Colors.transparent,
                               Colors.transparent,
-                              Color(0x441B2744), // ✅ أخف شفافية (was 0x99)
+                              Color(0x441B2744),
                             ],
                           ),
                         ),
@@ -82,11 +85,10 @@ class OwnerPastDetailScreen extends StatelessWidget {
                   ),
                 ),
 
-                // ✅ المساحة دي هتظهر باللون cream
                 Container(
-                  color: AppColors.cream, // ✅ تأكد إن اللون هنا
+                  color: AppColors.cream,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -197,7 +199,8 @@ class OwnerPastDetailScreen extends StatelessWidget {
                                 color: AppColors.navy,
                                 height: 52,
                                 radius: 14,
-                                onTap: () => context.push('/owner/rate-guest',
+                                onTap: () => AppNavigation.goToOwnerRateGuest(
+                                    context,
                                     extra: prop),
                               ),
                             ],
@@ -211,9 +214,8 @@ class OwnerPastDetailScreen extends StatelessWidget {
                           outline: true,
                           height: 52,
                           radius: 14,
-                          onTap: () => context.pop(),
+                          onTap: () => Navigator.pop(context),
                         ),
-                        const SizedBox(height: 40),
                       ],
                     ),
                   ),
@@ -234,7 +236,7 @@ class OwnerPastDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => context.pop(),
+                        onTap: () => Navigator.pop(context),
                         behavior: HitTestBehavior.opaque,
                         child: Container(
                           width: 42,

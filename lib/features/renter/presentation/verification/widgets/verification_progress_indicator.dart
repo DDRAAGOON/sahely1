@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../core/theme/app_colors.dart';
 
 class VerificationProgressIndicator extends StatelessWidget {
@@ -38,7 +39,8 @@ class VerificationProgressIndicator extends StatelessWidget {
 
         return Expanded(
           child: Padding(
-            padding: EdgeInsets.only(right: index == stepLabels.length - 1 ? 0 : 8),
+            padding:
+                EdgeInsets.only(right: index == stepLabels.length - 1 ? 0 : 8),
             child: Column(
               children: [
                 // Progress Bar

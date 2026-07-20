@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -33,45 +34,45 @@ class PrimaryButton extends StatelessWidget {
       height: 54,
       child: outlined
           ? OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            color: borderColor ?? AppColors.primary,
-            width: borderWidth ?? 1.5,
-          ),
-          backgroundColor: backgroundColor ?? Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius ?? 30),
-          ),
-        ),
-        child: Text(
-          text,
-          style: AppTheme.dm(
-            size: 16,
-            weight: FontWeight.w700,
-            color: textColor ?? AppColors.navy,
-          ),
-        ),
-      )
+              onPressed: onPressed,
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  color: borderColor ?? AppColors.primary,
+                  width: borderWidth ?? 1.5,
+                ),
+                backgroundColor: backgroundColor ?? Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius ?? 30),
+                ),
+              ),
+              child: Text(
+                text,
+                style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
+                  color: textColor ?? AppColors.navy,
+                ),
+              ),
+            )
           : ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? AppColors.primary,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius ?? 30),
-          ),
-        ),
-        child: Text(
-          text,
-          style: AppTheme.dm(
-            size: 16,
-            weight: FontWeight.w700,
-            color: textColor ?? Colors.white,
-          ),
-        ),
-      ),
+              onPressed: onPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: backgroundColor ?? AppColors.primary,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(borderRadius ?? 30),
+                ),
+              ),
+              child: Text(
+                text,
+                style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
+                  color: textColor ?? Colors.white,
+                ),
+              ),
+            ),
     );
   }
 }

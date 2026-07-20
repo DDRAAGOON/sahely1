@@ -1,133 +1,144 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+class AppRoutes {
+  AppRoutes._();
 
-// 1. استيراد ملف الـ Constants اللي انت عملته
-import '../../features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
-import '../../features/broker/presentation/screens/services/pages/broker_services_page.dart';
-import '../../features/broker/presentation/screens/wishlist/pages/broker_wishlist_page.dart';
-import '../../features/renter/presentation/screens/property/page/property_detail_screen.dart';
-import '../constants/app_routes.dart';
-import 'app_routes.dart';
+  // --------------------------------------------------------------------------
+  // Auth Routes
+  // --------------------------------------------------------------------------
+  static const String splash = '/splash';
+  static const String welcome = '/welcome';
+  static const String onboarding = '/onboarding';
+  static const String roleSelection = '/role';
+  static const String createAccount = '/create';
+  static const String signIn = '/signin';
+  static const String verifyEmail = '/verify-email';
+  static const String verifyPhone = '/verify-phone';
+  static const String forgotPassword = '/forgot';
+  static const String resetOtp = '/reset-otp';
+  static const String newPassword = '/new-password';
+  static const String passwordUpdated = '/password-updated';
+  static const String idVerification = '/id-verification';
+  static const String facialScan = '/facial-scan';
+  static const String verificationComplete = '/verification-complete';
+  static const String verifyGate = '/verify-gate';
 
-// 2. استيراد الشاشات (أمثلة، استبدلها بمسارات الشاشات الفعلية عندك)
-import 'package:sahely/features/auth/screens/splash_screen.dart';
-import 'package:sahely/features/auth/screens/sign_in_screen.dart';
-import 'package:sahely/features/broker/presentation/screens/home/pages/broker_home_page.dart';
-import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
-import 'package:sahely/features/broker/presentation/screens/dashboard/pages/broker_dashboard_page.dart';
-import 'package:sahely/core/navigation/shells/broker_shell.dart';
+  // --------------------------------------------------------------------------
+  // Renter Routes
+  // --------------------------------------------------------------------------
+  static const String renterHome = '/renter/home';
+  static const String renterWishlist = '/renter/wishlist';
+  static const String renterBookings = '/renter/bookings';
+  static const String renterServices = '/renter/services';
+  static const String renterProfile = '/renter/profile';
 
-// Global Navigator Key
-final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+  // --------------------------------------------------------------------------
+  // Broker Routes (Nested under /broker/profile to keep shell)
+  // --------------------------------------------------------------------------
+  static const String brokerHome = '/broker/home';
+  static const String brokerWishlist = '/broker/wishlist';
+  static const String brokerBookings = '/broker/bookings';
+  static const String brokerServices = '/broker/services';
+  static const String brokerProfile = '/broker/profile';
+  static const String brokerDashboard = '/broker/profile/dashboard';
+  static const String brokerPortfolio = '/broker/profile/portfolio';
+  
+  static const String brokerReferredDetail = '/broker/referred-detail';
+  static const String brokerReferralIssue = '/broker/referral-issue';
+  static const String brokerRefer = '/broker/refer';
+  static const String brokerHistory = '/broker/history';
+  static const String brokerTier = '/broker/tier';
+  static const String brokerMawsem = '/broker/mawsem';
+  static const String brokerTierUpgrade = '/broker/tier-upgrade';
+  static const String brokerSos = '/broker/sos';
+  static const String brokerBookingDetails = '/broker/booking-details';
+  static const String brokerSmartLock = '/broker/smart-lock';
+  static const String brokerWithdraw = '/broker/withdraw';
+  static const String brokerWithdrawReceipt = '/broker/withdraw-receipt';
+  static const String brokerPayout = '/broker/payout';
 
-GoRouter createAppRouter() {
-  return GoRouter(
-    navigatorKey: rootNavigatorKey,
-    initialLocation: AppRoutes.splash, // ✅ استخدام الـ Constant
-    debugLogDiagnostics: true,
+  // --------------------------------------------------------------------------
+  // Owner Routes
+  // --------------------------------------------------------------------------
+  static const String ownerHome = '/owner/home';
+  static const String ownerWishlist = '/owner/wishlist';
+  static const String ownerBookings = '/owner/bookings';
+  static const String ownerServices = '/owner/services';
+  static const String ownerProfile = '/owner/profile';
+  static const String ownerListings = '/owner/listings';
+  static const String ownerListingNew = '/owner/listings/new';
+  static const String ownerManage = '/owner/manage';
+  static const String ownerEdit = '/owner/edit';
+  static const String ownerPreview = '/owner/preview';
+  static const String ownerSmartLock = '/owner/smart-lock';
+  static const String ownerHistory = '/owner/history';
+  static const String ownerPortfolio = '/owner/portfolio';
+  static const String ownerAiChat = '/owner/ai-chat';
+  static const String ownerNotifications = '/owner/notifications';
+  static const String ownerEditBio = '/owner/edit-bio';
+  static const String ownerBookingUpcoming = '/owner/booking-upcoming';
+  static const String ownerBookingActive = '/owner/booking-active';
+  static const String ownerBookingPast = '/owner/booking-past';
+  static const String ownerRequestDetail = '/owner/request-detail';
+  static const String ownerEarnings = '/owner/earnings';
+  static const String ownerInsights = '/owner/insights';
+  static const String ownerViolations = '/owner/violations';
+  static const String ownerListingSubmitted = '/owner/listing-submitted';
+  static const String ownerRateGuest = '/owner/rate-guest';
+  static const String ownerRequests = '/owner/requests';
+  static const String ownerAllTrending = '/owner/all-trending';
+  static const String ownerProperties = '/owner/properties';
 
-    routes: [
-      // =======================================================================
-      // 1. AUTH ROUTES
-      // =======================================================================
-      GoRoute(
-        path: AppRoutes.splash,
-        name: 'splash',
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.signIn,
-        name: 'signIn',
-        builder: (context, state) => const SignInScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.verifyGate,
-        name: 'verifyGate',
-        builder: (context, state) => const VerificationGateScreen(),
-      ),
+  // --------------------------------------------------------------------------
+  // Shared Routes
+  // --------------------------------------------------------------------------
+  static const String browse = '/browse';
+  static const String search = '/browse';
+  static const String filters = '/filters';
+  static const String allProperties = '/all-properties';
+  static const String propertyDetail = '/property';
+  static const String propertyReviews = '/property-reviews';
+  static const String booking = '/booking';
+  static const String bookingConfirmed = '/booking-confirmed';
+  static const String bookings = '/bookings';
+  static const String bookingDetail = '/booked-property';
+  static const String bookingUpcoming = '/booking-upcoming';
+  static const String bookingPast = '/booking-past';
+  static const String bookedProperty = '/booked-property';
+  static const String smartLock = '/smart-lock';
+  static const String doorOut = '/door-out';
+  static const String arrivalChecklist = '/arrival-checklist';
+  static const String writeReview = '/write-review';
+  static const String wishlist = '/wishlist';
+  static const String collection = '/collection';
+  static const String collectionChat = '/collection-chat';
+  static const String compare = '/compare';
+  static const String shareCollection = '/share-collection';
+  static const String shareEarn = '/share-earn';
+  static const String services = '/services';
+  static const String mawsem = '/mawsem';
+  static const String mawsemLevel = '/mawsem-level';
+  static const String starsEarned = '/stars-earned';
+  static const String starNudges = '/star-nudges';
+  static const String levelUp = '/level-up';
+  static const String addCard = '/add-card';
+  static const String changePassword = '/change-password';
+  static const String blockedGate = '/blocked-gate';
+  static const String sos = '/sos';
+  static const String sosOwner = '/sos-owner';
+  static const String aiChat = '/ai-chat';
+  static const String currency = '/currency';
+  static const String language = '/language';
+  static const String wallet = '/wallet';
+  static const String myReviews = '/my-reviews';
+  static const String notificationsSettings = '/notifications-settings';
+  static const String editProfile = '/edit-profile';
+  static const String notifications = '/notifications';
+  static const String notifBanner = '/notif-banner';
+  static const String notifTop = '/notif-top';
 
-      // =======================================================================
-      // 2. BROKER SHELL (Bottom Navigation)
-      // =======================================================================
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return BrokerShell(navigationShell: navigationShell);
-        },
-        branches: [
-          // Tab 1: Home
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.brokerHome,
-                name: 'brokerHome',
-                builder: (context, state) => const BrokerHomePage(),
-              ),
-            ],
-          ),
-          // Tab 2: Wishlist
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.brokerWishlist,
-                name: 'brokerWishlist',
-                builder: (context, state) => const BrokerWishlistPage(),
-              ),
-            ],
-          ),
-          // Tab 3: Bookings
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.brokerBookings,
-                name: 'brokerBookings',
-                builder: (context, state) => const BrokerBookingsPage(),
-              ),
-            ],
-          ),
-          // Tab 4: Services
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.brokerServices,
-                name: 'brokerServices',
-                builder: (context, state) => const BrokerServicesPage(),
-              ),
-            ],
-          ),
-          // Tab 5: Profile (My Role) ✅
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.brokerProfile, // ✅ هنا بنستخدم الـ Constant بتاعك
-                name: 'brokerProfile',
-                builder: (context, state) => const BrokerProfilePage(),
-              ),
-            ],
-          ),
-        ],
-      ),
-
-      // =======================================================================
-      // 3. DYNAMIC ROUTES (مع Parameters)
-      // =======================================================================
-      GoRoute(
-        // ✅ نستخدم الـ Constant ونضيف الـ Parameter بتاع الـ GoRouter
-        path: '${AppRoutes.propertyDetails}/:id',
-        name: 'propertyDetail',
-        builder: (context, state) {
-          final propertyId = state.pathParameters['id']!;
-          return PropertyDetailScreen(propertyId: propertyId);
-        },
-      ),
-
-      GoRoute(
-        path: '${AppRoutes.bookingDetail}/:id',
-        name: 'bookingDetail',
-        builder: (context, state) {
-          final bookingId = state.pathParameters['id']!;
-          return BookingDetailScreen(bookingId: bookingId);
-        },
-      ),
-    ],
-  );
+  // --------------------------------------------------------------------------
+  // Dynamic Routes (with parameters)
+  // --------------------------------------------------------------------------
+  static String propertyDetailById(String id) => '/property/$id';
+  static String bookingDetailById(String id) => '/bookings/$id';
+  static String ownerListingEdit(String id) => '/owner/listings/$id/edit';
 }

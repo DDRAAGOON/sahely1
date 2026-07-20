@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../features/owner/widgets/owner_bottom_nav.dart';
 import '../../theme/app_colors.dart';
 
@@ -26,7 +27,7 @@ class OwnerShell extends StatelessWidget {
         children: [
           // The current tab's screen
           navigationShell,
-          
+
           // The persistent floating navigation bar
           Positioned(
             bottom: 0,

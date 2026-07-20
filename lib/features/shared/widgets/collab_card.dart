@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/avatars.dart';
@@ -40,22 +41,28 @@ class CollabCard extends StatelessWidget {
             loadingBuilder: (c, child, p) => p == null
                 ? child
                 : Container(height: 180, color: const Color(0xFFE8E4DC)),
-            errorBuilder: (_, __, ___) => Container(height: 180, color: const Color(0xFFE8E4DC)),
+            errorBuilder: (_, __, ___) =>
+                Container(height: 180, color: const Color(0xFFE8E4DC)),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(name, style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(name,
+                style: AppTheme.dm(
+                    size: 15, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 3),
             Row(children: [
-              const Icon(Icons.location_on_outlined, size: 11, color: AppColors.muted),
+              const Icon(Icons.location_on_outlined,
+                  size: 11, color: AppColors.muted),
               const SizedBox(width: 3),
               Text(loc, style: AppTheme.dm(size: 12, color: AppColors.muted))
             ]),
             const SizedBox(height: 8),
             Wrap(spacing: 6, runSpacing: 6, children: [
-              for (final t in tags) Pill(t, bg: AppColors.cream, fg: AppColors.ink),
+              for (final t in tags)
+                Pill(t, bg: AppColors.cream, fg: AppColors.ink),
               Pill(pet,
                   bg: petOk ? const Color(0xFFD7EEDD) : const Color(0xFFFDECEC),
                   fg: petOk ? AppColors.success : const Color(0xFFB22222)),
@@ -65,19 +72,30 @@ class CollabCard extends StatelessWidget {
               Row(children: [
                 const Icon(Icons.star, size: 13, color: AppColors.gold),
                 const SizedBox(width: 4),
-                Text(rating, style: AppTheme.dm(size: 13, weight: FontWeight.w700)),
-                Text(' ($reviews)', style: AppTheme.dm(size: 12, color: AppColors.muted))
+                Text(rating,
+                    style: AppTheme.dm(size: 13, weight: FontWeight.w700)),
+                Text(' ($reviews)',
+                    style: AppTheme.dm(size: 12, color: AppColors.muted))
               ]),
-              Text('$price /night', style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy)),
+              Text('$price /night',
+                  style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
             ]),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: AppColors.cream, borderRadius: BorderRadius.circular(10)),
+              decoration: BoxDecoration(
+                  color: AppColors.cream,
+                  borderRadius: BorderRadius.circular(10)),
               child: Row(children: [
-                const AvatarCircle(size: 22, colors: [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
+                const AvatarCircle(
+                    size: 22, colors: [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
                 const SizedBox(width: 8),
-                Expanded(child: Text(comment, style: AppTheme.dm(size: 12, color: AppColors.ink))),
+                Expanded(
+                    child: Text(comment,
+                        style: AppTheme.dm(size: 12, color: AppColors.ink))),
               ]),
             ),
           ]),

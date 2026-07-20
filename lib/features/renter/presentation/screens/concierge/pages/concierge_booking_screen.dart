@@ -33,8 +33,9 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
     return Scaffold(
       backgroundColor: AppColors.cream,
       appBar: AppBar(
-        title: Text('Book ${widget.serviceName}', 
-          style: const TextStyle(color: AppColors.navy, fontWeight: FontWeight.bold)),
+        title: Text('Book ${widget.serviceName}',
+            style: const TextStyle(
+                color: AppColors.navy, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -56,7 +57,9 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
                 }),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text('$_quantity', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: Text('$_quantity',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
                 _buildStepperButton(Icons.add, () {
                   setState(() => _quantity++);
@@ -72,7 +75,9 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
                 Expanded(
                   child: _buildPickerTile(
                     icon: Icons.calendar_today,
-                    label: _selectedDate == null ? 'Select Date' : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                    label: _selectedDate == null
+                        ? 'Select Date'
+                        : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
                     onTap: _pickDate,
                   ),
                 ),
@@ -80,7 +85,9 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
                 Expanded(
                   child: _buildPickerTile(
                     icon: Icons.access_time,
-                    label: _selectedTime == null ? 'Select Time' : _selectedTime!.format(context),
+                    label: _selectedTime == null
+                        ? 'Select Time'
+                        : _selectedTime!.format(context),
                     onTap: _pickTime,
                   ),
                 ),
@@ -137,10 +144,11 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
 
             // Payment Method
             _buildSectionTitle('Payment Method'),
-            _buildPaymentOption('Wallet', 'EGP 2,450 available', Icons.account_balance_wallet),
+            _buildPaymentOption(
+                'Wallet', 'EGP 2,450 available', Icons.account_balance_wallet),
             const SizedBox(height: 12),
             _buildPaymentOption('Credit Card', '**** 4242', Icons.credit_card),
-            
+
             const SizedBox(height: 40),
 
             // Price Breakdown & Button
@@ -148,9 +156,14 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Total Price', style: TextStyle(fontSize: 16, color: AppColors.secondary)),
-                  Text('EGP ${widget.basePrice! * _quantity}', 
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.navy)),
+                  const Text('Total Price',
+                      style:
+                          TextStyle(fontSize: 16, color: AppColors.secondary)),
+                  Text('EGP ${widget.basePrice! * _quantity}',
+                      style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.navy)),
                 ],
               ),
               const SizedBox(height: 20),
@@ -163,10 +176,14 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
                 onPressed: _submitBooking,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.navy,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
                 ),
-                child: const Text('Confirm & Pay', 
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text('Confirm & Pay',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold)),
               ),
             ),
             const SizedBox(height: 30),
@@ -179,7 +196,11 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.navy)),
+      child: Text(title,
+          style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: AppColors.navy)),
     );
   }
 
@@ -198,7 +219,10 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
     );
   }
 
-  Widget _buildPickerTile({required IconData icon, required String label, required VoidCallback onTap}) {
+  Widget _buildPickerTile(
+      {required IconData icon,
+      required String label,
+      required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -212,7 +236,10 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
           children: [
             Icon(icon, size: 18, color: AppColors.navy),
             const SizedBox(width: 8),
-            Expanded(child: Text(label, style: const TextStyle(fontSize: 13), overflow: TextOverflow.ellipsis)),
+            Expanded(
+                child: Text(label,
+                    style: const TextStyle(fontSize: 13),
+                    overflow: TextOverflow.ellipsis)),
           ],
         ),
       ),
@@ -228,7 +255,9 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isSelected ? AppColors.navy : AppColors.border, width: isSelected ? 2 : 1),
+          border: Border.all(
+              color: isSelected ? AppColors.navy : AppColors.border,
+              width: isSelected ? 2 : 1),
         ),
         child: Row(
           children: [
@@ -237,12 +266,16 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.secondary)),
+                Text(title,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(subtitle,
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.secondary)),
               ],
             ),
             const Spacer(),
-            if (isSelected) const Icon(Icons.check_circle, color: AppColors.navy),
+            if (isSelected)
+              const Icon(Icons.check_circle, color: AppColors.navy),
           ],
         ),
       ),
@@ -268,7 +301,9 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
   }
 
   void _submitBooking() {
-    if (_selectedDate == null || _selectedTime == null || _selectedBooking == null) {
+    if (_selectedDate == null ||
+        _selectedTime == null ||
+        _selectedBooking == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please complete all fields')),
       );
@@ -280,12 +315,15 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Success'),
-        content: const Text('Your service request has been sent to the provider. They will contact you via WhatsApp shortly.'),
+        content: const Text(
+            'Your service request has been sent to the provider. They will contact you via WhatsApp shortly.'),
         actions: [
-          TextButton(onPressed: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          }, child: const Text('OK')),
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: const Text('OK')),
         ],
       ),
     );

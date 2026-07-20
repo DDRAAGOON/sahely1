@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+
+import '../widgets/notification_channel_row.dart';
 import '../widgets/notification_section_header.dart';
 import '../widgets/notification_toggle_row.dart';
-import '../widgets/notification_channel_row.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
   const NotificationSettingsScreen({super.key});

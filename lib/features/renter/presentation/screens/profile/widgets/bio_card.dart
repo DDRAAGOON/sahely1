@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+
 import '../pages/edit_profile_screen.dart';
 
 class BioCard extends StatelessWidget {

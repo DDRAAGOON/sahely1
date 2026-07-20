@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/utils/currency_formatter.dart';
 import '../../wishlist/presentation/widgets/heart_button.dart';
@@ -16,7 +17,7 @@ class SearchResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push('/property', extra: property);
+        AppNavigation.goToPropertyDetail(context, extra: property);
       },
       child: Container(
         decoration: BoxDecoration(

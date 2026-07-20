@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MapTeaser extends StatelessWidget {
   const MapTeaser({super.key});
@@ -42,12 +42,14 @@ class MapTeaser extends StatelessWidget {
                 child: const Stack(
                   children: [
                     Center(
-                      child: Icon(Icons.location_on, color: AppColors.red, size: 40),
+                      child: Icon(Icons.location_on,
+                          color: AppColors.red, size: 40),
                     ),
                     Positioned(
                       bottom: 10,
                       right: 10,
-                      child: Icon(Icons.open_in_new, color: AppColors.navy, size: 20),
+                      child: Icon(Icons.open_in_new,
+                          color: AppColors.navy, size: 20),
                     ),
                   ],
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../../../../core/theme/app_colors.dart';
 import '../bloc/wishlist_cubit.dart';
 import 'add_to_collection_sheet.dart';
@@ -38,7 +39,8 @@ class _HeartButtonState extends State<HeartButton> {
   Widget build(BuildContext context) {
     return BlocBuilder<WishlistCubit, WishlistState>(
       builder: (context, state) {
-        final isWishlisted = state.items.any((item) => item.propertyId == widget.propertyId);
+        final isWishlisted =
+            state.items.any((item) => item.propertyId == widget.propertyId);
 
         return GestureDetector(
           onTap: () async {
@@ -48,10 +50,10 @@ class _HeartButtonState extends State<HeartButton> {
               _showAddToCollectionSheet(context);
             } else {
               context.read<WishlistCubit>().toggleWishlist(
-                propertyId: widget.propertyId,
-                propertyName: widget.propertyName,
-                propertyImage: widget.propertyImage,
-              );
+                    propertyId: widget.propertyId,
+                    propertyName: widget.propertyName,
+                    propertyImage: widget.propertyImage,
+                  );
             }
           },
           child: AnimatedSwitcher(

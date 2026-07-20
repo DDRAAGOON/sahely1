@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/cream_background.dart';
@@ -7,6 +8,7 @@ import '../../../core/widgets/ui.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   final String? role;
+
   const CreateAccountScreen({super.key, this.role});
 
   @override
@@ -25,8 +27,22 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   String? _selectedYear;
 
   final List<String> _days = List.generate(31, (i) => (i + 1).toString());
-  final List<String> _months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  final List<String> _years = List.generate(100, (i) => (DateTime.now().year - i).toString());
+  final List<String> _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ];
+  final List<String> _years =
+      List.generate(100, (i) => (DateTime.now().year - i).toString());
 
   @override
   void dispose() {
@@ -53,17 +69,26 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   const BackChip(),
                   const SizedBox(width: 12),
                   Text('Create Account',
-                      style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                      style: AppTheme.dm(
+                          size: 22,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy)),
                 ],
               ),
               const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(8)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  decoration: BoxDecoration(
+                      color: AppColors.gold,
+                      borderRadius: BorderRadius.circular(8)),
                   child: Text('Registering as: $role',
-                      style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: AppColors.navy)),
+                      style: AppTheme.dm(
+                          size: 12,
+                          weight: FontWeight.w600,
+                          color: AppColors.navy)),
                 ),
               ),
               const SizedBox(height: 16),
@@ -103,10 +128,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     Expanded(
                       child: AppTextField(
                         controller: _phoneController,
-                        hintText: '10 XXXX XXXX', 
+                        hintText: '10 XXXX XXXX',
                         keyboardType: TextInputType.phone,
                         validator: (v) {
-                          if (v == null || v.isEmpty) return 'Phone number is required';
+                          if (v == null || v.isEmpty)
+                            return 'Phone number is required';
                           return null;
                         },
                       ),
@@ -171,10 +197,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       height: 20,
                       decoration: BoxDecoration(
                         color: _agreed ? AppColors.navy : AppColors.white,
-                        border: Border.all(color: _agreed ? AppColors.navy : AppColors.border),
+                        border: Border.all(
+                            color: _agreed ? AppColors.navy : AppColors.border),
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: _agreed ? const Icon(Icons.check, size: 12, color: AppColors.white) : null,
+                      child: _agreed
+                          ? const Icon(Icons.check,
+                              size: 12, color: AppColors.white)
+                          : null,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -183,9 +213,22 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       text: 'I agree to ',
                       style: AppTheme.dm(size: 12, color: AppColors.muted),
                       children: [
-                        TextSpan(text: 'Terms', style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.navy)),
-                        TextSpan(text: ' & ', style: AppTheme.dm(size: 12, color: AppColors.muted)),
-                        TextSpan(text: 'Privacy Policy', style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.navy)),
+                        TextSpan(
+                            text: 'Terms',
+                            style: AppTheme.dm(
+                                size: 12,
+                                weight: FontWeight.w700,
+                                color: AppColors.navy)),
+                        TextSpan(
+                            text: ' & ',
+                            style:
+                                AppTheme.dm(size: 12, color: AppColors.muted)),
+                        TextSpan(
+                            text: 'Privacy Policy',
+                            style: AppTheme.dm(
+                                size: 12,
+                                weight: FontWeight.w700,
+                                color: AppColors.navy)),
                       ],
                     ),
                   ),
@@ -197,7 +240,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 onTap: () {
                   if (_formKey.currentState!.validate() && _agreed) {
                     context.push(
-                      '/verify-email', 
+                      '/verify-email',
                       extra: {
                         'name': _nameController.text,
                         'email': _emailController.text,
@@ -242,14 +285,17 @@ class _DobBox extends StatelessWidget {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
-          hint: Text(label, style: AppTheme.dm(size: 13, color: AppColors.muted)),
-          icon: const Icon(Icons.keyboard_arrow_down, size: 16, color: AppColors.muted),
+          hint:
+              Text(label, style: AppTheme.dm(size: 13, color: AppColors.muted)),
+          icon: const Icon(Icons.keyboard_arrow_down,
+              size: 16, color: AppColors.muted),
           isExpanded: true,
           menuMaxHeight: 300,
           items: items.map((String item) {
             return DropdownMenuItem<String>(
               value: item,
-              child: Text(item, style: AppTheme.dm(size: 13, color: AppColors.ink)),
+              child: Text(item,
+                  style: AppTheme.dm(size: 13, color: AppColors.ink)),
             );
           }).toList(),
           onChanged: onChanged,

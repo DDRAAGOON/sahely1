@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -20,9 +21,14 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       SnackBar(
         content: Row(
           children: [
-            const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)),
+            const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                    strokeWidth: 2, color: Colors.white)),
             const SizedBox(width: 12),
-            Text('Generating PDF report...', style: AppTheme.dm(color: Colors.white)),
+            Text('Generating PDF report...',
+                style: AppTheme.dm(color: Colors.white)),
           ],
         ),
         duration: const Duration(seconds: 2),
@@ -34,7 +40,8 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Report downloaded successfully!', style: AppTheme.dm(color: Colors.white)),
+            content: Text('Report downloaded successfully!',
+                style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.success,
           ),
         );
@@ -64,7 +71,8 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
         StatCard(value: '5.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
       ];
       txns = [
-        _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft, last: true),
+        _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft,
+            last: true),
       ];
     } else if (_activeTab == 1) {
       periodLabel = 'This Quarter';
@@ -73,12 +81,14 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       statCards = const [
         StatCard(value: '42.0k', label: 'Upcoming'),
         StatCard(value: '173.8k', label: 'Paid', valueColor: AppColors.success),
-        StatCard(value: '15.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
+        StatCard(
+            value: '15.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
       ];
       txns = [
         _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft),
         _txn('Sunset Suite', 'May 28', '+45,000', 'Paid', BadgeKind.greenSoft),
-        _txn('Beach Cabin', 'Apr 12', '+12,000', 'Paid', BadgeKind.greenSoft, last: true),
+        _txn('Beach Cabin', 'Apr 12', '+12,000', 'Paid', BadgeKind.greenSoft,
+            last: true),
       ];
     } else {
       periodLabel = 'This Year';
@@ -87,13 +97,15 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       statCards = const [
         StatCard(value: '120.0k', label: 'Upcoming'),
         StatCard(value: '720.0k', label: 'Paid', valueColor: AppColors.success),
-        StatCard(value: '40.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
+        StatCard(
+            value: '40.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
       ];
       txns = [
         _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft),
         _txn('Sunset Suite', 'May 28', '+45,000', 'Paid', BadgeKind.greenSoft),
         _txn('Beach Cabin', 'Apr 12', '+12,000', 'Paid', BadgeKind.greenSoft),
-        _txn('Royal Palace', 'Jan 15', '+150,000', 'Paid', BadgeKind.greenSoft, last: true),
+        _txn('Royal Palace', 'Jan 15', '+150,000', 'Paid', BadgeKind.greenSoft,
+            last: true),
       ];
     }
 
@@ -106,7 +118,11 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
             trailing: GestureDetector(
               onTap: () => _exportPDF(context),
               behavior: HitTestBehavior.opaque,
-              child: Text('Export PDF', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+              child: Text('Export PDF',
+                  style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w600,
+                      color: AppColors.gold)),
             ),
           ),
           const SizedBox(height: 12),
@@ -126,18 +142,28 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [Color(0xFF22335A), AppColors.navy]),
+                gradient: const LinearGradient(
+                    colors: [Color(0xFF22335A), AppColors.navy]),
                 borderRadius: BorderRadius.circular(16)),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(periodLabel, style: AppTheme.dm(size: 13, color: const Color(0xFFCDD4E0))),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(periodLabel,
+                  style: AppTheme.dm(size: 13, color: const Color(0xFFCDD4E0))),
               const SizedBox(height: 6),
               Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                Text(periodAmount, style: AppTheme.dm(size: 30, weight: FontWeight.w700, color: Colors.white)),
+                Text(periodAmount,
+                    style: AppTheme.dm(
+                        size: 30,
+                        weight: FontWeight.w700,
+                        color: Colors.white)),
                 const SizedBox(width: 10),
                 Padding(
                     padding: const EdgeInsets.only(bottom: 6),
                     child: Text(periodChange,
-                        style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: const Color(0xFF7BE0A0)))),
+                        style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w700,
+                            color: const Color(0xFF7BE0A0)))),
               ]),
             ]),
           ),
@@ -148,23 +174,25 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
           const SizedBox(height: 10),
           Center(
             child: GestureDetector(
-              onTap: () => context.push(
-                '/owner/history',
-                extra: _activeTab == 0 ? 'Month' : (_activeTab == 1 ? 'Quarter' : 'Year'),
-              ),
+              onTap: () => AppNavigation.goToOwnerHistory(context,
+                  extra: _activeTab == 0
+                      ? 'Month'
+                      : (_activeTab == 1 ? 'Quarter' : 'Year')),
               behavior: HitTestBehavior.opaque,
               child: Text(
                 'View Full History →',
-                style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold),
+                style: AppTheme.dm(
+                    size: 13, weight: FontWeight.w600, color: AppColors.gold),
               ),
             ),
           ),
           const SizedBox(height: 12),
           const InfoNote(
-              text: 'Payouts are released 48h after guest check-in. Pending funds appear here until cleared.'),
+              text:
+                  'Payouts are released 48h after guest check-in. Pending funds appear here until cleared.'),
           const SizedBox(height: 14),
           GestureDetector(
-            onTap: () => context.push('/owner/violations'),
+            onTap: () => AppNavigation.goToOwnerViolations(context),
             behavior: HitTestBehavior.opaque,
             child: WhiteCard(
                 padding: const EdgeInsets.all(14),
@@ -172,22 +200,32 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
                   Container(
                       width: 38,
                       height: 38,
-                      decoration:
-                          BoxDecoration(color: const Color(0xFFFDECEC), borderRadius: BorderRadius.circular(10)),
-                      child: const Icon(Icons.warning_amber_rounded, color: Color(0xFFB22222))),
+                      decoration: BoxDecoration(
+                          color: const Color(0xFFFDECEC),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: const Icon(Icons.warning_amber_rounded,
+                          color: Color(0xFFB22222))),
                   const SizedBox(width: 12),
                   Expanded(
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text('Violations', style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy)),
-                    Text('1 active · review details', style: AppTheme.dm(size: 12, color: AppColors.muted)),
-                  ])),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Text('Violations',
+                            style: AppTheme.dm(
+                                size: 14,
+                                weight: FontWeight.w700,
+                                color: AppColors.navy)),
+                        Text('1 active · review details',
+                            style:
+                                AppTheme.dm(size: 12, color: AppColors.muted)),
+                      ])),
                   const Icon(Icons.chevron_right, color: AppColors.faint),
                 ])),
           ),
           const SizedBox(height: 20),
           GoldButton(
             label: 'Withdraw to Bank',
-            onTap: () => context.push('/owner/withdraw'),
+            onTap: () => AppNavigation.goToOwnerWithdraw(context),
           ),
           const SizedBox(height: 20),
         ],
@@ -195,16 +233,28 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
     );
   }
 
-  Widget _txn(String name, String date, String amount, String badge, BadgeKind kind, {bool last = false}) => Container(
+  Widget _txn(
+          String name, String date, String amount, String badge, BadgeKind kind,
+          {bool last = false}) =>
+      Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: last ? null : const BoxDecoration(border: Border(bottom: BorderSide(color: Color(0xFFF4EFE7)))),
+        decoration: last
+            ? null
+            : const BoxDecoration(
+                border: Border(bottom: BorderSide(color: Color(0xFFF4EFE7)))),
         child: Row(children: [
           Expanded(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(name, style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
-            Text(date, style: AppTheme.dm(size: 11, color: AppColors.muted)),
-          ])),
-          Text(amount, style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.success)),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                Text(name,
+                    style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
+                Text(date,
+                    style: AppTheme.dm(size: 11, color: AppColors.muted)),
+              ])),
+          Text(amount,
+              style: AppTheme.dm(
+                  size: 14, weight: FontWeight.w700, color: AppColors.success)),
           const SizedBox(width: 8),
           StatusBadge(badge, kind: kind),
         ]),

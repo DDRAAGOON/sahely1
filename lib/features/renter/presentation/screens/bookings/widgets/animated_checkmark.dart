@@ -123,7 +123,7 @@ class _AnimatedCheckmarkState extends State<AnimatedCheckmark>
               );
             },
           ),
-          
+
           // Main Circle
           AnimatedBuilder(
             animation: _scaleAnimation,
@@ -164,12 +164,13 @@ class _AnimatedCheckmarkState extends State<AnimatedCheckmark>
 
 class CheckmarkPainter extends CustomPainter {
   final double progress;
+
   CheckmarkPainter(this.progress);
 
   @override
   void paint(Canvas canvas, Size size) {
     if (progress == 0) return;
-    
+
     final paint = Paint()
       ..color = Colors.white
       ..strokeWidth = 5.5 // Bolder stroke for better visibility
@@ -198,5 +199,6 @@ class CheckmarkPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CheckmarkPainter oldDelegate) => oldDelegate.progress != progress;
+  bool shouldRepaint(CheckmarkPainter oldDelegate) =>
+      oldDelegate.progress != progress;
 }

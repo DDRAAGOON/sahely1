@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+
 import '../widgets/password_input_field.dart';
 import '../widgets/password_strength_meter.dart';
 
@@ -153,8 +154,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       return 'Please enter your current password';
                     }
                     // Add logic to check if current password is correct (mocked)
-                    if (value != '12345678') { // Example mock current password
-                       // return 'Incorrect current password';
+                    if (value != '12345678') {
+                      // Example mock current password
+                      // return 'Incorrect current password';
                     }
                     return null;
                   },

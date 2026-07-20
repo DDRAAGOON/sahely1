@@ -13,18 +13,29 @@ class AppLocalizations {
   AppLocalizations(this._localizedStrings);
 
   String get language => _localizedStrings['language'] ?? 'Language';
-  String get chooseLanguage => _localizedStrings['chooseLanguage'] ?? 'Choose your app language';
+
+  String get chooseLanguage =>
+      _localizedStrings['chooseLanguage'] ?? 'Choose your app language';
+
   String get save => _localizedStrings['save'] ?? 'Save';
+
   String get english => _localizedStrings['english'] ?? 'English';
+
   String get arabic => _localizedStrings['arabic'] ?? 'العربية';
+
   String get french => _localizedStrings['french'] ?? 'French';
+
   String get german => _localizedStrings['german'] ?? 'German';
+
   String get italian => _localizedStrings['italian'] ?? 'Italian';
+
   String get spanish => _localizedStrings['spanish'] ?? 'Spanish';
+
   String get russian => _localizedStrings['russian'] ?? 'Russian';
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override

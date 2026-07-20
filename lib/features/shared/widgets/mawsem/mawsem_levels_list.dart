@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'mawsem_level_tile.dart';
+
 import 'level/level_detail_sheet.dart';
 import 'level/level_perk.dart';
+import 'mawsem_level_tile.dart';
 
 class MawsemLevelsList extends StatelessWidget {
   final int currentLevel;
@@ -59,8 +60,12 @@ class MawsemLevelsList extends StatelessWidget {
       'textColor': AppColors.navy,
       'iconColor': AppColors.mawsemTeal,
       'detailedPerks': [
-        LevelPerk(title: 'Late checkout (2 hours)', subtitle: 'Subject to availability'),
-        LevelPerk(title: 'Early check-in (2 hours)', subtitle: 'Subject to availability'),
+        LevelPerk(
+            title: 'Late checkout (2 hours)',
+            subtitle: 'Subject to availability'),
+        LevelPerk(
+            title: 'Early check-in (2 hours)',
+            subtitle: 'Subject to availability'),
       ],
       'reward': 'Shore Explorer Badge',
     },
@@ -106,8 +111,10 @@ class MawsemLevelsList extends StatelessWidget {
       'textColor': AppColors.navy,
       'iconColor': Color(0xFF6B4D8A),
       'detailedPerks': [
-        LevelPerk(title: 'Free Professional Cleaning', subtitle: 'Once per stay'),
-        LevelPerk(title: 'Early access (48h)', subtitle: 'For all season promos'),
+        LevelPerk(
+            title: 'Free Professional Cleaning', subtitle: 'Once per stay'),
+        LevelPerk(
+            title: 'Early access (48h)', subtitle: 'For all season promos'),
         LevelPerk(title: 'Everything from Coastal Regular'),
       ],
       'reward': 'Free Airport Pickup (Cairo to compound)',
@@ -122,8 +129,10 @@ class MawsemLevelsList extends StatelessWidget {
       'textColor': AppColors.navy,
       'iconColor': Color(0xFFBC9B43),
       'detailedPerks': [
-        LevelPerk(title: 'Free Concierge Service', subtitle: 'Unlimited bookings'),
-        LevelPerk(title: '3 Cancellation tokens', subtitle: 'No penalties apply'),
+        LevelPerk(
+            title: 'Free Concierge Service', subtitle: 'Unlimited bookings'),
+        LevelPerk(
+            title: '3 Cancellation tokens', subtitle: 'No penalties apply'),
         LevelPerk(title: 'Dedicated Account Manager'),
       ],
       'reward': 'Gift: Luxury Beach Towel Set',
@@ -132,7 +141,7 @@ class MawsemLevelsList extends StatelessWidget {
       'number': 7,
       'name': 'Sahely Ambassador',
       'stars': 500,
-      'icon': Icons.workspace_premium, 
+      'icon': Icons.workspace_premium,
       'perks': 'Free weekend + season party invite',
       'bgColor': AppColors.mawsemBg,
       'textColor': Colors.white,
@@ -141,9 +150,11 @@ class MawsemLevelsList extends StatelessWidget {
       'iconBgColor': AppColors.gold,
       'hasGoldBorder': true,
       'detailedPerks': [
-        LevelPerk(title: 'Free Weekend Stay', subtitle: 'Any unit of your choice'),
+        LevelPerk(
+            title: 'Free Weekend Stay', subtitle: 'Any unit of your choice'),
         LevelPerk(title: 'Season Party Invite', subtitle: 'VIP access for two'),
-        LevelPerk(title: 'Ambassador Level Support', subtitle: 'Instant 24/7 help'),
+        LevelPerk(
+            title: 'Ambassador Level Support', subtitle: 'Instant 24/7 help'),
       ],
       'reward': 'Ambassador Membership Card',
     },

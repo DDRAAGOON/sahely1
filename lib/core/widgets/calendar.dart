@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'cards.dart';
@@ -12,6 +13,7 @@ class AvailabilityCalendar extends StatelessWidget {
     this.ownerOff = const [],
     this.legend = const ['Ongoing', 'Upcoming', 'Blocked'],
   });
+
   final List<int> ongoing;
   final List<int> upcoming;
   final List<int> blocked;
@@ -27,7 +29,8 @@ class AvailabilityCalendar extends StatelessWidget {
   }
 
   Color _fg(int d) {
-    if (ongoing.contains(d) || upcoming.contains(d) || ownerOff.contains(d)) return AppColors.white;
+    if (ongoing.contains(d) || upcoming.contains(d) || ownerOff.contains(d))
+      return AppColors.white;
     return AppColors.ink;
   }
 
@@ -40,7 +43,11 @@ class AvailabilityCalendar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('June 2026', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.navy)),
+              Text('June 2026',
+                  style: AppTheme.dm(
+                      size: 14,
+                      weight: FontWeight.w600,
+                      color: AppColors.navy)),
               const Row(children: [
                 Icon(Icons.chevron_left, size: 18, color: AppColors.muted),
                 SizedBox(width: 12),
@@ -52,7 +59,11 @@ class AvailabilityCalendar extends StatelessWidget {
           Row(
             children: [
               for (final d in ['S', 'M', 'T', 'W', 'T', 'F', 'S'])
-                Expanded(child: Center(child: Text(d, style: AppTheme.dm(size: 11, color: AppColors.muted)))),
+                Expanded(
+                    child: Center(
+                        child: Text(d,
+                            style: AppTheme.dm(
+                                size: 11, color: AppColors.muted)))),
             ],
           ),
           const SizedBox(height: 6),
@@ -67,8 +78,15 @@ class AvailabilityCalendar extends StatelessWidget {
               for (var d = 1; d <= 30; d++)
                 Container(
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: _bg(d), borderRadius: BorderRadius.circular(8)),
-                  child: Text('$d', style: AppTheme.dm(size: 12, color: _fg(d), weight: _bg(d) != null ? FontWeight.w600 : FontWeight.w400)),
+                  decoration: BoxDecoration(
+                      color: _bg(d), borderRadius: BorderRadius.circular(8)),
+                  child: Text('$d',
+                      style: AppTheme.dm(
+                          size: 12,
+                          color: _fg(d),
+                          weight: _bg(d) != null
+                              ? FontWeight.w600
+                              : FontWeight.w400)),
                 ),
             ],
           ),
@@ -95,7 +113,11 @@ class AvailabilityCalendar extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(width: 10, height: 10, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(3))),
+        Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+                color: color, borderRadius: BorderRadius.circular(3))),
         const SizedBox(width: 5),
         Text(label, style: AppTheme.dm(size: 11, color: AppColors.muted)),
       ],

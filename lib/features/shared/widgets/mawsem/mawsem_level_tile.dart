@@ -38,12 +38,13 @@ class MawsemLevelTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveIconColor = iconColor ?? textColor;
-    final effectiveIconBgColor = iconBgColor ?? effectiveIconColor.withValues(alpha: 0.1);
-    
+    final effectiveIconBgColor =
+        iconBgColor ?? effectiveIconColor.withValues(alpha: 0.1);
+
     // Determine stars badge colors based on level number
     Color badgeBg;
     Color badgeText;
-    
+
     if (number == 7) {
       badgeBg = AppColors.gold;
       badgeText = AppColors.navy;
@@ -57,12 +58,11 @@ class MawsemLevelTile extends StatelessWidget {
       badgeBg = AppColors.levelLockedBg; // #FBF3DE
       badgeText = AppColors.levelLockedText; // #9A7A22
     } else {
-      badgeBg = isUnlocked 
-          ? AppColors.levelUnlockedBg 
+      badgeBg = isUnlocked
+          ? AppColors.levelUnlockedBg
           : Colors.black.withValues(alpha: 0.05);
-      badgeText = isUnlocked 
-          ? AppColors.levelUnlockedText 
-          : AppColors.secondary;
+      badgeText =
+          isUnlocked ? AppColors.levelUnlockedText : AppColors.secondary;
     }
 
     return GestureDetector(
@@ -149,9 +149,10 @@ class MawsemLevelTile extends StatelessWidget {
                     perks,
                     style: TextStyle(
                       fontSize: 12,
-                      color: perksColor ?? (isCurrent 
-                          ? Colors.white.withValues(alpha: 0.7) 
-                          : AppColors.secondary),
+                      color: perksColor ??
+                          (isCurrent
+                              ? Colors.white.withValues(alpha: 0.7)
+                              : AppColors.secondary),
                       fontFamily: 'Cairo',
                     ),
                     maxLines: 1,
@@ -190,4 +191,3 @@ class MawsemLevelTile extends StatelessWidget {
     );
   }
 }
-

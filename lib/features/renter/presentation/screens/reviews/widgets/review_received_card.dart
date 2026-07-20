@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class ReviewReceivedCard extends StatelessWidget {
@@ -37,7 +38,8 @@ class ReviewReceivedCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFFDF9F4), // Gold tint from image
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.gold.withValues(alpha: 0.3), width: 1),
+        border:
+            Border.all(color: AppColors.gold.withValues(alpha: 0.3), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,8 +65,9 @@ class ReviewReceivedCard extends StatelessWidget {
                         child: Image.network(
                           hostAvatar!,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => 
-                            const Icon(Icons.person, color: Colors.white, size: 24),
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.person,
+                                  color: Colors.white, size: 24),
                         ),
                       )
                     : const Icon(Icons.person, color: Colors.white, size: 24),
@@ -96,7 +99,8 @@ class ReviewReceivedCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFBF3DE), // Light gold from image
+                            color: const Color(0xFFFBF3DE),
+                            // Light gold from image
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(

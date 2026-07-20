@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/models/wishlist_item.dart';
+
 import '../../data/repositories/wishlist_repository.dart';
+import '../../domain/models/wishlist_item.dart';
 
 enum WishlistStatus { initial, loading, loaded, error }
 
@@ -44,77 +45,80 @@ class WishlistState {
 class WishlistStatusLoaded extends WishlistState {
   final String propertyId;
   final bool isWishlisted;
-  WishlistStatusLoaded(this.propertyId, this.isWishlisted, WishlistState previousState) 
-    : super(
-        toggledPropertyId: propertyId, 
-        isToggledStatus: isWishlisted, 
-        collections: previousState.collections,
-        items: previousState.items,
-        status: WishlistStatus.loaded
-      );
+
+  WishlistStatusLoaded(
+      this.propertyId, this.isWishlisted, WishlistState previousState)
+      : super(
+            toggledPropertyId: propertyId,
+            isToggledStatus: isWishlisted,
+            collections: previousState.collections,
+            items: previousState.items,
+            status: WishlistStatus.loaded);
 }
 
 class WishlistToggled extends WishlistState {
   final String propertyId;
   final bool isWishlisted;
-  WishlistToggled(this.propertyId, this.isWishlisted, WishlistState previousState) 
-    : super(
-        toggledPropertyId: propertyId, 
-        isToggledStatus: isWishlisted, 
-        collections: previousState.collections,
-        items: previousState.items,
-        status: WishlistStatus.loaded
-      );
+
+  WishlistToggled(
+      this.propertyId, this.isWishlisted, WishlistState previousState)
+      : super(
+            toggledPropertyId: propertyId,
+            isToggledStatus: isWishlisted,
+            collections: previousState.collections,
+            items: previousState.items,
+            status: WishlistStatus.loaded);
 }
 
 class CollectionsLoaded extends WishlistState {
   @override
   final List<WishlistCollection> collections;
-  CollectionsLoaded(this.collections, WishlistState previousState) 
-    : super(
-        collections: collections, 
-        items: previousState.items,
-        toggledPropertyId: previousState.toggledPropertyId,
-        isToggledStatus: previousState.isToggledStatus,
-        status: WishlistStatus.loaded
-      );
+
+  CollectionsLoaded(this.collections, WishlistState previousState)
+      : super(
+            collections: collections,
+            items: previousState.items,
+            toggledPropertyId: previousState.toggledPropertyId,
+            isToggledStatus: previousState.isToggledStatus,
+            status: WishlistStatus.loaded);
 }
 
 class WishlistItemsLoaded extends WishlistState {
   @override
   final List<WishlistItem> items;
-  WishlistItemsLoaded(this.items, WishlistState previousState) 
-    : super(
-        items: items, 
-        collections: previousState.collections,
-        toggledPropertyId: previousState.toggledPropertyId,
-        isToggledStatus: previousState.isToggledStatus,
-        status: WishlistStatus.loaded
-      );
+
+  WishlistItemsLoaded(this.items, WishlistState previousState)
+      : super(
+            items: items,
+            collections: previousState.collections,
+            toggledPropertyId: previousState.toggledPropertyId,
+            isToggledStatus: previousState.isToggledStatus,
+            status: WishlistStatus.loaded);
 }
 
 class WishlistLoading extends WishlistState {
-  WishlistLoading(WishlistState previousState) 
-    : super(
-        status: WishlistStatus.loading, 
-        collections: previousState.collections,
-        items: previousState.items,
-        toggledPropertyId: previousState.toggledPropertyId,
-        isToggledStatus: previousState.isToggledStatus,
-      );
+  WishlistLoading(WishlistState previousState)
+      : super(
+          status: WishlistStatus.loading,
+          collections: previousState.collections,
+          items: previousState.items,
+          toggledPropertyId: previousState.toggledPropertyId,
+          isToggledStatus: previousState.isToggledStatus,
+        );
 }
 
 class WishlistError extends WishlistState {
   final String message;
-  WishlistError(this.message, WishlistState previousState) 
-    : super(
-        errorMessage: message, 
-        status: WishlistStatus.error, 
-        collections: previousState.collections,
-        items: previousState.items,
-        toggledPropertyId: previousState.toggledPropertyId,
-        isToggledStatus: previousState.isToggledStatus,
-      );
+
+  WishlistError(this.message, WishlistState previousState)
+      : super(
+          errorMessage: message,
+          status: WishlistStatus.error,
+          collections: previousState.collections,
+          items: previousState.items,
+          toggledPropertyId: previousState.toggledPropertyId,
+          isToggledStatus: previousState.isToggledStatus,
+        );
 }
 
 class WishlistCubit extends Cubit<WishlistState> {
@@ -142,12 +146,12 @@ class WishlistCubit extends Cubit<WishlistState> {
         propertyName: propertyName,
         propertyImage: propertyImage,
       );
-      
+
       final collections = await _repository.getCollections();
-      
+
       // Update our internal items list by doing a fresh fetch so UI responds
-      final items = await _repository.getAllWishlistItems(); 
-      
+      final items = await _repository.getAllWishlistItems();
+
       // We manually construct a new WishlistState to update items along with the toggle
       final newState = state.copyWith(
         collections: collections,
@@ -175,10 +179,10 @@ class WishlistCubit extends Cubit<WishlistState> {
       );
       final collections = await _repository.getCollections();
       final items = await _repository.getAllWishlistItems();
-      
+
       final newState = state.copyWith(collections: collections, items: items);
       emit(WishlistToggled(propertyId, true, newState));
-      
+
       // We emit CollectionsLoaded to refresh the UI
       emit(CollectionsLoaded(collections, newState));
     } catch (e) {
@@ -215,7 +219,7 @@ class WishlistCubit extends Cubit<WishlistState> {
     try {
       final collections = await _repository.getCollections();
       final items = await _repository.getAllWishlistItems();
-      
+
       final newState = state.copyWith(collections: collections, items: items);
       emit(CollectionsLoaded(collections, newState));
     } catch (e) {

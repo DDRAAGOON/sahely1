@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/features/renter/presentation/verification/pages/add_payment_card_screen.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/widgets/blocked_action_gate.dart';
-import 'package:sahely/core/providers/bookings_provider.dart';
-import 'package:sahely/features/renter/presentation/verification/pages/add_payment_card_screen.dart';
-import '../widgets/booking_property_card.dart';
+
 import '../widgets/booking_calendar.dart';
+import '../widgets/booking_property_card.dart';
+import '../widgets/confirm_pay_button.dart';
 import '../widgets/guest_counter_row.dart';
 import '../widgets/guest_summary_note.dart';
 import '../widgets/price_breakdown.dart';
-import '../widgets/confirm_pay_button.dart';
 
 class BookingDatesGuestsScreen extends StatefulWidget {
   final String propertyName;
@@ -31,7 +32,8 @@ class BookingDatesGuestsScreen extends StatefulWidget {
   });
 
   @override
-  State<BookingDatesGuestsScreen> createState() => _BookingDatesGuestsScreenState();
+  State<BookingDatesGuestsScreen> createState() =>
+      _BookingDatesGuestsScreenState();
 }
 
 class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
@@ -56,15 +58,19 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
 
   int get _nights {
     if (_checkInDate == null || _checkOutDate == null) return 0;
-    final start = DateTime(_checkInDate!.year, _checkInDate!.month, _checkInDate!.day);
-    final end = DateTime(_checkOutDate!.year, _checkOutDate!.month, _checkOutDate!.day);
+    final start =
+        DateTime(_checkInDate!.year, _checkInDate!.month, _checkInDate!.day);
+    final end =
+        DateTime(_checkOutDate!.year, _checkOutDate!.month, _checkOutDate!.day);
     return end.difference(start).inDays;
   }
 
   int get _totalGuests => _adults + _children + _infants;
 
   int get _subtotal => _nights * widget.pricePerNight;
+
   int get _vat => (_subtotal * 0.14).round();
+
   int get _total => _subtotal > 0 ? (_subtotal + widget.cleaningFee + _vat) : 0;
 
   bool _localIsSameDay(DateTime? a, DateTime? b) {
@@ -93,16 +99,25 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
     });
   }
 
-  void _incrementAdults() => _totalGuests < widget.maxGuests ? setState(() => _adults++) : null;
+  void _incrementAdults() =>
+      _totalGuests < widget.maxGuests ? setState(() => _adults++) : null;
+
   void _decrementAdults() => _adults > 1 ? setState(() => _adults--) : null;
-  void _incrementChildren() => _totalGuests < widget.maxGuests ? setState(() => _children++) : null;
-  void _decrementChildren() => _children > 0 ? setState(() => _children--) : null;
-  void _incrementInfants() => _totalGuests < widget.maxGuests ? setState(() => _infants++) : null;
+
+  void _incrementChildren() =>
+      _totalGuests < widget.maxGuests ? setState(() => _children++) : null;
+
+  void _decrementChildren() =>
+      _children > 0 ? setState(() => _children--) : null;
+
+  void _incrementInfants() =>
+      _totalGuests < widget.maxGuests ? setState(() => _infants++) : null;
+
   void _decrementInfants() => _infants > 0 ? setState(() => _infants--) : null;
 
   Future<void> _confirmAndPay() async {
     if (_checkInDate == null || _checkOutDate == null) return;
-    
+
     final verificationCubit = context.read<VerificationCubit>();
     if (!verificationCubit.canPerformAction()) {
       showModalBottomSheet(
@@ -120,7 +135,8 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const AddPaymentCardScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const AddPaymentCardScreen()),
               );
             },
             onNotNow: () {
@@ -133,29 +149,31 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
     }
 
     setState(() => _isConfirming = true);
-    
+
     // Mock processing delay
     await Future.delayed(const Duration(seconds: 2));
-    
+
     if (mounted) {
       final bookingsProvider = context.read<BookingsProvider>();
       final newBooking = Booking(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         propertyName: widget.propertyName,
-        location: 'Marassi · North Coast', // Mock
+        location: 'Marassi · North Coast',
+        // Mock
         orderNumber: 'SHLY-${(1000 + (DateTime.now().millisecond % 9000))}',
-        dates: '${_formatDate(_checkInDate!)} – ${_formatDate(_checkOutDate!)} · $_nights nights',
+        dates:
+            '${_formatDate(_checkInDate!)} – ${_formatDate(_checkOutDate!)} · $_nights nights',
         guests: '$_adults adults${_children > 0 ? ', $_children child' : ''}',
         imageUrl: widget.propertyImage,
         checkIn: _checkInDate!,
         checkOut: _checkOutDate!,
         totalPaid: _total,
       );
-      
+
       bookingsProvider.addBooking(newBooking);
-      
+
       setState(() => _isConfirming = false);
-      
+
       context.push(
         '/booking-confirmed',
         extra: {
@@ -173,7 +191,20 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
   }
 
   String _formatDate(DateTime date) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
     return '${months[date.month - 1]} ${date.day}';
   }
 
@@ -188,7 +219,8 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
             _buildHeader(),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -232,7 +264,11 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
                             onDecrement: _decrementAdults,
                             canDecrement: _adults > 1,
                           ),
-                          const Divider(height: 1, color: AppColors.border, indent: 16, endIndent: 16),
+                          const Divider(
+                              height: 1,
+                              color: AppColors.border,
+                              indent: 16,
+                              endIndent: 16),
                           GuestCounterRow(
                             label: 'Children',
                             subtitle: 'Ages 2-17',
@@ -241,7 +277,11 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
                             onDecrement: _decrementChildren,
                             canDecrement: _children > 0,
                           ),
-                          const Divider(height: 1, color: AppColors.border, indent: 16, endIndent: 16),
+                          const Divider(
+                              height: 1,
+                              color: AppColors.border,
+                              indent: 16,
+                              endIndent: 16),
                           GuestCounterRow(
                             label: 'Infants',
                             subtitle: 'Under 2',
@@ -294,12 +334,17 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 12, color: AppColors.secondary, fontFamily: 'DM Sans'),
+          style: const TextStyle(
+              fontSize: 12, color: AppColors.secondary, fontFamily: 'DM Sans'),
         ),
         const SizedBox(height: 4),
         Text(
           date != null ? _formatDate(date) : 'Select',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'DM Sans'),
+          style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: AppColors.navy,
+              fontFamily: 'DM Sans'),
         ),
       ],
     );
@@ -314,19 +359,25 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
-              width: 38, height: 38,
+              width: 38,
+              height: 38,
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: AppColors.border),
               ),
-              child: const Icon(Icons.chevron_left, color: AppColors.navy, size: 24),
+              child: const Icon(Icons.chevron_left,
+                  color: AppColors.navy, size: 24),
             ),
           ),
           const SizedBox(width: 12),
           const Text(
             'Plan Your Stay',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'DM Sans'),
+            style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: AppColors.navy,
+                fontFamily: 'DM Sans'),
           ),
         ],
       ),

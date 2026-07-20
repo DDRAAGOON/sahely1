@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -9,10 +10,12 @@ class OwnerNotificationSettingsScreen extends StatefulWidget {
   const OwnerNotificationSettingsScreen({super.key});
 
   @override
-  State<OwnerNotificationSettingsScreen> createState() => _OwnerNotificationSettingsScreenState();
+  State<OwnerNotificationSettingsScreen> createState() =>
+      _OwnerNotificationSettingsScreenState();
 }
 
-class _OwnerNotificationSettingsScreenState extends State<OwnerNotificationSettingsScreen> {
+class _OwnerNotificationSettingsScreenState
+    extends State<OwnerNotificationSettingsScreen> {
   // State for toggles
   bool bookingUpdates = true;
   bool checkInAlerts = true;
@@ -34,7 +37,11 @@ class _OwnerNotificationSettingsScreenState extends State<OwnerNotificationSetti
               children: [
                 const BackChip(),
                 const SizedBox(width: 12),
-                Text('Notifications', style: AppTheme.dm(size: 20, weight: FontWeight.w700, color: AppColors.navy)),
+                Text('Notifications',
+                    style: AppTheme.dm(
+                        size: 20,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy)),
               ],
             ),
           ),
@@ -114,7 +121,8 @@ class _OwnerNotificationSettingsScreenState extends State<OwnerNotificationSetti
                         title: 'Email',
                         subtitle: 'mariam@example.com',
                         value: emailNotifications,
-                        onChanged: (v) => setState(() => emailNotifications = v),
+                        onChanged: (v) =>
+                            setState(() => emailNotifications = v),
                       ),
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       _toggleRow(
@@ -137,7 +145,12 @@ class _OwnerNotificationSettingsScreenState extends State<OwnerNotificationSetti
 
   Widget _sectionLabel(String label) => Padding(
         padding: const EdgeInsets.only(left: 4),
-        child: Text(label, style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.muted, letterSpacing: 0.5)),
+        child: Text(label,
+            style: AppTheme.dm(
+                size: 12,
+                weight: FontWeight.w700,
+                color: AppColors.muted,
+                letterSpacing: 0.5)),
       );
 
   Widget _toggleRow({
@@ -155,9 +168,14 @@ class _OwnerNotificationSettingsScreenState extends State<OwnerNotificationSetti
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+                Text(title,
+                    style: AppTheme.dm(
+                        size: 15,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy)),
                 const SizedBox(height: 2),
-                Text(subtitle, style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                Text(subtitle,
+                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
               ],
             ),
           ),

@@ -132,7 +132,7 @@ class BrokerMawsemLevelsList extends StatelessWidget {
       'number': 7,
       'name': 'Sahely Ambassador',
       'stars': 500,
-      'icon': Icons.workspace_premium, 
+      'icon': Icons.workspace_premium,
       'perks': '5% commission + Advisory Seat',
       'bgColor': AppColors.mawsemBg,
       'textColor': Colors.white,

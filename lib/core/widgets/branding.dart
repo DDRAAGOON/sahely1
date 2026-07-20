@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
 /// "SAHELY" wordmark.
 class Wordmark extends StatelessWidget {
-  const Wordmark({super.key, this.size = 24, this.color = AppColors.white, this.spacing = 5});
+  const Wordmark(
+      {super.key,
+      this.size = 24,
+      this.color = AppColors.white,
+      this.spacing = 5});
+
   final double size;
   final Color color;
   final double spacing;
@@ -12,13 +18,18 @@ class Wordmark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text('SAHELY',
-        style: AppTheme.dm(size: size, weight: FontWeight.w700, color: color, letterSpacing: spacing));
+        style: AppTheme.dm(
+            size: size,
+            weight: FontWeight.w700,
+            color: color,
+            letterSpacing: spacing));
   }
 }
 
 /// Progress dots for carousels or onboarding.
 class ProgressDots extends StatelessWidget {
   const ProgressDots({super.key, required this.count, required this.active});
+
   final int count;
   final int active;
 

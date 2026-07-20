@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+
+import '../../reviews/pages/write_review_screen.dart';
+import '../widgets/arrival_checklist_section.dart';
+import '../widgets/ask_sahely_ai_section.dart';
 import '../widgets/booked_property_header.dart';
-import '../widgets/property_photo_gallery.dart';
 import '../widgets/booking_info_chips.dart';
 import '../widgets/door_passcode_sos_buttons.dart';
-import '../widgets/property_details_card.dart';
 import '../widgets/location_map_section.dart';
-import '../widgets/arrival_checklist_section.dart';
+import '../widgets/property_details_card.dart';
+import '../widgets/property_photo_gallery.dart';
 import '../widgets/rate_your_stay_section.dart';
-import '../widgets/ask_sahely_ai_section.dart';
-import 'smart_lock_screen.dart';
 import 'arrival_checklist_screen.dart';
-import '../../reviews/pages/write_review_screen.dart';
+import 'smart_lock_screen.dart';
 
 class BookedPropertyScreen extends StatelessWidget {
   final String bookingId;
@@ -28,10 +29,14 @@ class BookedPropertyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Watch provider to get updates when checklist changes
     final bookingsProvider = context.watch<BookingsProvider>();
-    
+
     // Find the specific booking or show loading/error
-    final allBookings = [...bookingsProvider.activeBookings, ...bookingsProvider.upcomingBookings, ...bookingsProvider.pastBookings];
-    
+    final allBookings = [
+      ...bookingsProvider.activeBookings,
+      ...bookingsProvider.upcomingBookings,
+      ...bookingsProvider.pastBookings
+    ];
+
     Booking? booking;
     try {
       booking = allBookings.firstWhere((b) => b.id == bookingId);
@@ -45,7 +50,7 @@ class BookedPropertyScreen extends StatelessWidget {
         body: const Center(child: CircularProgressIndicator()),
       );
     }
-    
+
     return Scaffold(
       backgroundColor: AppColors.cream,
       body: CustomScrollView(
@@ -90,7 +95,7 @@ class BookedPropertyScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: DoorPasscodeSosButtons(
                 onDoorPasscodeTap: () {
-                   Navigator.push(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => SmartLockScreen(
@@ -106,7 +111,7 @@ class BookedPropertyScreen extends StatelessWidget {
                   );
                 },
                 onSOSTap: () {
-                  context.push('/sos');
+                  AppNavigation.goToSos(context);
                 },
               ),
             ),
@@ -150,7 +155,9 @@ class BookedPropertyScreen extends StatelessWidget {
               child: ArrivalChecklistSection(
                 checklist: booking.checklist,
                 onChecklistChanged: (newChecklist) {
-                  context.read<BookingsProvider>().updateChecklist(bookingId, newChecklist);
+                  context
+                      .read<BookingsProvider>()
+                      .updateChecklist(bookingId, newChecklist);
                 },
                 onReportIssue: () async {
                   final result = await Navigator.push(
@@ -159,13 +166,16 @@ class BookedPropertyScreen extends StatelessWidget {
                       builder: (context) => ArrivalChecklistScreen(
                         bookingId: booking!.orderNumber,
                         checkInTime: booking.checkIn,
-                        checklistItems: List<Map<String, dynamic>>.from(booking.checklist),
+                        checklistItems:
+                            List<Map<String, dynamic>>.from(booking.checklist),
                       ),
                     ),
                   );
-                  
+
                   if (result != null && result is List<Map<String, dynamic>>) {
-                    context.read<BookingsProvider>().updateChecklist(bookingId, result);
+                    context
+                        .read<BookingsProvider>()
+                        .updateChecklist(bookingId, result);
                   }
                 },
               ),
@@ -204,7 +214,7 @@ class BookedPropertyScreen extends StatelessWidget {
               child: AskSahelyAiSection(),
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 8)),
+          // Removed large bottom spacing
         ],
       ),
     );

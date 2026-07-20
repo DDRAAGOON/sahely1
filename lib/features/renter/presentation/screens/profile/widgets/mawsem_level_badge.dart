@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+
 import '../../../../../shared/widgets/mawsem/level/level_detail_sheet.dart';
 import '../../../../../shared/widgets/mawsem/level/level_perk.dart';
 

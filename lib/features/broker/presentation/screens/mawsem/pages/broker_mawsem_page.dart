@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+
 import '../../../../../shared/widgets/mawsem/mawsem_hero_card.dart';
 import '../../../../../shared/widgets/mawsem/referral_code_card.dart';
-import '../widgets/broker_mawsem_levels_list.dart';
 import '../widgets/broker_how_to_earn_section.dart';
+import '../widgets/broker_mawsem_levels_list.dart';
 
 class BrokerMawsemPage extends StatelessWidget {
   const BrokerMawsemPage({super.key});
@@ -62,7 +63,8 @@ class BrokerMawsemPage extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(16, 16, 16, 24),
                 child: MawsemHeroCard(
                   levelName: levelName,
-                  levelNumber: currentLevel, totalLevels: 7,
+                  levelNumber: currentLevel,
+                  totalLevels: 7,
                   currentStars: currentStars,
                   nextLevelName: nextLevelName,
                   nextLevelThreshold: nextLevelThreshold,

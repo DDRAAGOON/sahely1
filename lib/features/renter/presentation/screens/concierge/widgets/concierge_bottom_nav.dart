@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -25,7 +26,8 @@ class ConciergeBottomNav extends StatelessWidget {
         color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(28),
         // إضافة Border شفاف خفيف
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
+        border:
+            Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -82,5 +84,6 @@ class ConciergeBottomNav extends StatelessWidget {
 class _NavItem {
   final IconData icon;
   final String label;
+
   _NavItem({required this.icon, required this.label});
 }

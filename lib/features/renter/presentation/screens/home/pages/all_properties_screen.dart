@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
 import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
-import '../widgets/home_header.dart';
-import '../widgets/filter_chips.dart';
-import '../widgets/property_section.dart';
-import '../../Search/pages/search_filters_sheet.dart';
 import '../../Search/pages/search_empty_state.dart';
+import '../../Search/pages/search_filters_sheet.dart';
+import '../widgets/filter_chips.dart';
+import '../widgets/home_header.dart';
+import '../widgets/property_section.dart';
 
 class AllPropertiesScreen extends StatefulWidget {
   final Map<String, dynamic>? initialFilters;
+
   const AllPropertiesScreen({super.key, this.initialFilters});
 
   @override
@@ -19,10 +21,15 @@ class AllPropertiesScreen extends StatefulWidget {
 
 class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
   String _selectedFilter = 'All';
-  final List<String> _filters = ['All', 'Trending Now', 'Best Offers', 'Newly Added'];
+  final List<String> _filters = [
+    'All',
+    'Trending Now',
+    'Best Offers',
+    'Newly Added'
+  ];
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  
+
   Map<String, dynamic> _appliedFilters = {
     'propertyType': 'All',
     'bedrooms': 'Any',
@@ -38,15 +45,16 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
   List<Map<String, dynamic>> _masterProperties = [];
   bool _isLoading = true;
 
-
   List<Map<String, dynamic>> _filterList(List<Map<String, dynamic>> list) {
     var filtered = list;
 
     // 1. Apply Search Query
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((p) =>
-          p['name'].toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          p['location'].toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+      filtered = filtered
+          .where((p) =>
+              p['name'].toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              p['location'].toLowerCase().contains(_searchQuery.toLowerCase()))
+          .toList();
     }
 
     // 2. Apply Bottom Sheet Filters
@@ -68,7 +76,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
       filtered = filtered.where((p) => (p['beds'] as int) >= count).toList();
     }
 
-    final List<String> amenities = List<String>.from(_appliedFilters['amenities']);
+    final List<String> amenities =
+        List<String>.from(_appliedFilters['amenities']);
     if (amenities.isNotEmpty) {
       filtered = filtered.where((p) {
         List features = p['features'] as List;
@@ -90,7 +99,7 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
   }
 
   void _navigateToDetail(Map<String, dynamic> p) {
-    context.push('/property', extra: p);
+    AppNavigation.goToPropertyDetail(context, extra: p);
   }
 
   void _showFilters() {
@@ -166,10 +175,15 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
 
     // Dynamically derive sections from Master Data
     final allFiltered = _filterList(_masterProperties);
-    
-    final trending = allFiltered.where((p) => (p['rating'] as num) >= 4.8).toList();
-    final bestOffers = allFiltered.where((p) => (p['features'] as List).contains('Budget')).toList();
-    final newlyAdded = allFiltered.where((p) => (p['id'] as String).compareTo('10') > 0).toList();
+
+    final trending =
+        allFiltered.where((p) => (p['rating'] as num) >= 4.8).toList();
+    final bestOffers = allFiltered
+        .where((p) => (p['features'] as List).contains('Budget'))
+        .toList();
+    final newlyAdded = allFiltered
+        .where((p) => (p['id'] as String).compareTo('10') > 0)
+        .toList();
 
     final bool isEmpty = allFiltered.isEmpty;
 
@@ -205,7 +219,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                       ),
                       children: [
                         TextSpan(
-                          text: '${trending.length + bestOffers.length + newlyAdded.length}',
+                          text:
+                              '${trending.length + bestOffers.length + newlyAdded.length}',
                           style: const TextStyle(
                             color: AppColors.navy,
                             fontWeight: FontWeight.w700,
@@ -231,7 +246,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Trending Now Section
-                          if (_selectedFilter == 'All' || _selectedFilter == 'Trending Now')
+                          if (_selectedFilter == 'All' ||
+                              _selectedFilter == 'Trending Now')
                             _buildSection(
                               title: 'TRENDING NOW',
                               icon: Icons.local_fire_department,
@@ -241,7 +257,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                             ),
 
                           // Best Offers Section
-                          if (_selectedFilter == 'All' || _selectedFilter == 'Best Offers')
+                          if (_selectedFilter == 'All' ||
+                              _selectedFilter == 'Best Offers')
                             _buildSection(
                               title: 'BEST OFFERS',
                               icon: Icons.thumb_up,
@@ -251,7 +268,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                             ),
 
                           // Newly Added Section
-                          if (_selectedFilter == 'All' || _selectedFilter == 'Newly Added')
+                          if (_selectedFilter == 'All' ||
+                              _selectedFilter == 'Newly Added')
                             _buildSection(
                               title: 'NEWLY ADDED',
                               icon: Icons.auto_awesome,

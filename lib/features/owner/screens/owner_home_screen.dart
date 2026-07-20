@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/owner/data/datasources/mock_owner_data_source.dart';
 import 'package:sahely/features/owner/data/repositories/owner_repository_impl.dart';
 import 'package:sahely/features/owner/domain/entities/owner_dashboard.dart';
 import 'package:sahely/features/owner/presentation/bloc/owner_home_cubit.dart';
 import 'package:sahely/features/owner/presentation/bloc/owner_home_state.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/models.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/chips.dart';
 import '../../../core/widgets/common.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/property_card.dart';
-import '../widgets/pending_request_card.dart';
-import '../../shared/widgets/mawsem/mawsem_card.dart';
+import '../../../data/models.dart';
 import '../../renter/presentation/screens/home/widgets/promo_banner.dart';
+import '../../shared/widgets/mawsem/mawsem_card.dart';
+import '../widgets/pending_request_card.dart';
 
 class OwnerHomeScreen extends StatefulWidget {
   const OwnerHomeScreen({super.key});
@@ -112,7 +112,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                 Row(children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => context.push('/browse'),
+                      onTap: () => AppNavigation.goToBrowse(context),
                       behavior: HitTestBehavior.opaque,
                       child: Container(
                         height: 52,
@@ -141,9 +141,9 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                   const SizedBox(width: 10),
                   GestureDetector(
                     onTap: () async {
-                      final result = await context.push('/filters');
+                      final result = await AppNavigation.goToFilters(context);
                       if (result is Map<String, dynamic> && context.mounted) {
-                        context.push('/browse', extra: result);
+                        AppNavigation.goToSearchResults(context, extra: result);
                       }
                     },
                     behavior: HitTestBehavior.opaque,
@@ -159,7 +159,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                   ),
                   const SizedBox(width: 10),
                   GestureDetector(
-                    onTap: () => context.push('/owner/ai-chat'),
+                    onTap: () => AppNavigation.goToOwnerAiChat(context),
                     behavior: HitTestBehavior.opaque,
                     child: Container(
                       width: 50,
@@ -234,7 +234,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                             weight: FontWeight.w700,
                             color: AppColors.navy)),
                     GestureDetector(
-                      onTap: () => context.push('/owner/all-trending'),
+                      onTap: () => AppNavigation.goToOwnerAllTrending(context),
                       behavior: HitTestBehavior.opaque,
                       child: Text('See All',
                           style: AppTheme.dm(
@@ -255,7 +255,8 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                   for (var p in _filteredProperties) ...[
                     PropertyCard(
                         property: p,
-                        onTap: () => context.push('/property', extra: p)),
+                        onTap: () => AppNavigation.goToPropertyDetail(context,
+                            extra: p)),
                     const SizedBox(height: 14),
                   ],
                 const SizedBox(height: 24),
@@ -271,21 +272,21 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                   StatCard(
                       value: '${dashboard?.propertiesCount ?? 3}',
                       label: 'Properties',
-                      onTap: () => context.push('/owner/properties')),
+                      onTap: () => AppNavigation.goToOwnerProperties(context)),
                   StatCard(
                       value: '${dashboard?.bookingsCount ?? 7}',
                       label: 'Active bookings',
-                      onTap: () => context.push('/owner/bookings')),
+                      onTap: () => AppNavigation.goToOwnerBookings(context)),
                   StatCard(
                       value: '${dashboard?.monthlyEarnings ?? '68.4k'}',
                       label: 'EGP / month',
-                      onTap: () => context.push('/owner/earnings')),
+                      onTap: () => AppNavigation.goToOwnerEarnings(context)),
                 ]),
                 const SizedBox(height: 16),
 
                 // 6. Action: List new property
                 GestureDetector(
-                  onTap: () => context.push('/owner/add-property'),
+                  onTap: () => AppNavigation.goToOwnerAddProperty(context),
                   behavior: HitTestBehavior.opaque,
                   child: Container(
                     padding: const EdgeInsets.all(16),
@@ -337,16 +338,16 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                 SectionHeader(
                   title: 'Pending Requests',
                   action: 'View all · 2',
-                  onAction: () => context.push('/owner/requests'),
+                  onAction: () => AppNavigation.goToOwnerRequests(context),
                 ),
                 const SizedBox(height: 12),
                 PendingRequestCard(
-                    onTap: () => context.push('/owner/request-detail')),
+                    onTap: () => AppNavigation.goToOwnerRequestDetail(context)),
                 const SizedBox(height: 24),
 
                 // 9. Portfolio Insights
                 GestureDetector(
-                  onTap: () => context.push('/owner/portfolio'),
+                  onTap: () => AppNavigation.goToOwnerPortfolio(context),
                   behavior: HitTestBehavior.opaque,
                   child: WhiteCard(
                     padding: const EdgeInsets.all(16),
@@ -390,7 +391,6 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
       ),
     );
   }
-
 
   Widget _buildFooter() {
     return Column(

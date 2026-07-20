@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class CompareInputBar extends StatelessWidget {
@@ -68,7 +69,8 @@ class CompareInputBar extends StatelessWidget {
             const SizedBox(width: 10),
             // Send Button
             GestureDetector(
-              onTap: () => onSendMessage(''), // Placeholder for current implementation
+              onTap: () => onSendMessage(''),
+              // Placeholder for current implementation
               child: Container(
                 width: 44,
                 height: 44,

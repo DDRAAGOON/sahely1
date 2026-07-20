@@ -13,7 +13,20 @@ class LockInfoCards extends StatelessWidget {
   });
 
   String _formatDate(DateTime date) {
-    const months = ['Jun', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jun',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
     return '${months[date.month - 1]} ${date.day}';
   }
 
@@ -26,7 +39,9 @@ class LockInfoCards extends StatelessWidget {
         children: [
           _buildCard(
             isInRange ? 'Valid until' : 'Distance',
-            isInRange ? 'Checkout · ${_formatDate(checkOut)}' : '${distance.toStringAsFixed(1)} km away',
+            isInRange
+                ? 'Checkout · ${_formatDate(checkOut)}'
+                : '${distance.toStringAsFixed(1)} km away',
           ),
           const SizedBox(width: 10),
           _buildCard(

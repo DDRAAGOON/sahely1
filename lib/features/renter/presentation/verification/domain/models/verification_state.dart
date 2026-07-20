@@ -12,17 +12,14 @@ class VerificationState {
   });
 
   bool get isComplete =>
-      emailVerified &&
-          phoneVerified &&
-          idVerified &&
-          cardAdded;
+      emailVerified && phoneVerified && idVerified && cardAdded;
 
   int get completedSteps => [
-    emailVerified,
-    phoneVerified,
-    idVerified,
-    cardAdded,
-  ].where((step) => step).length;
+        emailVerified,
+        phoneVerified,
+        idVerified,
+        cardAdded,
+      ].where((step) => step).length;
 
   VerificationState copyWith({
     bool? emailVerified,

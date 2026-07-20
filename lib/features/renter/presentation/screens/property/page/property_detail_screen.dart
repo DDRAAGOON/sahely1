@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+
+import '../widgets/amenities_section.dart';
+import '../widgets/description_section.dart';
+import '../widgets/feature_chips_section.dart';
+import '../widgets/house_rules_section.dart';
+import '../widgets/map_teaser.dart';
 import '../widgets/property_image_gallery.dart';
 import '../widgets/property_info_section.dart';
-import '../widgets/feature_chips_section.dart';
-import '../widgets/amenities_section.dart';
-import '../widgets/house_rules_section.dart';
 import '../widgets/reviews_section.dart';
-import '../widgets/sticky_bottom_bar.dart';
-import '../widgets/map_teaser.dart';
-import '../widgets/description_section.dart';
 import '../widgets/smart_lock_badge.dart';
+import '../widgets/sticky_bottom_bar.dart';
 
 class PropertyDetailScreen extends StatefulWidget {
   final String propertyId;
@@ -120,7 +121,7 @@ class _PropertyDetailScreenState extends State<PropertyDetailScreen> {
             child: StickyBottomBar(
               pricePerNight: widget.pricePerNight,
               onBookNowTap: () {
-                context.push('/booking', extra: {
+                AppNavigation.goToBooking(context, extra: {
                   'propertyName': widget.propertyName,
                   'propertyImage': widget.propertyImage,
                   'pricePerNight': widget.pricePerNight,

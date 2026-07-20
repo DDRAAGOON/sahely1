@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
-import '../widgets/wallet_balance_card.dart';
 import '../widgets/wallet_add_credit_button.dart';
-import '../widgets/wallet_stats_tiles.dart';
+import '../widgets/wallet_balance_card.dart';
 import '../widgets/wallet_recent_activity.dart';
+import '../widgets/wallet_stats_tiles.dart';
 import 'add_credit_sheet.dart';
 import 'transaction_history_screen.dart';
 

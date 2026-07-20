@@ -1,5 +1,7 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class CollectionBottomNav extends StatelessWidget {
@@ -26,7 +28,8 @@ class CollectionBottomNav extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
+        border:
+            Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -47,7 +50,7 @@ class CollectionBottomNav extends StatelessWidget {
                 onTap: () {
                   // الرجوع للهوم وفتح التبويب المختار
                   Navigator.of(context).popUntil((route) => route.isFirst);
-                  // في حالة استخدام GoRouter يمكن استخدام context.go('/home') مع باراميتر للتبويب
+                  // في حالة استخدام GoRouter يمكن استخدام AppNavigation.goToRenterHome(context) مع باراميتر للتبويب
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -85,5 +88,6 @@ class CollectionBottomNav extends StatelessWidget {
 class _NavItem {
   final IconData icon;
   final String label;
+
   _NavItem({required this.icon, required this.label});
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 import '../../../../../shared/widgets/mawsem/level/level_detail_sheet.dart';
 import '../../../../../shared/widgets/mawsem/level/level_perk.dart';
-
 
 class MawsemSeasonPassCard extends StatelessWidget {
   final String levelName;
@@ -57,7 +56,7 @@ class MawsemSeasonPassCard extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => context.push('/mawsem'),
+            onTap: () => AppNavigation.goToMawsem(context),
             child: Row(
               children: [
                 // Star Icon Tile

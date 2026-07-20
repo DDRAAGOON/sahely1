@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+
+import '../../widgets/mawsem/how_to_earn_section.dart';
 import '../../widgets/mawsem/mawsem_hero_card.dart';
 import '../../widgets/mawsem/mawsem_levels_list.dart';
-import '../../widgets/mawsem/how_to_earn_section.dart';
 import '../../widgets/mawsem/referral_code_card.dart';
 
 class MawsemDashboardScreen extends StatelessWidget {
@@ -15,7 +16,8 @@ class MawsemDashboardScreen extends StatelessWidget {
     final profile = context.watch<ProfileProvider>();
     final levelData = profile.levelData;
     final nextLevel = profile.nextLevelData;
-    final int starsToNext = nextLevel != null ? nextLevel['stars'] - profile.stars : 0;
+    final int starsToNext =
+        nextLevel != null ? nextLevel['stars'] - profile.stars : 0;
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -64,8 +66,10 @@ class MawsemDashboardScreen extends StatelessWidget {
                   levelNumber: levelData['level'],
                   totalLevels: 7,
                   currentStars: profile.stars,
-                  nextLevelName: nextLevel != null ? nextLevel['name'] : 'Max Level',
-                  nextLevelThreshold: nextLevel != null ? nextLevel['stars'] : profile.stars,
+                  nextLevelName:
+                      nextLevel != null ? nextLevel['name'] : 'Max Level',
+                  nextLevelThreshold:
+                      nextLevel != null ? nextLevel['stars'] : profile.stars,
                   starsToNext: starsToNext,
                   seasonEndDays: 87,
                 ),
@@ -98,7 +102,8 @@ class MawsemDashboardScreen extends StatelessWidget {
             // Referral Code Card
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 120), // Added padding for floating bottom nav
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+                // Added padding for floating bottom nav
                 child: ReferralCodeCard(referralCode: profile.referralCode),
               ),
             ),

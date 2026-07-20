@@ -22,7 +22,8 @@ class DoorPasscodeSosButtons extends StatelessWidget {
             height: 54,
             child: ElevatedButton.icon(
               onPressed: onDoorPasscodeTap,
-              icon: const Icon(Icons.lock_open_outlined, size: 18, color: AppColors.navy),
+              icon: const Icon(Icons.lock_open_outlined,
+                  size: 18, color: AppColors.navy),
               label: const Text(
                 'Door Passcode',
                 style: TextStyle(
@@ -51,7 +52,8 @@ class DoorPasscodeSosButtons extends StatelessWidget {
             height: 54,
             child: ElevatedButton.icon(
               onPressed: onSOSTap,
-              icon: const Icon(Icons.warning_amber_rounded, size: 18, color: Colors.white),
+              icon: const Icon(Icons.warning_amber_rounded,
+                  size: 18, color: Colors.white),
               label: const Text(
                 'SOS',
                 style: TextStyle(

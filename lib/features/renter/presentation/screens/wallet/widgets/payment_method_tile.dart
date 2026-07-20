@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../pages/add_credit_sheet.dart';
 
@@ -26,7 +27,9 @@ class PaymentMethodTile extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        color: isSelected ? AppColors.navy.withValues(alpha: 0.04) : Colors.transparent,
+        color: isSelected
+            ? AppColors.navy.withValues(alpha: 0.04)
+            : Colors.transparent,
         child: Row(
           children: [
             // Icon
@@ -178,7 +181,8 @@ class PaymentMethodTile extends StatelessWidget {
                   onRegisterTap();
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: AppColors.gold.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),

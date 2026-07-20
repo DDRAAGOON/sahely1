@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
 
-const _azure = 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800&q=72&auto=format&fit=crop';
-const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
+const _azure =
+    'https://images.unsplash.com/photo-1776762893024-890728937eab?w=800&q=72&auto=format&fit=crop';
+const _dunes =
+    'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
 
 class CompareScreen extends StatelessWidget {
   const CompareScreen({super.key});
@@ -19,17 +22,26 @@ class CompareScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
               child: Row(children: [
-                const Text('Compare', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.gold)),
+                const Text('Compare',
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.gold)),
                 const Spacer(),
                 Container(
                     height: 30,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(16)),
+                    decoration: BoxDecoration(
+                        color: AppColors.gold,
+                        borderRadius: BorderRadius.circular(16)),
                     child: const Row(children: [
                       Icon(Icons.link, size: 14, color: AppColors.navy),
                       SizedBox(width: 4),
                       Text('Share',
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.navy))
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.navy))
                     ])),
                 const SizedBox(width: 10),
                 GestureDetector(
@@ -38,27 +50,37 @@ class CompareScreen extends StatelessWidget {
                         width: 28,
                         height: 28,
                         decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.12), shape: BoxShape.circle),
-                        child: const Icon(Icons.close, size: 16, color: Colors.white))),
+                            color: Colors.white.withValues(alpha: 0.12),
+                            shape: BoxShape.circle),
+                        child: const Icon(Icons.close,
+                            size: 16, color: Colors.white))),
               ]),
             ),
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
-                    color: AppColors.cream, borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                    color: AppColors.cream,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(20))),
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
                     Row(children: [
-                      Expanded(child: _photoCard(_azure, 'Azure Villa', 'EGP 4,500 / night')),
+                      Expanded(
+                          child: _photoCard(
+                              _azure, 'Azure Villa', 'EGP 4,500 / night')),
                       const SizedBox(width: 10),
-                      Expanded(child: _photoCard(_dunes, 'Golden Dunes', 'EGP 3,800 / night')),
+                      Expanded(
+                          child: _photoCard(
+                              _dunes, 'Golden Dunes', 'EGP 3,800 / night')),
                     ]),
                     const SizedBox(height: 14),
                     WhiteCard(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 4),
                       child: Column(children: [
-                        _row('Location', 'Marassi · N.Coast', 'Hacienda Bay', 0),
+                        _row(
+                            'Location', 'Marassi · N.Coast', 'Hacienda Bay', 0),
                         _row('Type', 'Villa', 'Chalet', -1),
                         _row('Rating', '★ 4.8', '★ 4.7', 0),
                         _row('Bedrooms', '4 bdr · 6 beds', '3 bdr · 5 beds', 0),
@@ -72,11 +94,18 @@ class CompareScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 14),
                     const Row(children: [
-                      Expanded(child: WideButton(label: 'Book Azure', color: AppColors.navy, height: 44)),
+                      Expanded(
+                          child: WideButton(
+                              label: 'Book Azure',
+                              color: AppColors.navy,
+                              height: 44)),
                       SizedBox(width: 10),
                       Expanded(
                           child: WideButton(
-                              label: 'Book Dunes', color: AppColors.gold, textColor: AppColors.navy, height: 44)),
+                              label: 'Book Dunes',
+                              color: AppColors.gold,
+                              textColor: AppColors.navy,
+                              height: 44)),
                     ]),
                   ],
                 ),
@@ -94,7 +123,9 @@ class CompareScreen extends StatelessWidget {
           height: 106,
           child: Stack(fit: StackFit.expand, children: [
             Image.network(img,
-                fit: BoxFit.cover, errorBuilder: (_, __, ___) => const ColoredBox(color: AppColors.cardWarm)),
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) =>
+                    const ColoredBox(color: AppColors.cardWarm)),
             const DecoratedBox(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -104,10 +135,20 @@ class CompareScreen extends StatelessWidget {
             Positioned(
                 left: 10,
                 bottom: 8,
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(name, style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: Colors.white)),
-                  Text(price, style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.gold)),
-                ])),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name,
+                          style: AppTheme.dm(
+                              size: 14,
+                              weight: FontWeight.w700,
+                              color: Colors.white)),
+                      Text(price,
+                          style: AppTheme.dm(
+                              size: 12,
+                              weight: FontWeight.w700,
+                              color: AppColors.gold)),
+                    ])),
           ]),
         ),
       );
@@ -119,18 +160,25 @@ class CompareScreen extends StatelessWidget {
         return Center(
             child: Text(v,
                 style: AppTheme.dm(
-                    size: 14, weight: FontWeight.w700, color: yes ? AppColors.success : const Color(0xFFBBBBBB))));
+                    size: 14,
+                    weight: FontWeight.w700,
+                    color: yes ? AppColors.success : const Color(0xFFBBBBBB))));
       }
       return Center(
           child: Text(v,
               style: AppTheme.dm(
-                  size: 12, weight: winner ? FontWeight.w700 : FontWeight.w400, color: winner ? AppColors.gold : AppColors.ink)));
+                  size: 12,
+                  weight: winner ? FontWeight.w700 : FontWeight.w400,
+                  color: winner ? AppColors.gold : AppColors.ink)));
     }
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 9),
       child: Row(children: [
-        Expanded(flex: 11, child: Text(label, style: AppTheme.dm(size: 12, color: AppColors.muted))),
+        Expanded(
+            flex: 11,
+            child: Text(label,
+                style: AppTheme.dm(size: 12, color: AppColors.muted))),
         Expanded(flex: 10, child: val(a, win == 0)),
         Expanded(flex: 10, child: val(b, win == -1)),
       ]),

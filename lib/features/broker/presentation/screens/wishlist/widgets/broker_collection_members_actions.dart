@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerCollectionMembersActions extends StatelessWidget {
@@ -49,7 +50,8 @@ class BrokerCollectionMembersActions extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: _getAvatarColor(i),
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.cream, width: 2),
+                            border:
+                                Border.all(color: AppColors.cream, width: 2),
                           ),
                           child: Center(
                             child: Text(
@@ -74,7 +76,8 @@ class BrokerCollectionMembersActions extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: AppColors.navy,
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.cream, width: 2),
+                            border:
+                                Border.all(color: AppColors.cream, width: 2),
                           ),
                           child: const Center(
                             child: Text(

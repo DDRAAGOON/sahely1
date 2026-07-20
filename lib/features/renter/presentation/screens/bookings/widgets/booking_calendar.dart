@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BookingCalendar extends StatelessWidget {
@@ -103,8 +104,10 @@ class BookingCalendar extends StatelessWidget {
             color: AppColors.navy,
             fontFamily: 'DM Sans',
           ),
-          leftChevronIcon: Icon(Icons.chevron_left, color: AppColors.navy, size: 20),
-          rightChevronIcon: Icon(Icons.chevron_right, color: AppColors.navy, size: 20),
+          leftChevronIcon:
+              Icon(Icons.chevron_left, color: AppColors.navy, size: 20),
+          rightChevronIcon:
+              Icon(Icons.chevron_right, color: AppColors.navy, size: 20),
         ),
         daysOfWeekStyle: const DaysOfWeekStyle(
           weekdayStyle: TextStyle(

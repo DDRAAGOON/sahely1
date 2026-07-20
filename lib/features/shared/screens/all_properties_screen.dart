@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../../data/sample_data.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/chips.dart';
 import '../../../core/widgets/cream_background.dart';
+import '../../../data/sample_data.dart';
 import '../widgets/hero_property_card.dart';
 
 class AllPropertiesScreen extends StatefulWidget {
@@ -36,7 +37,7 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: () => context.pop(),
+                  onTap: () => Navigator.pop(context),
                   behavior: HitTestBehavior.opaque,
                   child: Container(
                     width: 34,
@@ -46,7 +47,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                       border: Border.all(color: AppColors.border),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.chevron_left, size: 20, color: AppColors.navy),
+                    child: const Icon(Icons.chevron_left,
+                        size: 20, color: AppColors.navy),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -61,7 +63,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.search, size: 18, color: AppColors.gold),
+                        const Icon(Icons.search,
+                            size: 18, color: AppColors.gold),
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
@@ -69,7 +72,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                             onChanged: (v) => setState(() => _query = v),
                             decoration: InputDecoration(
                               hintText: 'Search properties',
-                              hintStyle: AppTheme.dm(size: 13, color: AppColors.faint),
+                              hintStyle:
+                                  AppTheme.dm(size: 13, color: AppColors.faint),
                               border: InputBorder.none,
                               isDense: true,
                               contentPadding: EdgeInsets.zero,
@@ -84,7 +88,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                               setState(() => _query = '');
                             },
                             behavior: HitTestBehavior.opaque,
-                            child: const Icon(Icons.close, size: 16, color: AppColors.faint),
+                            child: const Icon(Icons.close,
+                                size: 16, color: AppColors.faint),
                           ),
                       ],
                     ),
@@ -93,10 +98,10 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                 const SizedBox(width: 8),
                 GestureDetector(
                   onTap: () async {
-                    final result = await context.push('/filters');
+                    final result = await AppNavigation.goToFilters(context);
                     if (result is Map<String, dynamic> && context.mounted) {
                       // Optionally navigate to browse results with these filters
-                      context.push('/browse', extra: result);
+                      AppNavigation.goToSearchResults(context, extra: result);
                     }
                   },
                   behavior: HitTestBehavior.opaque,
@@ -107,12 +112,13 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                       color: AppColors.navy,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.tune, color: AppColors.gold, size: 20),
+                    child:
+                        const Icon(Icons.tune, color: AppColors.gold, size: 20),
                   ),
                 ),
                 const SizedBox(width: 8),
                 GestureDetector(
-                  onTap: () => context.push('/ai-chat'),
+                  onTap: () => AppNavigation.goToAiChat(context),
                   behavior: HitTestBehavior.opaque,
                   child: Stack(
                     children: [
@@ -123,7 +129,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                           color: const Color(0xFFD4B982),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(Icons.chat_bubble_outline, color: AppColors.navy, size: 20),
+                        child: const Icon(Icons.chat_bubble_outline,
+                            color: AppColors.navy, size: 20),
                       ),
                       Positioned(
                         top: 4,
@@ -134,7 +141,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
                           decoration: BoxDecoration(
                             color: const Color(0xFF34C759),
                             shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.cream, width: 2),
+                            border:
+                                Border.all(color: AppColors.cream, width: 2),
                           ),
                         ),
                       ),
@@ -152,7 +160,12 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
-                for (var f in ['All', 'Trending Now', 'Best Offers', 'Newly Added']) ...[
+                for (var f in [
+                  'All',
+                  'Trending Now',
+                  'Best Offers',
+                  'Newly Added'
+                ]) ...[
                   ChoiceChipPill(
                     f,
                     selected: _selectedFilter == f,
@@ -177,7 +190,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
   Widget _buildSearchResults() {
     final results = Sample.allTrending.where((p) {
       final q = _query.toLowerCase();
-      return p.name.toLowerCase().contains(q) || p.area.toLowerCase().contains(q);
+      return p.name.toLowerCase().contains(q) ||
+          p.area.toLowerCase().contains(q);
     }).toList();
 
     if (results.isEmpty) {
@@ -187,7 +201,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
           children: [
             const Icon(Icons.search_off, size: 64, color: AppColors.faint),
             const SizedBox(height: 16),
-            Text('No properties found for "$_query"', style: AppTheme.dm(size: 14, color: AppColors.muted)),
+            Text('No properties found for "$_query"',
+                style: AppTheme.dm(size: 14, color: AppColors.muted)),
           ],
         ),
       );
@@ -203,7 +218,8 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
           child: HeroPropertyCard(
             property: p,
             badge: p.rating >= 4.8 ? 'Top Rated' : 'Featured',
-            badgeColor: p.rating >= 4.8 ? const Color(0xFFB22222) : AppColors.gold,
+            badgeColor:
+                p.rating >= 4.8 ? const Color(0xFFB22222) : AppColors.gold,
           ),
         );
       },
@@ -264,7 +280,12 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title, style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.muted, letterSpacing: 0.5)),
+            Text(title,
+                style: AppTheme.dm(
+                    size: 13,
+                    weight: FontWeight.w700,
+                    color: AppColors.muted,
+                    letterSpacing: 0.5)),
           ],
         ),
       );

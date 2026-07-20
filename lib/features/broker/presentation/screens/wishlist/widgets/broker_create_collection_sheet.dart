@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerCreateCollectionSheet extends StatefulWidget {
   const BrokerCreateCollectionSheet({super.key});
 
   @override
-  State<BrokerCreateCollectionSheet> createState() => _BrokerCreateCollectionSheetState();
+  State<BrokerCreateCollectionSheet> createState() =>
+      _BrokerCreateCollectionSheetState();
 }
 
-class _BrokerCreateCollectionSheetState extends State<BrokerCreateCollectionSheet> {
+class _BrokerCreateCollectionSheetState
+    extends State<BrokerCreateCollectionSheet> {
   final _controller = TextEditingController();
 
   @override
@@ -18,7 +21,8 @@ class _BrokerCreateCollectionSheetState extends State<BrokerCreateCollectionShee
         color: AppColors.cream,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      padding: EdgeInsets.fromLTRB(24, 12, 24, MediaQuery.of(context).viewInsets.bottom + 24),
+      padding: EdgeInsets.fromLTRB(
+          24, 12, 24, MediaQuery.of(context).viewInsets.bottom + 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

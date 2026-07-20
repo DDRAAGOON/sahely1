@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class ConfirmPayButton extends StatelessWidget {
@@ -13,7 +14,6 @@ class ConfirmPayButton extends StatelessWidget {
     required this.onPressed,
   });
 
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -22,9 +22,8 @@ class ConfirmPayButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: (isLoading || total == 0) ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: (isLoading || total == 0)
-              ? AppColors.border
-              : AppColors.navy,
+          backgroundColor:
+              (isLoading || total == 0) ? AppColors.border : AppColors.navy,
           foregroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 
@@ -30,7 +31,8 @@ class SearchHeaderWithInput extends StatelessWidget {
               border: Border.all(color: AppColors.border),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.chevron_left, size: 22, color: AppColors.navy),
+            child:
+                const Icon(Icons.chevron_left, size: 22, color: AppColors.navy),
           ),
         ),
         const SizedBox(width: 10),
@@ -47,7 +49,8 @@ class SearchHeaderWithInput extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () => onSubmitted(controller.text),
-                  child: const Icon(Icons.search, size: 20, color: AppColors.gold),
+                  child:
+                      const Icon(Icons.search, size: 20, color: AppColors.gold),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -58,7 +61,9 @@ class SearchHeaderWithInput extends StatelessWidget {
                     controller: controller,
                     decoration: InputDecoration(
                       hintText: 'Search properties',
-                      hintStyle: AppTheme.dm(size: 13, color: AppColors.navy.withValues(alpha: 0.5)),
+                      hintStyle: AppTheme.dm(
+                          size: 13,
+                          color: AppColors.navy.withValues(alpha: 0.5)),
                       border: InputBorder.none,
                       isDense: true,
                     ),

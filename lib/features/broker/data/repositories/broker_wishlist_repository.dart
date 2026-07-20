@@ -5,14 +5,16 @@ class BrokerWishlistRepository {
     '1': BrokerWishlistItem(
       propertyId: '1',
       propertyName: 'Azure Beach Villa',
-      propertyImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+      propertyImage:
+          'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
       collectionIds: ['broker_saved', 'client_leads'],
       addedAt: DateTime.now(),
     ),
     '2': BrokerWishlistItem(
       propertyId: '2',
       propertyName: 'Lagoon Retreat',
-      propertyImage: 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800',
+      propertyImage:
+          'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800',
       collectionIds: ['broker_saved'],
       addedAt: DateTime.now(),
     ),
@@ -22,13 +24,15 @@ class BrokerWishlistRepository {
       id: 'broker_saved',
       name: 'My Broker Saves',
       itemCount: 2,
-      coverImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+      coverImage:
+          'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
     ),
     const BrokerWishlistCollection(
       id: 'client_leads',
       name: 'Client Recommendations',
       itemCount: 1,
-      coverImage: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+      coverImage:
+          'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
       isShared: true,
     ),
   ];
@@ -44,7 +48,7 @@ class BrokerWishlistRepository {
     String? collectionId,
   }) async {
     final targetCollection = collectionId ?? 'broker_saved';
-    
+
     final item = BrokerWishlistItem(
       propertyId: propertyId,
       propertyName: propertyName,
@@ -76,7 +80,10 @@ class BrokerWishlistRepository {
       await removeFromWishlist(propertyId);
       return false;
     } else {
-      await addToWishlist(propertyId: propertyId, propertyName: propertyName, propertyImage: propertyImage);
+      await addToWishlist(
+          propertyId: propertyId,
+          propertyName: propertyName,
+          propertyImage: propertyImage);
       return true;
     }
   }
@@ -98,7 +105,9 @@ class BrokerWishlistRepository {
         id: c.id,
         name: c.name,
         itemCount: (c.itemCount + delta).clamp(0, 999),
-        coverImage: delta > 0 ? (coverImage ?? c.coverImage) : (c.itemCount + delta > 0 ? c.coverImage : null),
+        coverImage: delta > 0
+            ? (coverImage ?? c.coverImage)
+            : (c.itemCount + delta > 0 ? c.coverImage : null),
         isShared: c.isShared,
       );
     }
@@ -117,13 +126,16 @@ class BrokerWishlistRepository {
       final updatedCollections = List<String>.from(item.collectionIds);
       if (!updatedCollections.contains(collectionId)) {
         updatedCollections.add(collectionId);
-        _wishlistItems[propertyId] = item.copyWith(collectionIds: updatedCollections);
+        _wishlistItems[propertyId] =
+            item.copyWith(collectionIds: updatedCollections);
         _updateCollectionCount(collectionId, 1, coverImage: item.propertyImage);
       }
     }
   }
 
   Future<List<BrokerWishlistItem>> getWishlistItems(String collectionId) async {
-    return _wishlistItems.values.where((item) => item.collectionIds.contains(collectionId)).toList();
+    return _wishlistItems.values
+        .where((item) => item.collectionIds.contains(collectionId))
+        .toList();
   }
 }

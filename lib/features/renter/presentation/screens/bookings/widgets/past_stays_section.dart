@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class PastStaysSection extends StatelessWidget {
   final List<Booking> pastBookings;
@@ -84,7 +84,8 @@ class PastStaysSection extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xFF9A9A9A).withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
@@ -104,7 +105,8 @@ class PastStaysSection extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.location_on, color: Color(0xFF9A9A9A), size: 12),
+                      const Icon(Icons.location_on,
+                          color: Color(0xFF9A9A9A), size: 12),
                       const SizedBox(width: 4),
                       Text(
                         booking.location,

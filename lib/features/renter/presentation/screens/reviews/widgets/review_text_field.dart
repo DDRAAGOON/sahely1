@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class ReviewTextField extends StatelessWidget {
@@ -35,7 +36,8 @@ class ReviewTextField extends StatelessWidget {
             maxLines: 5,
             maxLength: 500,
             decoration: const InputDecoration(
-              hintText: 'Tell others about the property, cleanliness, check-in...',
+              hintText:
+                  'Tell others about the property, cleanliness, check-in...',
               hintStyle: TextStyle(
                 fontSize: 13,
                 color: AppColors.placeholder,

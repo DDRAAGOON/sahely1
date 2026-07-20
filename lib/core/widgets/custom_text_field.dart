@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../core/theme/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -50,15 +51,16 @@ class CustomTextField extends StatelessWidget {
         ),
         prefixIcon: prefixIcon != null
             ? Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: prefixIcon,
-        )
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                child: prefixIcon,
+              )
             : null,
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         suffixIcon: suffixIcon,
         filled: false,
         fillColor: Colors.transparent,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius ?? 12),
           borderSide: BorderSide(

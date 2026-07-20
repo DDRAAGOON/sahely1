@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerBottomNav extends StatelessWidget {
@@ -74,6 +75,7 @@ class _NavItem {
   final IconData icon;
   final String label;
   final bool isActive;
+
   _NavItem({
     required this.icon,
     required this.label,

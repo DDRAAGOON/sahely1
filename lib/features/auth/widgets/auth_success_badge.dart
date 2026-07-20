@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+
 import '../../../core/theme/app_colors.dart';
 
 class AuthSuccessBadge extends StatefulWidget {
   const AuthSuccessBadge({super.key, required this.navy});
+
   final bool navy;
+
   @override
   State<AuthSuccessBadge> createState() => _AuthSuccessBadgeState();
 }
 
-class _AuthSuccessBadgeState extends State<AuthSuccessBadge> with SingleTickerProviderStateMixin {
-  late final AnimationController _c =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
+class _AuthSuccessBadgeState extends State<AuthSuccessBadge>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 1800))
+    ..repeat();
 
   @override
   void dispose() {
@@ -36,7 +41,9 @@ class _AuthSuccessBadgeState extends State<AuthSuccessBadge> with SingleTickerPr
                 height: size * (0.7 + t * 1.4),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.gold.withValues(alpha: 0.55 * (1 - t)), width: 3),
+                  border: Border.all(
+                      color: AppColors.gold.withValues(alpha: 0.55 * (1 - t)),
+                      width: 3),
                 ),
               );
             },
@@ -48,17 +55,22 @@ class _AuthSuccessBadgeState extends State<AuthSuccessBadge> with SingleTickerPr
               shape: BoxShape.circle,
               gradient: widget.navy
                   ? null
-                  : const RadialGradient(center: Alignment(0, -0.2), colors: [AppColors.goldBright, AppColors.gold]),
+                  : const RadialGradient(
+                      center: Alignment(0, -0.2),
+                      colors: [AppColors.goldBright, AppColors.gold]),
               color: widget.navy ? AppColors.navy : null,
               boxShadow: [
                 BoxShadow(
-                    color: (widget.navy ? AppColors.navy : AppColors.gold).withValues(alpha: 0.4),
+                    color: (widget.navy ? AppColors.navy : AppColors.gold)
+                        .withValues(alpha: 0.4),
                     blurRadius: 30,
                     offset: const Offset(0, 12)),
               ],
             ),
-            child: Icon(widget.navy ? Icons.verified_user_outlined : Icons.check,
-                color: widget.navy ? AppColors.gold : AppColors.white, size: widget.navy ? 50 : 50),
+            child: Icon(
+                widget.navy ? Icons.verified_user_outlined : Icons.check,
+                color: widget.navy ? AppColors.gold : AppColors.white,
+                size: widget.navy ? 50 : 50),
           ),
         ],
       ),

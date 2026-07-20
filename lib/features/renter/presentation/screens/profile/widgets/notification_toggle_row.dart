@@ -18,7 +18,8 @@ class NotificationToggleRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Reduced from 14
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      // Reduced from 14
       child: Row(
         children: [
           // Title & Subtitle

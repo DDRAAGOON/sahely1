@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
-import '../../../core/navigation/app_navigation.dart';
 
 class BookingConfirmedScreen extends StatelessWidget {
   final Map<String, dynamic>? arguments;
+
   const BookingConfirmedScreen({super.key, this.arguments});
 
   @override
@@ -17,9 +18,11 @@ class BookingConfirmedScreen extends StatelessWidget {
     final property = args?['property'] as Property?;
     final total = args?['total'] as double? ?? 21090;
     final guests = args?['guests'] as int? ?? 2;
-    final pName = property?.name ?? args?['propertyName'] ?? 'Azure Beach Villa';
+    final pName =
+        property?.name ?? args?['propertyName'] ?? 'Azure Beach Villa';
 
-    String format(num n) => n.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+    String format(num n) => n.toStringAsFixed(0).replaceAllMapped(
+        RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
 
     return PhoneScaffold(
       child: SingleChildScrollView(
@@ -30,7 +33,9 @@ class BookingConfirmedScreen extends StatelessWidget {
             const SizedBox(height: 40),
             const Center(child: SuccessCheck(gold: true)),
             const SizedBox(height: 24),
-            Text("You're All Set!", style: AppTheme.dm(size: 26, weight: FontWeight.w700, color: AppColors.navy)),
+            Text("You're All Set!",
+                style: AppTheme.dm(
+                    size: 26, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 8),
             Text(
               'Your booking at $pName is confirmed.',
@@ -47,7 +52,8 @@ class BookingConfirmedScreen extends StatelessWidget {
                   KeyValueRow('Guests', '$guests adults'),
                   const KeyValueRow('Unit · Floor', 'B-214 · Floor 2'),
                   const KeyValueRow('Booking ref', 'SHLY-8842'),
-                  KeyValueRow('Total paid', 'EGP ${format(total)}', bold: true, topBorder: true),
+                  KeyValueRow('Total paid', 'EGP ${format(total)}',
+                      bold: true, topBorder: true),
                 ],
               ),
             ),
@@ -55,7 +61,8 @@ class BookingConfirmedScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [AppColors.gold, Color(0xFFB3923C)]),
+                gradient: const LinearGradient(
+                    colors: [AppColors.gold, Color(0xFFB3923C)]),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Row(
@@ -65,7 +72,10 @@ class BookingConfirmedScreen extends StatelessWidget {
                   Expanded(
                     child: Text(
                       'You earned 10 Sahel Stars on this booking!',
-                      style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: AppColors.navy),
+                      style: AppTheme.dm(
+                          size: 12,
+                          weight: FontWeight.w600,
+                          color: AppColors.navy),
                     ),
                   ),
                 ],
@@ -79,13 +89,15 @@ class BookingConfirmedScreen extends StatelessWidget {
               child: InkWell(
                 borderRadius: BorderRadius.circular(14),
                 onTap: () {
-                  context.push(
+                  AppNavigation.safePush(
+                    context,
                     '/broker/smart-lock',
                     extra: {
                       'propertyName': pName,
                       'bookingRef': 'SHLY-8842',
                       'passcode': '1248',
-                      'checkIn': DateTime.now().subtract(const Duration(hours: 2)),
+                      'checkIn':
+                          DateTime.now().subtract(const Duration(hours: 2)),
                       'checkOut': DateTime.now().add(const Duration(days: 4)),
                       'lat': 31.02,
                       'lng': 29.60,
@@ -93,15 +105,20 @@ class BookingConfirmedScreen extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
                   child: Row(
                     children: [
-                      const Icon(Icons.lock_outline, size: 15, color: AppColors.gold),
+                      const Icon(Icons.lock_outline,
+                          size: 15, color: AppColors.gold),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           'Smart lock ready — tap to access your property',
-                          style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.white),
+                          style: AppTheme.dm(
+                              size: 12,
+                              weight: FontWeight.w700,
+                              color: AppColors.white),
                         ),
                       ),
                     ],

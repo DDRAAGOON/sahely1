@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class SearchEmptyState extends StatelessWidget {
@@ -35,9 +36,9 @@ class SearchEmptyState extends StatelessWidget {
                 color: AppColors.gold,
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Title
             const Text(
               'No properties match your search',
@@ -49,9 +50,9 @@ class SearchEmptyState extends StatelessWidget {
                 fontFamily: 'Cairo',
               ),
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Subtitle
             const Text(
               'Try adjusting your filters or search terms.',
@@ -62,16 +63,17 @@ class SearchEmptyState extends StatelessWidget {
                 fontFamily: 'Cairo',
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Clear Filters Button (Smaller Box with Normal Border Radius)
             ElevatedButton(
               onPressed: onClearFilters,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.navy,
                 foregroundColor: AppColors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

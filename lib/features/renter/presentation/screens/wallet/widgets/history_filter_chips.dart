@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class HistoryFilterChips extends StatelessWidget {
@@ -25,7 +26,8 @@ class HistoryFilterChips extends StatelessWidget {
           final isSelected = filter == selectedFilter;
 
           return Padding(
-            padding: EdgeInsets.only(right: index == filters.length - 1 ? 0 : 8),
+            padding:
+                EdgeInsets.only(right: index == filters.length - 1 ? 0 : 8),
             child: GestureDetector(
               onTap: () => onFilterSelected(filter),
               child: AnimatedContainer(

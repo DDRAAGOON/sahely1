@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../../core/theme/app_colors.dart';
 import 'animated_star_icon.dart';
 import 'stars_progress_bar.dart';
@@ -143,9 +144,7 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                   scale: _scaleAnimation,
                   child: const AnimatedStarIcon(),
                 ),
-
                 const SizedBox(height: 24),
-
                 AnimatedBuilder(
                   animation: _counterAnimation,
                   builder: (context, child) {
@@ -171,9 +170,7 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                     );
                   },
                 ),
-
                 const SizedBox(height: 8),
-
                 const Text(
                   'Stars earned!',
                   style: TextStyle(
@@ -183,9 +180,7 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                     fontFamily: 'DM Sans',
                   ),
                 ),
-
                 const SizedBox(height: 8),
-
                 Text(
                   'For ${widget.reason}\n${widget.propertyName}',
                   textAlign: TextAlign.center,
@@ -196,9 +191,7 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                     height: 1.4,
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
                 AnimatedBuilder(
                   animation: _progressAnimation,
                   builder: (context, child) {
@@ -210,9 +203,7 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                     );
                   },
                 ),
-
                 const SizedBox(height: 24),
-
                 SizedBox(
                   width: double.infinity,
                   height: 52,

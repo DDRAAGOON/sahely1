@@ -3,7 +3,8 @@ import 'package:sahely/core/theme/app_colors.dart';
 
 class PremiumServicesList extends StatelessWidget {
   final int userLevel;
-  final List<Map<String, dynamic>> services; // استقبال القائمة من الخارج للفلترة
+  final List<Map<String, dynamic>>
+      services; // استقبال القائمة من الخارج للفلترة
   final Function(String, int) onRequest;
 
   const PremiumServicesList({
@@ -32,7 +33,6 @@ class PremiumServicesList extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-
         ...services.map((service) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
@@ -88,7 +88,8 @@ class _PremiumServiceCard extends StatelessWidget {
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: AppColors.border,
-                        child: const Icon(Icons.image, color: AppColors.placeholder, size: 48),
+                        child: const Icon(Icons.image,
+                            color: AppColors.placeholder, size: 48),
                       );
                     },
                   ),
@@ -98,7 +99,8 @@ class _PremiumServiceCard extends StatelessWidget {
                     top: 12,
                     left: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: AppColors.gold,
                         borderRadius: BorderRadius.circular(8),
@@ -108,7 +110,11 @@ class _PremiumServiceCard extends StatelessWidget {
                         children: [
                           Text(
                             '15% off',
-                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'DM Sans'),
+                            style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.navy,
+                                fontFamily: 'DM Sans'),
                           ),
                           SizedBox(width: 4),
                           Icon(Icons.star, size: 12, color: AppColors.navy),
@@ -128,9 +134,18 @@ class _PremiumServiceCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'DM Sans')),
+                      Text(name,
+                          style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.navy,
+                              fontFamily: 'DM Sans')),
                       const SizedBox(height: 4),
-                      Text('From EGP ${price.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, color: AppColors.secondary, fontFamily: 'DM Sans')),
+                      Text('From EGP ${price.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                              fontSize: 13,
+                              color: AppColors.secondary,
+                              fontFamily: 'DM Sans')),
                     ],
                   ),
                 ),
@@ -142,10 +157,15 @@ class _PremiumServiceCard extends StatelessWidget {
                       backgroundColor: AppColors.navy,
                       foregroundColor: AppColors.white,
                       minimumSize: const Size(90, 36),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                       elevation: 0,
                     ),
-                    child: const Text('Request', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, fontFamily: 'DM Sans')),
+                    child: const Text('Request',
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'DM Sans')),
                   ),
                 ),
               ],

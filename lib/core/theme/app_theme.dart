@@ -1,14 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'app_colors.dart';
 
 /// Global theme. The design uses **DM Sans** throughout.
 class AppTheme {
   AppTheme._();
 
-  static TextTheme get _text =>
-      GoogleFonts.dmSansTextTheme().apply(bodyColor: AppColors.ink, displayColor: AppColors.ink);
+  static TextTheme get _text => GoogleFonts.dmSansTextTheme()
+      .apply(bodyColor: AppColors.ink, displayColor: AppColors.ink);
 
   static ThemeData get light => ThemeData(
         useMaterial3: true,

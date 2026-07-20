@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BlockedActionGate extends StatelessWidget {
@@ -156,7 +157,9 @@ class BlockedActionGate extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: isCompleted ? const Color(0xFF5B926C) : const Color(0xFFD2760A),
+              color: isCompleted
+                  ? const Color(0xFF5B926C)
+                  : const Color(0xFFD2760A),
               fontFamily: 'DM Sans',
             ),
           ),
@@ -166,7 +169,9 @@ class BlockedActionGate extends StatelessWidget {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w800,
-              color: isCompleted ? const Color(0xFF5B926C) : const Color(0xFFD2760A),
+              color: isCompleted
+                  ? const Color(0xFF5B926C)
+                  : const Color(0xFFD2760A),
             ),
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
@@ -50,7 +51,8 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
             children: [
               TopBar(
                 title: widget.collectionName,
-                subtitle: '${collectionItems.length} places${widget.sharedWithCount > 0 ? ' · shared with ${widget.sharedWithCount}' : ''}',
+                subtitle:
+                    '${collectionItems.length} places${widget.sharedWithCount > 0 ? ' · shared with ${widget.sharedWithCount}' : ''}',
               ),
               const SizedBox(height: 12),
               Row(children: [
@@ -62,12 +64,17 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
                       Positioned(
                         left: i * 18.0,
                         child: Container(
-                          width: 26, height: 26,
+                          width: 26,
+                          height: 26,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.white, width: 2),
                             gradient: LinearGradient(colors: [
-                              const [Color(0xFF7FA8BF), Color(0xFFD8B98A), Color(0xFFC9A84C)][i],
+                              const [
+                                Color(0xFF7FA8BF),
+                                Color(0xFFD8B98A),
+                                Color(0xFFC9A84C)
+                              ][i],
                               const Color(0xFF2C5066),
                             ]),
                           ),
@@ -76,51 +83,88 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
                     Positioned(
                       left: 54,
                       child: Container(
-                        width: 26, height: 26,
+                        width: 26,
+                        height: 26,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColors.navy,
                           border: Border.all(color: Colors.white, width: 2),
                         ),
-                        child: Text('+1', style: AppTheme.dm(size: 9, weight: FontWeight.w700, color: Colors.white)),
+                        child: Text('+1',
+                            style: AppTheme.dm(
+                                size: 9,
+                                weight: FontWeight.w700,
+                                color: Colors.white)),
                       ),
                     ),
                   ]),
                 ),
                 const SizedBox(width: 8),
-                Text('You, Omar, Nour & 1 more', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                Text('You, Omar, Nour & 1 more',
+                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
               ]),
               const SizedBox(height: 14),
               Row(children: [
-                Expanded(child: WideButton(label: 'Chat', icon: Icons.chat_bubble_outline, color: AppColors.navy, height: 42, onTap: () => context.push('/collection-chat'))),
+                Expanded(
+                    child: WideButton(
+                        label: 'Chat',
+                        icon: Icons.chat_bubble_outline,
+                        color: AppColors.navy,
+                        height: 42,
+                        onTap: () =>
+                            AppNavigation.goToCollectionChat(context))),
                 const SizedBox(width: 8),
-                Expanded(child: WideButton(label: 'Share', icon: Icons.link, color: AppColors.gold, textColor: AppColors.navy, height: 42, onTap: () => context.push('/share-collection'))),
+                Expanded(
+                    child: WideButton(
+                        label: 'Share',
+                        icon: Icons.link,
+                        color: AppColors.gold,
+                        textColor: AppColors.navy,
+                        height: 42,
+                        onTap: () =>
+                            AppNavigation.goToShareCollection(context))),
                 const SizedBox(width: 8),
-                Expanded(child: WideButton(label: 'Compare', icon: Icons.bar_chart, color: AppColors.navy, outline: true, height: 42, onTap: () => context.push('/compare'))),
+                Expanded(
+                    child: WideButton(
+                        label: 'Compare',
+                        icon: Icons.bar_chart,
+                        color: AppColors.navy,
+                        outline: true,
+                        height: 42,
+                        onTap: () => AppNavigation.goToCompare(context))),
               ]),
               const SizedBox(height: 16),
-
               if (collectionItems.isEmpty)
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 40),
-                    child: Text('No places added yet.', style: AppTheme.dm(color: AppColors.muted)),
+                    child: Text('No places added yet.',
+                        style: AppTheme.dm(color: AppColors.muted)),
                   ),
                 )
               else
                 Column(
                   children: collectionItems.map((item) {
-                    final prop = Sample.allTrending.where(
-                      (p) => p.name == item.propertyId || p.image == item.propertyImage,
-                    ).firstOrNull ?? Sample.allTrending.first;
+                    final prop = Sample.allTrending
+                            .where(
+                              (p) =>
+                                  p.name == item.propertyId ||
+                                  p.image == item.propertyImage,
+                            )
+                            .firstOrNull ??
+                        Sample.allTrending.first;
 
                     return GestureDetector(
                       onTap: () {
-                        context.push('/property', extra: {
+                        AppNavigation.goToProperty(context, extra: {
                           'id': prop.id,
-                          'name': item.propertyName.isNotEmpty ? item.propertyName : prop.name,
-                          'imageUrl': item.propertyImage.isNotEmpty ? item.propertyImage : prop.image,
+                          'name': item.propertyName.isNotEmpty
+                              ? item.propertyName
+                              : prop.name,
+                          'imageUrl': item.propertyImage.isNotEmpty
+                              ? item.propertyImage
+                              : prop.image,
                           'location': 'North Coast',
                           'rating': prop.rating,
                           'reviews': prop.reviews,
@@ -130,8 +174,12 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 12),
                         child: CollabCard(
-                          image: item.propertyImage.isNotEmpty ? item.propertyImage : prop.image,
-                          name: item.propertyName.isNotEmpty ? item.propertyName : prop.name,
+                          image: item.propertyImage.isNotEmpty
+                              ? item.propertyImage
+                              : prop.image,
+                          name: item.propertyName.isNotEmpty
+                              ? item.propertyName
+                              : prop.name,
                           loc: 'North Coast',
                           tags: const ['Villa', 'Pool'],
                           pet: '🐾 Pets',

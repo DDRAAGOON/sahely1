@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class AskSahelyAiSection extends StatefulWidget {
@@ -13,8 +14,9 @@ class _AskSahelyAiSectionState extends State<AskSahelyAiSection> {
   final TextEditingController _controller = TextEditingController();
 
   void _goToChat([String? message]) {
-    final msg = message ?? (_controller.text.isNotEmpty ? _controller.text : null);
-    context.push('/ai-chat', extra: msg);
+    final msg =
+        message ?? (_controller.text.isNotEmpty ? _controller.text : null);
+    AppNavigation.goToAiChat(context, extra: msg);
     _controller.clear();
   }
 

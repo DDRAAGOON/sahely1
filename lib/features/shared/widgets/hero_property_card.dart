@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/common.dart';
@@ -25,13 +26,16 @@ class HeroPropertyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push('/property', extra: property),
+      onTap: () => AppNavigation.goToPropertyDetail(context, extra: property),
       behavior: HitTestBehavior.opaque,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 10, offset: Offset(0, 4))],
+          boxShadow: const [
+            BoxShadow(
+                color: Color(0x1F000000), blurRadius: 10, offset: Offset(0, 4))
+          ],
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -46,7 +50,8 @@ class HeroPropertyCard extends StatelessWidget {
                 children: [
                   SahelyImage(
                     imageUrl: property.image,
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(20)),
                     showFade: true,
                     fadeHeight: 60,
                     fadeColor: AppColors.white,
@@ -56,9 +61,16 @@ class HeroPropertyCard extends StatelessWidget {
                     top: 12,
                     left: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(color: badgeColor, borderRadius: BorderRadius.circular(8)),
-                      child: Text(badge, style: AppTheme.dm(size: 10, weight: FontWeight.w800, color: Colors.white)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                          color: badgeColor,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Text(badge,
+                          style: AppTheme.dm(
+                              size: 10,
+                              weight: FontWeight.w800,
+                              color: Colors.white)),
                     ),
                   ),
                   Positioned(
@@ -67,8 +79,10 @@ class HeroPropertyCard extends StatelessWidget {
                     child: Container(
                       width: 32,
                       height: 32,
-                      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                      child: const Icon(Icons.favorite_border, size: 18, color: AppColors.navy),
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      child: const Icon(Icons.favorite_border,
+                          size: 18, color: AppColors.navy),
                     ),
                   ),
                 ],
@@ -86,7 +100,10 @@ class HeroPropertyCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           nameOverride ?? property.name,
-                          style: AppTheme.dm(size: 17, weight: FontWeight.w700, color: AppColors.navy),
+                          style: AppTheme.dm(
+                              size: 17,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -95,8 +112,17 @@ class HeroPropertyCard extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                           children: [
-                            TextSpan(text: 'EGP ${property.price.toString().replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")}', style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.navy)),
-                            const TextSpan(text: ' /night', style: TextStyle(fontSize: 11, color: Color(0xFF5B5B5B))),
+                            TextSpan(
+                                text:
+                                    'EGP ${property.price.toString().replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")}',
+                                style: AppTheme.dm(
+                                    size: 16,
+                                    weight: FontWeight.w700,
+                                    color: AppColors.navy)),
+                            const TextSpan(
+                                text: ' /night',
+                                style: TextStyle(
+                                    fontSize: 11, color: Color(0xFF5B5B5B))),
                           ],
                         ),
                       ),
@@ -105,9 +131,12 @@ class HeroPropertyCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.location_on_outlined, size: 14, color: Color(0xFF5B5B5B)),
+                      const Icon(Icons.location_on_outlined,
+                          size: 14, color: Color(0xFF5B5B5B)),
                       const SizedBox(width: 4),
-                      Text(property.area, style: AppTheme.dm(size: 13, color: const Color(0xFF5B5B5B))),
+                      Text(property.area,
+                          style: AppTheme.dm(
+                              size: 13, color: const Color(0xFF5B5B5B))),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -115,8 +144,15 @@ class HeroPropertyCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.star, size: 14, color: AppColors.gold),
                       const SizedBox(width: 4),
-                      Text('${property.rating}', style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy)),
-                      Text('  ·  ${property.beds} beds · ${property.type} · Sea view', style: AppTheme.dm(size: 13, color: const Color(0xFF5B5B5B))),
+                      Text('${property.rating}',
+                          style: AppTheme.dm(
+                              size: 13,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy)),
+                      Text(
+                          '  ·  ${property.beds} beds · ${property.type} · Sea view',
+                          style: AppTheme.dm(
+                              size: 13, color: const Color(0xFF5B5B5B))),
                     ],
                   ),
                   const SizedBox(height: 14),
@@ -124,12 +160,35 @@ class HeroPropertyCard extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      Pill('Beachfront', bg: AppColors.white, fg: AppColors.navy, radius: 10, border: AppColors.border),
-                      Pill('Pool', bg: AppColors.white, fg: AppColors.navy, radius: 10, border: AppColors.border),
-                      Pill('WiFi', bg: AppColors.white, fg: AppColors.navy, radius: 10, border: AppColors.border),
-                      Pill('AC', bg: AppColors.white, fg: AppColors.navy, radius: 10, border: AppColors.border),
-                      Pill('Sea View', bg: AppColors.white, fg: AppColors.navy, radius: 10, border: AppColors.border),
-                      Pill('🐾 Pets OK', bg: Color(0xFFD7EEDD), fg: AppColors.success, radius: 10),
+                      Pill('Beachfront',
+                          bg: AppColors.white,
+                          fg: AppColors.navy,
+                          radius: 10,
+                          border: AppColors.border),
+                      Pill('Pool',
+                          bg: AppColors.white,
+                          fg: AppColors.navy,
+                          radius: 10,
+                          border: AppColors.border),
+                      Pill('WiFi',
+                          bg: AppColors.white,
+                          fg: AppColors.navy,
+                          radius: 10,
+                          border: AppColors.border),
+                      Pill('AC',
+                          bg: AppColors.white,
+                          fg: AppColors.navy,
+                          radius: 10,
+                          border: AppColors.border),
+                      Pill('Sea View',
+                          bg: AppColors.white,
+                          fg: AppColors.navy,
+                          radius: 10,
+                          border: AppColors.border),
+                      Pill('🐾 Pets OK',
+                          bg: Color(0xFFD7EEDD),
+                          fg: AppColors.success,
+                          radius: 10),
                     ],
                   ),
                 ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class PropertyCompareData {
@@ -71,7 +72,8 @@ class PropertyComparisonBar extends StatelessWidget {
     );
   }
 
-  Widget _buildPropertyCard(PropertyCompareData property, {required bool isLeft}) {
+  Widget _buildPropertyCard(PropertyCompareData property,
+      {required bool isLeft}) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(

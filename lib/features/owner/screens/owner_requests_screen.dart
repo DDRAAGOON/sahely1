@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/sample_data.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/common.dart';
 import '../../../core/widgets/floating_nav.dart';
 import '../../../core/widgets/kit.dart';
+import '../../../data/sample_data.dart';
 
 class OwnerRequestsScreen extends StatefulWidget {
   const OwnerRequestsScreen({super.key});
+
   @override
   State<OwnerRequestsScreen> createState() => _OwnerRequestsScreenState();
 }
 
 class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
   int tab = 0;
+
   @override
   Widget build(BuildContext context) {
     return PhoneScaffold(
@@ -46,7 +50,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
                   meta: 'Azure Beach Villa · 12 stays',
                   chips: const ['Jun 21–25', '4 guests · 2A 2C', 'EGP 18,000'],
                   ai: 'Strong guest — 5★ history, no violations. Low risk.',
-                  onTap: () => context.push('/owner/request-detail',
+                  onTap: () => AppNavigation.goToOwnerRequestDetail(context,
                       extra: Sample.azure)),
               const SizedBox(height: 12),
               _RequestCard(
@@ -54,7 +58,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
                   rating: '★ 4.6',
                   meta: 'Golden Dunes · 3 stays',
                   chips: const ['Jul 2–6', '2 guests', 'EGP 15,200'],
-                  onTap: () => context.push('/owner/request-detail',
+                  onTap: () => AppNavigation.goToOwnerRequestDetail(context,
                       extra: Sample.dunes)),
             ] else if (tab == 1) ...[
               const _StatusReqRow(
@@ -110,9 +114,9 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
                 '/owner/profile'
               ];
               if (i == 0) {
-                context.go(routes[0]);
+                AppNavigation.safeGo(context, routes[0]);
               } else {
-                context.go(routes[i]);
+                AppNavigation.safeGo(context, routes[i]);
               }
             }),
       ]),
@@ -145,10 +149,12 @@ class _RequestCard extends StatelessWidget {
       required this.chips,
       this.ai,
       this.onTap});
+
   final String name, rating, meta;
   final List<String> chips;
   final String? ai;
   final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
     return WhiteCard(
@@ -273,13 +279,13 @@ Future<void> showBlockDialog(BuildContext context, String name) async {
           style: AppTheme.dm(size: 14, color: AppColors.muted)),
       actions: [
         TextButton(
-          onPressed: () => context.pop(false),
+          onPressed: () => Navigator.pop(context, false),
           child: Text('No',
               style: AppTheme.dm(
                   size: 14, weight: FontWeight.w600, color: AppColors.muted)),
         ),
         TextButton(
-          onPressed: () => context.pop(true),
+          onPressed: () => Navigator.pop(context, true),
           child: Text('Ok',
               style: AppTheme.dm(
                   size: 14,
@@ -336,7 +342,7 @@ void showDeclineSheet(BuildContext context) {
                 label: 'Confirm Decline',
                 color: const Color(0xFFB22222),
                 onTap: () {
-                  context.pop();
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                         content: Text('Request declined successfully'),
@@ -434,7 +440,7 @@ void showApprovedSheet(BuildContext context) {
             ])),
         const SizedBox(height: 16),
         GestureDetector(
-            onTap: () => context.pop(),
+            onTap: () => Navigator.pop(context),
             behavior: HitTestBehavior.opaque,
             child: Text('Done',
                 style: AppTheme.dm(
@@ -448,10 +454,12 @@ class _StatusReqRow extends StatelessWidget {
   const _StatusReqRow(
       this.name, this.rating, this.meta, this.badge, this.kind, this.chips,
       {this.reason});
+
   final String name, rating, meta, badge;
   final BadgeKind kind;
   final List<String> chips;
   final String? reason;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -501,6 +509,7 @@ class _StatusReqRow extends StatelessWidget {
 
 class OwnerRequestDetailScreen extends StatelessWidget {
   const OwnerRequestDetailScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final extra = GoRouterState.of(context).extra;

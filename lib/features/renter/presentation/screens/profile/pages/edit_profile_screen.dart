@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sahely/core/theme/app_colors.dart';
+import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+
 import '../widgets/edit_profile_avatar.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _tiktokController;
   late TextEditingController _facebookController;
   String? _localAvatarPath;
-  
+
   final int _bioMaxLength = 150;
   bool _isLoading = false;
 
@@ -31,7 +32,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _tiktokController = TextEditingController(text: profile.tiktok ?? '');
     _facebookController = TextEditingController(text: profile.facebook ?? '');
     _localAvatarPath = profile.avatarPath;
-    
+
     _bioController.addListener(() => setState(() {}));
   }
 
@@ -47,7 +48,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    
+
     if (image != null) {
       setState(() {
         _localAvatarPath = image.path;
@@ -57,19 +58,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _handleSave() async {
     setState(() => _isLoading = true);
-    
+
     // Save to provider
     context.read<ProfileProvider>().updateProfile(
-      bio: _bioController.text,
-      instagram: _instagramController.text,
-      tiktok: _tiktokController.text,
-      facebook: _facebookController.text,
-      avatarPath: _localAvatarPath,
-    );
+          bio: _bioController.text,
+          instagram: _instagramController.text,
+          tiktok: _tiktokController.text,
+          facebook: _facebookController.text,
+          avatarPath: _localAvatarPath,
+        );
 
     // Mock API delay
     await Future.delayed(const Duration(seconds: 1));
-    
+
     if (mounted) {
       setState(() => _isLoading = false);
       Navigator.pop(context);
@@ -257,7 +258,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ? const SizedBox(
                         width: 24,
                         height: 24,
-                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        child: CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2),
                       )
                     : const Text(
                         'Save Profile',
@@ -304,7 +306,7 @@ class _SocialLinkFieldState extends State<_SocialLinkField> {
   @override
   Widget build(BuildContext context) {
     bool isLinked = widget.controller.text.isNotEmpty;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -337,14 +339,16 @@ class _SocialLinkFieldState extends State<_SocialLinkField> {
             decoration: BoxDecoration(
               color: AppColors.goldTint,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: isLinked ? AppColors.gold : AppColors.border),
+              border: Border.all(
+                  color: isLinked ? AppColors.gold : AppColors.border),
             ),
             child: TextField(
               controller: widget.controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: widget.hint,
-                hintStyle: const TextStyle(color: AppColors.placeholder, fontSize: 13),
+                hintStyle:
+                    const TextStyle(color: AppColors.placeholder, fontSize: 13),
               ),
               style: const TextStyle(fontSize: 14, color: AppColors.navy),
             ),
@@ -358,7 +362,9 @@ class _SocialLinkFieldState extends State<_SocialLinkField> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: isLinked ? AppColors.green.withValues(alpha: 0.1) : AppColors.gold.withValues(alpha: 0.1),
+        color: isLinked
+            ? AppColors.green.withValues(alpha: 0.1)
+            : AppColors.gold.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

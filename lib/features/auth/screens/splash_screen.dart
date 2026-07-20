@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/brand.dart';
@@ -7,20 +7,23 @@ import '../../../core/widgets/ui.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _c =
-      AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat(reverse: true);
+      AnimationController(vsync: this, duration: const Duration(seconds: 2))
+        ..repeat(reverse: true);
 
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.go('/welcome');
+        AppNavigation.safeGo(context, '/welcome');
       }
     });
   }
@@ -47,7 +50,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   const Wordmark(size: 46, spacing: 8),
                   const SizedBox(height: 14),
                   Text('Verified Chalets. Zero Chaos.',
-                      style: AppTheme.dm(size: 15, color: AppColors.gold, letterSpacing: 1)),
+                      style: AppTheme.dm(
+                          size: 15, color: AppColors.gold, letterSpacing: 1)),
                 ],
               ),
             ),

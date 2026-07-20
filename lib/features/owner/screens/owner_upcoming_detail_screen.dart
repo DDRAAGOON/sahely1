@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../data/sample_data.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/kit.dart';
 import '../../../core/widgets/ui.dart';
+import '../../../data/sample_data.dart';
 
 class OwnerUpcomingDetailScreen extends StatelessWidget {
   final Property? property;
+
   const OwnerUpcomingDetailScreen({super.key, this.property});
 
   @override
@@ -16,8 +18,9 @@ class OwnerUpcomingDetailScreen extends StatelessWidget {
     final prop = property ?? Sample.azure;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F0E8), // Direct Cream
+      backgroundColor: AppColors.cream,
       body: SafeArea(
+        bottom: false,
         child: Stack(
           children: [
             ListView(
@@ -33,7 +36,7 @@ class OwnerUpcomingDetailScreen extends StatelessWidget {
                           imageUrl: prop.image,
                           enableViewer: true,
                           fadeHeight: 120,
-                          fadeColor: const Color(0xFFF5F0E8)),
+                          fadeColor: AppColors.cream),
                       const DecoratedBox(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
@@ -71,7 +74,7 @@ class OwnerUpcomingDetailScreen extends StatelessWidget {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -280,7 +283,7 @@ class OwnerUpcomingDetailScreen extends StatelessWidget {
 
                       // 8. AI Banner
                       GestureDetector(
-                        onTap: () => context.push('/ai-chat'),
+                        onTap: () => AppNavigation.goToAiChat(context),
                         behavior: HitTestBehavior.opaque,
                         child: Container(
                           padding: const EdgeInsets.all(16),
@@ -330,7 +333,6 @@ class OwnerUpcomingDetailScreen extends StatelessWidget {
                         radius: 16,
                         onTap: () => _showCancelDialog(context),
                       ),
-                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
@@ -350,7 +352,7 @@ class OwnerUpcomingDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => context.pop(),
+                        onTap: () => Navigator.pop(context),
                         behavior: HitTestBehavior.opaque,
                         child: Container(
                           width: 42,
@@ -391,14 +393,14 @@ class OwnerUpcomingDetailScreen extends StatelessWidget {
             style: AppTheme.dm(size: 14, color: AppColors.muted)),
         actions: [
           TextButton(
-            onPressed: () => context.pop(),
+            onPressed: () => Navigator.pop(context),
             child: Text('No, keep it',
                 style: AppTheme.dm(
                     size: 14, weight: FontWeight.w600, color: AppColors.muted)),
           ),
           TextButton(
             onPressed: () {
-              context.pop();
+              Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                     content: Text('Booking cancellation request sent'),

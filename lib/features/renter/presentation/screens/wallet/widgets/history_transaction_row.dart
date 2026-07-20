@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class HistoryTransactionRow extends StatelessWidget {
@@ -132,7 +133,8 @@ class HistoryTransactionRow extends StatelessWidget {
                     if (isViolation) ...[
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFBF3DE),
                           borderRadius: BorderRadius.circular(4),

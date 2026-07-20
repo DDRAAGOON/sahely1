@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class CollectionPropertyCard extends StatelessWidget {
@@ -33,10 +34,10 @@ class CollectionPropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Assuming price is in cents or similar if dividing by 100, 
+    // Assuming price is in cents or similar if dividing by 100,
     // but based on previous code it might just be the direct value.
     // Let's stick to a simple formatting or the one provided.
-    final egpPrice = pricePerNight.toString(); 
+    final egpPrice = pricePerNight.toString();
 
     return GestureDetector(
       onTap: onTap,
@@ -148,7 +149,8 @@ class CollectionPropertyCard extends StatelessWidget {
                       _buildChip('$beds beds'),
                       ...amenities.map((amenity) => _buildChip(
                             amenity,
-                            isSpecial: amenity == 'Pets' || amenity == 'No pets',
+                            isSpecial:
+                                amenity == 'Pets' || amenity == 'No pets',
                             isPositive: amenity == 'Pets',
                           )),
                     ],
@@ -256,7 +258,8 @@ class CollectionPropertyCard extends StatelessWidget {
     );
   }
 
-  Widget _buildChip(String label, {bool isSpecial = false, bool isPositive = true}) {
+  Widget _buildChip(String label,
+      {bool isSpecial = false, bool isPositive = true}) {
     Color bgColor = AppColors.cream;
     Color textColor = AppColors.navy;
     Color borderColor = AppColors.navy;

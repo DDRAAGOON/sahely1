@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerServicesPage extends StatelessWidget {
@@ -14,7 +15,11 @@ class BrokerServicesPage extends StatelessWidget {
           children: [
             const Text(
               'Broker Services',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'Cairo'),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.navy,
+                  fontFamily: 'Cairo'),
             ),
             const SizedBox(height: 40),
             Center(
@@ -27,13 +32,18 @@ class BrokerServicesPage extends StatelessWidget {
                       color: AppColors.navy.withValues(alpha: 0.04),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.business_center_outlined, size: 40, color: AppColors.gold),
+                    child: const Icon(Icons.business_center_outlined,
+                        size: 40, color: AppColors.gold),
                   ),
                   const SizedBox(height: 32),
                   const Text(
                     'Exclusive for Brokers',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: AppColors.navy, fontFamily: 'Cairo'),
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.navy,
+                        fontFamily: 'Cairo'),
                   ),
                   const SizedBox(height: 12),
                   const Padding(
@@ -41,7 +51,11 @@ class BrokerServicesPage extends StatelessWidget {
                     child: Text(
                       'Manage your referrals, track payouts, and access premium tools for top brokers.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15, color: AppColors.secondary, height: 1.4, fontFamily: 'Cairo'),
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: AppColors.secondary,
+                          height: 1.4,
+                          fontFamily: 'Cairo'),
                     ),
                   ),
                 ],

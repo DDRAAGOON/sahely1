@@ -22,9 +22,14 @@ class PropertyDetailsCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              _DetailItem(icon: Icons.bed, label: '${details['bedrooms'] ?? 0} bdr · ${details['beds'] ?? 0} beds'),
+              _DetailItem(
+                  icon: Icons.bed,
+                  label:
+                      '${details['bedrooms'] ?? 0} bdr · ${details['beds'] ?? 0} beds'),
               const SizedBox(width: 16),
-              _DetailItem(icon: Icons.bathtub, label: '${details['bathrooms'] ?? 0} bathrooms'),
+              _DetailItem(
+                  icon: Icons.bathtub,
+                  label: '${details['bathrooms'] ?? 0} bathrooms'),
             ],
           ),
           const SizedBox(height: 12),
@@ -38,7 +43,9 @@ class PropertyDetailsCard extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              _DetailItem(icon: Icons.beach_access, label: details['beach'] ?? 'Beach access'),
+              _DetailItem(
+                  icon: Icons.beach_access,
+                  label: details['beach'] ?? 'Beach access'),
               const SizedBox(width: 16),
               const _DetailItem(icon: Icons.lock, label: 'Smart lock'),
             ],

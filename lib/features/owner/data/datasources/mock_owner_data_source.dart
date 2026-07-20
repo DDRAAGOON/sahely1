@@ -16,7 +16,8 @@ class MockOwnerDataSource {
           id: '1',
           name: 'Azure Beach Villa',
           area: 'North Coast',
-          image: 'https://images.unsplash.com/photo-1776762893024-890728937eab?w=1200&q=72&auto=format&fit=crop',
+          image:
+              'https://images.unsplash.com/photo-1776762893024-890728937eab?w=1200&q=72&auto=format&fit=crop',
           price: 4500,
           rating: 4.8,
           reviews: 124,
@@ -32,7 +33,8 @@ class MockOwnerDataSource {
           id: '2',
           name: 'Lagoon Retreat',
           area: 'Marassi',
-          image: 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=1200&q=72&auto=format&fit=crop',
+          image:
+              'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=1200&q=72&auto=format&fit=crop',
           price: 6200,
           rating: 4.9,
           reviews: 86,
@@ -48,7 +50,8 @@ class MockOwnerDataSource {
           id: '3',
           name: 'Golden Dunes',
           area: 'Hacienda Bay',
-          image: 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=1200&q=72&auto=format&fit=crop',
+          image:
+              'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=1200&q=72&auto=format&fit=crop',
           price: 3800,
           rating: 4.7,
           reviews: 53,

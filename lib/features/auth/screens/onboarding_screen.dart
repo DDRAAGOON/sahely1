@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/ui.dart';
@@ -19,19 +21,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<Map<String, String>> _slides = [
     {
-      'image': 'https://images.unsplash.com/photo-1765288116127-3c5a76fa2ba6?w=1200&q=75&auto=format&fit=crop',
+      'image':
+          'https://images.unsplash.com/photo-1765288116127-3c5a76fa2ba6?w=1200&q=75&auto=format&fit=crop',
       'title': 'Find Your Perfect Stay',
       'subtitle': 'Discover luxury villas, chalets, and beachfront properties.',
     },
     {
-      'image': 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=75&auto=format&fit=crop',
+      'image':
+          'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=75&auto=format&fit=crop',
       'title': 'Book with Confidence',
-      'subtitle': 'Verified listings and secure payments for a chaos-free experience.',
+      'subtitle':
+          'Verified listings and secure payments for a chaos-free experience.',
     },
     {
-      'image': 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200&q=75&auto=format&fit=crop',
+      'image':
+          'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200&q=75&auto=format&fit=crop',
       'title': 'Enjoy Your Vacation',
-      'subtitle': 'Experience luxury like never before with our premium services.',
+      'subtitle':
+          'Experience luxury like never before with our premium services.',
     },
   ];
 
@@ -70,7 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      context.push('/role');
+      AppNavigation.goToRoleSelection(context);
     }
   }
 
@@ -112,17 +119,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             right: 0,
                             child: SafeArea(
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 12, right: 16),
+                                padding:
+                                    const EdgeInsets.only(top: 12, right: 16),
                                 child: GestureDetector(
-                                  onTap: () => context.push('/role'),
+                                  onTap: () =>
+                                      AppNavigation.goToRoleSelection(context),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: AppColors.navy.withValues(alpha: 0.35),
+                                      color: AppColors.navy
+                                          .withValues(alpha: 0.35),
                                       borderRadius: BorderRadius.circular(16),
                                     ),
                                     child: Text('Skip',
-                                        style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.white)),
+                                        style: AppTheme.dm(
+                                            size: 13,
+                                            weight: FontWeight.w600,
+                                            color: AppColors.white)),
                                   ),
                                 ),
                               ),
@@ -133,12 +147,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                     const SizedBox(height: 14),
                     Text(_slides[index]['title']!,
-                        style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+                        style: AppTheme.dm(
+                            size: 22,
+                            weight: FontWeight.w700,
+                            color: AppColors.navy)),
                     const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
                       child: Text(_slides[index]['subtitle']!,
-                          textAlign: TextAlign.center, style: AppTheme.dm(size: 15, color: AppColors.muted, height: 1.5)),
+                          textAlign: TextAlign.center,
+                          style: AppTheme.dm(
+                              size: 15, color: AppColors.muted, height: 1.5)),
                     ),
                   ],
                 );
@@ -153,7 +172,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(28, 0, 28, 40),
               child: GoldButton(
-                label: _currentPage == _slides.length - 1 ? 'Get Started' : 'Next',
+                label:
+                    _currentPage == _slides.length - 1 ? 'Get Started' : 'Next',
                 onTap: _onNext,
               ),
             ),

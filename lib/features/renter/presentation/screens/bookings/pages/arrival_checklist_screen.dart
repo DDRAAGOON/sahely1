@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
+
+import '../../mawsem/celebration/pages/level_up_celebration_screen.dart';
 import '../widgets/checklist_header_banner.dart';
 import '../widgets/checklist_item.dart';
 import '../widgets/report_issue_section.dart';
-import '../widgets/submit_checklist_banner.dart';
 import '../widgets/stars/stars_earned_dialog.dart';
-import '../../mawsem/celebration/pages/level_up_celebration_screen.dart';
+import '../widgets/submit_checklist_banner.dart';
 
 class ArrivalChecklistScreen extends StatefulWidget {
   final String bookingId;
@@ -37,8 +38,10 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
   void initState() {
     super.initState();
     // Use the passed items directly to maintain their saved state (completed/reported)
-    _checklistItems = widget.checklistItems.map((item) => Map<String, dynamic>.from(item)).toList();
-    
+    _checklistItems = widget.checklistItems
+        .map((item) => Map<String, dynamic>.from(item))
+        .toList();
+
     // Re-populate reported issues if any exist in the initial data
     for (int i = 0; i < _checklistItems.length; i++) {
       if (_checklistItems[i]['issueReported'] == true) {
@@ -47,8 +50,9 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
           'itemName': _checklistItems[i]['label'],
           'issueText': _checklistItems[i]['issueText'] ?? '',
         });
-        if (_checklistItems[i]['issueText'] != null && _checklistItems[i]['issueText'].isNotEmpty) {
-           _issueController.text = _checklistItems[i]['issueText'];
+        if (_checklistItems[i]['issueText'] != null &&
+            _checklistItems[i]['issueText'].isNotEmpty) {
+          _issueController.text = _checklistItems[i]['issueText'];
         }
       }
     }
@@ -63,9 +67,10 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
 
   void _toggleItem(int index) {
     setState(() {
-      final bool currentlyCompleted = _checklistItems[index]['completed'] ?? false;
+      final bool currentlyCompleted =
+          _checklistItems[index]['completed'] ?? false;
       _checklistItems[index]['completed'] = !currentlyCompleted;
-      
+
       if (_checklistItems[index]['completed'] == true) {
         _checklistItems[index]['issueReported'] = false;
         _reportedIssues.removeWhere((issue) => issue['itemIndex'] == index);
@@ -77,7 +82,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
     setState(() {
       _checklistItems[index]['issueReported'] = true;
       _checklistItems[index]['completed'] = false;
-      
+
       if (!_reportedIssues.any((i) => i['itemIndex'] == index)) {
         _reportedIssues.add({
           'itemIndex': index,
@@ -86,7 +91,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
         });
       }
     });
-    
+
     // Smooth scroll to show report area
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
@@ -105,7 +110,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
         source: ImageSource.gallery,
         imageQuality: 70,
       );
-      
+
       if (image != null) {
         setState(() {
           _uploadedPhotos.add(image.path);
@@ -122,7 +127,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
       int idx = issue['itemIndex'];
       _checklistItems[idx]['issueText'] = _issueController.text;
     }
-    
+
     final profile = context.read<ProfileProvider>();
     final int previousStars = profile.stars;
     final int? newLevel = profile.addStars(5);
@@ -138,15 +143,17 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
         propertyName: 'Lagoon Retreat',
         previousTotal: previousStars,
         newTotal: profile.stars,
-        starsToNextLevel: nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
+        starsToNextLevel:
+            nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
         nextLevelName: nextLevel != null ? nextLevel['name'] : 'Max Level',
         onKeepEarning: () {
           Navigator.pop(context); // Close dialog
-          
+
           if (newLevel != null) {
             _showLevelUpCelebration(context, newLevel);
           } else {
-            Navigator.pop(context, _checklistItems); // Return to previous screen
+            Navigator.pop(
+                context, _checklistItems); // Return to previous screen
           }
         },
       ),
@@ -170,13 +177,15 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
           unlockRewardTitle: 'Level Reward',
           unlockRewardDescription: _getUnlockReward(level),
           currentSeasonStars: profile.stars,
-          starsToNextLevel: nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
+          starsToNextLevel:
+              nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
           onShare: () {
             // Share achievement logic
           },
           onKeepExploring: () {
             Navigator.pop(context); // Close celebration
-            Navigator.pop(context, _checklistItems); // Return to previous screen
+            Navigator.pop(
+                context, _checklistItems); // Return to previous screen
           },
         ),
       ),
@@ -185,19 +194,27 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
 
   String _getUnlockBenefit(int level) {
     switch (level) {
-      case 2: return 'Basic perks and dashboard access unlocked.';
-      case 3: return '15% off all concierge services is now active for the rest of this season.';
-      case 4: return 'Priority support and welcome gifts are now available.';
-      default: return 'Premium benefits and exclusive access are now yours.';
+      case 2:
+        return 'Basic perks and dashboard access unlocked.';
+      case 3:
+        return '15% off all concierge services is now active for the rest of this season.';
+      case 4:
+        return 'Priority support and welcome gifts are now available.';
+      default:
+        return 'Premium benefits and exclusive access are now yours.';
     }
   }
 
   String _getUnlockReward(int level) {
     switch (level) {
-      case 3: return 'Priority WhatsApp Support';
-      case 4: return '200 EGP Booking Credit';
-      case 5: return 'Free Airport Pickup';
-      default: return 'Exclusive Digital Badge';
+      case 3:
+        return 'Priority WhatsApp Support';
+      case 4:
+        return '200 EGP Booking Credit';
+      case 5:
+        return 'Free Airport Pickup';
+      default:
+        return 'Exclusive Digital Badge';
     }
   }
 
@@ -209,7 +226,6 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
         child: Column(
           children: [
             _buildHeader(),
-            
             Expanded(
               child: SingleChildScrollView(
                 controller: _scrollController,
@@ -226,7 +242,11 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
 
                     const Text(
                       'Tick everything the host promised. Tap the camera on any item that\'s wrong.',
-                      style: TextStyle(fontSize: 13, color: Color(0xFF717171), fontFamily: 'DM Sans', height: 1.4),
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF717171),
+                          fontFamily: 'DM Sans',
+                          height: 1.4),
                     ),
 
                     const SizedBox(height: 16),
@@ -254,7 +274,11 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
                                 onReportIssue: () => _onCameraTap(index),
                               ),
                               if (!isLast)
-                                const Divider(height: 1, color: Color(0xFFE0D8CC), indent: 16, endIndent: 16),
+                                const Divider(
+                                    height: 1,
+                                    color: Color(0xFFE0D8CC),
+                                    indent: 16,
+                                    endIndent: 16),
                             ],
                           );
                         }).toList(),
@@ -277,7 +301,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
                       starsEarned: 5,
                       collectionName: 'AL MAWSEM',
                     ),
-                    
+
                     const SizedBox(height: 24),
 
                     // Submit Button
@@ -289,20 +313,25 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF1B2744),
                           foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14)),
                           elevation: 0,
                         ),
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Submit & earn +5', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontFamily: 'DM Sans')),
+                            Text('Submit & earn +5',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'DM Sans')),
                             SizedBox(width: 6),
                             Icon(Icons.star, color: Colors.white, size: 18),
                           ],
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -322,17 +351,24 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
-              width: 38, height: 38,
+              width: 38,
+              height: 38,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: const Color(0xFFE0D8CC)),
               ),
-              child: const Icon(Icons.chevron_left, color: Color(0xFF1B2744), size: 24),
+              child: const Icon(Icons.chevron_left,
+                  color: Color(0xFF1B2744), size: 24),
             ),
           ),
           const SizedBox(width: 16),
-          const Text('Arrival Checklist', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Color(0xFF1B2744), fontFamily: 'DM Sans')),
+          const Text('Arrival Checklist',
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1B2744),
+                  fontFamily: 'DM Sans')),
         ],
       ),
     );

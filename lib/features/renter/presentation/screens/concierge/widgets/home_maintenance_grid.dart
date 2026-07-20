@@ -39,7 +39,8 @@ class HomeMaintenanceGrid extends StatelessWidget {
         // 4-column grid
         GridView.builder(
           shrinkWrap: true,
-          padding: EdgeInsets.zero, // إزالة الـ padding الافتراضي
+          padding: EdgeInsets.zero,
+          // إزالة الـ padding الافتراضي
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
@@ -52,7 +53,8 @@ class HomeMaintenanceGrid extends StatelessWidget {
             return _ServiceTile(
               icon: _services[index]['icon'],
               label: _services[index]['label'],
-              onTap: () => _showServiceSheet(context, _services[index]['label']),
+              onTap: () =>
+                  _showServiceSheet(context, _services[index]['label']),
             );
           },
         ),

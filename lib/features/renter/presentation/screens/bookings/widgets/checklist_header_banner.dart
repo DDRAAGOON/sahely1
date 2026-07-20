@@ -67,7 +67,8 @@ class ChecklistHeaderBanner extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      TextSpan(text: ' — confirms the home matched the listing.'),
+                      TextSpan(
+                          text: ' — confirms the home matched the listing.'),
                     ],
                   ),
                 ),

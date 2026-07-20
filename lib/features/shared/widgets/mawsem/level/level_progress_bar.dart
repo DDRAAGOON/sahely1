@@ -15,7 +15,7 @@ class LevelProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int starsNeeded = (starsRequired - currentStars).clamp(0, 999999);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
 /// Simple top app bar: back button + title (+ optional subtitle / trailing).
 class TopBar extends StatelessWidget {
-  const TopBar({super.key, required this.title, this.subtitle, this.trailing, this.onBack});
+  const TopBar(
+      {super.key,
+      required this.title,
+      this.subtitle,
+      this.trailing,
+      this.onBack});
+
   final String title;
   final String? subtitle;
   final Widget? trailing;
@@ -25,7 +32,8 @@ class TopBar extends StatelessWidget {
               border: Border.all(color: AppColors.border),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Icon(Icons.chevron_left, size: 22, color: AppColors.navy),
+            child:
+                const Icon(Icons.chevron_left, size: 22, color: AppColors.navy),
           ),
         ),
         const SizedBox(width: 12),
@@ -34,8 +42,14 @@ class TopBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title, style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
-              if (subtitle != null) Text(subtitle!, style: AppTheme.dm(size: 12, color: AppColors.muted)),
+              Text(title,
+                  style: AppTheme.dm(
+                      size: 22,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
+              if (subtitle != null)
+                Text(subtitle!,
+                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
             ],
           ),
         ),

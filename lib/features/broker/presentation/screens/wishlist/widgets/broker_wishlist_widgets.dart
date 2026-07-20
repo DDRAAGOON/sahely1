@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 export 'broker_create_collection_sheet.dart';
@@ -82,7 +83,8 @@ class BrokerWishlistCollectionCard extends StatelessWidget {
                 top: 10,
                 right: 10,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                   decoration: BoxDecoration(
                     color: AppColors.navy.withValues(alpha: 0.85),
                     borderRadius: BorderRadius.circular(12),
@@ -94,7 +96,10 @@ class BrokerWishlistCollectionCard extends StatelessWidget {
                       SizedBox(width: 4),
                       Text(
                         'Shared',
-                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.white),
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.white),
                       ),
                     ],
                   ),
@@ -109,7 +114,10 @@ class BrokerWishlistCollectionCard extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.white),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.white),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -130,6 +138,7 @@ class BrokerWishlistCollectionCard extends StatelessWidget {
 
 class BrokerNewCollectionTile extends StatelessWidget {
   final VoidCallback onTap;
+
   const BrokerNewCollectionTile({super.key, required this.onTap});
 
   @override
@@ -149,7 +158,10 @@ class BrokerNewCollectionTile extends StatelessWidget {
             SizedBox(height: 8),
             Text(
               'New Collection',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.navy),
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.navy),
             ),
           ],
         ),

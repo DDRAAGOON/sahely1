@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';import '../widgets/history_filter_chips.dart';
-import '../widgets/history_transaction_row.dart';
+
+import '../../../../../../core/theme/app_colors.dart';
+import '../widgets/history_filter_chips.dart';
 import '../widgets/history_section_header.dart';
+import '../widgets/history_transaction_row.dart';
 
 class TransactionHistoryScreen extends StatefulWidget {
   const TransactionHistoryScreen({super.key});
@@ -113,7 +115,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-            
+
             // Filter Chips
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -152,7 +154,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                   ],
 
                   // Empty State
-                  if (!_hasTransactionsForMonth('THIS MONTH') && 
+                  if (!_hasTransactionsForMonth('THIS MONTH') &&
                       !_hasTransactionsForMonth('LAST MONTH'))
                     const Padding(
                       padding: EdgeInsets.only(top: 48),
@@ -207,7 +209,8 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
     return _transactions[month]!.any((transaction) {
       if (_selectedFilter == 'Payments') {
-        return transaction['type'] == 'payment' || transaction['type'] == 'refund';
+        return transaction['type'] == 'payment' ||
+            transaction['type'] == 'refund';
       } else if (_selectedFilter == 'Credit') {
         return transaction['type'] == 'credit';
       } else if (_selectedFilter == 'Violations') {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../../../core/theme/app_colors.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
-import '../widgets/reviews_tabs.dart';
+
+import '../../../../../../core/theme/app_colors.dart';
 import '../widgets/reviews_given_section.dart';
 import '../widgets/reviews_received_section.dart';
+import '../widgets/reviews_tabs.dart';
 
 class MyReviewsScreen extends StatefulWidget {
   const MyReviewsScreen({super.key});
@@ -63,7 +64,7 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
         child: Column(
           children: [
             const SizedBox(height: 16),
-            
+
             // Tabs
             ReviewsTabs(
               selectedTab: _selectedTab,
@@ -86,17 +87,21 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
                         reviews: const [
                           {
                             'propertyName': 'Lagoon Retreat',
-                            'propertyImage': 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=200',
+                            'propertyImage':
+                                'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=200',
                             'rating': 5,
                             'date': 'Jun 2026',
-                            'reviewText': 'Unreal pool and the smart-lock check-in was effortless. Would book again in a heartbeat.',
+                            'reviewText':
+                                'Unreal pool and the smart-lock check-in was effortless. Would book again in a heartbeat.',
                           },
                           {
                             'propertyName': 'Golden Dunes',
-                            'propertyImage': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200',
+                            'propertyImage':
+                                'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200',
                             'rating': 4,
                             'date': 'May 2026',
-                            'reviewText': 'Beautiful villa, quiet area. Beach was a little busy on the weekend but loved it overall.',
+                            'reviewText':
+                                'Beautiful villa, quiet area. Beach was a little busy on the weekend but loved it overall.',
                           },
                         ],
                       )
@@ -108,14 +113,16 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
                             'hostRole': 'Owner',
                             'hostAvatar': null,
                             'rating': 5,
-                            'reviewText': 'Wonderful guest — left the villa spotless and communicated clearly. Welcome any time!',
+                            'reviewText':
+                                'Wonderful guest — left the villa spotless and communicated clearly. Welcome any time!',
                           },
                           {
                             'hostName': 'Karim A.',
                             'hostRole': 'Broker',
                             'hostAvatar': null,
                             'rating': 5,
-                            'reviewText': 'Respectful, on-time check-out, easy to coordinate with. A 5-star guest.',
+                            'reviewText':
+                                'Respectful, on-time check-out, easy to coordinate with. A 5-star guest.',
                           },
                         ],
                       ),

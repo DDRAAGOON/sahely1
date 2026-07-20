@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
+
 import '../../../../../../core/navigation/app_navigation.dart';
+import '../../../../../../core/theme/app_colors.dart';
 
 class SearchRow extends StatelessWidget {
   final VoidCallback? onFilterTap;
   final VoidCallback? onChatTap;
+
   const SearchRow({super.key, this.onFilterTap, this.onChatTap});
 
   @override

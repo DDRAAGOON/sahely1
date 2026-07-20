@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
@@ -96,7 +97,8 @@ class SearchHeaderRow extends StatelessWidget {
                 border: Border.all(color: AppColors.border),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.chevron_left, size: 22, color: AppColors.navy),
+              child: const Icon(Icons.chevron_left,
+                  size: 22, color: AppColors.navy),
             ),
           ),
           const SizedBox(width: 10),
@@ -119,7 +121,10 @@ class SearchHeaderRow extends StatelessWidget {
                   Expanded(
                     child: Text(
                       value ?? placeholder,
-                      style: AppTheme.dm(size: 14, color: value == null ? AppColors.faint : AppColors.ink),
+                      style: AppTheme.dm(
+                          size: 14,
+                          color:
+                              value == null ? AppColors.faint : AppColors.ink),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -135,7 +140,8 @@ class SearchHeaderRow extends StatelessWidget {
           child: Container(
             width: h,
             height: h,
-            decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(14)),
+            decoration: BoxDecoration(
+                color: AppColors.navy, borderRadius: BorderRadius.circular(14)),
             child: const Icon(Icons.tune, size: 22, color: AppColors.gold),
           ),
         ),
@@ -143,12 +149,16 @@ class SearchHeaderRow extends StatelessWidget {
         Container(
           width: h,
           height: h,
-          decoration: BoxDecoration(color: AppColors.gold, borderRadius: BorderRadius.circular(14)),
+          decoration: BoxDecoration(
+              color: AppColors.gold, borderRadius: BorderRadius.circular(14)),
           child: Stack(
             alignment: Alignment.center,
             children: [
-              const Icon(Icons.chat_bubble_outline, size: 22, color: AppColors.navy),
-              const Positioned(top: 14, child: Icon(Icons.star, size: 9, color: AppColors.navy)),
+              const Icon(Icons.chat_bubble_outline,
+                  size: 22, color: AppColors.navy),
+              const Positioned(
+                  top: 14,
+                  child: Icon(Icons.star, size: 9, color: AppColors.navy)),
               Positioned(
                 top: -2,
                 right: -2,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
@@ -75,11 +76,11 @@ class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
     final bool isMultiline = widget.height > 60;
-    
+
     // Logic: use gold if focused or has text, unless a specific borderColor was forced
     final bool hasText = widget.controller?.text.isNotEmpty ?? false;
     Color borderCol = widget.borderColor ?? AppColors.border;
-    
+
     // If user didn't force a color, we apply the logic
     if (widget.borderColor == null) {
       if (_isFocused || hasText) {
@@ -92,31 +93,37 @@ class _AppTextFieldState extends State<AppTextField> {
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.circular(widget.radius),
-        border: Border.all(color: borderCol, width: _isFocused ? 1.5 : widget.borderWidth),
+        border: Border.all(
+            color: borderCol, width: _isFocused ? 1.5 : widget.borderWidth),
       ),
       alignment: isMultiline ? Alignment.topLeft : Alignment.center,
       child: TextFormField(
         controller: widget.controller,
         focusNode: _focusNode,
-        onChanged: (_) => setState(() {}), // Trigger rebuild to update border if text is empty/full
+        onChanged: (_) => setState(() {}),
+        // Trigger rebuild to update border if text is empty/full
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,
         validator: widget.validator,
         textAlign: widget.textAlign,
         cursorColor: AppColors.navy,
         inputFormatters: widget.inputFormatters,
-        textAlignVertical: isMultiline ? TextAlignVertical.top : TextAlignVertical.center,
+        textAlignVertical:
+            isMultiline ? TextAlignVertical.top : TextAlignVertical.center,
         maxLines: isMultiline ? null : 1,
-        style: AppTheme.dm(size: widget.fontSize, color: widget.textColor ?? Colors.black, letterSpacing: widget.letterSpacing),
+        style: AppTheme.dm(
+            size: widget.fontSize,
+            color: widget.textColor ?? Colors.black,
+            letterSpacing: widget.letterSpacing),
         decoration: InputDecoration(
           hintText: widget.hintText,
-          hintStyle: AppTheme.dm(size: widget.fontSize, color: const Color(0xFFA0A2A0)),
+          hintStyle: AppTheme.dm(
+              size: widget.fontSize, color: const Color(0xFFA0A2A0)),
           contentPadding: EdgeInsets.fromLTRB(
-            widget.leading != null ? 0 : (widget.radius >= 999 ? 18 : 14), 
-            isMultiline ? 12 : 0, 
-            widget.trailing != null ? 0 : (widget.radius >= 999 ? 18 : 14),
-            isMultiline ? 12 : 0
-          ),
+              widget.leading != null ? 0 : (widget.radius >= 999 ? 18 : 14),
+              isMultiline ? 12 : 0,
+              widget.trailing != null ? 0 : (widget.radius >= 999 ? 18 : 14),
+              isMultiline ? 12 : 0),
           border: InputBorder.none,
           isDense: true,
           prefixIcon: widget.leading,
@@ -157,7 +164,9 @@ class FakeField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: radius >= 999 ? 18 : 14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border.all(color: focused ? AppColors.gold : AppColors.border, width: focused ? 2 : 1),
+        border: Border.all(
+            color: focused ? AppColors.gold : AppColors.border,
+            width: focused ? 2 : 1),
         borderRadius: BorderRadius.circular(radius),
       ),
       child: Row(
@@ -181,7 +190,13 @@ class FakeField extends StatelessWidget {
 
 /// Labelled field group: small bold label above a child widget.
 class FieldGroup extends StatelessWidget {
-  const FieldGroup({super.key, this.label, required this.child, this.trailingLabel, this.labelWidget});
+  const FieldGroup(
+      {super.key,
+      this.label,
+      required this.child,
+      this.trailingLabel,
+      this.labelWidget});
+
   final String? label;
   final Widget child;
   final Widget? trailingLabel;
@@ -200,7 +215,8 @@ class FieldGroup extends StatelessWidget {
               if (labelWidget != null)
                 labelWidget!
               else
-                Text(label ?? '', style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
+                Text(label ?? '',
+                    style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
               if (trailingLabel != null) trailingLabel!,
             ],
           ),
@@ -213,27 +229,34 @@ class FieldGroup extends StatelessWidget {
 
 /// Lightweight dashed-border wrapper.
 class DottedBorder extends StatelessWidget {
-  const DottedBorder({super.key, required this.child, required this.color, this.radius = 14});
+  const DottedBorder(
+      {super.key, required this.child, required this.color, this.radius = 14});
+
   final Widget child;
   final Color color;
   final double radius;
+
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(painter: _DashPainter(color: color, radius: radius), child: child);
+    return CustomPaint(
+        painter: _DashPainter(color: color, radius: radius), child: child);
   }
 }
 
 class _DashPainter extends CustomPainter {
   _DashPainter({required this.color, required this.radius});
+
   final Color color;
   final double radius;
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    final rrect = RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius));
+    final rrect =
+        RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius));
     final path = Path()..addRRect(rrect);
     const dash = 6.0, gap = 5.0;
     for (final metric in path.computeMetrics()) {

@@ -24,7 +24,8 @@ class MockBrokerDataSource {
           'client': 'Nour A.',
           'date': 'Jun 19',
           'profit': '+EGP 320 profit',
-          'imageUrl': 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=200',
+          'imageUrl':
+              'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=200',
           'status': 'Soon',
         },
         {
@@ -33,7 +34,8 @@ class MockBrokerDataSource {
           'client': 'Sara M.',
           'date': 'Jun 22',
           'profit': '+EGP 260 profit',
-          'imageUrl': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200',
+          'imageUrl':
+              'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200',
           'status': 'Soon',
         },
       ],
@@ -47,7 +49,8 @@ class MockBrokerDataSource {
           'beds': 3,
           'type': 'Villa',
           'pricePerNight': 450000,
-          'imageUrl': 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+          'imageUrl':
+              'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
           'isWishlisted': true,
         },
         {
@@ -59,7 +62,8 @@ class MockBrokerDataSource {
           'beds': 4,
           'type': 'Chalet',
           'pricePerNight': 620000,
-          'imageUrl': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
+          'imageUrl':
+              'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
           'isWishlisted': false,
         },
         {
@@ -71,7 +75,8 @@ class MockBrokerDataSource {
           'beds': 2,
           'type': 'Penthouse',
           'pricePerNight': 380000,
-          'imageUrl': 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
+          'imageUrl':
+              'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
           'isWishlisted': false,
         },
       ],

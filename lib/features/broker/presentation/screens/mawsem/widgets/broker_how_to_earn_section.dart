@@ -81,7 +81,8 @@ class BrokerHowToEarnSection extends StatelessWidget {
                 color: const Color(0xFF9A7A22),
                 bgColor: const Color(0xFFBC9B43),
                 rowBgColor: const Color(0xFFFBF3DE),
-                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+                borderRadius:
+                    const BorderRadius.vertical(bottom: Radius.circular(16)),
                 isLast: true,
               ),
             ],

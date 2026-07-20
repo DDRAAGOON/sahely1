@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 import '../../wishlist/widgets/broker_heart_button.dart';
 
@@ -48,7 +49,8 @@ class BrokerPropertyCard extends StatelessWidget {
           children: [
             // Image Section
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
               child: Stack(
                 children: [
                   // Property Image
@@ -117,7 +119,8 @@ class BrokerPropertyCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Row(
                           children: [
-                            const Icon(Icons.location_on, color: AppColors.navy, size: 14),
+                            const Icon(Icons.location_on,
+                                color: AppColors.navy, size: 14),
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
@@ -153,7 +156,8 @@ class BrokerPropertyCard extends StatelessWidget {
                       // Rating
                       Row(
                         children: [
-                          const Icon(Icons.star, size: 16, color: AppColors.gold),
+                          const Icon(Icons.star,
+                              size: 16, color: AppColors.gold),
                           const SizedBox(width: 4),
                           Text(
                             rating.toString(),

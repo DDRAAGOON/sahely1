@@ -1,8 +1,10 @@
 ﻿import 'package:flutter/material.dart';
+
 import '../../../../../../core/theme/app_colors.dart';
 
 class BrokerCategoryChips extends StatefulWidget {
   final Function(String)? onCategorySelected;
+
   const BrokerCategoryChips({super.key, this.onCategorySelected});
 
   @override
@@ -11,7 +13,13 @@ class BrokerCategoryChips extends StatefulWidget {
 
 class _BrokerCategoryChipsState extends State<BrokerCategoryChips> {
   int _selectedIndex = 0;
-  final List<String> _categories = ['All', 'Villa', 'Chalet', 'Apartment', 'Studio'];
+  final List<String> _categories = [
+    'All',
+    'Villa',
+    'Chalet',
+    'Apartment',
+    'Studio'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +49,15 @@ class _BrokerCategoryChipsState extends State<BrokerCategoryChips> {
                   color: isSelected ? AppColors.gold : AppColors.border,
                   width: 1.5,
                 ),
-                boxShadow: isSelected ? [
-                  BoxShadow(
-                    color: AppColors.gold.withValues(alpha: 0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  )
-                ] : null,
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: AppColors.gold.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        )
+                      ]
+                    : null,
               ),
               alignment: Alignment.center,
               child: Text(
