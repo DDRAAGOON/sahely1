@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../core/widgets/kit.dart';
 import '../../../../../../core/widgets/ui.dart';
 import '../widgets/refer_property_header.dart';

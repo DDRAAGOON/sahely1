@@ -30,7 +30,7 @@ class WalletStatsRow extends StatelessWidget {
             child: _StatCard(
               label: 'Pending',
               value: pending,
-              valueColor: AppColors.gold,
+              valueColor: const Color(0xFFD2760A),
             ),
           ),
           const SizedBox(width: 8),

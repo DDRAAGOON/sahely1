@@ -5,7 +5,6 @@ import 'package:sahely/features/broker/data/datasources/mock_broker_data_source.
 import 'package:sahely/features/broker/data/repositories/broker_repository_impl.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_cubit.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_state.dart';
-
 import '../../../../../../core/theme/app_colors.dart';
 import '../../../../../../features/shared/properties/domain/entities/property.dart';
 import '../widgets/broker_dashboard_section.dart';

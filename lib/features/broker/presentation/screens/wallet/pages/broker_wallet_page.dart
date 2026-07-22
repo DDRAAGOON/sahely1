@@ -54,141 +54,149 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
       ];
     }
 
-    return SafeArea(
-      bottom: false,
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 8, bottom: 8),
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-                color: Color(0xFFFEF4E8),
-                border: Border(
-                    left: BorderSide(color: Color(0xFFD2760A), width: 3))),
-            child: Row(children: [
-              const Icon(Icons.warning_amber_rounded,
-                  size: 18, color: Color(0xFFD2760A)),
-              const SizedBox(width: 8),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Text('Account not verified',
-                        style: AppTheme.dm(
-                            size: 12,
-                            weight: FontWeight.w600,
-                            color: AppColors.navy)),
-                    Text('Add your card to withdraw earnings',
-                        style: AppTheme.dm(
-                            size: 11, color: const Color(0xFF8A6A1E))),
-                  ])),
-              GestureDetector(
-                  onTap: () => AppNavigation.goToAddCard(context),
-                  behavior: HitTestBehavior.opaque,
-                  child: Text('Add Card →',
-                      style: AppTheme.dm(
-                          size: 12,
-                          weight: FontWeight.w700,
-                          color: const Color(0xFFD2760A)))),
-            ]),
-          ),
-          Text('Commission Wallet',
-              style: AppTheme.dm(
-                  size: 22, weight: FontWeight.w700, color: AppColors.navy)),
-          const SizedBox(height: 14),
-          Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                    colors: [Color(0xFF22335A), AppColors.navy]),
-                borderRadius: BorderRadius.circular(16)),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Available Balance',
-                  style: AppTheme.dm(size: 13, color: const Color(0xFFCDD4E0))),
-              const SizedBox(height: 6),
-              Text('EGP 12,840',
-                  style: AppTheme.dm(
-                      size: 30,
-                      weight: FontWeight.w700,
-                      color: AppColors.gold)),
-            ]),
-          ),
-          const SizedBox(height: 12),
-          const InfoNote(
-              text:
-                  'Commissions clear 48h after guest check-in. Pending balance: EGP 5,400.',
-              icon: Icons.schedule),
-          const SizedBox(height: 12),
-          const Opacity(
-              opacity: 0.4, child: GoldButton(label: 'Withdraw to Bank')),
-          const SizedBox(height: 6),
-          Center(
-              child: Text('Locked until your account is verified',
-                  style: AppTheme.dm(size: 11, color: AppColors.muted))),
-          const SizedBox(height: 14),
-          SizedBox(
-            height: 36,
-            child: SegmentTabs(
-              tabs: const ['This Month', 'Last Month'],
-              active: _activeTab,
-              onTap: (index) {
-                setState(() {
-                  _activeTab = index;
-                });
-              },
-            ),
-          ),
-          const SizedBox(height: 12),
-          StatRow(cards: statCards),
-          const SizedBox(height: 12),
-          WhiteCard(
-              padding: const EdgeInsets.all(14),
+    return Scaffold(
+      backgroundColor: AppColors.cream,
+      body: SafeArea(
+        bottom: false,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 8, bottom: 8),
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(
+                  color: Color(0xFFFEF4E8),
+                  border: Border(
+                      left: BorderSide(color: Color(0xFFd2760a), width: 3))),
               child: Row(children: [
-                Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                        color: AppColors.gold.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: const Icon(Icons.star, color: AppColors.gold)),
-                const SizedBox(width: 12),
+                const Icon(Icons.warning_amber_rounded,
+                    size: 18, color: Color(0xFFd2760a)),
+                const SizedBox(width: 8),
                 Expanded(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                      Text('Gold tier · 4% rate',
+                      Text('Account not verified',
                           style: AppTheme.dm(
-                              size: 13,
-                              weight: FontWeight.w700,
+                              size: 12,
+                              weight: FontWeight.w600,
                               color: AppColors.navy)),
-                      Text('avg EGP 1,300 per booking',
-                          style: AppTheme.dm(size: 11, color: AppColors.muted)),
+                      Text('Add your card to withdraw earnings',
+                          style: AppTheme.dm(
+                              size: 11, color: const Color(0xFF8A6A1E))),
                     ])),
-                const Text('45 to Elite',
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF9A7A22))),
-              ])),
-          const SizedBox(height: 14),
-          Text('Recent commissions',
-              style: AppTheme.dm(
-                  size: 13, weight: FontWeight.w700, color: AppColors.navy)),
-          const SizedBox(height: 8),
-          WhiteCard(child: Column(children: commissions)),
-          const SizedBox(height: 10),
-          Center(
-              child: GestureDetector(
-                  onTap: () => AppNavigation.goToBrokerHistory(context),
-                  behavior: HitTestBehavior.opaque,
-                  child: Text('View Full History →',
-                      style: AppTheme.dm(
-                          size: 13,
-                          weight: FontWeight.w600,
-                          color: AppColors.gold)))),
-        ],
+                GestureDetector(
+                    onTap: () => AppNavigation.goToAddCard(context),
+                    behavior: HitTestBehavior.opaque,
+                    child: Text('Add Card →',
+                        style: AppTheme.dm(
+                            size: 12,
+                            weight: FontWeight.w700,
+                            color: const Color(0xFFD2760A)))),
+              ]),
+            ),
+            Text('Commission Wallet',
+                style: AppTheme.dm(
+                    size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                      colors: [Color(0xFF22335A), AppColors.navy]),
+                  borderRadius: BorderRadius.circular(16)),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Available Balance',
+                        style: AppTheme.dm(
+                            size: 13, color: const Color(0xFFCDD4E0))),
+                    const SizedBox(height: 6),
+                    Text('EGP 12,840',
+                        style: AppTheme.dm(
+                            size: 30,
+                            weight: FontWeight.w700,
+                            color: AppColors.gold)),
+                  ]),
+            ),
+            const SizedBox(height: 12),
+            const InfoNote(
+                text:
+                    'Commissions clear 48h after guest check-in. Pending balance: EGP 5,400.',
+                icon: Icons.schedule),
+            const SizedBox(height: 12),
+            const Opacity(
+                opacity: 0.4,
+                child: GoldButton(
+                    label: 'Withdraw to Bank', color: Color(0xFFE2D1A6))),
+            const SizedBox(height: 6),
+            Center(
+                child: Text('Locked until your account is verified',
+                    style: AppTheme.dm(size: 11, color: AppColors.muted))),
+            const SizedBox(height: 14),
+            SizedBox(
+              height: 36,
+              child: SegmentTabs(
+                tabs: const ['This Month', 'Last Month'],
+                active: _activeTab,
+                onTap: (index) {
+                  setState(() {
+                    _activeTab = index;
+                  });
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
+            StatRow(cards: statCards),
+            const SizedBox(height: 12),
+            WhiteCard(
+                padding: const EdgeInsets.all(14),
+                child: Row(children: [
+                  Container(
+                      width: 38,
+                      height: 38,
+                      decoration: BoxDecoration(
+                          color: AppColors.gold.withValues(alpha: 0.18),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: const Icon(Icons.star, color: AppColors.gold)),
+                  const SizedBox(width: 12),
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Text('Gold tier · 4% rate',
+                            style: AppTheme.dm(
+                                size: 13,
+                                weight: FontWeight.w700,
+                                color: AppColors.navy)),
+                        Text('avg EGP 1,300 per booking',
+                            style:
+                                AppTheme.dm(size: 11, color: AppColors.muted)),
+                      ])),
+                  const Text('45 to Elite',
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF9A7A22))),
+                ])),
+            const SizedBox(height: 14),
+            Text('Recent commissions',
+                style: AppTheme.dm(
+                    size: 13, weight: FontWeight.w700, color: AppColors.navy)),
+            const SizedBox(height: 8),
+            WhiteCard(child: Column(children: commissions)),
+            const SizedBox(height: 10),
+            Center(
+                child: GestureDetector(
+                    onTap: () => AppNavigation.goToBrokerHistory(context),
+                    behavior: HitTestBehavior.opaque,
+                    child: Text('View Full History →',
+                        style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w600,
+                            color: AppColors.gold)))),
+          ],
+        ),
       ),
     );
   }

@@ -31,15 +31,15 @@ class AppRoutes {
   static const String renterProfile = '/renter/profile';
 
   // --------------------------------------------------------------------------
-  // Broker Routes (Nested under /broker/profile to keep shell)
+  // Broker Routes
   // --------------------------------------------------------------------------
   static const String brokerHome = '/broker/home';
   static const String brokerWishlist = '/broker/wishlist';
   static const String brokerBookings = '/broker/bookings';
   static const String brokerServices = '/broker/services';
   static const String brokerProfile = '/broker/profile';
-  static const String brokerDashboard = '/broker/profile/dashboard';
-  static const String brokerPortfolio = '/broker/profile/portfolio';
+  static const String brokerDashboard = '/broker/dashboard';
+  static const String brokerPortfolio = '/broker/portfolio';
   static const String brokerWallet = '/broker/wallet';
   
   static const String brokerReferredDetail = '/broker/referred-detail';

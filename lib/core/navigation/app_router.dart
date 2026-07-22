@@ -9,12 +9,13 @@ import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/auth/auth_screens.dart';
 import 'package:sahely/features/broker/broker_go_routes.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
-import 'package:sahely/features/broker/presentation/screens/dashboard/pages/broker_dashboard_screen.dart';
+import 'package:sahely/features/broker/presentation/screens/dashboard/pages/broker_dashboard_page.dart';
 import 'package:sahely/features/broker/presentation/screens/home/pages/broker_home_page.dart';
 import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
-import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_screen.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_page.dart';
 import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_wishlist_page.dart';
+import 'package:sahely/features/broker/presentation/screens/wallet/pages/broker_wallet_page.dart';
 import 'package:sahely/features/notifications/notifications_screen.dart';
 import 'package:sahely/features/owner/owner_go_routes.dart';
 import 'package:sahely/features/owner/screens/owner_bookings_screen.dart';
@@ -125,6 +126,11 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
       return null;
     },
     routes: [
+      // ---- Notifications (Fixed) ----
+      GoRoute(
+          path: AppRoutes.notifications,
+          builder: (context, state) => const NotificationsScreen()),
+
       // ---- Auth ----
       GoRoute(
           path: AppRoutes.splash,
@@ -293,23 +299,21 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
                   builder: (context, state) => const BrokerServicesPage())
             ],
           ),
-          // ✅ Tab 5: My Role (Profile & Sub-pages)
+          // ✅ Tab 5: My Role (Profile & Dashboard)
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRoutes.brokerProfile,
-                builder: (context, state) => const BrokerProfilePage(),
-                routes: [
-                  GoRoute(
-                    path: 'dashboard', // matches /broker/profile/dashboard
-                    builder: (context, state) => const BrokerDashboardScreen(),
-                  ),
-                  GoRoute(
-                    path: 'portfolio', // matches /broker/profile/portfolio
-                    builder: (context, state) => const BrokerPortfolioScreen(),
-                  ),
-                ],
-              ),
+                  path: AppRoutes.brokerProfile,
+                  builder: (context, state) => const BrokerProfilePage()),
+              GoRoute(
+                  path: AppRoutes.brokerDashboard,
+                  builder: (context, state) => const BrokerDashboardPage()),
+              GoRoute(
+                  path: AppRoutes.brokerPortfolio,
+                  builder: (context, state) => const BrokerPortfolioPage()),
+              GoRoute(
+                  path: AppRoutes.brokerWallet,
+                  builder: (context, state) => const BrokerWalletPage()),
             ],
           ),
         ],
@@ -373,17 +377,6 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
 
       // ---- Broker ----
       ...brokerGoRoutes,
-
-      // ---- Notifications ----
-      GoRoute(
-          path: AppRoutes.notifications,
-          builder: (context, state) => const NotificationsScreen()),
-      GoRoute(
-          path: AppRoutes.notifBanner,
-          builder: (context, state) => const BannerAnatomyScreen()),
-      GoRoute(
-          path: AppRoutes.notifTop,
-          builder: (context, state) => const TopBannerScreen()),
     ],
   );
 }

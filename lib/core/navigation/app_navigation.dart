@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'app_routes.dart';
-import '../../../data/role_state.dart';
-import '../../../data/models.dart';
+import '../../data/role_state.dart';
+import '../../data/models.dart';
 
 class AppNavigation {
   AppNavigation._();
@@ -44,7 +44,6 @@ class AppNavigation {
   static void goToBrokerDashboard(BuildContext context) => context.push(AppRoutes.brokerDashboard);
   static void goToBrokerWallet(BuildContext context) => context.push(AppRoutes.brokerWallet);
   static void goToBrokerPortfolio(BuildContext context) => context.push(AppRoutes.brokerPortfolio); 
-  static void goToBrokerReferredProperties(BuildContext context) => context.push('/broker/referred-properties');
   static void goToBrokerRefer(BuildContext context) => context.push(AppRoutes.brokerRefer);
   static void goToBrokerTier(BuildContext context) => context.push(AppRoutes.brokerTier);
   static void goToBrokerTierUpgrade(BuildContext context) => context.push(AppRoutes.brokerTierUpgrade);

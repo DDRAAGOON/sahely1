@@ -67,11 +67,13 @@ class GoldButton extends StatelessWidget {
     required this.label,
     this.onTap,
     this.radius = 12,
+    this.color,
   });
 
   final String label;
   final VoidCallback? onTap;
   final double radius;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -81,15 +83,17 @@ class GoldButton extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-                color: Color(0x59C9A84C), blurRadius: 16, offset: Offset(0, 4))
+                color: (color ?? AppColors.gold).withValues(alpha: 0.35),
+                blurRadius: 16,
+                offset: const Offset(0, 4))
           ],
         ),
         child: ElevatedButton(
           onPressed: onTap,
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.gold,
+            backgroundColor: color ?? AppColors.gold,
             foregroundColor: AppColors.navy,
             elevation: 0,
             shape: RoundedRectangleBorder(

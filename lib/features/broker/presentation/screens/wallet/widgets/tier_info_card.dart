@@ -74,7 +74,7 @@ class TierInfoCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: Color(0xFFD2760A),
+              color: AppColors.gold,
               fontFamily: 'DM Sans',
             ),
           ),

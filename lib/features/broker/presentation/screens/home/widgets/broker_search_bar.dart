@@ -36,7 +36,7 @@ class BrokerSearchBar extends StatelessWidget {
                     Icon(
                       Icons.search,
                       size: 18,
-                      color: AppColors.secondary,
+                      color: AppColors.gold,
                     ),
                     SizedBox(width: 8),
                     Text(

@@ -50,7 +50,7 @@ class RecentCommissionCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '+${commission['amount']}',
+                '${commission['amount']}',
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
