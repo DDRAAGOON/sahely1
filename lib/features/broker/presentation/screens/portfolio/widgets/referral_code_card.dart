@@ -21,7 +21,7 @@ class ReferralCodeCard extends StatelessWidget {
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.gold.withOpacity(0.3),
+          color: AppColors.gold.withValues(alpha: 0.3),
           width: 1.5,
           style: BorderStyle.solid,
         ),

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/property_card_base.dart' as base;
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import 'package:sahely/core/widgets/image.dart';
-
+/// Owner-specific property card with status, stats, and action buttons.
+/// Uses [PropertyCardBase] under the hood with [extraInfo] and [footerActions] slots.
 class OwnerPropertyCard extends StatelessWidget {
   const OwnerPropertyCard({
     super.key,
@@ -38,141 +39,100 @@ class OwnerPropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = nameOverride ?? property?.name ?? 'Untitled';
-    final img = property?.image;
+    final displayName = nameOverride ?? property?.name ?? 'Untitled';
+    final img = property?.image ?? '';
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-              color: Color(0x1F000000), blurRadius: 10, offset: Offset(0, 4))
-        ],
+    // Fake property for PropertyCardBase using the actual property data
+    final displayProperty = Property(
+      name: displayName,
+      area: property?.area ?? '',
+      image: img,
+      price: property?.price ?? 0,
+      rating: property?.rating ?? 0.0,
+      reviews: property?.reviews ?? 0,
+      type: property?.type ?? 'Chalet',
+    );
+
+    return base.PropertyCardBase(
+      property: displayProperty,
+      imageHeight: 160,
+      showGuestFav: false,
+      // Status badge overlay on image
+      imageOverlay: Positioned(
+        top: 12,
+        right: 12,
+        child: StatusBadge(status,
+            kind: badgeKind, dot: badgeKind == BadgeKind.green),
       ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
+      // Extra info: meta + stats pills + note
+      extraInfo: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image with soft fade
-          if (img != null)
-            SahelyImage(
-              imageUrl: img,
-              height: 160,
-              width: double.infinity,
-              showFade: true,
-              fadeHeight: 60,
-              fadeColor: AppColors.white,
-              enableViewer: false,
-            )
-          else
-            Container(
-              height: 160,
-              width: double.infinity,
-              color: const Color(0xFFD8D2C6),
-            ),
-
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Text(
+            meta,
+            style: AppTheme.dm(size: 13, color: const Color(0xFF5B5B5B)),
+          ),
+          if (stats.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
-                // Title and Status Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        name,
-                        style: AppTheme.dm(
-                          size: 18,
-                          weight: FontWeight.w700,
-                          color: AppColors.navy,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    StatusBadge(status,
-                        kind: badgeKind, dot: badgeKind == BadgeKind.green),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                // Meta Info
-                Text(
-                  meta,
-                  style: AppTheme.dm(size: 13, color: const Color(0xFF5B5B5B)),
-                ),
-                if (stats.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  // Stats Pills
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final s in stats)
-                        Pill(
-                          s,
-                          bg: AppColors.white,
-                          fg: AppColors.navy,
-                          radius: 12,
-                          border: AppColors.border,
-                        ),
-                    ],
+                for (final s in stats)
+                  Pill(
+                    s,
+                    bg: AppColors.white,
+                    fg: AppColors.navy,
+                    radius: 12,
+                    border: AppColors.border,
                   ),
-                ],
-                if (note != null) ...[
-                  const SizedBox(height: 10),
-                  Text(
-                    note!,
-                    style: AppTheme.dm(
-                        size: 12,
-                        color: const Color(0xFFD2760A),
-                        weight: FontWeight.w600),
-                  ),
-                ],
               ],
             ),
-          ),
-
-          // Action Bar
-          const Divider(height: 1, color: Color(0x33000000)),
-          IntrinsicHeight(
-            child: Row(
-              children: [
-                _actionButton(
-                  label: primaryActionLabel,
-                  color: AppColors.navy,
-                  onTap: onPrimaryAction,
-                ),
-                const VerticalDivider(
-                    width: 1,
-                    color: Color(0x33000000),
-                    indent: 12,
-                    endIndent: 12),
-                _actionButton(
-                  label: secondaryActionLabel,
-                  color: AppColors.navy,
-                  onTap: onSecondaryAction,
-                ),
-                if (onSosAction != null || stats.isNotEmpty) ...[
-                  const VerticalDivider(
-                      width: 1,
-                      color: Color(0x33000000),
-                      indent: 12,
-                      endIndent: 12),
-                  _actionButton(
-                    label: 'SOS',
-                    color: const Color(0xFFB22222),
-                    icon: Icons.warning_amber_rounded,
-                    onTap: onSosAction,
-                  ),
-                ],
-              ],
+          ],
+          if (note != null) ...[
+            const SizedBox(height: 10),
+            Text(
+              note!,
+              style: AppTheme.dm(
+                size: 12,
+                color: Color(0xFFD2760A),
+                weight: FontWeight.w600,
+              ),
             ),
-          ),
+          ],
         ],
+      ),
+      // Footer action buttons
+      footerActions: IntrinsicHeight(
+        child: Row(
+          children: [
+            _actionButton(
+              label: primaryActionLabel,
+              color: AppColors.navy,
+              onTap: onPrimaryAction,
+            ),
+            const VerticalDivider(
+                width: 1, color: Color(0x33000000), indent: 12, endIndent: 12),
+            _actionButton(
+              label: secondaryActionLabel,
+              color: AppColors.navy,
+              onTap: onSecondaryAction,
+            ),
+            if (onSosAction != null || stats.isNotEmpty) ...[
+              const VerticalDivider(
+                  width: 1,
+                  color: Color(0x33000000),
+                  indent: 12,
+                  endIndent: 12),
+              _actionButton(
+                label: 'SOS',
+                color: const Color(0xFFB22222),
+                icon: Icons.warning_amber_rounded,
+                onTap: onSosAction,
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

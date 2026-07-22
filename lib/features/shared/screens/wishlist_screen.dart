@@ -1,12 +1,9 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
-import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_collection_inside_page.dart';
-import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_create_collection_sheet.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_wishlist_widgets.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/create_collection_sheet.dart';

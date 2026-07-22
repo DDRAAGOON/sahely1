@@ -21,7 +21,7 @@ class IssueAlertCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFFFFF0F0), // Light red/pink background
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.red.withOpacity(0.3)),
+        border: Border.all(color: AppColors.red.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [

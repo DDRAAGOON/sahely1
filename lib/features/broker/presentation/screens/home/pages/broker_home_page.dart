@@ -144,22 +144,22 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                                     _selectedFilter == 'All' ||
                                     p['type'] == _selectedFilter)
                                 .map((property) {
+                              final data = property as Map<String, dynamic>;
+                              final p = Property(
+                                name: data['name'] ?? '',
+                                area: data['location'] ?? '',
+                                image: data['imageUrl'] ?? '',
+                                price: (data['pricePerNight'] ?? 0) ~/ 100,
+                                rating: (data['rating'] ?? 0.0).toDouble(),
+                                reviews: (data['reviews'] ?? 0).toInt(),
+                                type: data['type'] ?? 'Villa',
+                              );
                               return Padding(
                                 padding: const EdgeInsets.only(
                                     bottom: 16, left: 16, right: 16),
                                 child: BrokerPropertyCard(
-                                  property: property,
+                                  property: p,
                                   onTap: () {
-                                    final p = Property(
-                                      name: property['name'],
-                                      area: property['location'],
-                                      image: property['imageUrl'],
-                                      price: (property['pricePerNight'] / 100)
-                                          .toInt(),
-                                      rating: property['rating'],
-                                      reviews: property['reviews'],
-                                      type: property['type'],
-                                    );
                                     AppNavigation.goToPropertyDetail(context,
                                         extra: p);
                                   },

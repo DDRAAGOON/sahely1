@@ -21,7 +21,7 @@ class ContactOwnerCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFFFFFBF0), // Light gold/cream background
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.gold.withOpacity(0.3)),
+          border: Border.all(color: AppColors.gold.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [

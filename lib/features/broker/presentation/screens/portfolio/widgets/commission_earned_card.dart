@@ -56,18 +56,18 @@ class CommissionEarnedCard extends StatelessWidget {
               _StatColumn(
                 value: '$liveCount',
                 label: 'Live',
-                dividerColor: Colors.white.withOpacity(0.2),
+                dividerColor: Colors.white.withValues(alpha: 0.2),
               ),
               _StatColumn(
                 value: '$pendingCount',
                 label: 'Pending',
-                dividerColor: Colors.white.withOpacity(0.2),
+                dividerColor: Colors.white.withValues(alpha: 0.2),
               ),
               _StatColumn(
                 value: '$issueCount',
                 label: 'Issue',
                 valueColor: AppColors.red,
-                dividerColor: Colors.white.withOpacity(0.2),
+                dividerColor: Colors.white.withValues(alpha: 0.2),
               ),
               _StatColumn(
                 value: '$cancelledCount',

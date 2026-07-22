@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/core/widgets/property_card_base.dart' as base;
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
+/// Small compact property card for horizontal lists (Browse screen top rated).
+/// Uses [PropertyCardBase] under the hood for consistent look across roles.
 class SmallPropCard extends StatelessWidget {
   const SmallPropCard({
     super.key,
@@ -15,60 +17,39 @@ class SmallPropCard extends StatelessWidget {
 
   final String image, name, price, rating;
 
+  /// Constructs a [SmallPropCard] from a [Property] object directly.
+  factory SmallPropCard.fromProperty(Property p) {
+    return SmallPropCard(
+      image: p.image,
+      name: p.name,
+      price: '${p.price}',
+      rating: p.rating.toStringAsFixed(1),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    // Convert price string like '3,200' to int: remove commas, parse
+    final priceNum = int.tryParse(price.replaceAll(',', '')) ?? 0;
+    final ratingNum = double.tryParse(rating) ?? 0.0;
+
+    final prop = Property(
+      name: name,
+      area: '',
+      image: image,
+      price: priceNum,
+      rating: ratingNum,
+      reviews: 0,
+      type: 'Chalet',
+    );
+
+    return SizedBox(
       width: 160,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(
-              color: Color(0x0F1B2744), blurRadius: 10, offset: Offset(0, 2))
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SahelyImage(
-            imageUrl: image,
-            height: 110,
-            width: 160,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            fadeHeight: 40,
-            enableViewer: false,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: AppTheme.dm(
-                      size: 13, weight: FontWeight.w700, color: AppColors.navy),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Text('EGP $price/night',
-                    style: AppTheme.dm(
-                        size: 11,
-                        weight: FontWeight.w600,
-                        color: AppColors.gold)),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    const Icon(Icons.star, size: 10, color: AppColors.gold),
-                    const SizedBox(width: 3),
-                    Text(rating,
-                        style: AppTheme.dm(size: 10, weight: FontWeight.w700)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+      child: base.PropertyCardBase(
+        property: prop,
+        imageHeight: 110,
+        showGuestFav: false,
+        onTap: null,
       ),
     );
   }
