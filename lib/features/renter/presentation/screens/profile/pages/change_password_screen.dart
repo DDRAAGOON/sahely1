@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import '../widgets/password_input_field.dart';
-import '../widgets/password_strength_meter.dart';
+import 'package:sahely/features/renter/presentation/screens/profile/widgets/password_input_field.dart';
+import 'package:sahely/features/renter/presentation/screens/profile/widgets/password_strength_meter.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../navigation/app_navigation.dart';
-import '../providers/auth_provider.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
+import 'package:sahely/core/providers/auth_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 export 'branding.dart';
 export 'buttons.dart';
 export 'forms.dart';

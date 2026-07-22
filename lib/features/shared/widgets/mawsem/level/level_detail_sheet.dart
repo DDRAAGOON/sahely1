@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'level_done_button.dart';
-import 'level_header.dart';
-import 'level_perk.dart';
-import 'level_progress_bar.dart';
-import 'season_perks_section.dart';
-import 'unlock_reward_card.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_done_button.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_header.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_progress_bar.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/season_perks_section.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/unlock_reward_card.dart';
 
 class LevelDetailSheet extends StatelessWidget {
   final String levelName;

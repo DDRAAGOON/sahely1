@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/ui.dart';
-import '../widgets/auth_success_badge.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/cream_background.dart';
+import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/features/auth/widgets/auth_success_badge.dart';
 
 // ========================================================= 08 · Forgot Password
 class ForgotPasswordScreen extends StatefulWidget {

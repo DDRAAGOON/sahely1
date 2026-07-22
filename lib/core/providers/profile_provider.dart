@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 // TODO: Integrate with backend API for real profile and loyalty data.
 class ProfileProvider extends ChangeNotifier {
@@ -6,7 +6,7 @@ class ProfileProvider extends ChangeNotifier {
   String _email = 'mariam@example.com';
   String _phone = '+20 100 123 4567';
   String _bio =
-      'Sun-chaser & North Coast regular. Always hunting the next great beachfront escape 🏖️';
+      'Sun-chaser & North Coast regular. Always hunting the next great beachfront escape ðŸ–ï¸';
   String? _instagram = '@mariam.h';
   String? _tiktok;
   String? _facebook;
@@ -17,7 +17,7 @@ class ProfileProvider extends ChangeNotifier {
 
   // AL MAWSEM Loyalty State
   int _stars = 47;
-  String _referralCode = 'MARIAM-50';
+  final String _referralCode = 'MARIAM-50';
 
   final List<Map<String, dynamic>> _levelThresholds = [
     {
@@ -142,3 +142,4 @@ class ProfileProvider extends ChangeNotifier {
     return null;
   }
 }
+

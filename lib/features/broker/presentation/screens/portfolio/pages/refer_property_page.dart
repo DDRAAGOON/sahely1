@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/widgets/kit.dart';
-import '../../../../../../core/widgets/ui.dart';
-import '../widgets/refer_property_header.dart';
-import '../widgets/refer_property_input.dart';
-import '../widgets/refer_property_dropdown.dart';
-import '../widgets/copy_referral_link_button.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/refer_property_header.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/refer_property_input.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/refer_property_dropdown.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/copy_referral_link_button.dart';
 
 class ReferPropertyPage extends StatefulWidget {
   const ReferPropertyPage({super.key});

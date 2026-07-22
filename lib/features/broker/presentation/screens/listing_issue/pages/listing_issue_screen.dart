@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
-import '../widgets/listing_issue_header.dart';
-import '../widgets/issue_alert_card.dart';
-import '../widgets/property_info_card.dart';
-import '../widgets/what_team_needs_section.dart';
-import '../widgets/sahely_ai_suggestion.dart';
-import '../widgets/why_not_listed_section.dart';
-import '../widgets/status_cards_row.dart';
-import '../widgets/contact_owner_card.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/broker/presentation/screens/listing_issue/widgets/listing_issue_header.dart';
+import 'package:sahely/features/broker/presentation/screens/listing_issue/widgets/issue_alert_card.dart';
+import 'package:sahely/features/broker/presentation/screens/listing_issue/widgets/property_info_card.dart';
+import 'package:sahely/features/broker/presentation/screens/listing_issue/widgets/what_team_needs_section.dart';
+import 'package:sahely/features/broker/presentation/screens/listing_issue/widgets/sahely_ai_suggestion.dart';
+import 'package:sahely/features/broker/presentation/screens/listing_issue/widgets/why_not_listed_section.dart';
+import 'package:sahely/features/broker/presentation/screens/listing_issue/widgets/status_cards_row.dart';
+import 'package:sahely/features/broker/presentation/screens/listing_issue/widgets/contact_owner_card.dart';
 
 class ListingIssueScreen extends StatelessWidget {
   const ListingIssueScreen({super.key});
@@ -18,7 +18,6 @@ class ListingIssueScreen extends StatelessWidget {
     final issueData = {
       'title': 'Needs better photos',
       'flaggedBy': 'Flagged by review team',
-      'flaggedDate': 'Jun 17',
       'propertyName': 'Marina Loft',
       'propertyType': 'Apartment',
       'location': 'Marina',
@@ -30,11 +29,10 @@ class ListingIssueScreen extends StatelessWidget {
         'Compound layout with unit marked',
       ],
       'aiSuggestion':
-      'Reach out to Tarek — a quick morning re-shoot usually clears this within a day.',
+      'Reach out to Tarek â€” a quick morning re-shoot usually clears this within a day.',
       'whyNotListed':
-      'The review team paused this listing because the current photos don\'t meet Sahely\'s quality bar — they\'re low-light and don\'t show the full space, so guests can\'t see what they\'re booking. The listing stays offline until the items above are added and it passes a re-review (about 24h). No commission is earned while a referred property is offline.',
+      'The review team paused this listing because the current photos don\'t meet Sahely\'s quality bar â€” they\'re low-light and don\'t show the full space, so guests can\'t see what they\'re booking. The listing stays offline until the items above are added and it passes a re-review (about 24h). No commission is earned while a referred property is offline.',
       'status': 'Offline',
-      'flaggedDate': 'Jun 17',
       'reReviewTime': '~24h',
       'ownerName': 'Tarek S.',
     };

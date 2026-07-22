@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import 'wallet_activity_row.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_activity_row.dart';
 
 class WalletRecentActivity extends StatelessWidget {
   final List<Map<String, dynamic>> transactions;

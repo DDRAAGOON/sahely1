@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/providers/auth_provider.dart';
 
-import '../../data/repositories/verification_repository.dart';
-import '../../domain/models/verification_state.dart';
+import 'package:sahely/features/renter/presentation/verification/data/repositories/verification_repository.dart';
+import 'package:sahely/features/renter/presentation/verification/domain/models/verification_state.dart';
 
 // UI States
 abstract class VerificationCubitState {}

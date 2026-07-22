@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class CreateCollectionSheet extends StatefulWidget {
   const CreateCollectionSheet({super.key});
@@ -55,7 +55,7 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
         24,
         12,
         24,
-        MediaQuery.of(context).viewInsets.bottom + 24,
+        MediaQuery.of(context).viewInsets.bottom + 100,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

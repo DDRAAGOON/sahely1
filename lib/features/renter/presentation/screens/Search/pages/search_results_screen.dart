@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/navigation/app_router.dart';
-import '../../../../../../core/theme/app_colors.dart';
+import 'package:sahely/core/navigation/app_router.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/filter_chips.dart';
-import '../widgets/search_result_card.dart';
-import 'search_empty_state.dart';
-import 'search_filters_sheet.dart';
+import 'package:sahely/features/renter/presentation/screens/Search/widgets/search_result_card.dart';
+import 'package:sahely/features/renter/presentation/screens/Search/pages/search_empty_state.dart';
+import 'package:sahely/features/renter/presentation/screens/Search/pages/search_filters_sheet.dart';
 
 class SearchResultsScreen extends StatefulWidget {
   final String initialQuery;

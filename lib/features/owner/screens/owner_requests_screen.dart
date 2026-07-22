@@ -3,12 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/floating_nav.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../data/sample_data.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/floating_nav.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/data/sample_data.dart';
 
 class OwnerRequestsScreen extends StatefulWidget {
   const OwnerRequestsScreen({super.key});

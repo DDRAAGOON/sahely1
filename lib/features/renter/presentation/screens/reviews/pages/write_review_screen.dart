@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../../bookings/widgets/stars/stars_earned_dialog.dart';
-import '../../mawsem/celebration/pages/level_up_celebration_screen.dart';
-import '../widgets/review_property_card.dart';
-import '../widgets/review_text_field.dart';
-import '../widgets/star_rating_widget.dart';
-import '../widgets/submit_review_button.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/stars/stars_earned_dialog.dart';
+import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/pages/level_up_celebration_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_property_card.dart';
+import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_text_field.dart';
+import 'package:sahely/features/renter/presentation/screens/reviews/widgets/star_rating_widget.dart';
+import 'package:sahely/features/renter/presentation/screens/reviews/widgets/submit_review_button.dart';
 
 class WriteReviewScreen extends StatefulWidget {
   final String propertyName;

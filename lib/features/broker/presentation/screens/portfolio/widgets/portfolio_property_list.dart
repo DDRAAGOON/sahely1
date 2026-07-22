@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
-import 'portfolio_property_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/portfolio_property_card.dart';
 
 class PortfolioPropertyList extends StatelessWidget {
   final String title;

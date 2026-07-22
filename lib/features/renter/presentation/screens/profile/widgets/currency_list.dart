@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import 'currency_tile.dart';
+import 'package:sahely/features/renter/presentation/screens/profile/widgets/currency_tile.dart';
 
 class CurrencyList extends StatelessWidget {
   final String selectedCurrency;

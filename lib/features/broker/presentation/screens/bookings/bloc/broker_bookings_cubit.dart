@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/repositories/broker_bookings_repository.dart';
+import 'package:sahely/features/broker/data/repositories/broker_bookings_repository.dart';
 
 enum BrokerBookingsStatus { initial, loading, loaded, error }
 

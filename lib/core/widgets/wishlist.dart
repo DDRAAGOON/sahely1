@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../../features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
-import '../../features/renter/presentation/screens/wishlist/presentation/widgets/add_to_collection_sheet.dart';
-import '../theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/add_to_collection_sheet.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class SaveHeart extends StatelessWidget {
   const SaveHeart(

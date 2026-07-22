@@ -1,4 +1,4 @@
-import '../../domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
 
 class WishlistRepository {
   // Real In-memory Data

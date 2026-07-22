@@ -23,7 +23,8 @@ class MockBrokerDataSource {
           'name': 'Palm Chalet',
           'client': 'Nour A.',
           'date': 'Jun 19',
-          'profit': '+EGP 320 profit',
+          'nights': 4,
+          'margin': '+960',
           'imageUrl':
               'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=200',
           'status': 'Soon',
@@ -33,7 +34,8 @@ class MockBrokerDataSource {
           'name': 'Dune House',
           'client': 'Sara M.',
           'date': 'Jun 22',
-          'profit': '+EGP 260 profit',
+          'nights': 3,
+          'margin': '+720',
           'imageUrl':
               'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200',
           'status': 'Soon',

@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../../domain/models/broker_wishlist_item.dart';
-import '../bloc/broker_wishlist_cubit.dart';
-import '../widgets/broker_collection_header.dart';
-import '../widgets/broker_collection_members_actions.dart';
-import '../widgets/broker_collection_property_card.dart';
-import '../widgets/broker_share_collection_sheet.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/broker/domain/models/broker_wishlist_item.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_collection_header.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_collection_members_actions.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_collection_property_card.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_share_collection_sheet.dart';
 
 class BrokerCollectionInsidePage extends StatefulWidget {
   final String collectionId;

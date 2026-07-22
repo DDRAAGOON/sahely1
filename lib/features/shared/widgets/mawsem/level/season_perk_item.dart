@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'level_perk.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
 
 class SeasonPerkItem extends StatelessWidget {
   final LevelPerk perk;

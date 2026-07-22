@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../widgets/currency_apply_button.dart';
-import '../widgets/currency_header.dart';
-import '../widgets/currency_list.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/profile/widgets/currency_apply_button.dart';
+import 'package:sahely/features/renter/presentation/screens/profile/widgets/currency_header.dart';
+import 'package:sahely/features/renter/presentation/screens/profile/widgets/currency_list.dart';
 
 class CurrencySelectorSheet extends StatefulWidget {
   const CurrencySelectorSheet({super.key});

@@ -4,16 +4,16 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/renter/presentation/verification/pages/add_payment_card_screen.dart';
+import 'package:sahely/features/shared/screens/add_payment_card_screen.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/widgets/blocked_action_gate.dart';
 
-import '../widgets/booking_calendar.dart';
-import '../widgets/booking_property_card.dart';
-import '../widgets/confirm_pay_button.dart';
-import '../widgets/guest_counter_row.dart';
-import '../widgets/guest_summary_note.dart';
-import '../widgets/price_breakdown.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booking_calendar.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booking_property_card.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/confirm_pay_button.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/guest_counter_row.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/guest_summary_note.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/price_breakdown.dart';
 
 class BookingDatesGuestsScreen extends StatefulWidget {
   final String propertyName;

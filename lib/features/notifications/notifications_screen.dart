@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_colors.dart';
-import '../../core/widgets/buttons.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/buttons.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});

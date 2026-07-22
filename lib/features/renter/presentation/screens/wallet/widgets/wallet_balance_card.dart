@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class WalletBalanceCard extends StatelessWidget {
   final int balance; // In piastres

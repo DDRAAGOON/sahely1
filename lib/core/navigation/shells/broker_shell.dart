@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../features/broker/presentation/widgets/broker_bottom_nav.dart';
-import '../../theme/app_colors.dart';
+import 'package:sahely/features/broker/presentation/widgets/broker_bottom_nav.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class BrokerShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;

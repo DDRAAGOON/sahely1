@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/chips.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/ui.dart';
-import '../../../data/sample_data.dart';
-import '../widgets/filter_widgets.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/chips.dart';
+import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/features/shared/widgets/filter_widgets.dart';
 
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({super.key});

@@ -5,12 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/ui.dart';
-import '../../../data/sample_data.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/data/sample_data.dart';
 
 class OwnerPropertyInsightsScreen extends StatelessWidget {
   final Property? property;

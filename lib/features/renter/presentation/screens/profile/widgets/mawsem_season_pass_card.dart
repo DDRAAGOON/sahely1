@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import '../../../../../shared/widgets/mawsem/level/level_detail_sheet.dart';
-import '../../../../../shared/widgets/mawsem/level/level_perk.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
 
 class MawsemSeasonPassCard extends StatelessWidget {
   final String levelName;

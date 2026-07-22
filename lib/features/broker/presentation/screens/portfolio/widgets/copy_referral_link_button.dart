@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_theme.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CopyReferralLinkButton extends StatelessWidget {
   final VoidCallback onTap;

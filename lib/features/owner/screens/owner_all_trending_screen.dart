@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/property_card.dart';
-import '../../../data/sample_data.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/property_card.dart';
+import 'package:sahely/data/sample_data.dart';
 
 class OwnerAllTrendingScreen extends StatelessWidget {
   const OwnerAllTrendingScreen({super.key});

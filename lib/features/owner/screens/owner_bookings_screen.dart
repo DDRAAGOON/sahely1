@@ -4,11 +4,11 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/ui.dart';
-import '../../../data/sample_data.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/data/sample_data.dart';
 
 class OwnerBookingsScreen extends StatefulWidget {
   final int initialMainTab;

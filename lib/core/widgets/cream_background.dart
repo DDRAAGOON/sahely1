@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 /// The background used on almost every light screen.
 /// Simplified to a solid color to remove gradients as per user request.

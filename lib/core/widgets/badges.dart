@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../data/models.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 enum BadgeKind {
   navy,

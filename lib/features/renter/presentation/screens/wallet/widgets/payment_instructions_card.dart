@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class PaymentInstructionsCard extends StatelessWidget {
   final String methodId;

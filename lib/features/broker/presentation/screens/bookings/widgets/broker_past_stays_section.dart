@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../../data/repositories/broker_bookings_repository.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/broker/data/repositories/broker_bookings_repository.dart';
 
 class BrokerPastStaysSection extends StatelessWidget {
   final List<BrokerBooking> pastBookings;

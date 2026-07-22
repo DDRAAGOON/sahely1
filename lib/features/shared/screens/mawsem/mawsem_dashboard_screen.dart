@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import '../../widgets/mawsem/how_to_earn_section.dart';
-import '../../widgets/mawsem/mawsem_hero_card.dart';
-import '../../widgets/mawsem/mawsem_levels_list.dart';
-import '../../widgets/mawsem/referral_code_card.dart';
+import 'package:sahely/features/shared/widgets/mawsem/how_to_earn_section.dart';
+import 'package:sahely/features/shared/widgets/mawsem/mawsem_hero_card.dart';
+import 'package:sahely/features/shared/widgets/mawsem/mawsem_levels_list.dart';
+import 'package:sahely/features/shared/widgets/mawsem/referral_code_card.dart';
 
 class MawsemDashboardScreen extends StatelessWidget {
   const MawsemDashboardScreen({super.key});

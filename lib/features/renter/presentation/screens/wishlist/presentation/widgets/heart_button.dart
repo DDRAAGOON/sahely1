@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../../../core/theme/app_colors.dart';
-import '../bloc/wishlist_cubit.dart';
-import 'add_to_collection_sheet.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/add_to_collection_sheet.dart';
 
 class HeartButton extends StatefulWidget {
   final String propertyId;

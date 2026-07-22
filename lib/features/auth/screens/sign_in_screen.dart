@@ -3,13 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
-import '../../../core/providers/auth_provider.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/ui.dart';
-import '../../../data/models.dart';
-import '../mock_auth_service.dart';
+import 'package:sahely/core/providers/auth_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/cream_background.dart';
+import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/features/auth/mock_auth_service.dart';
 
 class SignInScreen extends StatefulWidget {
   final String? from;

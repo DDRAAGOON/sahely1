@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../widgets/history_filter_chips.dart';
-import '../widgets/history_section_header.dart';
-import '../widgets/history_transaction_row.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_filter_chips.dart';
+import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_section_header.dart';
+import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_transaction_row.dart';
 
 class TransactionHistoryScreen extends StatefulWidget {
   const TransactionHistoryScreen({super.key});

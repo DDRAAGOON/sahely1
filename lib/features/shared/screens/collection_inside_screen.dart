@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../data/sample_data.dart';
-import '../../renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
-import '../widgets/collab_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
+import 'package:sahely/features/shared/widgets/collab_card.dart';
 
 class CollectionInsideScreen extends StatefulWidget {
   final String collectionId;

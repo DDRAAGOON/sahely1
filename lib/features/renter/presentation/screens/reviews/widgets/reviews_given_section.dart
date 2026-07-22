@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import 'review_given_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_given_card.dart';
 
 class ReviewsGivenSection extends StatelessWidget {
   final int reviewCount;

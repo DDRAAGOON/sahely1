@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import 'level/level_detail_sheet.dart';
-import 'level/level_perk.dart';
-import 'mawsem_level_tile.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
+import 'package:sahely/features/shared/widgets/mawsem/mawsem_level_tile.dart';
 
 class MawsemLevelsList extends StatelessWidget {
   final int currentLevel;

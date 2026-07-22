@@ -4,7 +4,7 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../../../core/widgets/image.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class OwnerPropertyCard extends StatelessWidget {
   const OwnerPropertyCard({

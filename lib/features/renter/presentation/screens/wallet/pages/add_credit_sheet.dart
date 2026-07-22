@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../verification/pages/add_payment_card_screen.dart';
-import '../widgets/payment_instructions_card.dart';
-import '../widgets/payment_method_tile.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/shared/screens/add_payment_card_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/wallet/widgets/payment_instructions_card.dart';
+import 'package:sahely/features/renter/presentation/screens/wallet/widgets/payment_method_tile.dart';
 
 class AddCreditSheet extends StatefulWidget {
   /// الطرق المسجلة للمستخدم (من البروفايل)

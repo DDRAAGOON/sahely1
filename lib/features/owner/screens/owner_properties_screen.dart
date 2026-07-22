@@ -7,7 +7,7 @@ import 'package:sahely/core/widgets/floating_nav.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/data/sample_data.dart';
 
-import '../widgets/owner_property_card.dart';
+import 'package:sahely/features/owner/widgets/owner_property_card.dart';
 
 class OwnerPropertiesScreen extends StatefulWidget {
   const OwnerPropertiesScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data/repositories/wishlist_repository.dart';
-import '../../domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/data/repositories/wishlist_repository.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
 
 enum WishlistStatus { initial, loading, loaded, error }
 

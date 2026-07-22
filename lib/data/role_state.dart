@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'models.dart';
+import 'package:sahely/data/models.dart';
 
 class RoleState extends ChangeNotifier {
   static final RoleState _instance = RoleState._internal();

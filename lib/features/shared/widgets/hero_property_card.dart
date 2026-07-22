@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/image.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class HeroPropertyCard extends StatelessWidget {
   const HeroPropertyCard({

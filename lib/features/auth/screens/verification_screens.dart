@@ -6,15 +6,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
-import '../../../core/providers/auth_provider.dart';
-import '../../../core/providers/profile_provider.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/ui.dart';
-import '../../../data/models.dart';
-import '../../../data/role_state.dart';
-import '../widgets/auth_success_badge.dart';
+import 'package:sahely/core/providers/auth_provider.dart';
+import 'package:sahely/core/providers/profile_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/cream_background.dart';
+import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/role_state.dart';
+import 'package:sahely/features/auth/widgets/auth_success_badge.dart';
 
 // ===================================================== 10 · ID Verification
 class IdVerificationScreen extends StatefulWidget {

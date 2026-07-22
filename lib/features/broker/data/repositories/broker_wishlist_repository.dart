@@ -1,4 +1,4 @@
-import '../../domain/models/broker_wishlist_item.dart';
+import 'package:sahely/features/broker/domain/models/broker_wishlist_item.dart';
 
 class BrokerWishlistRepository {
   final Map<String, BrokerWishlistItem> _wishlistItems = {};

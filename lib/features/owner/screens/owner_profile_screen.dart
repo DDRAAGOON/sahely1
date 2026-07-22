@@ -4,9 +4,9 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 
-import '../widgets/owner_bio_card.dart';
-import '../widgets/owner_gradient_cta.dart';
-import '../widgets/owner_profile_header.dart';
+import 'package:sahely/features/owner/widgets/owner_bio_card.dart';
+import 'package:sahely/features/owner/widgets/owner_gradient_cta.dart';
+import 'package:sahely/features/owner/widgets/owner_profile_header.dart';
 
 class OwnerProfileScreen extends StatelessWidget {
   const OwnerProfileScreen({super.key});

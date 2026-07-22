@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import '../../../../../shared/widgets/mawsem/earn_star_row.dart';
+import 'package:sahely/features/shared/widgets/mawsem/earn_star_row.dart';
 
 class BrokerHowToEarnSection extends StatelessWidget {
   const BrokerHowToEarnSection({super.key});

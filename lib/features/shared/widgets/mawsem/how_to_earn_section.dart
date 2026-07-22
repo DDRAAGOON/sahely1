@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'earn_star_row.dart';
+import 'package:sahely/features/shared/widgets/mawsem/earn_star_row.dart';
 
 class HowToEarnSection extends StatelessWidget {
   const HowToEarnSection({super.key});

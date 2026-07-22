@@ -3,16 +3,16 @@ import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../core/widgets/floating_nav.dart';
-import '../../../core/widgets/property_card.dart';
-import '../../../data/sample_data.dart';
-import '../widgets/browse_empty_state.dart';
-import '../widgets/search_header_with_input.dart';
-import '../widgets/small_prop_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/cream_background.dart';
+import 'package:sahely/core/widgets/floating_nav.dart';
+import 'package:sahely/core/widgets/property_card.dart';
+import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/features/shared/widgets/browse_empty_state.dart';
+import 'package:sahely/features/shared/widgets/search_header_with_input.dart';
+import 'package:sahely/features/shared/widgets/small_prop_card.dart';
 
 class BrowseScreen extends StatefulWidget {
   const BrowseScreen({super.key});

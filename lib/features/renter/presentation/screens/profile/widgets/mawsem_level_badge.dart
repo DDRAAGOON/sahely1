@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import '../../../../../shared/widgets/mawsem/level/level_detail_sheet.dart';
-import '../../../../../shared/widgets/mawsem/level/level_perk.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
 
 class MawsemLevelBadge extends StatelessWidget {
   final String levelName;

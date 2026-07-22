@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../features/renter/presentation/screens/home/widgets/renter_bottom_nav.dart';
-import '../../theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/home/widgets/renter_bottom_nav.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class RenterShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;

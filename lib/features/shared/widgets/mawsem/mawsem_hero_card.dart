@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import 'level/level_detail_sheet.dart';
-import 'level/level_perk.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
 
 /// Hero card for AL MAWSEM dashboard.
 /// Displays current level, stars, and progress to next tier.

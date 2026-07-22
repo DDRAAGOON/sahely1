@@ -5,17 +5,17 @@ import 'package:sahely/features/broker/data/datasources/mock_broker_data_source.
 import 'package:sahely/features/broker/data/repositories/broker_repository_impl.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_cubit.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_state.dart';
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../../../../features/shared/properties/domain/entities/property.dart';
-import '../widgets/broker_dashboard_section.dart';
-import '../widgets/broker_filter_chips.dart';
-import '../widgets/broker_header.dart';
-import '../widgets/broker_level_progress_card.dart';
-import '../widgets/broker_promo_banner.dart';
-import '../widgets/broker_property_card.dart';
-import '../widgets/broker_search_bar.dart';
-import '../widgets/refer_property_banner.dart';
-import '../widgets/upcoming_checkins_section.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+import 'package:sahely/features/broker/presentation/widgets/broker_dashboard_section.dart';
+import 'package:sahely/features/broker/presentation/widgets/broker_filter_chips.dart';
+import 'package:sahely/features/broker/presentation/widgets/broker_header.dart';
+import 'package:sahely/features/broker/presentation/widgets/broker_level_progress_card.dart';
+import 'package:sahely/features/broker/presentation/widgets/broker_promo_banner.dart';
+import 'package:sahely/features/broker/presentation/widgets/broker_property_card.dart';
+import 'package:sahely/features/broker/presentation/widgets/broker_search_bar.dart';
+import 'package:sahely/features/broker/presentation/widgets/refer_property_banner.dart';
+import 'package:sahely/features/broker/presentation/widgets/upcoming_checkins_section.dart';
 
 class BrokerHomePage extends StatefulWidget {
   const BrokerHomePage({super.key});
@@ -183,6 +183,8 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                         UpcomingCheckinsSection(
                           checkins: List<Map<String, dynamic>>.from(
                               dashboard.upcomingCheckins),
+                          onSeeAllTap: () =>
+                              AppNavigation.goToBrokerBookings(context),
                           onCheckinTap: (checkin) {},
                         ),
                         const SizedBox(height: 24),

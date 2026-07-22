@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import 'level/level_detail_sheet.dart';
-import 'level/level_perk.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
+import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
 
 class MawsemCard extends StatelessWidget {
   const MawsemCard({super.key});

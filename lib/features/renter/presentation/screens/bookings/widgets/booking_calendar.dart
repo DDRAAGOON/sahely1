@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class BookingCalendar extends StatelessWidget {
   final DateTime selectedDay;

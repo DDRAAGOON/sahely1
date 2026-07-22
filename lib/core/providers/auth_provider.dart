@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../data/models.dart';
-import '../../data/role_state.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/role_state.dart';
 
 class AuthProvider extends ChangeNotifier {
   static const _tokenKey = 'auth_token';

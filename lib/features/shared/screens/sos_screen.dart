@@ -1,15 +1,18 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+
+/// Enum representing the three user roles in Sahely.
+enum UserRole { renter, owner, broker }
 
 class SosScreen extends StatefulWidget {
-  const SosScreen({super.key, this.owner = false});
+  const SosScreen({super.key, this.role = UserRole.renter});
 
-  final bool owner;
+  final UserRole role;
 
   @override
   State<SosScreen> createState() => _SosScreenState();
@@ -27,11 +30,20 @@ class _SosScreenState extends State<SosScreen> {
     _messages = [
       {
         'role': 'agent',
-        'text': widget.owner
-            ? 'Hi Layla, this is Sahely Support. We see you flagged an urgent issue at Azure Beach Villa. How can we help?'
-            : 'Hi! This is Mona from Sahely Support. I can see your active stay at Lagoon Retreat. How can I help?'
+        'text': _initialAgentMessage(),
       },
     ];
+  }
+
+  String _initialAgentMessage() {
+    switch (widget.role) {
+      case UserRole.owner:
+        return 'Hi Layla, this is Sahely Support. We see you flagged an urgent issue at Azure Beach Villa. How can we help?';
+      case UserRole.broker:
+        return 'Hi, this is Sahely Broker Support. We see you flagged an issue for your client. How can we assist you today?';
+      case UserRole.renter:
+      return 'Hi! This is Mona from Sahely Support. I can see your active stay at Lagoon Retreat. How can I help?';
+    }
   }
 
   @override
@@ -54,10 +66,18 @@ class _SosScreenState extends State<SosScreen> {
         _isTyping = false;
         _messages.add({
           'role': 'agent',
-          'text':
-              "I've received the photo. Our team is reviewing the issue now. ETA for a technician is still under 60 min."
+          'text': _imageReceivedMessage(),
         });
       });
+    }
+  }
+
+  String _imageReceivedMessage() {
+    switch (widget.role) {
+      case UserRole.broker:
+        return "We've received the photo from your end. Our team is looking into it. We'll update you shortly.";
+      default:
+        return "I've received the photo. Our team is reviewing the issue now. ETA for a technician is still under 60 min.";
     }
   }
 
@@ -71,52 +91,84 @@ class _SosScreenState extends State<SosScreen> {
 
     await Future.delayed(const Duration(milliseconds: 1500));
 
-    String response = widget.owner
-        ? "Understood — we're dispatching a technician now and notifying the guest. ETA under 90 min. Can you confirm the unit/floor?"
-        : "Thanks for flagging — I'm dispatching a technician now. They'll arrive within 60 minutes. I'll stay on this chat until it's resolved. ✅";
-
     setState(() {
       _isTyping = false;
-      _messages.add({'role': 'agent', 'text': response});
+      _messages.add({'role': 'agent', 'text': _responseMessage()});
     });
+  }
+
+  String _responseMessage() {
+    switch (widget.role) {
+      case UserRole.owner:
+        return "Understood â€” we're dispatching a technician now and notifying the guest. ETA under 90 min. Can you confirm the unit/floor?";
+      case UserRole.broker:
+        return "Understood. We are dispatching a technician to the unit. We will notify you once they arrive.";
+      case UserRole.renter:
+      return "Thanks for flagging â€” I'm dispatching a technician now. They'll arrive within 60 minutes. I'll stay on this chat until it's resolved. âœ…";
+    }
+  }
+
+  String _getTitle() {
+    switch (widget.role) {
+      case UserRole.owner:
+        return 'SOS Â· Live Support';
+      case UserRole.broker:
+        return 'Broker Support Â· SOS';
+      case UserRole.renter:
+      return 'Sahely Support Â· SOS';
+    }
+  }
+
+  String _getStatusText() {
+    switch (widget.role) {
+      case UserRole.owner:
+        return 'Agent connected Â· priority';
+      case UserRole.broker:
+        return 'Agent connected Â· Priority';
+      case UserRole.renter:
+      return 'Agent connected Â· live now';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F0E8),
+      backgroundColor: widget.role == UserRole.broker
+          ? const Color(0xFFEFEAE1)
+          : const Color(0xFFF5F0E8),
       body: SafeArea(
         child: Column(children: [
           Container(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            padding: widget.role == UserRole.broker
+                ? const EdgeInsets.fromLTRB(12, 10, 12, 12)
+                : const EdgeInsets.fromLTRB(16, 12, 16, 16),
             decoration: const BoxDecoration(
               color: Color(0xFFB22222),
             ),
             child: Row(children: [
               GestureDetector(
                 onTap: () => Navigator.maybePop(context),
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(Icons.chevron_left,
-                      color: Colors.white, size: 24),
-                ),
+                child: widget.role == UserRole.broker
+                    ? const Icon(Icons.chevron_left, color: Colors.white)
+                    : Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.chevron_left,
+                            color: Colors.white, size: 24),
+                      ),
               ),
               const SizedBox(width: 12),
               Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                    Text(
-                        widget.owner
-                            ? 'SOS · Live Support'
-                            : 'Sahely Support · SOS',
+                    Text(_getTitle(),
                         style: AppTheme.dm(
-                            size: 16,
+                            size: widget.role == UserRole.broker ? 15 : 16,
                             weight: FontWeight.w700,
                             color: Colors.white)),
                     Row(children: [
@@ -127,10 +179,7 @@ class _SosScreenState extends State<SosScreen> {
                               color: Color(0xFF7BE0A0),
                               shape: BoxShape.circle)),
                       const SizedBox(width: 6),
-                      Text(
-                          widget.owner
-                              ? 'Agent connected · priority'
-                              : 'Agent connected · live now',
+                      Text(_getStatusText(),
                           style: AppTheme.dm(size: 12, color: Colors.white70)),
                     ]),
                   ])),
@@ -138,37 +187,44 @@ class _SosScreenState extends State<SosScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: widget.role == UserRole.broker
+                  ? const EdgeInsets.all(14)
+                  : const EdgeInsets.all(16),
               itemCount: _messages.length +
-                  (_isTyping ? 1 : 1), // Always show timestamp at start
+                  (_isTyping ? 1 : (widget.role != UserRole.broker ? 1 : 1)),
               itemBuilder: (context, i) {
-                if (i == 0) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 24, top: 8),
-                    child: Center(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 7),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFE8E1D5),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Text(
-                          'Today · Emergency chat started',
-                          style: AppTheme.dm(
-                              size: 12,
-                              weight: FontWeight.w600,
-                              color: AppColors.muted),
+                if (widget.role != UserRole.broker) {
+                  if (i == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 24, top: 8),
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 7),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE8E1D5),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Text(
+                            'Today Â· Emergency chat started',
+                            style: AppTheme.dm(
+                                size: 12,
+                                weight: FontWeight.w600,
+                                color: AppColors.muted),
+                          ),
                         ),
                       ),
-                    ),
-                  );
+                    );
+                  }
+                  final msgIndex = i - 1;
+                  if (msgIndex == _messages.length) return _typingIndicator();
+                  final m = _messages[msgIndex];
+                  return m['role'] == 'agent' ? _agent(m['text']) : _user(m);
+                } else {
+                  if (i == _messages.length) return _typingIndicator();
+                  final m = _messages[i];
+                  return m['role'] == 'agent' ? _agent(m['text']) : _user(m);
                 }
-
-                final msgIndex = i - 1;
-                if (msgIndex == _messages.length) return _typingIndicator();
-                final m = _messages[msgIndex];
-                return m['role'] == 'agent' ? _agent(m['text']) : _user(m);
               },
             ),
           ),
@@ -192,7 +248,7 @@ class _SosScreenState extends State<SosScreen> {
                         controller: _controller,
                         onSubmitted: _send,
                         decoration: InputDecoration(
-                          hintText: 'Message support…',
+                          hintText: 'Message supportâ€¦',
                           hintStyle: AppTheme.dm(
                               size: 13,
                               color: AppColors.navy.withValues(alpha: 0.5)),
@@ -288,3 +344,4 @@ class _SosScreenState extends State<SosScreen> {
         ]),
       );
 }
+

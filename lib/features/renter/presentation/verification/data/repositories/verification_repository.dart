@@ -1,4 +1,4 @@
-import '../../domain/models/verification_state.dart';
+import 'package:sahely/features/renter/presentation/verification/domain/models/verification_state.dart';
 
 class VerificationRepository {
   // TODO: لما الـ API يجي، هتحذف الـ Mock Data وتستخدم الـ API

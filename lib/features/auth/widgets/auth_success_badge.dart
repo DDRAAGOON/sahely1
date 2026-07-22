@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class AuthSuccessBadge extends StatefulWidget {
   const AuthSuccessBadge({super.key, required this.navy});

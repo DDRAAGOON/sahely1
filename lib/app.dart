@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'core/theme/app_theme.dart';
-import 'core/navigation/app_router.dart';
-import 'core/providers/auth_provider.dart';
-import 'data/role_state.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/navigation/app_router.dart';
+import 'package:sahely/core/providers/auth_provider.dart';
+import 'package:sahely/data/role_state.dart';
 
 class SahelyApp extends StatefulWidget {
   const SahelyApp({super.key});

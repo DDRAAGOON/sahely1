@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class BrokerCreateCollectionSheet extends StatefulWidget {
   const BrokerCreateCollectionSheet({super.key});
@@ -22,7 +22,7 @@ class _BrokerCreateCollectionSheetState
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       padding: EdgeInsets.fromLTRB(
-          24, 12, 24, MediaQuery.of(context).viewInsets.bottom + 24),
+          24, 12, 24, MediaQuery.of(context).viewInsets.bottom + 100),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

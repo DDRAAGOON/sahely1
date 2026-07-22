@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/ui.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/ui.dart';
 
 class PayoutBankScreen extends StatefulWidget {
   const PayoutBankScreen({super.key});

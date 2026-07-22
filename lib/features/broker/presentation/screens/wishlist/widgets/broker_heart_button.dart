@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../bloc/broker_wishlist_cubit.dart';
-import 'broker_add_to_collection_sheet.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_add_to_collection_sheet.dart';
 
 class BrokerHeartButton extends StatefulWidget {
   final String propertyId;

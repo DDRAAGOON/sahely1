@@ -5,13 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/broker_check_in_out_footer.dart';
-import '../widgets/broker_get_directions_button.dart';
-import '../widgets/broker_lock_icon_widget.dart';
-import '../widgets/broker_lock_info_cards.dart';
-import '../widgets/broker_lock_info_text.dart';
-import '../widgets/broker_lock_status_badge.dart';
-import '../widgets/broker_passcode_display.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_check_in_out_footer.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_get_directions_button.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_lock_icon_widget.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_lock_info_cards.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_lock_info_text.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_lock_status_badge.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_passcode_display.dart';
 
 class BrokerSmartLockScreen extends StatefulWidget {
   final String propertyName;

@@ -7,16 +7,16 @@ import 'package:sahely/features/owner/domain/entities/owner_dashboard.dart';
 import 'package:sahely/features/owner/presentation/bloc/owner_home_cubit.dart';
 import 'package:sahely/features/owner/presentation/bloc/owner_home_state.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/chips.dart';
-import '../../../core/widgets/common.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/property_card.dart';
-import '../../../data/models.dart';
-import '../../renter/presentation/screens/home/widgets/promo_banner.dart';
-import '../../shared/widgets/mawsem/mawsem_card.dart';
-import '../widgets/pending_request_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/chips.dart';
+import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/property_card.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/features/renter/presentation/screens/home/widgets/promo_banner.dart';
+import 'package:sahely/features/shared/widgets/mawsem/mawsem_card.dart';
+import 'package:sahely/features/owner/widgets/pending_request_card.dart';
 
 class OwnerHomeScreen extends StatefulWidget {
   const OwnerHomeScreen({super.key});

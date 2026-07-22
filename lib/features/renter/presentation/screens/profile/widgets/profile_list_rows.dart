@@ -5,7 +5,7 @@ import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import '../pages/currency_selector_sheet.dart';
+import 'package:sahely/features/renter/presentation/screens/profile/pages/currency_selector_sheet.dart';
 
 class ProfileListRows extends StatelessWidget {
   final int walletBalance;

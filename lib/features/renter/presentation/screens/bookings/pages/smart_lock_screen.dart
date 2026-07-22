@@ -5,13 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/check_in_out_footer.dart';
-import '../widgets/get_directions_button.dart';
-import '../widgets/lock_icon_widget.dart';
-import '../widgets/lock_info_cards.dart';
-import '../widgets/lock_info_text.dart';
-import '../widgets/lock_status_badge.dart';
-import '../widgets/passcode_display.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/check_in_out_footer.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/get_directions_button.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/lock_icon_widget.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/lock_info_cards.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/lock_info_text.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/lock_status_badge.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/passcode_display.dart';
 
 class SmartLockScreen extends StatefulWidget {
   final String propertyName;

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../domain/models/wishlist_item.dart';
-import '../presentation/bloc/wishlist_cubit.dart';
-import '../widgets/collection_header.dart';
-import '../widgets/collection_members_actions.dart';
-import '../widgets/collection_property_card.dart';
-import '../widgets/share_collection_sheet.dart';
-import 'collection_compare_screen.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_header.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_members_actions.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_property_card.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/share_collection_sheet.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/pages/collection_compare_screen.dart';
 
 class CollectionInsideSharedScreen extends StatefulWidget {
   final String collectionId;

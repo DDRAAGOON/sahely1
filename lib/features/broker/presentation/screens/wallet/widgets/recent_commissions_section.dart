@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../../core/theme/app_colors.dart';
-import 'recent_commission_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/broker/presentation/screens/wallet/widgets/recent_commission_card.dart';
 
 class RecentCommissionsSection extends StatelessWidget {
   final List<Map<String, dynamic>> commissions;

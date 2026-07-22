@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'app_colors.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 /// Global theme. The design uses **DM Sans** throughout.
 class AppTheme {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 /// Full-width navy CTA button (52px tall, 12px radius) — the default action.
 class NavyButton extends StatelessWidget {

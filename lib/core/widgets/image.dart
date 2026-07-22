@@ -5,9 +5,9 @@ import 'package:gal/gal.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
-import 'buttons.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/buttons.dart';
 
 /// Rounded photo with a soft bottom fade.
 class BlendedImage extends StatelessWidget {

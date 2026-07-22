@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import '../../bookings/pages/gallery/photo_viewer_screen.dart';
-import '../../wishlist/presentation/widgets/heart_button.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/pages/gallery/photo_viewer_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/heart_button.dart';
 
 class PropertyImageGallery extends StatefulWidget {
   final String propertyId;

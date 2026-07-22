@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../bloc/broker_bookings_cubit.dart';
-import '../widgets/broker_active_booking_card.dart';
-import '../widgets/broker_bookings_filter_tabs.dart';
-import '../widgets/broker_bookings_header.dart';
-import '../widgets/broker_past_stays_section.dart';
-import '../widgets/broker_upcoming_booking_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/broker/presentation/screens/bookings/bloc/broker_bookings_cubit.dart';
+import 'package:sahely/features/broker/presentation/screens/bookings/widgets/broker_active_booking_card.dart';
+import 'package:sahely/features/broker/presentation/screens/bookings/widgets/broker_bookings_filter_tabs.dart';
+import 'package:sahely/features/broker/presentation/screens/bookings/widgets/broker_bookings_header.dart';
+import 'package:sahely/features/broker/presentation/screens/bookings/widgets/broker_past_stays_section.dart';
+import 'package:sahely/features/broker/presentation/screens/bookings/widgets/broker_upcoming_booking_card.dart';
 
 class BrokerBookingsPage extends StatefulWidget {
   const BrokerBookingsPage({super.key});

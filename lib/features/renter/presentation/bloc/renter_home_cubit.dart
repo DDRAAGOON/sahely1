@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
 
-import 'renter_home_state.dart';
+import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
 
 class RenterHomeCubit extends Cubit<RenterHomeState> {
   final RenterRepository repository;

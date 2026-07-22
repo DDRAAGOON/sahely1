@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/chips.dart';
-import '../../../core/widgets/cream_background.dart';
-import '../../../data/sample_data.dart';
-import '../widgets/hero_property_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/chips.dart';
+import 'package:sahely/core/widgets/cream_background.dart';
+import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/features/shared/widgets/hero_property_card.dart';
 
 class AllPropertiesScreen extends StatefulWidget {
   const AllPropertiesScreen({super.key});

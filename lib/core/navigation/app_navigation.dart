@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'app_routes.dart';
-import '../../data/role_state.dart';
-import '../../data/models.dart';
+import 'package:sahely/core/navigation/app_routes.dart';
+import 'package:sahely/data/role_state.dart';
+import 'package:sahely/data/models.dart';
 
 class AppNavigation {
   AppNavigation._();

@@ -1,26 +1,42 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/kit.dart';
-import '../../../core/widgets/ui.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/ui.dart';
 
 class ArrivalChecklistScreen extends StatefulWidget {
-  const ArrivalChecklistScreen({super.key});
+  final String? bookingId;
+  final DateTime? checkInTime;
+  final List<Map<String, dynamic>>? checklistItems;
+
+  const ArrivalChecklistScreen({
+    super.key,
+    this.bookingId,
+    this.checkInTime,
+    this.checklistItems,
+  });
 
   @override
   State<ArrivalChecklistScreen> createState() => _ArrivalChecklistScreenState();
 }
 
 class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
-  final List<Map<String, dynamic>> _items = [
-    {'label': 'Pool clean & usable', 'done': true, 'issue': false},
-    {'label': 'WiFi works (password on fridge)', 'done': true, 'issue': false},
-    {'label': 'AC in all rooms', 'done': true, 'issue': false},
-    {'label': '5 beds made & linens fresh', 'done': true, 'issue': false},
-    {'label': 'Beach access tags (4)', 'done': false, 'issue': false},
-    {'label': 'Kitchen fully equipped', 'done': false, 'issue': false},
-  ];
+  late List<Map<String, dynamic>> _items;
+
+  @override
+  void initState() {
+    super.initState();
+    _items = widget.checklistItems ??
+        [
+          {'label': 'Pool clean & usable', 'done': true, 'issue': false},
+          {'label': 'WiFi works (password on fridge)', 'done': true, 'issue': false},
+          {'label': 'AC in all rooms', 'done': true, 'issue': false},
+          {'label': '5 beds made & linens fresh', 'done': true, 'issue': false},
+          {'label': 'Beach access tags (4)', 'done': false, 'issue': false},
+          {'label': 'Kitchen fully equipped', 'done': false, 'issue': false},
+        ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +78,8 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
         Padding(
           padding: const EdgeInsets.all(16),
           child: NavyButton(
-              label: 'Submit Checklist', onTap: () => Navigator.pop(context)),
+              label: 'Submit Checklist',
+              onTap: () => Navigator.pop(context, _items)),
         ),
       ]),
     );

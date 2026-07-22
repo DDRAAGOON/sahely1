@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../widgets/chat_message_bubble.dart';
-import '../widgets/collection_strip.dart';
-import '../widgets/compare_header.dart';
-import '../widgets/compare_input_bar.dart';
-import '../widgets/property_comparison_bar.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/chat_message_bubble.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_strip.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/compare_header.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/compare_input_bar.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/property_comparison_bar.dart';
 
 class CollectionCompareScreen extends StatelessWidget {
   final String collectionName;

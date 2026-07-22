@@ -14,22 +14,20 @@ import 'package:sahely/features/broker/presentation/screens/home/pages/broker_ho
 import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_page.dart';
 import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
-import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_wishlist_page.dart';
 import 'package:sahely/features/broker/presentation/screens/wallet/pages/broker_wallet_page.dart';
 import 'package:sahely/features/notifications/notifications_screen.dart';
 import 'package:sahely/features/owner/owner_go_routes.dart';
 import 'package:sahely/features/owner/screens/owner_bookings_screen.dart';
 import 'package:sahely/features/owner/screens/owner_home_screen.dart';
 import 'package:sahely/features/owner/screens/owner_profile_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/pages/my_bookings_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/concierge/pages/concierge_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/home/pages/home_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/profile/pages/profile_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/pages/wishlist_screen.dart';
+import 'package:sahely/features/shared/screens/home_screen.dart';
+import 'package:sahely/features/shared/screens/profile_screen.dart';
+import 'package:sahely/features/shared/screens/wishlist_screen.dart';
+import 'package:sahely/features/shared/screens/my_bookings_screen.dart';
+import 'package:sahely/features/shared/screens/concierge_screen.dart';
 import 'package:sahely/features/shared/screens/services_screen.dart';
+import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/features/shared/shared_go_routes.dart';
-
-import 'app_routes.dart';
 
 /// The global navigator key for the main router.
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -112,10 +110,14 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
       // Role-based guarding: prevent access to broker/owner sections if role mismatches
       if (isAuth) {
         if (loc.startsWith('/broker') && role != Role.broker) {
-          return role == Role.owner ? AppRoutes.ownerHome : AppRoutes.renterHome;
+          return role == Role.owner
+              ? AppRoutes.ownerHome
+              : AppRoutes.renterHome;
         }
         if (loc.startsWith('/owner') && role != Role.owner) {
-          return role == Role.broker ? AppRoutes.brokerHome : AppRoutes.renterHome;
+          return role == Role.broker
+              ? AppRoutes.brokerHome
+              : AppRoutes.renterHome;
         }
       }
 
@@ -126,7 +128,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
       return null;
     },
     routes: [
-      // ---- Notifications (Fixed) ----
+      // ---- Global Routes ----
       GoRoute(
           path: AppRoutes.notifications,
           builder: (context, state) => const NotificationsScreen()),
@@ -222,7 +224,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
           path: AppRoutes.verificationComplete,
           builder: (context, state) => const VerificationCompleteScreen()),
 
-      // ---- Renter (Standalone Shell) ----
+      // ---- Renter (Shell) ----
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             RenterShell(navigationShell: navigationShell),
@@ -266,7 +268,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         ],
       ),
 
-      // ---- Broker (Standalone Shell) ----
+      // ---- Broker (Shell) ----
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             BrokerShell(navigationShell: navigationShell),
@@ -282,7 +284,8 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
             routes: [
               GoRoute(
                   path: AppRoutes.brokerWishlist,
-                  builder: (context, state) => const BrokerWishlistPage())
+                  builder: (context, state) => const WishlistScreen(
+                      showNav: false, role: WishlistRole.broker))
             ],
           ),
           StatefulShellBranch(
@@ -299,7 +302,6 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
                   builder: (context, state) => const BrokerServicesPage())
             ],
           ),
-          // ✅ Tab 5: My Role (Profile & Dashboard)
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -319,7 +321,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         ],
       ),
 
-      // ---- Owner (Standalone Shell) ----
+      // ---- Owner (Shell) ----
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             OwnerShell(navigationShell: navigationShell),
@@ -369,13 +371,9 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         ],
       ),
 
-      // ---- Shared ----
+      // ---- Shared & Extra Features ----
       ...sharedGoRoutes,
-
-      // ---- Owner ----
       ...ownerGoRoutes,
-
-      // ---- Broker ----
       ...brokerGoRoutes,
     ],
   );

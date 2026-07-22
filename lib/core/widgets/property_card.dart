@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import '../theme/app_colors.dart';
-import '../theme/app_theme.dart';
-import 'common.dart';
-import 'ui.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/ui.dart';
 
 /// Large hero property card (Trending Now / Browse results).
 class PropertyCard extends StatelessWidget {

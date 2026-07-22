@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../data/models.dart';
-import '../../data/role_state.dart';
-import '../theme/app_colors.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/role_state.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class NavItem {
   const NavItem(this.icon, this.activeIcon, this.label, [this.route]);

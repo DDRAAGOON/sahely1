@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import 'models.dart';
+import 'package:sahely/data/models.dart';
 
 /// Static sample content lifted from the design board. Unsplash URLs are kept
 /// verbatim per the handoff decision.

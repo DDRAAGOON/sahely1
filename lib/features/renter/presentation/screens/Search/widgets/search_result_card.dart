@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../../../../core/utils/currency_formatter.dart';
-import '../../wishlist/presentation/widgets/heart_button.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/heart_button.dart';
 
 class SearchResultCard extends StatelessWidget {
   final Map<String, dynamic> property;

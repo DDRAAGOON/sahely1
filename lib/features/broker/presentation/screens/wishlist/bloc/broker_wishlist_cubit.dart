@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/repositories/broker_wishlist_repository.dart';
-import '../../../../domain/models/broker_wishlist_item.dart';
+import 'package:sahely/features/broker/data/repositories/broker_wishlist_repository.dart';
+import 'package:sahely/features/broker/domain/models/broker_wishlist_item.dart';
 
 enum BrokerWishlistStatus { initial, loading, loaded, error }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../pages/add_credit_sheet.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/wallet/pages/add_credit_sheet.dart';
 
 class PaymentMethodTile extends StatelessWidget {
   final PaymentMethod method;

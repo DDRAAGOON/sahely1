@@ -1,27 +1,28 @@
 import 'package:go_router/go_router.dart';
+import 'package:sahely/features/owner/screens/owner_portfolio_screen.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+import 'package:sahely/features/shared/screens/active_booking_detail_screen.dart';
+import 'package:sahely/features/shared/screens/upcoming_booking_detail_screen.dart';
+import 'package:sahely/features/shared/screens/past_booking_detail_screen.dart';
 
-import 'screens/add_property_screen.dart';
-import 'screens/listing_submitted_screen.dart';
-import 'screens/owner_active_detail_screen.dart';
-import 'screens/owner_ai_chat_screen.dart';
-import 'screens/owner_all_trending_screen.dart';
-import 'screens/owner_earnings_screen.dart';
-import 'screens/owner_edit_bio_screen.dart';
-import 'screens/owner_history_screen.dart';
-import 'screens/owner_manage_screen.dart';
-import 'screens/owner_notification_settings_screen.dart';
-import 'screens/owner_past_detail_screen.dart';
-import 'screens/owner_portfolio_screen.dart';
-import 'screens/owner_properties_screen.dart';
-import 'screens/owner_property_detail_screens.dart';
-import 'screens/owner_requests_screen.dart';
-import 'screens/owner_smart_lock_screen.dart';
-import 'screens/owner_upcoming_detail_screen.dart';
-import 'screens/payout_bank_screen.dart';
-import 'screens/team_review_screen.dart';
-import 'screens/withdraw_amount_screen.dart';
-import 'screens/withdraw_receipt_screen.dart';
+import 'package:sahely/features/owner/screens/add_property_screen.dart';
+import 'package:sahely/features/owner/screens/listing_submitted_screen.dart';
+import 'package:sahely/features/owner/screens/owner_ai_chat_screen.dart';
+import 'package:sahely/features/owner/screens/owner_all_trending_screen.dart';
+import 'package:sahely/features/owner/screens/owner_earnings_screen.dart';
+import 'package:sahely/features/owner/screens/owner_edit_bio_screen.dart';
+import 'package:sahely/features/owner/screens/owner_history_screen.dart';
+import 'package:sahely/features/owner/screens/owner_manage_screen.dart';
+import 'package:sahely/features/owner/screens/owner_notification_settings_screen.dart';
+
+import 'package:sahely/features/owner/screens/owner_properties_screen.dart';
+import 'package:sahely/features/owner/screens/owner_property_detail_screens.dart';
+import 'package:sahely/features/owner/screens/owner_requests_screen.dart';
+import 'package:sahely/features/owner/screens/owner_smart_lock_screen.dart';
+import 'package:sahely/features/owner/screens/payout_bank_screen.dart';
+import 'package:sahely/features/owner/screens/team_review_screen.dart';
+import 'package:sahely/features/owner/screens/withdraw_amount_screen.dart';
+import 'package:sahely/features/owner/screens/withdraw_receipt_screen.dart';
 
 final List<GoRoute> ownerGoRoutes = [
   GoRoute(
@@ -65,39 +66,84 @@ final List<GoRoute> ownerGoRoutes = [
     path: '/owner/booking-upcoming',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) return OwnerUpcomingDetailScreen(property: args);
+      if (args is Property) {
+        return UpcomingBookingDetailScreen(
+          property: args,
+          role: UpcomingBookingRole.owner,
+        );
+      }
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property) return OwnerUpcomingDetailScreen(property: prop);
-        return OwnerUpcomingDetailScreen(property: Property.fromMap(args));
+        if (prop is Property) {
+          return UpcomingBookingDetailScreen(
+            property: prop,
+            bookingData: args,
+            role: UpcomingBookingRole.owner,
+          );
+        }
+        return UpcomingBookingDetailScreen(
+          property: Property.fromMap(args),
+          bookingData: args,
+          role: UpcomingBookingRole.owner,
+        );
       }
-      return const OwnerUpcomingDetailScreen();
+      return const UpcomingBookingDetailScreen(role: UpcomingBookingRole.owner);
     },
   ),
   GoRoute(
     path: '/owner/booking-active',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) return OwnerActiveDetailScreen(property: args);
+      if (args is Property) {
+        return ActiveBookingDetailScreen(
+          property: args,
+          role: ActiveBookingRole.owner,
+        );
+      }
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property) return OwnerActiveDetailScreen(property: prop);
-        return OwnerActiveDetailScreen(property: Property.fromMap(args));
+        if (prop is Property) {
+          return ActiveBookingDetailScreen(
+            property: prop,
+            bookingData: args,
+            role: ActiveBookingRole.owner,
+          );
+        }
+        return ActiveBookingDetailScreen(
+          property: Property.fromMap(args),
+          bookingData: args,
+          role: ActiveBookingRole.owner,
+        );
       }
-      return const OwnerActiveDetailScreen();
+      return const ActiveBookingDetailScreen(role: ActiveBookingRole.owner);
     },
   ),
   GoRoute(
     path: '/owner/booking-past',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) return OwnerPastDetailScreen(property: args);
+      if (args is Property) {
+        return PastBookingDetailScreen(
+          property: args,
+          role: PastBookingRole.owner,
+        );
+      }
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property) return OwnerPastDetailScreen(property: prop);
-        return OwnerPastDetailScreen(property: Property.fromMap(args));
+        if (prop is Property) {
+          return PastBookingDetailScreen(
+            property: prop,
+            bookingData: args,
+            role: PastBookingRole.owner,
+          );
+        }
+        return PastBookingDetailScreen(
+          property: Property.fromMap(args),
+          bookingData: args,
+          role: PastBookingRole.owner,
+        );
       }
-      return const OwnerPastDetailScreen();
+      return const PastBookingDetailScreen(role: PastBookingRole.owner);
     },
   ),
   GoRoute(

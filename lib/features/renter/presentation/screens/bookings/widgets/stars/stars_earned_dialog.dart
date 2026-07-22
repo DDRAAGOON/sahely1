@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../core/theme/app_colors.dart';
-import 'animated_star_icon.dart';
-import 'stars_progress_bar.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/stars/animated_star_icon.dart';
+import 'package:sahely/features/renter/presentation/screens/bookings/widgets/stars/stars_progress_bar.dart';
 
 class StarsEarnedDialog extends StatefulWidget {
   final int starsEarned;

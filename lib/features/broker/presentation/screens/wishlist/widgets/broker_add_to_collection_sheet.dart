@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../../domain/models/broker_wishlist_item.dart';
-import '../bloc/broker_wishlist_cubit.dart';
-import 'broker_create_collection_sheet.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/broker/domain/models/broker_wishlist_item.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_create_collection_sheet.dart';
 
 class BrokerAddToCollectionSheet extends StatefulWidget {
   final String propertyId;

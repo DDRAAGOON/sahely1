@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../features/owner/widgets/owner_bottom_nav.dart';
-import '../../theme/app_colors.dart';
+import 'package:sahely/features/owner/widgets/owner_bottom_nav.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 
 class OwnerShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;

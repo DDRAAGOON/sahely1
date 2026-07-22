@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../../data/models.dart';
+import 'package:sahely/data/models.dart';
 
 class AuthResponse {
   final String token;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../../core/theme/app_colors.dart';
-import '../widgets/celebration_icon.dart';
-import '../widgets/level_stats_row.dart';
-import '../widgets/level_unlocked_text.dart';
-import '../widgets/share_achievement_button.dart';
-import '../widgets/unlock_reward_card.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/widgets/celebration_icon.dart';
+import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/widgets/level_stats_row.dart';
+import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/widgets/level_unlocked_text.dart';
+import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/widgets/share_achievement_button.dart';
+import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/widgets/unlock_reward_card.dart';
 
 class LevelUpCelebrationScreen extends StatefulWidget {
   final int newLevel;

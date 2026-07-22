@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../../../core/theme/app_colors.dart';
-import '../../domain/models/wishlist_item.dart';
-import '../../widgets/create_collection_sheet.dart';
-import '../bloc/wishlist_cubit.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/create_collection_sheet.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 
 class AddToCollectionSheet extends StatefulWidget {
   final String propertyId;

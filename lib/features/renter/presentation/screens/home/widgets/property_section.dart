@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../../core/theme/app_colors.dart';
-import '../../../../../../core/widgets/property_card.dart';
-import '../../../../../shared/properties/domain/entities/property.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/property_card.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 enum PropertyBadge { trending, discount, newlyAdded }
 

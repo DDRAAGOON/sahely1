@@ -1,22 +1,23 @@
 import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_routes.dart';
 
-import '../owner/screens/payout_bank_screen.dart';
-import '../owner/screens/withdraw_amount_screen.dart';
-import '../owner/screens/withdraw_receipt_screen.dart';
-import 'presentation/screens/bookings/pages/broker_booking_details_page.dart';
-import 'presentation/screens/dashboard/pages/tier_dashboard_page.dart';
-import 'presentation/screens/dashboard/pages/tier_upgrade_page.dart';
-import 'presentation/screens/mawsem/pages/broker_mawsem_page.dart';
-import 'presentation/screens/portfolio/pages/refer_property_page.dart';
-import 'presentation/screens/portfolio/pages/referral_issue_page.dart';
-import 'presentation/screens/portfolio/pages/referred_property_detail_page.dart';
-import 'presentation/screens/smart_lock/pages/broker_smart_lock_screen.dart';
-import 'presentation/screens/support/pages/broker_sos_chat_screen.dart';
-import 'presentation/screens/wallet/pages/broker_history_page.dart';
+import 'package:sahely/features/shared/screens/sos_screen.dart' as sos;
+import 'package:sahely/features/shared/screens/active_booking_detail_screen.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+import 'package:sahely/features/owner/screens/payout_bank_screen.dart';
+import 'package:sahely/features/owner/screens/withdraw_amount_screen.dart';
+import 'package:sahely/features/owner/screens/withdraw_receipt_screen.dart';
+import 'package:sahely/features/broker/presentation/screens/dashboard/pages/tier_dashboard_page.dart';
+import 'package:sahely/features/broker/presentation/screens/dashboard/pages/tier_upgrade_page.dart';
+import 'package:sahely/features/broker/presentation/screens/mawsem/pages/broker_mawsem_page.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/refer_property_page.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/referral_issue_page.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/referred_property_detail_page.dart';
+import 'package:sahely/features/broker/presentation/screens/smart_lock/pages/broker_smart_lock_screen.dart';
+import 'package:sahely/features/broker/presentation/screens/wallet/pages/broker_history_page.dart';
 
-// NOTE: BrokerDashboard and Portfolio are defined inside AppRouter's Shell Tab 5
-// to preserve the bottom navigation bar.
+// NOTE: Global Broker Routes (not nested in Tabs)
+// Tab-specific routes like Dashboard, Portfolio, Wallet are in AppRouter.
 
 final List<GoRoute> brokerGoRoutes = [
   GoRoute(
@@ -42,12 +43,18 @@ final List<GoRoute> brokerGoRoutes = [
       builder: (context, state) => const BrokerTierUpgradePage()),
   GoRoute(
       path: AppRoutes.brokerSos,
-      builder: (context, state) => const BrokerSOSChatScreen()),
+      builder: (context, state) =>
+          const sos.SosScreen(role: sos.UserRole.broker)),
   GoRoute(
     path: AppRoutes.brokerBookingDetails,
     builder: (context, state) {
-      final args = state.extra as Map<String, dynamic>?;
-      return BrokerBookingDetailsPage(booking: args ?? {});
+      final args = state.extra as Map<String, dynamic>? ?? {};
+      final prop = args['prop'];
+      return ActiveBookingDetailScreen(
+        property: prop is Property ? prop : Property.fromMap(args),
+        bookingData: args,
+        role: ActiveBookingRole.broker,
+      );
     },
   ),
   GoRoute(

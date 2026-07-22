@@ -13,12 +13,10 @@ class BrokerPortfolioPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.cream,
-      child: Scaffold(
-        backgroundColor: AppColors.cream,
-        body: SafeArea(
-          child: ListView(
+    return Scaffold(
+      backgroundColor: AppColors.cream,
+      body: SafeArea(
+        child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
             children: [
               TopBar(
@@ -63,8 +61,7 @@ class BrokerPortfolioPage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _refCard(BuildContext context, String img, String name, String area,
