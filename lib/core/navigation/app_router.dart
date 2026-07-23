@@ -15,7 +15,7 @@ import 'package:sahely/features/broker/presentation/screens/profile/pages/broker
 import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_page.dart';
 import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
 import 'package:sahely/features/broker/presentation/screens/wallet/pages/broker_wallet_page.dart';
-import 'package:sahely/features/notifications/notifications_screen.dart';
+import 'package:sahely/features/shared/screens/notification_settings_screen.dart';
 import 'package:sahely/features/owner/owner_go_routes.dart';
 import 'package:sahely/features/owner/screens/owner_bookings_screen.dart';
 import 'package:sahely/features/owner/screens/owner_home_screen.dart';
@@ -131,7 +131,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
       // ---- Global Routes ----
       GoRoute(
           path: AppRoutes.notifications,
-          builder: (context, state) => const NotificationsScreen()),
+          builder: (context, state) => const NotificationSettingsScreen()),
 
       // ---- Auth ----
       GoRoute(
@@ -164,9 +164,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
             icon: Icons.mail_outline,
             hint: 'Check your inbox — and your spam folder',
             cta: 'Verify Email',
-            onVerify: () {
-              context.push(AppRoutes.verifyPhone, extra: extra);
-            },
+            onVerify: () => context.push(AppRoutes.verifyPhone, extra: extra),
           );
         },
       ),
@@ -182,9 +180,8 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
             cta: 'Verify Number',
             bottomText: 'Wrong number? Change it',
             isPhone: true,
-            onVerify: () {
-              context.push(AppRoutes.idVerification, extra: extra);
-            },
+            onVerify: () =>
+                context.push(AppRoutes.idVerification, extra: extra),
           );
         },
       ),
@@ -229,42 +226,32 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         builder: (context, state, navigationShell) =>
             RenterShell(navigationShell: navigationShell),
         branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.renterHome,
-                  builder: (context, state) => const HomeScreen())
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.renterWishlist,
-                  builder: (context, state) =>
-                      const WishlistScreen(showNav: false))
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.renterBookings,
-                  builder: (context, state) => const MyBookingsScreen())
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.renterServices,
-                  builder: (context, state) => const ConciergeScreen())
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.renterProfile,
-                  builder: (context, state) => const ProfileScreen())
-            ],
-          ),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.renterHome,
+                builder: (context, state) => const HomeScreen())
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.renterWishlist,
+                builder: (context, state) =>
+                    const WishlistScreen(showNav: false))
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.renterBookings,
+                builder: (context, state) => const MyBookingsScreen())
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.renterServices,
+                builder: (context, state) => const ConciergeScreen())
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.renterProfile,
+                builder: (context, state) => const ProfileScreen())
+          ]),
         ],
       ),
 
@@ -273,51 +260,41 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         builder: (context, state, navigationShell) =>
             BrokerShell(navigationShell: navigationShell),
         branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.brokerHome,
-                  builder: (context, state) => const BrokerHomePage())
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.brokerWishlist,
-                  builder: (context, state) => const WishlistScreen(
-                      showNav: false, role: WishlistRole.broker))
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.brokerBookings,
-                  builder: (context, state) => const BrokerBookingsPage())
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.brokerServices,
-                  builder: (context, state) => const BrokerServicesPage())
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.brokerProfile,
-                  builder: (context, state) => const BrokerProfilePage()),
-              GoRoute(
-                  path: AppRoutes.brokerDashboard,
-                  builder: (context, state) => const BrokerDashboardPage()),
-              GoRoute(
-                  path: AppRoutes.brokerPortfolio,
-                  builder: (context, state) => const BrokerPortfolioPage()),
-              GoRoute(
-                  path: AppRoutes.brokerWallet,
-                  builder: (context, state) => const BrokerWalletPage()),
-            ],
-          ),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.brokerHome,
+                builder: (context, state) => const BrokerHomePage())
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.brokerWishlist,
+                builder: (context, state) => const WishlistScreen(
+                    showNav: false, role: WishlistRole.broker))
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.brokerBookings,
+                builder: (context, state) => const BrokerBookingsPage())
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.brokerServices,
+                builder: (context, state) => const BrokerServicesPage())
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.brokerProfile,
+                builder: (context, state) => const BrokerProfilePage()),
+            GoRoute(
+                path: AppRoutes.brokerDashboard,
+                builder: (context, state) => const BrokerDashboardPage()),
+            GoRoute(
+                path: AppRoutes.brokerPortfolio,
+                builder: (context, state) => const BrokerPortfolioPage()),
+            GoRoute(
+                path: AppRoutes.brokerWallet,
+                builder: (context, state) => const BrokerWalletPage()),
+          ]),
         ],
       ),
 
@@ -326,48 +303,37 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         builder: (context, state, navigationShell) =>
             OwnerShell(navigationShell: navigationShell),
         branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.ownerHome,
-                  builder: (context, state) => const OwnerHomeScreen())
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.ownerWishlist,
-                  builder: (context, state) =>
-                      const WishlistScreen(showNav: false))
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.ownerHome,
+                builder: (context, state) => const OwnerHomeScreen())
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.ownerWishlist,
+                builder: (context, state) =>
+                    const WishlistScreen(showNav: false))
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
                 path: AppRoutes.ownerBookings,
                 builder: (context, state) {
                   final tab = state.uri.queryParameters['tab'];
                   return OwnerBookingsScreen(
                       initialMainTab: tab == 'stays' ? 1 : 0);
-                },
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.ownerServices,
-                  builder: (context, state) =>
-                      const ServicesScreen(showNav: false))
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                  path: AppRoutes.ownerProfile,
-                  builder: (context, state) => const OwnerProfileScreen())
-            ],
-          ),
+                })
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.ownerServices,
+                builder: (context, state) =>
+                    const ServicesScreen(showNav: false))
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: AppRoutes.ownerProfile,
+                builder: (context, state) => const OwnerProfileScreen())
+          ]),
         ],
       ),
 

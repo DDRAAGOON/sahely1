@@ -33,7 +33,7 @@ import 'package:sahely/features/shared/screens/my_bookings_screen.dart'
     as shared_bookings;
 import 'package:sahely/features/shared/screens/wallet_screen.dart';
 import 'package:sahely/features/shared/screens/my_reviews_screen.dart';
-import 'package:sahely/features/notifications/notifications_screen.dart';
+import 'package:sahely/features/shared/screens/notification_settings_screen.dart';
 import 'package:sahely/features/shared/screens/collection_inside_screen.dart';
 import 'package:sahely/features/shared/screens/collection_chat_screen.dart';
 import 'package:sahely/features/shared/screens/compare_screen.dart';
@@ -60,7 +60,7 @@ final List<GoRoute> sharedGoRoutes = [
       final args = state.extra;
       if (args is Property) {
         return shared_property.PropertyDetailScreen(
-          propertyId: args.name, // Wishlist logic uses name as ID
+          propertyId: args.name,
           propertyName: args.name,
           propertyImage: args.image,
           location: args.area,
@@ -71,7 +71,7 @@ final List<GoRoute> sharedGoRoutes = [
       }
       if (args is Map<String, dynamic>) {
         return shared_property.PropertyDetailScreen(
-          propertyId: args['name'] ?? 'Property', // Use name as ID
+          propertyId: args['name'] ?? 'Property',
           propertyName: args['name'] ?? '',
           propertyImage: args['imageUrl'] ?? args['image'] ?? '',
           location: args['location'] ?? args['area'] ?? '',
@@ -105,7 +105,6 @@ final List<GoRoute> sharedGoRoutes = [
       return const PropertyReviewsScreen();
     },
   ),
-
   GoRoute(
     path: '/booking',
     builder: (context, state) {
@@ -151,12 +150,9 @@ final List<GoRoute> sharedGoRoutes = [
     path: '/booked-property',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) {
+      if (args is Property)
         return ActiveBookingDetailScreen(
-          property: args,
-          role: ActiveBookingRole.renter,
-        );
-      }
+            property: args, role: ActiveBookingRole.renter);
       if (args is Map<String, dynamic>) {
         final role = args['role'] is ActiveBookingRole
             ? args['role'] as ActiveBookingRole
@@ -244,7 +240,6 @@ final List<GoRoute> sharedGoRoutes = [
           propertyName: 'Property', propertyImage: '', stayDates: '');
     },
   ),
-
   // Wishlist / collections
   GoRoute(
       path: '/renter/wishlist',
@@ -271,7 +266,6 @@ final List<GoRoute> sharedGoRoutes = [
   GoRoute(
       path: '/share-earn',
       builder: (context, state) => const ShareEarnScreen()),
-
   // Services + AL MAWSEM
   GoRoute(
       path: '/services', builder: (context, state) => const ServicesScreen()),
@@ -295,7 +289,6 @@ final List<GoRoute> sharedGoRoutes = [
       path: '/level-up',
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const LevelUpScreen()),
-
   // Account utilities
   GoRoute(
       path: '/add-card',
@@ -315,10 +308,9 @@ final List<GoRoute> sharedGoRoutes = [
       builder: (context, state) =>
           const sos.SosScreen(role: sos.UserRole.owner)),
   GoRoute(
-    path: '/ai-chat',
-    builder: (context, state) =>
-        AiChatScreen(initialMessage: state.extra as String?),
-  ),
+      path: '/ai-chat',
+      builder: (context, state) =>
+          AiChatScreen(initialMessage: state.extra as String?)),
   GoRoute(
       path: '/currency', builder: (context, state) => const CurrencyScreen()),
   GoRoute(
@@ -329,7 +321,8 @@ final List<GoRoute> sharedGoRoutes = [
       builder: (context, state) => const MyReviewsScreen()),
   GoRoute(
       path: '/notifications',
-      builder: (context, state) => const NotificationsScreen()),
+      builder: (context, state) =>
+          const NotificationSettingsScreen(role: NotificationRole.renter)),
   GoRoute(
       path: '/edit-profile',
       builder: (context, state) => const EditProfileScreen()),

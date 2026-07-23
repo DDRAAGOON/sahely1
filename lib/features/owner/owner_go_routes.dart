@@ -4,6 +4,7 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 import 'package:sahely/features/shared/screens/active_booking_detail_screen.dart';
 import 'package:sahely/features/shared/screens/upcoming_booking_detail_screen.dart';
 import 'package:sahely/features/shared/screens/past_booking_detail_screen.dart';
+import 'package:sahely/features/shared/screens/notification_settings_screen.dart';
 
 import 'package:sahely/features/owner/screens/add_property_screen.dart';
 import 'package:sahely/features/owner/screens/listing_submitted_screen.dart';
@@ -13,8 +14,6 @@ import 'package:sahely/features/owner/screens/owner_earnings_screen.dart';
 import 'package:sahely/features/owner/screens/owner_edit_bio_screen.dart';
 import 'package:sahely/features/owner/screens/owner_history_screen.dart';
 import 'package:sahely/features/owner/screens/owner_manage_screen.dart';
-import 'package:sahely/features/owner/screens/owner_notification_settings_screen.dart';
-
 import 'package:sahely/features/owner/screens/owner_properties_screen.dart';
 import 'package:sahely/features/owner/screens/owner_property_detail_screens.dart';
 import 'package:sahely/features/owner/screens/owner_requests_screen.dart';
@@ -66,26 +65,20 @@ final List<GoRoute> ownerGoRoutes = [
     path: '/owner/booking-upcoming',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) {
+      if (args is Property)
         return UpcomingBookingDetailScreen(
-          property: args,
-          role: UpcomingBookingRole.owner,
-        );
-      }
+            property: args, role: UpcomingBookingRole.owner);
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property) {
+        if (prop is Property)
           return UpcomingBookingDetailScreen(
-            property: prop,
-            bookingData: args,
-            role: UpcomingBookingRole.owner,
-          );
-        }
+              property: prop,
+              bookingData: args,
+              role: UpcomingBookingRole.owner);
         return UpcomingBookingDetailScreen(
-          property: Property.fromMap(args),
-          bookingData: args,
-          role: UpcomingBookingRole.owner,
-        );
+            property: Property.fromMap(args),
+            bookingData: args,
+            role: UpcomingBookingRole.owner);
       }
       return const UpcomingBookingDetailScreen(role: UpcomingBookingRole.owner);
     },
@@ -94,26 +87,18 @@ final List<GoRoute> ownerGoRoutes = [
     path: '/owner/booking-active',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) {
+      if (args is Property)
         return ActiveBookingDetailScreen(
-          property: args,
-          role: ActiveBookingRole.owner,
-        );
-      }
+            property: args, role: ActiveBookingRole.owner);
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property) {
+        if (prop is Property)
           return ActiveBookingDetailScreen(
-            property: prop,
-            bookingData: args,
-            role: ActiveBookingRole.owner,
-          );
-        }
+              property: prop, bookingData: args, role: ActiveBookingRole.owner);
         return ActiveBookingDetailScreen(
-          property: Property.fromMap(args),
-          bookingData: args,
-          role: ActiveBookingRole.owner,
-        );
+            property: Property.fromMap(args),
+            bookingData: args,
+            role: ActiveBookingRole.owner);
       }
       return const ActiveBookingDetailScreen(role: ActiveBookingRole.owner);
     },
@@ -122,26 +107,18 @@ final List<GoRoute> ownerGoRoutes = [
     path: '/owner/booking-past',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) {
+      if (args is Property)
         return PastBookingDetailScreen(
-          property: args,
-          role: PastBookingRole.owner,
-        );
-      }
+            property: args, role: PastBookingRole.owner);
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property) {
+        if (prop is Property)
           return PastBookingDetailScreen(
-            property: prop,
-            bookingData: args,
-            role: PastBookingRole.owner,
-          );
-        }
+              property: prop, bookingData: args, role: PastBookingRole.owner);
         return PastBookingDetailScreen(
-          property: Property.fromMap(args),
-          bookingData: args,
-          role: PastBookingRole.owner,
-        );
+            property: Property.fromMap(args),
+            bookingData: args,
+            role: PastBookingRole.owner);
       }
       return const PastBookingDetailScreen(role: PastBookingRole.owner);
     },
@@ -179,7 +156,8 @@ final List<GoRoute> ownerGoRoutes = [
       builder: (context, state) => const PayoutBankScreen()),
   GoRoute(
       path: '/owner/notifications',
-      builder: (context, state) => const OwnerNotificationSettingsScreen()),
+      builder: (context, state) =>
+          const NotificationSettingsScreen(role: NotificationRole.owner)),
   GoRoute(
       path: '/owner/edit-bio',
       builder: (context, state) => const OwnerEditBioScreen()),

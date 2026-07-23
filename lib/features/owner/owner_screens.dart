@@ -9,7 +9,6 @@ export 'screens/owner_bookings_screen.dart';
 export 'screens/owner_history_screen.dart';
 export 'screens/owner_home_screen.dart';
 export 'screens/owner_manage_screen.dart';
-export 'screens/owner_notification_settings_screen.dart';
 export 'screens/owner_portfolio_screen.dart';
 export 'screens/owner_profile_screen.dart';
 export 'screens/owner_properties_screen.dart';

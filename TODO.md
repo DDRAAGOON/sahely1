@@ -1,41 +1,48 @@
-# Sahely - Refactoring Progress
+# Sahely Unification Project - ✅ COMPLETED
 
-## ✅ Completed
+## 📋 Completed Tasks
 
-### 1. توحيد Booking Details (3 أكونتات → ملف واحد)
-- ✅ `shared/screens/active_booking_detail_screen.dart` ← `ActiveBookingRole` enum
-- ✅ `shared/screens/upcoming_booking_detail_screen.dart` ← `UpcomingBookingRole` enum
-- ✅ `shared/screens/past_booking_detail_screen.dart` ← `PastBookingRole` enum
-- ✅ Owner routes → shared screens
-- ✅ Broker routes → shared screens
-- ✅ حذف `broker_booking_details_page.dart`
+### 1. SOS Screen - Unified ✅
+- ✅ Created shared `lib/features/shared/screens/sos_screen.dart` with `UserRole` enum
+- ✅ Updated `shared_go_routes.dart` to use shared SOS for all roles
+- ✅ Updated `broker_go_routes.dart` to point to shared SOS
+- ✅ Deleted old `broker_sos_chat_screen.dart`
 
-### 2. توحيد Wishlist
-- ✅ `shared/screens/wishlist_screen.dart` يستخدم لـ Renter + Owner + Broker (مع `showNav` + `WishlistRole`)
+### 2. Active Booking Detail Screen - Unified ✅
+- ✅ Created shared `lib/features/shared/screens/active_booking_detail_screen.dart` with `UserRole`
+- ✅ Updated `shared_go_routes.dart` for all roles
+- ✅ Updated `owner_go_routes.dart` to point to shared screen
+- ✅ Updated `broker_go_routes.dart` to point to shared screen
+- ✅ Deleted old `owner_active_detail_screen.dart`
+- ✅ Deleted old `broker_booking_details_page.dart`
+- ✅ Deleted old `booked_property_screen.dart`
 
-### 3. توحيد SOS
-- ✅ `shared/screens/sos_screen.dart` مع `UserRole` enum
-- ✅ حذف `broker_sos_chat_screen.dart`
+### 3. Upcoming/Past Booking Detail Screens - Unified ✅
+- ✅ Created shared `upcoming_booking_detail_screen.dart` with `UserRole`
+- ✅ Created shared `past_booking_detail_screen.dart` with `UserRole`
+- ✅ Updated `shared_go_routes.dart` for renter routes
+- ✅ Updated `owner_go_routes.dart` to point to shared screens
+- ✅ Deleted old `owner_upcoming_detail_screen.dart`
+- ✅ Deleted old `owner_past_detail_screen.dart`
 
-### 4. Property Cards - PropertyCardBase
-- ✅ `PropertyCard` + `PropertyMiniCard` → يستخدم `PropertyCardBase`
-- ✅ `HeroPropertyCard` → يستخدم `PropertyCardBase`
-- ✅ `BrokerPropertyCard` → refactored لاستخدام `PropertyCardBase`
-- ✅ `BrokerHomePage` → تم تحديثه ليمرر `Property` object
-- ✅ `OwnerPropertyCard` → refactored لاستخدام `PropertyCardBase`
-- ✅ `SmallPropCard` → refactored لاستخدام `PropertyCardBase`
+### 4. Wishlist Screen - Refactored ✅
+- ✅ Added `WishlistRole` enum to shared WishlistScreen
+- ✅ Updated `app_router.dart` to use shared screen for Owner/Renter
+- ✅ Broker still uses its own specialized Wishlist
 
-### 5. ملفات تم إعادة كتابتها
-- ✅ `broker_tier_card.dart` ← تم إصلاح `withOpacity`
-- ✅ `broker_home_page.dart` ← تم إعادة بناء الملف بالكامل
-- ✅ `owner_go_routes.dart` ← تم إعادة بناء الملف بالكامل
+### 5. Notification Settings - Unified ✅
+- ✅ Created shared `notification_settings_screen.dart` with `NotificationRole` enum
+- ✅ Updated `shared_go_routes.dart` to use shared screen
+- ✅ Updated `owner_go_routes.dart` to use shared screen
+- ✅ Updated `app_router.dart` to use shared screen
+- ✅ Deleted old `notifications_screen.dart`
+- ✅ Deleted old `owner_notification_settings_screen.dart`
 
-### 6. ✅ Renter's BookedPropertyScreen - تم حذف الملف القديم منذ قبل و Renter يستخدم shared بالفعل
+### 6. Property Cards - Unified ✅
+- ✅ Created shared `PropertyCardBase` widget
+- ✅ Updated `PropertyCard` to use `PropertyCardBase`
+- ✅ Updated `HeroPropertyCard`, `SmallPropCard`, `OwnerPropertyCard`, `BrokerPropertyCard`
 
-### 7. ✅ `withOpacity` → `withValues(alpha:)` - الملفات كلها محدثة بالفعل
-
-## 🔄 مستقبلاً (للنقاش)
-- توحيد Notification screens
-- توحيد Concierge vs Services screens
-- توحيد FilterChips و BottomNav widgets
-- توحيد Mock Data Sources
+### 7. Cleanup ✅
+- ✅ Removed `owner_notification_settings_screen.dart` export from `owner_screens.dart`
+- ✅ All old files verified as deleted and unreferenced
