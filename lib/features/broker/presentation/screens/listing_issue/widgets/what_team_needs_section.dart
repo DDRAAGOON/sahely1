@@ -68,7 +68,7 @@ class WhatTeamNeedsSection extends StatelessWidget {
                 ),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

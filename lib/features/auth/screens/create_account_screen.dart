@@ -131,8 +131,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         hintText: '10 XXXX XXXX',
                         keyboardType: TextInputType.phone,
                         validator: (v) {
-                          if (v == null || v.isEmpty)
+                          if (v == null || v.isEmpty) {
                             return 'Phone number is required';
+                          }
                           return null;
                         },
                       ),

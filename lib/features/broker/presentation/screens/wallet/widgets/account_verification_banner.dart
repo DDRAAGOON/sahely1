@@ -35,13 +35,13 @@ class AccountVerificationBanner extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             // Text
-            Expanded(
+            const Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: EdgeInsets.symmetric(vertical: 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Account not verified',
                       style: TextStyle(
                         fontSize: 14,
@@ -50,8 +50,8 @@ class AccountVerificationBanner extends StatelessWidget {
                         fontFamily: 'DM Sans',
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    const Text(
+                    SizedBox(height: 2),
+                    Text(
                       'Add your card to withdraw earnings',
                       style: TextStyle(
                         fontSize: 12,

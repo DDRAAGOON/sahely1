@@ -4,7 +4,6 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/property_card_base.dart' as base;
 
 class HeroPropertyCard extends StatelessWidget {

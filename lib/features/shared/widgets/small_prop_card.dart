@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sahely/core/navigation/app_navigation.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/property_card_base.dart' as base;
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
@@ -12,20 +13,17 @@ class SmallPropCard extends StatelessWidget {
     required this.name,
     required this.price,
     required this.rating,
-    this.onTap,
   });
 
   final String image, name, price, rating;
-  final VoidCallback? onTap;
 
   /// Constructs a [SmallPropCard] from a [Property] object directly.
-  factory SmallPropCard.fromProperty(Property p, {VoidCallback? onTap}) {
+  factory SmallPropCard.fromProperty(Property p) {
     return SmallPropCard(
       image: p.image,
       name: p.name,
       price: '${p.price}',
       rating: p.rating.toStringAsFixed(1),
-      onTap: onTap,
     );
   }
 
@@ -37,11 +35,11 @@ class SmallPropCard extends StatelessWidget {
 
     final prop = Property(
       name: name,
-      area: 'North Coast',
+      area: '',
       image: image,
       price: priceNum,
       rating: ratingNum,
-      reviews: 120,
+      reviews: 0,
       type: 'Chalet',
     );
 
@@ -51,7 +49,7 @@ class SmallPropCard extends StatelessWidget {
         property: prop,
         imageHeight: 110,
         showGuestFav: false,
-        onTap: onTap ?? () => AppNavigation.goToPropertyDetail(context, extra: prop),
+        onTap: null,
       ),
     );
   }

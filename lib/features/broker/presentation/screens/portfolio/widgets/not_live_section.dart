@@ -40,7 +40,7 @@ class NotLiveSection extends StatelessWidget {
                 onTap: () => onPropertyTap(property),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

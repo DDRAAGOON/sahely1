@@ -51,8 +51,9 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
   }
 
   String get _location {
-    if (widget.property != null)
+    if (widget.property != null) {
       return '${widget.property!.area} Â· North Coast';
+    }
     return widget.bookingData?['location'] ?? 'Marassi Â· North Coast';
   }
 
@@ -195,7 +196,7 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ArrivalChecklistSection(
-                checklist: [
+                checklist: const [
                   {'label': 'Pool clean & usable', 'completed': true},
                   {
                     'label': 'WiFi works (password on fridge)',

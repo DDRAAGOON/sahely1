@@ -29,8 +29,9 @@ class AvailabilityCalendar extends StatelessWidget {
   }
 
   Color _fg(int d) {
-    if (ongoing.contains(d) || upcoming.contains(d) || ownerOff.contains(d))
+    if (ongoing.contains(d) || upcoming.contains(d) || ownerOff.contains(d)) {
       return AppColors.white;
+    }
     return AppColors.ink;
   }
 
