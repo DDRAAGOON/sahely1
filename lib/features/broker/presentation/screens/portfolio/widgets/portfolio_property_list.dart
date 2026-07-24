@@ -42,7 +42,7 @@ class PortfolioPropertyList extends StatelessWidget {
                 onTap: () => onPropertyTap(property),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

@@ -38,7 +38,6 @@ class _NotificationSettingsScreenState
   bool _emailNotifications = true;
   bool _smsWhatsApp = false;
 
-  bool get _isOwner => widget.role == NotificationRole.owner;
 
   @override
   Widget build(BuildContext context) {

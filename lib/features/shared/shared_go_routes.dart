@@ -100,8 +100,9 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Property) return PropertyReviewsScreen(property: args);
-      if (args is Map<String, dynamic>)
+      if (args is Map<String, dynamic>) {
         return PropertyReviewsScreen(property: Property.fromMap(args));
+      }
       return const PropertyReviewsScreen();
     },
   ),
@@ -110,8 +111,9 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Property) return BookingScreen(property: args);
-      if (args is Map<String, dynamic>)
+      if (args is Map<String, dynamic>) {
         return BookingScreen(property: Property.fromMap(args));
+      }
       return const BookingScreen();
     },
   ),
@@ -129,9 +131,10 @@ final List<GoRoute> sharedGoRoutes = [
     path: '/booking-upcoming',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Map<String, dynamic>)
+      if (args is Map<String, dynamic>) {
         return UpcomingBookingDetailScreen(
             bookingData: args, role: UpcomingBookingRole.renter);
+      }
       return const UpcomingBookingDetailScreen(
           role: UpcomingBookingRole.renter);
     },
@@ -140,9 +143,10 @@ final List<GoRoute> sharedGoRoutes = [
     path: '/booking-past',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Map<String, dynamic>)
+      if (args is Map<String, dynamic>) {
         return PastBookingDetailScreen(
             bookingData: args, role: PastBookingRole.renter);
+      }
       return const PastBookingDetailScreen(role: PastBookingRole.renter);
     },
   ),
@@ -150,9 +154,10 @@ final List<GoRoute> sharedGoRoutes = [
     path: '/booked-property',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property)
+      if (args is Property) {
         return ActiveBookingDetailScreen(
             property: args, role: ActiveBookingRole.renter);
+      }
       if (args is Map<String, dynamic>) {
         final role = args['role'] is ActiveBookingRole
             ? args['role'] as ActiveBookingRole

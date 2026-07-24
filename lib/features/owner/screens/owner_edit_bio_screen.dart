@@ -71,8 +71,9 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                       Navigator.pop(ctx);
                       final XFile? photo =
                           await _picker.pickImage(source: ImageSource.camera);
-                      if (photo != null)
+                      if (photo != null) {
                         setState(() => _imageFile = File(photo.path));
+                      }
                     },
                   ),
                 ),
@@ -85,8 +86,9 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                       Navigator.pop(ctx);
                       final XFile? image =
                           await _picker.pickImage(source: ImageSource.gallery);
-                      if (image != null)
+                      if (image != null) {
                         setState(() => _imageFile = File(image.path));
+                      }
                     },
                   ),
                 ),

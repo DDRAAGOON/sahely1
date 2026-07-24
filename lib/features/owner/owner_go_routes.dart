@@ -35,8 +35,9 @@ final List<GoRoute> ownerGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Property) return OwnerPropertyInsightsScreen(property: args);
-      if (args is Map<String, dynamic>)
+      if (args is Map<String, dynamic>) {
         return OwnerPropertyInsightsScreen(property: Property.fromMap(args));
+      }
       return const OwnerPropertyInsightsScreen();
     },
   ),
@@ -65,16 +66,18 @@ final List<GoRoute> ownerGoRoutes = [
     path: '/owner/booking-upcoming',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property)
+      if (args is Property) {
         return UpcomingBookingDetailScreen(
             property: args, role: UpcomingBookingRole.owner);
+      }
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property)
+        if (prop is Property) {
           return UpcomingBookingDetailScreen(
               property: prop,
               bookingData: args,
               role: UpcomingBookingRole.owner);
+        }
         return UpcomingBookingDetailScreen(
             property: Property.fromMap(args),
             bookingData: args,
@@ -87,14 +90,16 @@ final List<GoRoute> ownerGoRoutes = [
     path: '/owner/booking-active',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property)
+      if (args is Property) {
         return ActiveBookingDetailScreen(
             property: args, role: ActiveBookingRole.owner);
+      }
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property)
+        if (prop is Property) {
           return ActiveBookingDetailScreen(
               property: prop, bookingData: args, role: ActiveBookingRole.owner);
+        }
         return ActiveBookingDetailScreen(
             property: Property.fromMap(args),
             bookingData: args,
@@ -107,14 +112,16 @@ final List<GoRoute> ownerGoRoutes = [
     path: '/owner/booking-past',
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property)
+      if (args is Property) {
         return PastBookingDetailScreen(
             property: args, role: PastBookingRole.owner);
+      }
       if (args is Map<String, dynamic>) {
         final prop = args['prop'];
-        if (prop is Property)
+        if (prop is Property) {
           return PastBookingDetailScreen(
               property: prop, bookingData: args, role: PastBookingRole.owner);
+        }
         return PastBookingDetailScreen(
             property: Property.fromMap(args),
             bookingData: args,

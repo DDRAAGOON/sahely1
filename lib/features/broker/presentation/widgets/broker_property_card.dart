@@ -1,7 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/property_card_base.dart' as base;
 import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_heart_button.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';

@@ -106,7 +106,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ActiveBookingDetailScreen(role: ActiveBookingRole.renter),
+                            builder: (context) => const ActiveBookingDetailScreen(role: ActiveBookingRole.renter),
                           ),
                         );
                       },

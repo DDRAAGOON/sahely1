@@ -144,7 +144,7 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                                     _selectedFilter == 'All' ||
                                     p['type'] == _selectedFilter)
                                 .map((property) {
-                              final data = property as Map<String, dynamic>;
+                              final data = property;
                               final p = Property(
                                 name: data['name'] ?? '',
                                 area: data['location'] ?? '',
