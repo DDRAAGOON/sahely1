@@ -26,11 +26,8 @@ import 'package:sahely/features/shared/screens/stars_earned_screen.dart';
 import 'package:sahely/features/shared/screens/star_nudges_screen.dart';
 import 'package:sahely/features/shared/screens/level_up_screen.dart';
 import 'package:sahely/features/shared/screens/edit_profile_screen.dart';
-import 'package:sahely/features/shared/screens/wishlist_screen.dart' as complex;
 import 'package:sahely/features/shared/screens/property_detail_screen.dart'
     as shared_property;
-import 'package:sahely/features/shared/screens/my_bookings_screen.dart'
-    as shared_bookings;
 import 'package:sahely/features/shared/screens/wallet_screen.dart';
 import 'package:sahely/features/shared/screens/my_reviews_screen.dart';
 import 'package:sahely/features/shared/screens/notification_settings_screen.dart';
