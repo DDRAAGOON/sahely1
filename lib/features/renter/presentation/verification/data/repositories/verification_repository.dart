@@ -19,7 +19,7 @@ class VerificationRepository {
       emailVerified: true,
       phoneVerified: true,
       idVerified: true,
-      cardAdded: false, // مش مضاف عشان نجرب الـ Blocked Gate
+      cardAdded: true, // مضاف افتراضياً للسماح بتصفح كافة شاشات المستأجر
     );
   }
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,7 @@ import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/auth/widgets/auth_success_badge.dart';
+import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 
 // ===================================================== 10 · ID Verification
 class IdVerificationScreen extends StatefulWidget {
@@ -690,6 +692,11 @@ class VerificationCompleteScreen extends StatelessWidget {
                         // In a real app, this would come from a backend response
                         role: role,
                       );
+
+                  context.read<AuthProvider>().setVerified(true);
+                  try {
+                    context.read<VerificationCubit>().updateCardAdded();
+                  } catch (_) {}
 
                   context.go(targetRoute);
                 }),

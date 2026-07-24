@@ -71,7 +71,7 @@ class ProfileListRows extends StatelessWidget {
           _ListRow(
             icon: Icons.notifications_outlined,
             label: 'Notifications',
-            onTap: () => AppNavigation.goToNotificationsSettings(context),
+            onTap: () => AppNavigation.goToNotifications(context),
           ),
           _Divider(),
           // Change Password
@@ -118,6 +118,7 @@ class ProfileListRows extends StatelessWidget {
                 context: context,
                 backgroundColor: Colors.transparent,
                 isScrollControlled: true,
+                useRootNavigator: true,
                 builder: (context) => const CurrencySelectorSheet(),
               );
             },

@@ -19,6 +19,8 @@ class OwnerPropertyCard extends StatelessWidget {
     this.note,
     this.primaryActionLabel = 'Insights',
     this.secondaryActionLabel = 'Edit',
+    this.primaryActionColor,
+    this.secondaryActionColor,
     this.onPrimaryAction,
     this.onSecondaryAction,
     this.onSosAction,
@@ -33,6 +35,8 @@ class OwnerPropertyCard extends StatelessWidget {
   final String? note;
   final String primaryActionLabel;
   final String secondaryActionLabel;
+  final Color? primaryActionColor;
+  final Color? secondaryActionColor;
   final VoidCallback? onPrimaryAction;
   final VoidCallback? onSecondaryAction;
   final VoidCallback? onSosAction;
@@ -108,17 +112,22 @@ class OwnerPropertyCard extends StatelessWidget {
           children: [
             _actionButton(
               label: primaryActionLabel,
-              color: AppColors.navy,
+              color: primaryActionColor ?? AppColors.navy,
               onTap: onPrimaryAction,
             ),
-            const VerticalDivider(
-                width: 1, color: Color(0x33000000), indent: 12, endIndent: 12),
-            _actionButton(
-              label: secondaryActionLabel,
-              color: AppColors.navy,
-              onTap: onSecondaryAction,
-            ),
-            if (onSosAction != null || stats.isNotEmpty) ...[
+            if (onSecondaryAction != null) ...[
+              const VerticalDivider(
+                  width: 1,
+                  color: Color(0x33000000),
+                  indent: 12,
+                  endIndent: 12),
+              _actionButton(
+                label: secondaryActionLabel,
+                color: secondaryActionColor ?? AppColors.navy,
+                onTap: onSecondaryAction,
+              ),
+            ],
+            if (onSosAction != null) ...[
               const VerticalDivider(
                   width: 1,
                   color: Color(0x33000000),

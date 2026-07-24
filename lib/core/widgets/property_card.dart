@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 import 'package:sahely/core/widgets/common.dart';
@@ -25,7 +26,7 @@ class PropertyCard extends StatelessWidget {
       property: p,
       imageHeight: imageHeight,
       showGuestFav: showGuestFav,
-      onTap: onTap,
+      onTap: onTap ?? () => AppNavigation.goToPropertyDetail(context, extra: p),
       imageOverlay:
           Positioned(top: 12, right: 12, child: SaveHeart(property: p)),
     );
@@ -45,7 +46,7 @@ class PropertyMiniCard extends StatelessWidget {
     return base.PropertyCardBase(
       property: p,
       imageHeight: 140,
-      onTap: onTap,
+      onTap: onTap ?? () => AppNavigation.goToPropertyDetail(context, extra: p),
       imageOverlay:
           Positioned(top: 10, right: 10, child: SaveHeart(property: p)),
     );

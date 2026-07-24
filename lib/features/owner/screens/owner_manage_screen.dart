@@ -13,38 +13,53 @@ class OwnerManageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PhoneScaffold(
-      child: Stack(children: [
-        ListView(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
-          children: [
-            Row(children: [
-              const AvatarCircle(
-                  size: 52, colors: [Color(0xFFD8B98A), Color(0xFF7D5A2C)]),
-              const SizedBox(width: 12),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Text('Manage',
-                        style: AppTheme.dm(
-                            size: 22,
-                            weight: FontWeight.w700,
-                            color: AppColors.navy)),
-                    Text('Layla Mansour',
-                        style: AppTheme.dm(size: 13, color: AppColors.muted)),
-                  ])),
-              GestureDetector(
-                onTap: () => AppNavigation.goToOwnerAddProperty(context),
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: AppColors.gold,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: const Icon(Icons.add, color: AppColors.navy)),
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
+        children: [
+          Row(children: [
+            GestureDetector(
+              onTap: () => AppNavigation.goBack(context),
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                width: 34,
+                height: 34,
+                margin: const EdgeInsets.only(right: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  border: Border.all(color: AppColors.border),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.chevron_left,
+                    size: 20, color: AppColors.navy),
               ),
-            ]),
+            ),
+            const AvatarCircle(
+                size: 52, colors: [Color(0xFFD8B98A), Color(0xFF7D5A2C)]),
+            const SizedBox(width: 12),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Text('Manage',
+                      style: AppTheme.dm(
+                          size: 22,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy)),
+                  Text('Layla Mansour',
+                      style: AppTheme.dm(size: 13, color: AppColors.muted)),
+                ])),
+            GestureDetector(
+              onTap: () => AppNavigation.goToOwnerAddProperty(context),
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: AppColors.gold,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: const Icon(Icons.add, color: AppColors.navy)),
+            ),
+          ]),
             const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerLeft,
@@ -159,8 +174,6 @@ class OwnerManageScreen extends StatelessWidget {
                 onTap: () => AppNavigation.goToOwnerRequestDetail(context)),
           ],
         ),
-        const FloatingNav(active: 4),
-      ]),
     );
   }
 

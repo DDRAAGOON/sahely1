@@ -16,6 +16,7 @@ class MawsemCard extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
+      useRootNavigator: true, // This makes it cover the bottom nav
       builder: (context) => LevelDetailSheet(
         levelName: nextLevel['name'],
         levelIcon: nextLevel['icon'],

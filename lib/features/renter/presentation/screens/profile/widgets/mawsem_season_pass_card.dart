@@ -20,6 +20,7 @@ class MawsemSeasonPassCard extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
+      useRootNavigator: true, // This makes it cover the bottom nav
       builder: (context) => LevelDetailSheet(
         levelName: 'Coastal Regular',
         levelIcon: Icons.home_outlined,

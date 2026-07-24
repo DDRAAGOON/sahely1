@@ -332,12 +332,15 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
   int _price = 4500;
   final TextEditingController _priceController =
       TextEditingController(text: '4500');
-  bool _isEditingPrice = false;
+  final TextEditingController _descController = TextEditingController(
+      text:
+          'A stunning beachfront villa with private pool, panoramic sea views and direct beach access. Sleeps 6 across 4 bedrooms.');
   final List<String> _photos = [
     Sample.azure.image,
     Sample.lagoon.image,
     Sample.dunes.image
   ];
+  final List<String> _amenities = ['Pool', 'WiFi', 'AC', 'Smart Lock'];
   final ImagePicker _picker = ImagePicker();
 
   void _updatePrice(int delta) {
@@ -356,9 +359,52 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
     }
   }
 
+  void _addAmenity() {
+    final TextEditingController controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text('Add Amenity',
+            style: AppTheme.dm(
+                size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: 'e.g. Sea View, Parking',
+            border: UnderlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('Cancel',
+                style: AppTheme.dm(size: 14, color: AppColors.muted)),
+          ),
+          TextButton(
+            onPressed: () {
+              if (controller.text.trim().isNotEmpty) {
+                setState(() {
+                  _amenities.add(controller.text.trim());
+                });
+              }
+              Navigator.pop(ctx);
+            },
+            child: Text('Add',
+                style: AppTheme.dm(
+                    size: 14, weight: FontWeight.w700, color: AppColors.gold)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _priceController.dispose();
+    _descController.dispose();
     super.dispose();
   }
 
@@ -368,234 +414,482 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
         RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
 
     return PhoneScaffold(
-      child: Column(children: [
-        Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-            children: [
-              const TopBar(
-                  title: 'Edit Property',
-                  subtitle: 'Azure Beach Villa · Hacienda Bay'),
-              const SizedBox(height: 16),
-              const Row(children: [
-                SectionLabel('NIGHTLY PRICE'),
-                SizedBox(width: 8),
-                StatusBadge('Instant', kind: BadgeKind.greenSoft)
-              ]),
-              const SizedBox(height: 8),
-              WhiteCard(
-                padding: const EdgeInsets.all(14),
-                child: Column(children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () => _updatePrice(-100),
-                          child: Container(
-                              width: 44,
-                              height: 44,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: AppColors.navy, width: 1.5),
-                                  shape: BoxShape.circle),
-                              child: const Icon(Icons.remove,
-                                  color: AppColors.navy)),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
+              children: [
+                // 1. Header
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => AppNavigation.goBack(context),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: AppColors.border),
                         ),
-                        Column(children: [
-                          Text('EGP / night',
+                        child: const Icon(Icons.chevron_left,
+                            size: 24, color: AppColors.navy),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Edit Property',
                               style: AppTheme.dm(
-                                  size: 11, color: AppColors.muted)),
-                          if (_isEditingPrice)
-                            SizedBox(
-                              width: 120,
-                              child: TextField(
-                                controller: _priceController,
-                                autofocus: true,
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                style: AppTheme.dm(
-                                    size: 30,
-                                    weight: FontWeight.w700,
-                                    color: AppColors.navy),
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none, isDense: true),
-                                onSubmitted: (v) {
-                                  setState(() {
-                                    _price = int.tryParse(v) ?? _price;
-                                    _isEditingPrice = false;
-                                  });
-                                },
+                                  size: 22,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy)),
+                          Text('Azure Beach Villa · Hacienda Bay',
+                              style: AppTheme.dm(
+                                  size: 13, color: AppColors.muted)),
+                        ],
+                      ),
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        Sample.azure.image,
+                        width: 52,
+                        height: 52,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 24),
+
+                // 2. Nightly Price Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('NIGHTLY PRICE',
+                        style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w800,
+                            color: AppColors.navy,
+                            letterSpacing: 0.5)),
+                    const StatusBadge('Instant', kind: BadgeKind.greenSoft),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                WhiteCard(
+                  padding: const EdgeInsets.all(20),
+                  radius: 20,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Minus Button
+                          GestureDetector(
+                            onTap: () => _updatePrice(-100),
+                            child: Container(
+                              width: 54,
+                              height: 54,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: AppColors.navy, width: 1.5),
                               ),
-                            )
-                          else
-                            GestureDetector(
-                              onTap: () =>
-                                  setState(() => _isEditingPrice = true),
-                              behavior: HitTestBehavior.opaque,
-                              child: Text(format(_price),
-                                  style: AppTheme.dm(
-                                      size: 30,
-                                      weight: FontWeight.w700,
-                                      color: AppColors.navy)),
+                              child: const Icon(Icons.remove,
+                                  color: AppColors.navy, size: 24),
                             ),
-                        ]),
-                        GestureDetector(
-                          onTap: () => _updatePrice(100),
-                          child: Container(
-                              width: 44,
-                              height: 44,
-                              alignment: Alignment.center,
+                          ),
+                          // Price Display
+                          Column(
+                            children: [
+                              Text('EGP / night',
+                                  style: AppTheme.dm(
+                                      size: 12,
+                                      weight: FontWeight.w500,
+                                      color: AppColors.muted)),
+                              const SizedBox(height: 2),
+                              Text(format(_price),
+                                  style: AppTheme.dm(
+                                      size: 38,
+                                      weight: FontWeight.w800,
+                                      color: AppColors.navy,
+                                      letterSpacing: -1)),
+                            ],
+                          ),
+                          // Plus Button
+                          GestureDetector(
+                            onTap: () => _updatePrice(100),
+                            child: Container(
+                              width: 54,
+                              height: 54,
                               decoration: const BoxDecoration(
-                                  color: AppColors.navy,
-                                  shape: BoxShape.circle),
-                              child:
-                                  const Icon(Icons.add, color: Colors.white)),
-                        ),
-                      ]),
-                  const SizedBox(height: 10),
-                  Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
+                                color: AppColors.navy,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.add,
+                                  color: Colors.white, size: 24),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
                           color: const Color(0xFFD7EEDD),
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Text(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
                           'Applies immediately to new bookings · current EGP ${format(_price)}',
                           textAlign: TextAlign.center,
                           style: AppTheme.dm(
-                              size: 11,
-                              weight: FontWeight.w600,
-                              color: AppColors.success))),
-                ]),
-              ),
-              const SizedBox(height: 16),
-              const Row(children: [
-                SectionLabel('PHOTOS'),
-                SizedBox(width: 8),
-                StatusBadge('Add only', kind: BadgeKind.gold)
-              ]),
-              const SizedBox(height: 8),
-              GridView.count(
-                  crossAxisCount: 3,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
+                            size: 11,
+                            weight: FontWeight.w700,
+                            color: const Color(0xFF1B6B3A),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // 3. Photos Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    for (var i = 0; i < _photos.length; i++)
-                      _photoTile(_photos[i], cover: i == 0),
-                    GestureDetector(
-                      onTap: _addPhoto,
-                      child: const DottedBorder(
-                          color: AppColors.gold,
-                          radius: 10,
-                          child: Center(
-                              child: Icon(Icons.add, color: AppColors.gold))),
-                    ),
-                  ]),
-              const SizedBox(height: 8),
-              Text(
-                  "Existing photos can't be deleted here. Request removal from support →",
-                  style: AppTheme.dm(size: 11, color: AppColors.muted)),
-              const SizedBox(height: 16),
-              const SectionLabel('DESCRIPTION'),
-              const SizedBox(height: 8),
-              Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFFDECEC),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Text(
-                      'Note: no phone numbers or social media accounts allowed.',
-                      style: AppTheme.dm(
-                          size: 11,
-                          weight: FontWeight.w600,
-                          color: const Color(0xFFB22222)))),
-              const SizedBox(height: 8),
-              Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                      color: AppColors.white,
-                      border: Border.all(color: AppColors.border),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Text(
-                      'A stunning beachfront villa with private pool, panoramic sea views and direct beach access. Sleeps 6 across 4 bedrooms.',
-                      style: AppTheme.dm(size: 13, height: 1.4))),
-              const SizedBox(height: 16),
-              const Row(children: [
-                SectionLabel('FEATURES & AMENITIES'),
-                SizedBox(width: 8),
-                StatusBadge('Reviewed · 24h', kind: BadgeKind.gold)
-              ]),
-              const SizedBox(height: 8),
-              Text(
-                  'Edits to the guest checklist are reviewed by Sahely before going live (~24h).',
-                  style: AppTheme.dm(size: 11, color: AppColors.muted)),
-              const SizedBox(height: 8),
-              const Wrap(spacing: 8, runSpacing: 8, children: [
-                Pill('Pool ✓', bg: AppColors.navy, fg: AppColors.white),
-                Pill('WiFi ✓', bg: AppColors.navy, fg: AppColors.white),
-                Pill('AC ✓', bg: AppColors.navy, fg: AppColors.white),
-                Pill('Smart Lock ✓', bg: AppColors.navy, fg: AppColors.white),
-              ]),
-            ],
+                    Text('PHOTOS',
+                        style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w800,
+                            color: AppColors.navy,
+                            letterSpacing: 0.5)),
+                    const StatusBadge('Add only', kind: BadgeKind.gold),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                WhiteCard(
+                  padding: const EdgeInsets.all(16),
+                  radius: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: [
+                          for (int i = 0; i < _photos.length; i++)
+                            _photoTile(_photos[i], cover: i == 0),
+                          GestureDetector(
+                            onTap: _addPhoto,
+                            child: DottedBorder(
+                              color: AppColors.gold,
+                              radius: 12,
+                              child: Container(
+                                width: 85,
+                                height: 85,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.add,
+                                        color: AppColors.gold, size: 24),
+                                    const SizedBox(height: 4),
+                                    Text('Add photo',
+                                        style: AppTheme.dm(
+                                            size: 10,
+                                            weight: FontWeight.w700,
+                                            color: AppColors.gold)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFDF5E8),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Icon(Icons.lock_outline,
+                                size: 16, color: Color(0xFFD2760A)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: RichText(
+                                text: TextSpan(
+                                  style: AppTheme.dm(
+                                      size: 11,
+                                      color: const Color(0xFF8A6D1E),
+                                      height: 1.4),
+                                  children: const [
+                                    TextSpan(
+                                        text:
+                                            "Existing photos can't be deleted here. "),
+                                    TextSpan(
+                                      text: "Request removal from support →",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          decoration: TextDecoration.underline),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // 4. Description Section
+                Text('DESCRIPTION',
+                    style: AppTheme.dm(
+                        size: 13,
+                        weight: FontWeight.w800,
+                        color: AppColors.navy,
+                        letterSpacing: 0.5)),
+                const SizedBox(height: 10),
+                WhiteCard(
+                  padding: const EdgeInsets.all(16),
+                  radius: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFDECEC),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.error_outline,
+                                size: 16, color: Color(0xFFB22222)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Note: no phone numbers or social media accounts allowed.',
+                                style: AppTheme.dm(
+                                    size: 11,
+                                    weight: FontWeight.w700,
+                                    color: const Color(0xFFB22222)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _descController,
+                        maxLines: null,
+                        style: AppTheme.dm(
+                            size: 14, color: AppColors.navy, height: 1.5),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          isDense: true,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text('${_descController.text.length} / 400',
+                            style: AppTheme.dm(
+                                size: 11, color: AppColors.muted)),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // 5. Features & Amenities Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('FEATURES & AMENITIES',
+                        style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w800,
+                            color: AppColors.navy,
+                            letterSpacing: 0.5)),
+                    const StatusBadge('Reviewed · 24h', kind: BadgeKind.gold),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                WhiteCard(
+                  padding: const EdgeInsets.all(16),
+                  radius: 20,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Edits to the guest checklist are reviewed by Sahely before going live (~24h).',
+                        style: AppTheme.dm(
+                            size: 12, color: AppColors.muted, height: 1.4),
+                      ),
+                      const SizedBox(height: 16),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          for (final amenity in _amenities)
+                            _amenityChip(amenity),
+                          GestureDetector(
+                            onTap: _addAmenity,
+                            child: DottedBorder(
+                              color: AppColors.gold,
+                              radius: 12,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14, vertical: 8),
+                                child: Text('+ Add',
+                                    style: AppTheme.dm(
+                                        size: 13,
+                                        weight: FontWeight.w700,
+                                        color: AppColors.gold)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-          child: Row(children: [
-            Expanded(
-                child: WideButton(
-                    label: 'Discard',
-                    color: AppColors.navy,
-                    outline: true,
-                    height: 52,
-                    radius: 14,
-                    onTap: () => Navigator.pop(context))),
-            const SizedBox(width: 12),
-            Expanded(
-                child: NavyButton(
+
+          // 6. Bottom Buttons
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+            decoration: const BoxDecoration(
+              color: AppColors.cream,
+              border:
+                  Border(top: BorderSide(color: AppColors.border, width: 0.5)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      height: 54,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.navy, width: 1),
+                      ),
+                      child: Text('Discard',
+                          style: AppTheme.dm(
+                              size: 16,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy)),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 2,
+                  child: NavyButton(
                     label: 'Save changes',
-                    height: 52,
-                    radius: 14,
-                    onTap: () => Navigator.pop(context))),
-          ]),
-        ),
-      ]),
+                    height: 54,
+                    radius: 16,
+                    onTap: () => Navigator.pop(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _photoTile(String img, {bool cover = false}) => ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Stack(fit: StackFit.expand, children: [
-          img.startsWith('http')
-              ? Image.network(img,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
-                      const ColoredBox(color: AppColors.cardWarm))
-              : Image.file(File(img), fit: BoxFit.cover),
-          if (cover)
-            Positioned(
-                top: 6,
-                left: 6,
-                child: Container(
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          width: 85,
+          height: 85,
+          decoration: const BoxDecoration(color: AppColors.cardWarm),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              img.startsWith('http')
+                  ? Image.network(img, fit: BoxFit.cover)
+                  : Image.file(File(img), fit: BoxFit.cover),
+              if (cover)
+                Positioned(
+                  top: 6,
+                  left: 6,
+                  child: Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
                         color: AppColors.gold,
                         borderRadius: BorderRadius.circular(6)),
                     child: Text('Cover',
                         style: AppTheme.dm(
-                            size: 9,
-                            weight: FontWeight.w700,
-                            color: AppColors.navy)))),
-          const Positioned(
-              bottom: 6,
-              right: 6,
-              child: Icon(Icons.lock, size: 14, color: Colors.white)),
-        ]),
+                            size: 8,
+                            weight: FontWeight.w800,
+                            color: AppColors.navy)),
+                  ),
+                ),
+              Positioned(
+                bottom: 6,
+                right: 6,
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.lock, size: 12, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
       );
+
+  Widget _amenityChip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.navy,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label,
+              style: AppTheme.dm(
+                  size: 13, weight: FontWeight.w700, color: Colors.white)),
+          const SizedBox(width: 4),
+          const Icon(Icons.check, size: 14, color: Colors.white),
+        ],
+      ),
+    );
+  }
 }
 
 class OwnerPreviewListingScreen extends StatelessWidget {

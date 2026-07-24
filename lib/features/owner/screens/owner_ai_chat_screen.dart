@@ -230,6 +230,7 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
   void _pickImage() {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         decoration: const BoxDecoration(

@@ -19,7 +19,7 @@ class SearchRow extends StatelessWidget {
             onTap: () => AppNavigation.goToSearchResults(context),
             child: Container(
               height: 54,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(27),
@@ -32,12 +32,14 @@ class SearchRow extends StatelessWidget {
                     color: AppColors.gold,
                     size: 22,
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       'Find your perfect stay',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: AppColors.navy.withValues(alpha: 0.5),
                         fontFamily: 'Cairo',
                       ),

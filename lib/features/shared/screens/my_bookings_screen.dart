@@ -4,14 +4,11 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/shared/screens/active_booking_detail_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/pages/smart_lock_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/active_booking_card.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/bookings_filter_tabs.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/bookings_header.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/past_stays_section.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/upcoming_booking_card.dart';
-import 'package:sahely/features/shared/screens/past_booking_detail_screen.dart';
-import 'package:sahely/features/shared/screens/upcoming_booking_detail_screen.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({super.key});
@@ -84,30 +81,37 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                       guests: booking.guests,
                       imageUrl: booking.imageUrl,
                       onDigitalLockTap: () {
-                        Navigator.push(
+                        AppNavigation.goToSmartLock(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => SmartLockScreen(
-                              propertyName: booking.propertyName,
-                              bookingRef: booking.orderNumber,
-                              passcode: '8842',
-                              checkIn: booking.checkIn,
-                              checkOut: booking.checkOut,
-                              propertyLat: 31.0263,
-                              propertyLng: 28.9402,
-                            ),
-                          ),
+                          extra: {
+                            'propertyName': booking.propertyName,
+                            'bookingRef': booking.orderNumber,
+                            'passcode': '8842',
+                            'checkIn': booking.checkIn,
+                            'checkOut': booking.checkOut,
+                            'propertyLat': 31.0263,
+                            'propertyLng': 28.9402,
+                          },
                         );
                       },
                       onSOSTap: () {
                         AppNavigation.goToSos(context);
                       },
                       onViewDetailsTap: () {
-                        Navigator.push(
+                        AppNavigation.goToBookingDetail(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => ActiveBookingDetailScreen(role: ActiveBookingRole.renter),
-                          ),
+                          extra: {
+                            'propertyName': booking.propertyName,
+                            'location': booking.location,
+                            'orderNumber': booking.orderNumber,
+                            'dates': booking.dates,
+                            'guests': booking.guests,
+                            'imageUrl': booking.imageUrl,
+                            'checkIn': booking.checkIn,
+                            'checkOut': booking.checkOut,
+                            'totalPaid': booking.totalPaid,
+                            'role': ActiveBookingRole.renter,
+                          },
                         );
                       },
                     ),
@@ -131,50 +135,47 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                       orderNumber: booking.orderNumber,
                       imageUrl: booking.imageUrl,
                       onTap: () {
-                        Navigator.push(
+                        AppNavigation.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => UpcomingBookingDetailScreen(
-                              bookingData: {
-                                'propertyName': booking.propertyName,
-                                'location': booking.location,
-                                'imageUrl': booking.imageUrl,
-                                'orderNumber': booking.orderNumber,
-                                'checkIn': booking.checkIn,
-                                'checkOut': booking.checkOut,
-                                'guests': booking.guests,
-                                'total': booking.totalPaid,
-                                'nights': booking.checkOut
-                                    .difference(booking.checkIn)
-                                    .inDays,
-                                'daysUntilCheckIn': booking.checkIn
-                                    .difference(DateTime.now())
-                                    .inDays,
-                                'photos': [
-                                  booking.imageUrl,
-                                  booking.imageUrl,
-                                  booking.imageUrl
-                                ],
-                                'description':
-                                    'A beautiful stay in the heart of ${booking.location}. Enjoy world-class amenities and breathtaking views.',
-                                'amenities': const [
-                                  'Wi-Fi',
-                                  'Pool',
-                                  'Parking',
-                                  'Kitchen'
-                                ],
-                                'included': const [
-                                  'Breakfast',
-                                  'Free Cleaning',
-                                  'Airport Transfer'
-                                ],
-                                'latitude': 31.0263,
-                                'longitude': 28.9402,
-                                'pricePerNight': 2500,
-                                'cleaningVat': 150,
-                              },
-                            ),
-                          ),
+                          '/booking-upcoming',
+                          extra: {
+                            'propertyName': booking.propertyName,
+                            'location': booking.location,
+                            'imageUrl': booking.imageUrl,
+                            'orderNumber': booking.orderNumber,
+                            'checkIn': booking.checkIn,
+                            'checkOut': booking.checkOut,
+                            'guests': booking.guests,
+                            'total': booking.totalPaid,
+                            'nights': booking.checkOut
+                                .difference(booking.checkIn)
+                                .inDays,
+                            'daysUntilCheckIn': booking.checkIn
+                                .difference(DateTime.now())
+                                .inDays,
+                            'photos': [
+                              booking.imageUrl,
+                              booking.imageUrl,
+                              booking.imageUrl
+                            ],
+                            'description':
+                                'A beautiful stay in the heart of ${booking.location}. Enjoy world-class amenities and breathtaking views.',
+                            'amenities': const [
+                              'Wi-Fi',
+                              'Pool',
+                              'Parking',
+                              'Kitchen'
+                            ],
+                            'included': const [
+                              'Breakfast',
+                              'Free Cleaning',
+                              'Airport Transfer'
+                            ],
+                            'latitude': 31.0263,
+                            'longitude': 28.9402,
+                            'pricePerNight': 2500,
+                            'cleaningVat': 150,
+                          },
                         );
                       },
                     ),
@@ -192,43 +193,39 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
               PastStaysSection(
                 pastBookings: bookingsProvider.pastBookings,
                 onCardTap: (booking) {
-                  Navigator.push(
+                  AppNavigation.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => PastBookingDetailScreen(
-                        bookingData: {
-                          'propertyName': booking.propertyName,
-                          'location': booking.location,
-                          'imageUrl': booking.imageUrl,
-                          'orderNumber': booking.orderNumber,
-                          'checkIn': booking.checkIn,
-                          'checkOut': booking.checkOut,
-                          'guests': booking.guests,
-                          'total': booking.totalPaid,
-                          'nights': booking.checkOut
-                              .difference(booking.checkIn)
-                              .inDays,
-                          'photos': [
-                            booking.imageUrl,
-                            booking.imageUrl,
-                            booking.imageUrl
-                          ],
-                          'description':
-                              'Your wonderful stay at ${booking.propertyName} in ${booking.location}. We hope to see you again!',
-                          'amenities': const [
-                            'Wi-Fi',
-                            'Pool',
-                            'Parking',
-                            'Kitchen'
-                          ],
-                          'included': const ['Breakfast', 'Free Cleaning'],
-                          'pricePerNight': 2500,
-                          'cleaningVat': 150,
-                          'hasReview': false,
-                          // Logic could check if a review exists
-                        },
-                      ),
-                    ),
+                    '/booking-past',
+                    extra: {
+                      'propertyName': booking.propertyName,
+                      'location': booking.location,
+                      'imageUrl': booking.imageUrl,
+                      'orderNumber': booking.orderNumber,
+                      'checkIn': booking.checkIn,
+                      'checkOut': booking.checkOut,
+                      'guests': booking.guests,
+                      'total': booking.totalPaid,
+                      'nights': booking.checkOut
+                          .difference(booking.checkIn)
+                          .inDays,
+                      'photos': [
+                        booking.imageUrl,
+                        booking.imageUrl,
+                        booking.imageUrl
+                      ],
+                      'description':
+                          'Your wonderful stay at ${booking.propertyName} in ${booking.location}. We hope to see you again!',
+                      'amenities': const [
+                        'Wi-Fi',
+                        'Pool',
+                        'Parking',
+                        'Kitchen'
+                      ],
+                      'included': const ['Breakfast', 'Free Cleaning'],
+                      'pricePerNight': 2500,
+                      'cleaningVat': 150,
+                      'hasReview': false,
+                    },
                   );
                 },
               ),

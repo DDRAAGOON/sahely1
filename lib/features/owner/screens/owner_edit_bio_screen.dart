@@ -40,6 +40,7 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
   Future<void> _pickImage() async {
     showModalBottomSheet(
       context: context,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         decoration: const BoxDecoration(

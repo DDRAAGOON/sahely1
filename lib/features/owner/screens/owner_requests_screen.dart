@@ -309,6 +309,7 @@ void showDeclineSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
+    useRootNavigator: true,
     backgroundColor: Colors.transparent,
     barrierColor: const Color(0x731B2744),
     builder: (ctx) => Container(
@@ -379,6 +380,7 @@ Widget _reasonRow(BuildContext context, String text) => Padding(
 void showApprovedSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
+    useRootNavigator: true,
     backgroundColor: Colors.transparent,
     barrierColor: const Color(0x731B2744),
     builder: (_) => Container(

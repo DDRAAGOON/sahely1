@@ -64,18 +64,20 @@ class Booking {
 }
 
 class BookingsProvider extends ChangeNotifier {
+  static final DateTime _now = DateTime.now();
+
   final List<Booking> _bookings = [
     Booking(
       id: '1',
       propertyName: 'Lagoon Retreat',
       location: 'Marassi · North Coast',
       orderNumber: 'SHLY-7741',
-      dates: 'Jun 14 – 18 · 4 nights',
+      dates: 'Active Stay · 4 nights',
       guests: '2 adults, 1 child',
       imageUrl:
           'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800',
-      checkIn: DateTime(2026, 6, 14, 15, 0),
-      checkOut: DateTime(2026, 6, 18, 11, 0),
+      checkIn: _now.subtract(const Duration(days: 1)),
+      checkOut: _now.add(const Duration(days: 3)),
       totalPaid: 2100000,
     ),
     Booking(
@@ -83,12 +85,12 @@ class BookingsProvider extends ChangeNotifier {
       propertyName: 'Azure Beach Villa',
       location: 'Hacienda Bay · North Coast',
       orderNumber: 'SHLY-8842',
-      dates: 'Jun 21 – 25 · 2 guests',
+      dates: 'Upcoming · 4 nights',
       guests: '2 adults',
       imageUrl:
           'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400',
-      checkIn: DateTime(2026, 6, 21, 15, 0),
-      checkOut: DateTime(2026, 6, 25, 11, 0),
+      checkIn: _now.add(const Duration(days: 7)),
+      checkOut: _now.add(const Duration(days: 11)),
       totalPaid: 1800000,
     ),
     Booking(
@@ -96,12 +98,12 @@ class BookingsProvider extends ChangeNotifier {
       propertyName: 'Sunset Chalet',
       location: 'Amwaj · North Coast',
       orderNumber: 'SHLY-9910',
-      dates: 'May 10 – 14 · 4 nights',
+      dates: 'Past Stay · 4 nights',
       guests: '4 adults',
       imageUrl:
           'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800',
-      checkIn: DateTime(2024, 5, 10, 15, 0),
-      checkOut: DateTime(2024, 5, 14, 11, 0),
+      checkIn: _now.subtract(const Duration(days: 30)),
+      checkOut: _now.subtract(const Duration(days: 26)),
       totalPaid: 1200000,
     ),
   ];

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
-import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
-import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
 
@@ -43,6 +41,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    final cubitState = context.read<RenterHomeCubit>().state;
+    if (cubitState is RenterHomeLoaded) {
+      _allProperties = cubitState.properties;
+      _applyFilters();
+    }
   }
 
   void _onCategoryChanged(String category) {
@@ -74,10 +77,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // Filter by Category Chip
     if (_selectedCategory != 'All') {
       results = results.where((p) {
-        if (_selectedCategory == 'Pool')
+        if (_selectedCategory == 'Pool') {
           return (p['features'] as List).contains('Pool');
-        if (_selectedCategory == 'Beachfront')
+        }
+        if (_selectedCategory == 'Beachfront') {
           return (p['features'] as List).contains('Beachfront');
+        }
         return true;
       }).toList();
     }
@@ -104,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useRootNavigator: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
         return DraggableScrollableSheet(
@@ -128,175 +134,174 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RenterHomeCubit(
-        repository: RenterRepositoryImpl(
-          remoteDataSource: MockRenterDataSource(),
-        ),
-      )..loadProperties(),
-      child: BlocConsumer<RenterHomeCubit, RenterHomeState>(
-        listener: (context, state) {
-          if (state is RenterHomeLoaded) {
-            setState(() {
-              _allProperties = state.properties;
-              _applyFilters();
-            });
-          }
-        },
-        builder: (context, state) {
-          if (state is RenterHomeLoading || state is RenterHomeInitial) {
-            return const Center(
-                child: CircularProgressIndicator(color: AppColors.gold));
-          }
-          if (state is RenterHomeError) {
-            return Center(child: Text(state.message));
-          }
+    return BlocConsumer<RenterHomeCubit, RenterHomeState>(
+      listener: (context, state) {
+        if (state is RenterHomeLoaded) {
+          setState(() {
+            _allProperties = state.properties;
+            _applyFilters();
+          });
+        }
+      },
+      builder: (context, state) {
+        if (state is RenterHomeLoading || state is RenterHomeInitial) {
+          return const Center(
+              child: CircularProgressIndicator(color: AppColors.gold));
+        }
+        if (state is RenterHomeError) {
+          return Center(child: Text(state.message));
+        }
 
-          return Container(
-            color: AppColors.cream,
-            child: SafeArea(
-              bottom: false,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: CustomScrollView(
-                      slivers: [
-                        // Greeting Header
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(16, 16, 16, 14),
-                            child: GreetingHeader(),
+        return Container(
+          color: AppColors.cream,
+          child: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      // Greeting Header
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(16, 16, 16, 14),
+                          child: GreetingHeader(),
+                        ),
+                      ),
+
+                      // Search Row
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: SearchRow(
+                            onFilterTap: _showFiltersSheet,
+                            onChatTap: () =>
+                                AppNavigation.goToAiChat(context),
                           ),
                         ),
+                      ),
 
-                        // Search Row
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: SearchRow(
-                              onFilterTap: _showFiltersSheet,
-                              onChatTap: () =>
-                                  AppNavigation.goToAiChat(context),
-                            ),
+                      const SliverToBoxAdapter(child: SizedBox(height: 14)),
+
+                      // MAWSEM Card
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: MawsemCard(),
+                        ),
+                      ),
+
+                      const SliverToBoxAdapter(child: SizedBox(height: 14)),
+
+                      // Promo Banner
+                      const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: PromoBanner(),
+                        ),
+                      ),
+
+                      const SliverToBoxAdapter(child: SizedBox(height: 18)),
+
+                      // Category Chips
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: CategoryChips(
+                            onCategorySelected: _onCategoryChanged,
                           ),
                         ),
+                      ),
 
-                        const SliverToBoxAdapter(child: SizedBox(height: 14)),
+                      const SliverToBoxAdapter(child: SizedBox(height: 18)),
 
-                        // MAWSEM Card
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: MawsemCard(),
-                          ),
-                        ),
-
-                        const SliverToBoxAdapter(child: SizedBox(height: 14)),
-
-                        // Promo Banner
-                        const SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: PromoBanner(),
-                          ),
-                        ),
-
-                        const SliverToBoxAdapter(child: SizedBox(height: 18)),
-
-                        // Category Chips
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: CategoryChips(
-                              onCategorySelected: _onCategoryChanged,
-                            ),
-                          ),
-                        ),
-
-                        const SliverToBoxAdapter(child: SizedBox(height: 18)),
-
-                        // Section Header - Trending Now
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Trending Now: $_selectedCategory',
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                ),
-                                TextButton(
-                                  onPressed: () =>
-                                      AppNavigation.goToAllProperties(context),
-                                  child: const Text(
-                                    'See All',
-                                    style: TextStyle(
-                                      color: AppColors.gold,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Cairo',
-                                    ),
+                      // Section Header - Trending Now
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Trending Now: $_selectedCategory',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    AppNavigation.goToAllProperties(context),
+                                child: const Text(
+                                  'See All',
+                                  style: TextStyle(
+                                    color: AppColors.gold,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Cairo',
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
+                      ),
 
-                        const SliverToBoxAdapter(child: SizedBox(height: 4)),
+                      const SliverToBoxAdapter(child: SizedBox(height: 4)),
 
-                        // Property Cards
-                        SliverList(
-                          key: ValueKey(_selectedCategory),
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 4),
-                                child: PropertyCard(
-                                    property: Property.fromMap(_filteredProperties[index])),
-                              );
-                            },
-                            childCount: _filteredProperties.length > 4
-                                ? 4
-                                : _filteredProperties.length,
-                          ),
+                      // Property Cards
+                      SliverList(
+                        key: ValueKey(_selectedCategory),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final propertyMap = _filteredProperties[index];
+                            final property = Property.fromMap(propertyMap);
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 4),
+                              child: PropertyCard(
+                                property: property,
+                                onTap: () => AppNavigation.goToPropertyDetail(
+                                    context,
+                                    extra: property),
+                              ),
+                            );
+                          },
+                          childCount: _filteredProperties.length > 4
+                              ? 4
+                              : _filteredProperties.length,
                         ),
+                      ),
 
-                        const SliverToBoxAdapter(child: SizedBox(height: 12)),
+                      const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
-                        // Explore North Coast Section
-                        SliverToBoxAdapter(
-                          child: _buildExploreSection(),
+                      // Explore North Coast Section
+                      SliverToBoxAdapter(
+                        child: _buildExploreSection(),
+                      ),
+
+                      const SliverToBoxAdapter(child: SizedBox(height: 32)),
+
+                      // Referral Banner
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: _buildReferralBanner(),
                         ),
+                      ),
 
-                        const SliverToBoxAdapter(child: SizedBox(height: 32)),
+                      const SliverToBoxAdapter(child: SizedBox(height: 48)),
 
-                        // Referral Banner
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: _buildReferralBanner(),
-                          ),
-                        ),
+                      // Footer
+                      SliverToBoxAdapter(
+                        child: _buildFooter(),
+                      ),
 
-                        const SliverToBoxAdapter(child: SizedBox(height: 48)),
-
-                        // Footer
-                        SliverToBoxAdapter(
-                          child: _buildFooter(),
-                        ),
-
-                        const SliverToBoxAdapter(child: SizedBox(height: 120)),
-                      ],
-                    ),
+                      const SliverToBoxAdapter(child: SizedBox(height: 120)),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -340,35 +345,39 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: locations.length,
             separatorBuilder: (context, index) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
-              return Container(
-                width: 160,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    image: NetworkImage(locations[index]['image']!),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              return GestureDetector(
+                onTap: () => AppNavigation.goToAllProperties(context,
+                    filters: {'location': locations[index]['name']}),
                 child: Container(
+                  width: 160,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black.withValues(alpha: 0.6),
-                        Colors.transparent
-                      ],
+                    image: DecorationImage(
+                      image: NetworkImage(locations[index]['image']!),
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  padding: const EdgeInsets.all(12),
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    locations[index]['name']!,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.6),
+                          Colors.transparent
+                        ],
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      locations[index]['name']!,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14),
+                    ),
                   ),
                 ),
               );
@@ -380,38 +389,42 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildReferralBanner() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: AppColors.referralGradient,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: AppColors.gold, borderRadius: BorderRadius.circular(12)),
-            child: const Icon(Icons.person_add_alt_1,
-                color: AppColors.navy, size: 24),
-          ),
-          const SizedBox(width: 16),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Invite friends, earn 15 ★',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700)),
-                Text('When they book & complete a stay',
-                    style: TextStyle(color: Colors.white70, fontSize: 12)),
-              ],
+    return GestureDetector(
+      onTap: () => AppNavigation.goToShareEarn(context),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: AppColors.referralGradient,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: AppColors.gold,
+                  borderRadius: BorderRadius.circular(12)),
+              child: const Icon(Icons.person_add_alt_1,
+                  color: AppColors.navy, size: 24),
             ),
-          ),
-          const Icon(Icons.chevron_right, color: AppColors.gold, size: 20),
-        ],
+            const SizedBox(width: 16),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Invite friends, earn 15 ★',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700)),
+                  Text('When they book & complete a stay',
+                      style: TextStyle(color: Colors.white70, fontSize: 12)),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.gold, size: 20),
+          ],
+        ),
       ),
     );
   }

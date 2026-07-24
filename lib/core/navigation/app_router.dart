@@ -26,6 +26,8 @@ import 'package:sahely/features/shared/screens/wishlist_screen.dart';
 import 'package:sahely/features/shared/screens/my_bookings_screen.dart';
 import 'package:sahely/features/shared/screens/concierge_screen.dart';
 import 'package:sahely/features/shared/screens/services_screen.dart';
+import 'package:sahely/features/shared/screens/blocked_gate_screen.dart';
+import 'package:sahely/features/shared/screens/add_payment_card_screen.dart';
 import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/features/shared/shared_go_routes.dart';
 
@@ -132,6 +134,9 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
       GoRoute(
           path: AppRoutes.notifications,
           builder: (context, state) => const NotificationSettingsScreen()),
+      GoRoute(
+          path: AppRoutes.notificationsSettings,
+          builder: (context, state) => const NotificationSettingsScreen()),
 
       // ---- Auth ----
       GoRoute(
@@ -220,6 +225,20 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
       GoRoute(
           path: AppRoutes.verificationComplete,
           builder: (context, state) => const VerificationCompleteScreen()),
+
+      // ---- Verification Gate Routes ----
+      GoRoute(
+        path: AppRoutes.verifyGate,
+        builder: (context, state) => const BlockedGateScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.blockedGate,
+        builder: (context, state) => const BlockedGateScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.addCard,
+        builder: (context, state) => const AddPaymentCardScreen(),
+      ),
 
       // ---- Renter (Shell) ----
       StatefulShellRoute.indexedStack(

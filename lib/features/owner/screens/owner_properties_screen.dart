@@ -22,17 +22,36 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
   @override
   Widget build(BuildContext context) {
     return PhoneScaffold(
-      child: Stack(children: [
-        ListView(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('My Properties',
-                  style: AppTheme.dm(
-                      size: 22,
-                      weight: FontWeight.w700,
-                      color: AppColors.navy)),
-              GestureDetector(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () => AppNavigation.goBack(context),
+                  behavior: HitTestBehavior.opaque,
+                  child: Container(
+                    width: 34,
+                    height: 34,
+                    margin: const EdgeInsets.only(right: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      border: Border.all(color: AppColors.border),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.chevron_left,
+                        size: 20, color: AppColors.navy),
+                  ),
+                ),
+                Text('My Properties',
+                    style: AppTheme.dm(
+                        size: 22,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy)),
+              ],
+            ),
+            GestureDetector(
                 onTap: () => AppNavigation.goToOwnerAddProperty(context),
                 behavior: HitTestBehavior.opaque,
                 child: Container(
@@ -84,6 +103,7 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
                 badgeKind: BadgeKind.green,
                 meta: 'Villa · Hacienda Bay · 320 m²',
                 stats: const ['★ 4.8', '88% occ.', '1,284 views'],
+                primaryActionColor: const Color(0xFFCEB15E),
                 onPrimaryAction: () => AppNavigation.goToOwnerInsights(context,
                     extra: Sample.azure),
                 onSecondaryAction: () => AppNavigation.goToOwnerEdit(context),
@@ -96,6 +116,7 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
                 badgeKind: BadgeKind.green,
                 meta: 'Chalet · Marassi · 180 m² · 2 floors',
                 stats: const ['★ 4.7', '62% occ.', '643 views'],
+                primaryActionColor: const Color(0xFFCEB15E),
                 onPrimaryAction: () => AppNavigation.goToOwnerInsights(context,
                     extra: Sample.dunes),
                 onSecondaryAction: () => AppNavigation.goToOwnerEdit(context),
@@ -113,10 +134,11 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
                 nameOverride: 'Palm Shores',
                 note: 'Submitted · our team is reviewing (1–24h)',
                 primaryActionLabel: 'View submission status',
+                primaryActionColor: const Color(0xFFCEB15E),
                 onPrimaryAction: () => AppNavigation.goToOwnerListingSubmitted(
                     context,
                     extra: Sample.lagoon),
-                onSecondaryAction: () => AppNavigation.goToOwnerEdit(context),
+                onSecondaryAction: null, // Removed Edit button
               ),
               const SizedBox(height: 12),
             ],
@@ -131,6 +153,8 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
                 note: 'Listing 60% complete — add photos',
                 primaryActionLabel: 'Continue setup',
                 secondaryActionLabel: 'Delete',
+                primaryActionColor: const Color(0xFFCEB15E),
+                secondaryActionColor: const Color(0xFFB3261E),
                 onPrimaryAction: () => AppNavigation.goToOwnerEdit(context),
                 onSecondaryAction: () {
                   /* Handle Delete */
@@ -139,8 +163,6 @@ class _OwnerPropertiesScreenState extends State<OwnerPropertiesScreen> {
             ],
           ],
         ),
-        const FloatingNav(active: 4),
-      ]),
     );
   }
 }

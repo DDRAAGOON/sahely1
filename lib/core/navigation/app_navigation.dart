@@ -118,6 +118,11 @@ class AppNavigation {
   static void goToCollectionChat(BuildContext context) => context.push(AppRoutes.collectionChat);
   static void goToCompare(BuildContext context) => context.push(AppRoutes.compare);
   static void goToShareCollection(BuildContext context) => context.push(AppRoutes.shareCollection);
+  static void goToShareEarn(BuildContext context) => context.push(AppRoutes.shareEarn);
+  static void goToMawsemLevel(BuildContext context) => context.push(AppRoutes.mawsemLevel);
+  static void goToStarsEarned(BuildContext context) => context.push(AppRoutes.starsEarned);
+  static void goToStarNudges(BuildContext context) => context.push(AppRoutes.starNudges);
+  static void goToLevelUp(BuildContext context) => context.push(AppRoutes.levelUp);
   static void goToProperty(BuildContext context, {Object? extra}) => context.push(AppRoutes.propertyDetail, extra: extra);
   static void goToLanguage(BuildContext context) => context.push(AppRoutes.language);
   static void goToCurrency(BuildContext context) => context.push(AppRoutes.currency);

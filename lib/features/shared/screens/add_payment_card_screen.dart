@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:sahely/core/navigation/app_routes.dart';
+import 'package:sahely/core/providers/auth_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/role_state.dart';
+import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 
 class AddPaymentCardScreen extends StatefulWidget {
   const AddPaymentCardScreen({super.key});
@@ -189,10 +196,28 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
           ),
         ),
         Padding(
-            padding: const EdgeInsets.all(16),
-            child: GoldButton(
-                label: 'Save Card & Complete Setup',
-                onTap: () => Navigator.maybePop(context))),
+          padding: const EdgeInsets.all(16),
+          child: GoldButton(
+            label: 'Save Card & Complete Setup',
+            onTap: () async {
+              // Update verification status in Cubit and AuthProvider
+              try {
+                await context.read<VerificationCubit>().updateCardAdded();
+              } catch (_) {}
+              if (!context.mounted) return;
+              await context.read<AuthProvider>().setVerified(true);
+              if (!context.mounted) return;
+
+              final role = context.read<RoleState>().currentRole;
+              final targetRoute = switch (role) {
+                Role.broker => AppRoutes.brokerHome,
+                Role.owner => AppRoutes.ownerHome,
+                _ => AppRoutes.renterHome,
+              };
+              context.go(targetRoute);
+            },
+          ),
+        ),
       ]),
     );
   }

@@ -45,6 +45,7 @@ class MawsemLevelBadge extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
+      useRootNavigator: true, // This makes it cover the bottom nav
       builder: (context) => LevelDetailSheet(
         levelName: levelName,
         levelIcon: levelIcons[levelNumber] ?? Icons.waves,

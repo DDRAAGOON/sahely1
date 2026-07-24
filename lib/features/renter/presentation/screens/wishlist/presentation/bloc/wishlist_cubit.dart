@@ -71,10 +71,7 @@ class WishlistToggled extends WishlistState {
 }
 
 class CollectionsLoaded extends WishlistState {
-  @override
-  final List<WishlistCollection> collections;
-
-  CollectionsLoaded(this.collections, WishlistState previousState)
+  CollectionsLoaded(List<WishlistCollection> collections, WishlistState previousState)
       : super(
             collections: collections,
             items: previousState.items,
@@ -84,10 +81,7 @@ class CollectionsLoaded extends WishlistState {
 }
 
 class WishlistItemsLoaded extends WishlistState {
-  @override
-  final List<WishlistItem> items;
-
-  WishlistItemsLoaded(this.items, WishlistState previousState)
+  WishlistItemsLoaded(List<WishlistItem> items, WishlistState previousState)
       : super(
             items: items,
             collections: previousState.collections,
