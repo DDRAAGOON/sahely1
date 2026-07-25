@@ -12,4 +12,11 @@ class OwnerRepositoryImpl implements OwnerRepository {
     // When real API arrives: call remoteDataSource.getOwnerDashboardFromApi()
     return await remoteDataSource.fetchOwnerDashboard();
   }
+
+  @override
+  Future<void> submitDispute({required String reason, List<String>? attachments}) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 2));
+    // In production, this would call remoteDataSource.submitDispute(...)
+  }
 }

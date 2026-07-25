@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_router.dart';
+import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/features/owner/screens/owner_portfolio_screen.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/features/shared/screens/active_booking_detail_screen.dart';
@@ -14,6 +15,8 @@ import 'package:sahely/features/owner/screens/owner_all_trending_screen.dart';
 import 'package:sahely/features/owner/screens/owner_earnings_screen.dart';
 import 'package:sahely/features/owner/screens/owner_edit_bio_screen.dart';
 import 'package:sahely/features/owner/screens/owner_history_screen.dart';
+import 'package:sahely/features/owner/screens/dispute_violation_screen.dart';
+import 'package:sahely/features/owner/screens/violation_report_screen.dart';
 import 'package:sahely/features/owner/screens/owner_manage_screen.dart';
 import 'package:sahely/features/owner/screens/owner_properties_screen.dart';
 import 'package:sahely/features/owner/screens/owner_property_detail_screens.dart';
@@ -26,11 +29,11 @@ import 'package:sahely/features/owner/screens/withdraw_receipt_screen.dart';
 
 final List<GoRoute> ownerGoRoutes = [
   GoRoute(
-      path: '/owner/manage',
+      path: AppRoutes.ownerManage,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerManageScreen()),
   GoRoute(
-      path: '/owner/properties',
+      path: AppRoutes.ownerProperties,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerPropertiesScreen()),
   GoRoute(
@@ -70,7 +73,7 @@ final List<GoRoute> ownerGoRoutes = [
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const TeamReviewScreen()),
   GoRoute(
-      path: '/owner/all-trending',
+      path: AppRoutes.ownerAllTrending,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerAllTrendingScreen()),
   GoRoute(
@@ -153,13 +156,21 @@ final List<GoRoute> ownerGoRoutes = [
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerRequestDetailScreen()),
   GoRoute(
-      path: '/owner/earnings',
+      path: AppRoutes.ownerEarnings,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerEarningsScreen()),
   GoRoute(
       path: '/owner/violations',
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const ViolationsScreen()),
+  GoRoute(
+      path: '/owner/dispute',
+      parentNavigatorKey: rootNavigatorKey,
+      builder: (context, state) => const DisputeViolationScreen()),
+  GoRoute(
+      path: '/owner/violation-report',
+      parentNavigatorKey: rootNavigatorKey,
+      builder: (context, state) => const ViolationReportScreen()),
   GoRoute(
       path: '/owner/history',
       parentNavigatorKey: rootNavigatorKey,
@@ -174,15 +185,15 @@ final List<GoRoute> ownerGoRoutes = [
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerAiChatScreen()),
   GoRoute(
-      path: '/owner/withdraw',
+      path: AppRoutes.ownerWithdraw,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const WithdrawAmountScreen()),
   GoRoute(
-      path: '/owner/withdraw-receipt',
+      path: AppRoutes.ownerWithdrawReceipt,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const WithdrawReceiptScreen()),
   GoRoute(
-      path: '/owner/payout',
+      path: AppRoutes.ownerPayout,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const PayoutBankScreen()),
   GoRoute(

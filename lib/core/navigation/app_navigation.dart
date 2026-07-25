@@ -49,6 +49,7 @@ class AppNavigation {
   static void goToBrokerTierUpgrade(BuildContext context) => context.push(AppRoutes.brokerTierUpgrade);
   static void goToBrokerHistory(BuildContext context) => context.push(AppRoutes.brokerHistory);
   static void goToBrokerWithdraw(BuildContext context) => context.push(AppRoutes.brokerWithdraw);
+  static void goToBrokerWithdrawReceipt(BuildContext context) => context.push(AppRoutes.brokerWithdrawReceipt);
   static void goToBrokerReferredDetail(BuildContext context) => context.push(AppRoutes.brokerReferredDetail);
   static void goToBrokerReferralIssue(BuildContext context) => context.push(AppRoutes.brokerReferralIssue);
   static void goToBrokerSos(BuildContext context, {Object? extra}) => context.push(AppRoutes.brokerSos, extra: extra);
@@ -72,15 +73,17 @@ class AppNavigation {
   static void goToOwnerEditBio(BuildContext context) => context.push(AppRoutes.ownerEditBio);
   static void goToOwnerEarnings(BuildContext context) => context.push(AppRoutes.ownerEarnings);
   static void goToOwnerViolations(BuildContext context) => context.push(AppRoutes.ownerViolations);
+  static void goToOwnerViolationReport(BuildContext context) => context.push(AppRoutes.ownerViolationReport);
+  static void goToOwnerDispute(BuildContext context) => context.push(AppRoutes.ownerDispute);
   static void goToOwnerListingSubmitted(BuildContext context, {Object? extra}) => context.push(AppRoutes.ownerListingSubmitted, extra: extra);
   static void goToOwnerRateGuest(BuildContext context, {Object? extra}) => context.push(AppRoutes.ownerRateGuest, extra: extra);
   static void goToOwnerRequests(BuildContext context) => context.push(AppRoutes.ownerRequests);
   static void goToOwnerRequestDetail(BuildContext context, {Object? extra}) => context.push(AppRoutes.ownerRequestDetail, extra: extra);
-  static void goToOwnerWithdraw(BuildContext context) => context.push(AppRoutes.brokerWithdraw); 
-  static void goToOwnerWithdrawReceipt(BuildContext context) => context.push(AppRoutes.brokerWithdrawReceipt);
+  static void goToOwnerWithdraw(BuildContext context) => context.push(AppRoutes.ownerWithdraw); 
+  static void goToOwnerWithdrawReceipt(BuildContext context) => context.push(AppRoutes.ownerWithdrawReceipt);
   static void goToOwnerAllTrending(BuildContext context) => context.push(AppRoutes.ownerAllTrending);
   static void goToOwnerProperties(BuildContext context) => context.push(AppRoutes.ownerProperties);
-  static void goToOwnerPayout(BuildContext context) => context.push(AppRoutes.brokerPayout);
+  static void goToOwnerPayout(BuildContext context) => context.push(AppRoutes.ownerPayout);
   static void goToOwnerAddProperty(BuildContext context) => context.push(AppRoutes.ownerListingNew);
   static void goToSosOwner(BuildContext context) => context.push(AppRoutes.sosOwner);
 

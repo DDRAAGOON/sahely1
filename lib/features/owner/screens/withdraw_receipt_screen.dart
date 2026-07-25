@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
@@ -77,8 +78,8 @@ class WithdrawReceiptScreen extends StatelessWidget {
                 onTap: () => Navigator.popUntil(
                     context,
                     (r) =>
-                        r.settings.name == '/owner/earnings' ||
-                        r.settings.name == '/broker/wallet' ||
+                        r.settings.name == AppRoutes.ownerEarnings ||
+                        r.settings.name == AppRoutes.brokerWallet ||
                         r.isFirst)),
           ]),
         ),

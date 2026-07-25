@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
-
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/data/role_state.dart';
+import 'package:sahely/data/models.dart';
 
 class WithdrawAmountScreen extends StatefulWidget {
   const WithdrawAmountScreen({super.key});
@@ -28,6 +30,24 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
           .replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (m) => '${m[1]},');
       _amountController.text = formatted;
     });
+  }
+
+  void _onWithdraw() {
+    final role = context.read<RoleState>().currentRole;
+    if (role == Role.broker) {
+      AppNavigation.goToBrokerWithdrawReceipt(context);
+    } else {
+      AppNavigation.goToOwnerWithdrawReceipt(context);
+    }
+  }
+
+  void _onChangeAccount() {
+    final role = context.read<RoleState>().currentRole;
+    if (role == Role.broker) {
+      AppNavigation.goToBrokerPayout(context);
+    } else {
+      AppNavigation.goToOwnerPayout(context);
+    }
   }
 
   @override
@@ -181,7 +201,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                                   size: 11, color: AppColors.muted)),
                         ])),
                     GestureDetector(
-                      onTap: () => AppNavigation.goToOwnerPayout(context),
+                      onTap: _onChangeAccount,
                       behavior: HitTestBehavior.opaque,
                       child: Text('Change',
                           style: AppTheme.dm(
@@ -203,7 +223,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
             listenable: _amountController,
             builder: (context, _) => NavyButton(
               label: 'Withdraw EGP ${_amountController.text}',
-              onTap: () => AppNavigation.goToOwnerWithdrawReceipt(context),
+              onTap: _onWithdraw,
             ),
           ),
         ),
@@ -211,6 +231,8 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
     );
   }
 }
+
+
 
 class _ThousandsFormatter extends TextInputFormatter {
   @override

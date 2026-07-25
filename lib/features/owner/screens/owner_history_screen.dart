@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -256,17 +257,19 @@ class ViolationsScreen extends StatelessWidget {
                   valueColor: Color(0xFFB22222)),
               const KeyValueRow('Reported on', 'Jun 18, 2026'),
               const SizedBox(height: 12),
-              const Row(children: [
+              Row(children: [
                 Expanded(
                     child: WideButton(
                         label: 'Dispute',
+                        onTap: () => AppNavigation.goToOwnerDispute(context),
                         color: AppColors.navy,
                         outline: true,
                         height: 44)),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                     child: WideButton(
                         label: 'View full report',
+                        onTap: () => AppNavigation.goToOwnerViolationReport(context),
                         color: AppColors.navy,
                         height: 44)),
               ]),

@@ -82,11 +82,17 @@ class AppRoutes {
   static const String ownerEarnings = '/owner/earnings';
   static const String ownerInsights = '/owner/insights';
   static const String ownerViolations = '/owner/violations';
+  static const String ownerViolationReport = '/owner/violation-report';
+  static const String ownerDispute = '/owner/dispute';
   static const String ownerListingSubmitted = '/owner/listing-submitted';
   static const String ownerRateGuest = '/owner/rate-guest';
   static const String ownerRequests = '/owner/requests';
   static const String ownerAllTrending = '/owner/all-trending';
   static const String ownerProperties = '/owner/properties';
+  static const String ownerWithdraw = '/owner/withdraw';
+  static const String ownerWithdrawReceipt = '/owner/withdraw-receipt';
+  static const String ownerPayout = '/owner/payout';
+  static const String sosOwner = '/sos-owner';
 
   // --------------------------------------------------------------------------
   // Shared Routes
@@ -124,7 +130,6 @@ class AppRoutes {
   static const String changePassword = '/change-password';
   static const String blockedGate = '/blocked-gate';
   static const String sos = '/sos';
-  static const String sosOwner = '/sos-owner';
   static const String aiChat = '/ai-chat';
   static const String currency = '/currency';
   static const String language = '/language';
