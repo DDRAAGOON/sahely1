@@ -9,6 +9,7 @@ class WideButton extends StatelessWidget {
       required this.label,
       this.color = AppColors.navy,
       this.textColor = AppColors.white,
+      this.bgColor,
       this.outline = false,
       this.icon,
       this.onTap,
@@ -18,6 +19,7 @@ class WideButton extends StatelessWidget {
   final String label;
   final Color color;
   final Color textColor;
+  final Color? bgColor;
   final bool outline;
   final IconData? icon;
   final VoidCallback? onTap;
@@ -26,12 +28,14 @@ class WideButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveBgColor = bgColor ?? (outline ? AppColors.white : color);
+    
     return GestureDetector(
       onTap: onTap,
       child: Container(
         height: height,
         decoration: BoxDecoration(
-          color: outline ? Colors.transparent : color,
+          color: effectiveBgColor,
           border: outline ? Border.all(color: color, width: 1.5) : null,
           borderRadius: BorderRadius.circular(radius),
         ),

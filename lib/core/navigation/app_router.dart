@@ -236,7 +236,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
             GoRoute(
                 path: AppRoutes.renterWishlist,
                 builder: (context, state) =>
-                    const WishlistScreen(showNav: false))
+                    const WishlistScreen(showNav: false, role: Role.renter))
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
@@ -270,7 +270,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
             GoRoute(
                 path: AppRoutes.brokerWishlist,
                 builder: (context, state) => const WishlistScreen(
-                    showNav: false, role: WishlistRole.broker))
+                    showNav: false, role: Role.broker))
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
@@ -313,7 +313,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
             GoRoute(
                 path: AppRoutes.ownerWishlist,
                 builder: (context, state) =>
-                    const WishlistScreen(showNav: false))
+                    const WishlistScreen(showNav: false, role: Role.owner))
           ]),
           StatefulShellBranch(routes: [
             GoRoute(

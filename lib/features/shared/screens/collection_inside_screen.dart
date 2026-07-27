@@ -5,6 +5,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/data/role_state.dart';
 import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/shared/widgets/collab_card.dart';
@@ -33,7 +34,10 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
     super.initState();
     // Load all items fresh when this screen opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) context.read<WishlistCubit>().loadCollections();
+      if (mounted) {
+        final role = RoleState().currentRole;
+        context.read<WishlistCubit>().loadCollections(role);
+      }
     });
   }
 
@@ -122,8 +126,19 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
                         color: AppColors.gold,
                         textColor: AppColors.navy,
                         height: 42,
-                        onTap: () =>
-                            AppNavigation.goToShareCollection(context))),
+                        onTap: () {
+                          final cover = collectionItems.isNotEmpty 
+                            ? collectionItems.first.propertyImage 
+                            : 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800';
+                          
+                          AppNavigation.goToShareCollection(
+                            context,
+                            collectionName: widget.collectionName,
+                            collectionImage: cover,
+                            placesCount: collectionItems.length,
+                            shareableLink: 'sahely.app/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
+                          );
+                        })),
                 const SizedBox(width: 8),
                 Expanded(
                     child: WideButton(
@@ -132,7 +147,11 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
                         color: AppColors.navy,
                         outline: true,
                         height: 42,
-                        onTap: () => AppNavigation.goToCompare(context))),
+                        onTap: () => AppNavigation.goToCompare(
+                          context,
+                          collectionName: widget.collectionName,
+                          memberNames: widget.memberNames.isNotEmpty ? widget.memberNames : const ['Omar', 'Nour', 'Youssef'],
+                        ))),
               ]),
               const SizedBox(height: 16),
               if (collectionItems.isEmpty)

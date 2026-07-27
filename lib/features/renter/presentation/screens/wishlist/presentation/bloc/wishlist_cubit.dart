@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/role_state.dart';
 
 import 'package:sahely/features/renter/presentation/screens/wishlist/data/repositories/wishlist_repository.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
@@ -41,91 +43,25 @@ class WishlistState {
   }
 }
 
-// Fixed specialized states to use correct names and preserve all data
-class WishlistStatusLoaded extends WishlistState {
-  final String propertyId;
-  final bool isWishlisted;
-
-  WishlistStatusLoaded(
-      this.propertyId, this.isWishlisted, WishlistState previousState)
-      : super(
-            toggledPropertyId: propertyId,
-            isToggledStatus: isWishlisted,
-            collections: previousState.collections,
-            items: previousState.items,
-            status: WishlistStatus.loaded);
-}
-
-class WishlistToggled extends WishlistState {
-  final String propertyId;
-  final bool isWishlisted;
-
-  WishlistToggled(
-      this.propertyId, this.isWishlisted, WishlistState previousState)
-      : super(
-            toggledPropertyId: propertyId,
-            isToggledStatus: isWishlisted,
-            collections: previousState.collections,
-            items: previousState.items,
-            status: WishlistStatus.loaded);
-}
-
-class CollectionsLoaded extends WishlistState {
-  CollectionsLoaded(List<WishlistCollection> collections, WishlistState previousState)
-      : super(
-            collections: collections,
-            items: previousState.items,
-            toggledPropertyId: previousState.toggledPropertyId,
-            isToggledStatus: previousState.isToggledStatus,
-            status: WishlistStatus.loaded);
-}
-
-class WishlistItemsLoaded extends WishlistState {
-  WishlistItemsLoaded(List<WishlistItem> items, WishlistState previousState)
-      : super(
-            items: items,
-            collections: previousState.collections,
-            toggledPropertyId: previousState.toggledPropertyId,
-            isToggledStatus: previousState.isToggledStatus,
-            status: WishlistStatus.loaded);
-}
-
-class WishlistLoading extends WishlistState {
-  WishlistLoading(WishlistState previousState)
-      : super(
-          status: WishlistStatus.loading,
-          collections: previousState.collections,
-          items: previousState.items,
-          toggledPropertyId: previousState.toggledPropertyId,
-          isToggledStatus: previousState.isToggledStatus,
-        );
-}
-
-class WishlistError extends WishlistState {
-  final String message;
-
-  WishlistError(this.message, WishlistState previousState)
-      : super(
-          errorMessage: message,
-          status: WishlistStatus.error,
-          collections: previousState.collections,
-          items: previousState.items,
-          toggledPropertyId: previousState.toggledPropertyId,
-          isToggledStatus: previousState.isToggledStatus,
-        );
-}
-
 class WishlistCubit extends Cubit<WishlistState> {
   final WishlistRepository _repository;
 
   WishlistCubit(this._repository) : super(WishlistState());
 
-  Future<void> checkStatus(String propertyId) async {
+  /// Helper to get current role from RoleState
+  Role get _activeRole => RoleState().currentRole;
+
+  Future<void> checkStatus(String propertyId, [Role? role]) async {
+    final targetRole = role ?? _activeRole;
     try {
-      final isWishlisted = await _repository.isWishlisted(propertyId);
-      emit(WishlistStatusLoaded(propertyId, isWishlisted, state));
+      final isWishlisted = await _repository.isWishlisted(propertyId, targetRole);
+      emit(state.copyWith(
+        toggledPropertyId: propertyId,
+        isToggledStatus: isWishlisted,
+        status: WishlistStatus.loaded,
+      ));
     } catch (e) {
-      emit(WishlistError('Error checking status', state));
+      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Error checking status'));
     }
   }
 
@@ -133,28 +69,29 @@ class WishlistCubit extends Cubit<WishlistState> {
     required String propertyId,
     required String propertyName,
     required String propertyImage,
+    Role? role,
   }) async {
+    final targetRole = role ?? _activeRole;
     try {
       final isWishlisted = await _repository.toggleWishlist(
         propertyId: propertyId,
         propertyName: propertyName,
         propertyImage: propertyImage,
+        role: targetRole,
       );
 
-      final collections = await _repository.getCollections();
+      final collections = await _repository.getCollections(targetRole);
+      final items = await _repository.getAllWishlistItems(targetRole);
 
-      // Update our internal items list by doing a fresh fetch so UI responds
-      final items = await _repository.getAllWishlistItems();
-
-      // We manually construct a new WishlistState to update items along with the toggle
-      final newState = state.copyWith(
+      emit(state.copyWith(
         collections: collections,
-        items: items, // Add this so CollectionInsideScreen gets the new item!
-      );
-
-      emit(WishlistToggled(propertyId, isWishlisted, newState));
+        items: items,
+        toggledPropertyId: propertyId,
+        isToggledStatus: isWishlisted,
+        status: WishlistStatus.loaded,
+      ));
     } catch (e) {
-      emit(WishlistError('Failed to toggle', state));
+      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to toggle'));
     }
   }
 
@@ -163,71 +100,76 @@ class WishlistCubit extends Cubit<WishlistState> {
     required String propertyName,
     required String propertyImage,
     required String collectionId,
+    Role? role,
   }) async {
+    final targetRole = role ?? _activeRole;
     try {
       await _repository.addToWishlist(
         propertyId: propertyId,
         propertyName: propertyName,
         propertyImage: propertyImage,
         collectionId: collectionId,
+        role: targetRole,
       );
-      final collections = await _repository.getCollections();
-      final items = await _repository.getAllWishlistItems();
-
-      final newState = state.copyWith(collections: collections, items: items);
-      emit(WishlistToggled(propertyId, true, newState));
-
-      // We emit CollectionsLoaded to refresh the UI
-      emit(CollectionsLoaded(collections, newState));
+      await loadCollections(targetRole);
     } catch (e) {
-      emit(WishlistError('Failed to save to collection', state));
+      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to save to collection'));
     }
   }
 
   Future<void> addToCollection({
     required String propertyId,
     required String collectionId,
+    Role? role,
   }) async {
+    final targetRole = role ?? _activeRole;
     try {
       await _repository.addToCollection(
         propertyId: propertyId,
         collectionId: collectionId,
+        role: targetRole,
       );
-      await loadCollections();
+      await loadCollections(targetRole);
     } catch (e) {
-      emit(WishlistError('Failed to add to collection', state));
+      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to add to collection'));
     }
   }
 
-  Future<void> createCollection(String name) async {
+  Future<void> createCollection(String name, [Role? role]) async {
+    final targetRole = role ?? _activeRole;
     try {
-      await _repository.addCollection(name);
-      await loadCollections();
+      await _repository.addCollection(name, targetRole);
+      await loadCollections(targetRole);
     } catch (e) {
-      emit(WishlistError('Failed to create collection', state));
+      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to create collection'));
     }
   }
 
-  Future<void> loadCollections() async {
-    emit(WishlistLoading(state));
+  Future<void> loadCollections([Role? role]) async {
+    final targetRole = role ?? _activeRole;
+    emit(state.copyWith(status: WishlistStatus.loading));
     try {
-      final collections = await _repository.getCollections();
-      final items = await _repository.getAllWishlistItems();
+      final collections = await _repository.getCollections(targetRole);
+      final items = await _repository.getAllWishlistItems(targetRole);
 
-      final newState = state.copyWith(collections: collections, items: items);
-      emit(CollectionsLoaded(collections, newState));
+      emit(state.copyWith(
+        collections: collections,
+        items: items,
+        status: WishlistStatus.loaded,
+      ));
     } catch (e) {
-      emit(WishlistError('Failed to load collections', state));
+      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to load collections'));
     }
   }
 
-  Future<void> loadWishlistItems(String collectionId) async {
-    emit(WishlistLoading(state));
+  Future<void> loadWishlistItems(String collectionId, [Role? role]) async {
+    final targetRole = role ?? _activeRole;
+    emit(state.copyWith(status: WishlistStatus.loading));
     try {
-      final items = await _repository.getWishlistItems(collectionId);
-      emit(WishlistItemsLoaded(items, state));
+      final items = await _repository.getWishlistItems(collectionId, targetRole);
+      emit(state.copyWith(items: items, status: WishlistStatus.loaded));
     } catch (e) {
-      emit(WishlistError('Failed to load wishlist items', state));
+      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to load wishlist items'));
     }
   }
 }

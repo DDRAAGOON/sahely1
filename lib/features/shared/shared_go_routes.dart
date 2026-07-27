@@ -53,11 +53,8 @@ final List<GoRoute> sharedGoRoutes = [
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) => const BrowseScreen(),
   ),
-  GoRoute(
-    path: '/filters',
-    parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const FiltersScreen(),
-  ),
+  // Filters is now a ModalBottomSheet called via AppNavigation, 
+  // so we remove the separate route to avoid conflicts.
   GoRoute(
     path: '/all-properties',
     parentNavigatorKey: rootNavigatorKey,
@@ -283,11 +280,7 @@ final List<GoRoute> sharedGoRoutes = [
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) => const CompareScreen(),
   ),
-  GoRoute(
-    path: '/share-collection',
-    parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const ShareCollectionScreen(),
-  ),
+  // Share collection is now a ModalBottomSheet called via AppNavigation.
   GoRoute(
     path: '/share-earn',
     parentNavigatorKey: rootNavigatorKey,

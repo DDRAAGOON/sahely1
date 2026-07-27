@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_header.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_members_actions.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_property_card.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/share_collection_sheet.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/pages/collection_compare_screen.dart';
 
 class CollectionInsideSharedScreen extends StatefulWidget {
@@ -37,7 +37,8 @@ class _CollectionInsideSharedScreenState
   @override
   void initState() {
     super.initState();
-    context.read<WishlistCubit>().loadWishlistItems(widget.collectionId);
+    final role = RoleState().currentRole;
+    context.read<WishlistCubit>().loadWishlistItems(widget.collectionId, role);
   }
 
   @override
@@ -74,29 +75,19 @@ class _CollectionInsideSharedScreenState
                       itemCount: widget.propertyCount),
                 );
 
-                showModalBottomSheet(
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  isScrollControlled: true,
-                  builder: (context) => ShareCollectionSheet(
-                    collectionName: widget.collectionName,
-                    collectionImage: collection.coverImage ?? '',
-                    placesCount: collection.itemCount,
-                    shareableLink:
-                        'sahely.app/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
-                    isInviteOnly: false,
-                  ),
+                AppNavigation.goToShareCollection(
+                  context,
+                  collectionName: widget.collectionName,
+                  collectionImage: collection.coverImage ?? 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800',
+                  placesCount: collection.itemCount,
+                  shareableLink: 'sahely.app/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
                 );
               },
               onCompareTap: () {
-                Navigator.push(
+                AppNavigation.goToCompare(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => CollectionCompareScreen(
-                      collectionName: widget.collectionName,
-                      participantNames: widget.memberNames,
-                    ),
-                  ),
+                  collectionName: widget.collectionName,
+                  memberNames: widget.memberNames,
                 );
               },
             ),
@@ -107,13 +98,13 @@ class _CollectionInsideSharedScreenState
             Expanded(
               child: BlocBuilder<WishlistCubit, WishlistState>(
                 builder: (context, state) {
-                  if (state is WishlistLoading) {
+                  if (state.status == WishlistStatus.loading) {
                     return const Center(
                         child:
                             CircularProgressIndicator(color: AppColors.gold));
                   }
 
-                  if (state is WishlistItemsLoaded) {
+                  if (state.status == WishlistStatus.loaded) {
                     if (state.items.isEmpty) {
                       return Center(
                         child: Column(

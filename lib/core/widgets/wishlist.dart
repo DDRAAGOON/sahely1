@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
@@ -16,6 +17,8 @@ class SaveHeart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final role = RoleState().currentRole;
+    
     return BlocBuilder<WishlistCubit, WishlistState>(
       builder: (context, state) {
         // Rely ONLY on state.items — always up to date after toggle/load
@@ -30,6 +33,7 @@ class SaveHeart extends StatelessWidget {
                     propertyId: property.name,
                     propertyName: property.name,
                     propertyImage: property.image,
+                    role: role,
                   );
             } else {
               // Not saved → always show sheet to choose collection
@@ -44,6 +48,7 @@ class SaveHeart extends StatelessWidget {
                     propertyId: property.name,
                     propertyName: property.name,
                     propertyImage: property.image,
+                    role: role,
                   ),
                 ),
               );

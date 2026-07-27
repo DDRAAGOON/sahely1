@@ -6,7 +6,6 @@ import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
 
 /// Hero card for AL MAWSEM dashboard.
 /// Displays current level, stars, and progress to next tier.
-/// TODO: Hook up real-time progress from backend API.
 class MawsemHeroCard extends StatelessWidget {
   final String levelName;
   final int levelNumber;
@@ -57,7 +56,7 @@ class MawsemHeroCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.mawsemBg, // Updated Background Color #182441
+        color: AppColors.mawsemBg,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -70,7 +69,7 @@ class MawsemHeroCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          // Background Glow Circle - Restored to Old Golden Style
+          // Background Glow Circle
           Positioned(
             top: -100,
             right: -80,
@@ -90,39 +89,37 @@ class MawsemHeroCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
-            // Reduced horizontal padding
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Top Row: AL MAWSEM + Season Badge - Fixed Visibility
+                // Top Row: AL MAWSEM + Season Badge
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
                       'AL MAWSEM',
                       style: TextStyle(
-                        fontSize: 20,
-                        // Restored original size
+                        fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: AppColors.gold,
                         fontFamily: 'DM Sans',
-                        letterSpacing: 3, // Balanced spacing
+                        letterSpacing: 2,
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
-                        color: AppColors.mawsemDark, // Background #424446
+                        color: AppColors.mawsemDark,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
-                        'Season 2026 Â· Battle Pass',
+                        'Season 2026 · Battle Pass',
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.mawsemGold, // Text #B1974C
+                          color: AppColors.mawsemGold,
                           fontFamily: 'DM Sans',
                         ),
                       ),
@@ -130,34 +127,33 @@ class MawsemHeroCard extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 // Level Info Row
                 Row(
                   children: [
-                    // Teal Medallion with Reduced Glow
+                    // Teal Medallion
                     Container(
-                      width: 62,
-                      height: 62,
+                      width: 58,
+                      height: 58,
                       decoration: BoxDecoration(
-                        color: AppColors.mawsemTeal,
-                        borderRadius: BorderRadius.circular(18),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.mawsemTeal.withValues(alpha: 0.3),
-                            // Toned down glow
-                            blurRadius: 12,
-                            spreadRadius: 1,
-                          )
-                        ],
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppColors.mawsemTealStart,
+                            AppColors.mawsemTealEnd,
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: const Icon(
                         Icons.waves,
                         color: Colors.white,
-                        size: 34,
+                        size: 30,
                       ),
                     ),
-                    const SizedBox(width: 12), // Reduced spacing
+                    const SizedBox(width: 14),
 
                     // Level Name + Status
                     Expanded(
@@ -168,15 +164,16 @@ class MawsemHeroCard extends StatelessWidget {
                             'Level $levelNumber of $totalLevels',
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Color(0xFFB8C4E0),
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.mawsemTextMuted,
                               fontFamily: 'DM Sans',
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 2),
                           Text(
                             levelName,
                             style: const TextStyle(
-                              fontSize: 24,
+                              fontSize: 22,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                               fontFamily: 'DM Sans',
@@ -193,23 +190,23 @@ class MawsemHeroCard extends StatelessWidget {
                         Text(
                           '$currentStars',
                           style: const TextStyle(
-                            fontSize: 32,
+                            fontSize: 28,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.gold,
+                            color: AppColors.mawsemGoldBright,
                             fontFamily: 'DM Sans',
                           ),
                         ),
                         const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.star, color: AppColors.gold, size: 12),
+                            Icon(Icons.star, color: AppColors.mawsemGoldBright, size: 12),
                             SizedBox(width: 4),
                             Text(
                               'Sahel Stars',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.gold,
+                                color: AppColors.mawsemGoldBright,
                                 fontFamily: 'DM Sans',
                               ),
                             ),
@@ -220,9 +217,9 @@ class MawsemHeroCard extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 18),
 
-                // Progress Bar Section - Clickable
+                // Progress Bar Section
                 GestureDetector(
                   onTap: () => _showNextLevelDetail(context),
                   child: Column(
@@ -231,13 +228,13 @@ class MawsemHeroCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6),
                         child: LinearProgressIndicator(
                           value: progress.clamp(0.0, 1.0),
-                          backgroundColor: Colors.white.withValues(alpha: 0.1),
+                          backgroundColor: AppColors.mawsemProgressTrack,
                           valueColor: const AlwaysStoppedAnimation<Color>(
-                              AppColors.mawsemProgress),
-                          minHeight: 10,
+                              AppColors.mawsemGoldBright),
+                          minHeight: 7,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
                       // Progress Text
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,46 +242,46 @@ class MawsemHeroCard extends StatelessWidget {
                           RichText(
                             text: TextSpan(
                               style: const TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   color: Colors.white,
                                   fontFamily: 'DM Sans'),
                               children: [
                                 TextSpan(
                                     text: '$starsToNext',
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.w900)),
+                                        fontWeight: FontWeight.w800)),
                                 const TextSpan(
-                                    text: ' â˜…',
+                                    text: '★',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.white)),
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w800)),
                                 const TextSpan(
                                     text: ' to ',
-                                    style: TextStyle(color: Color(0xFFB8C4E0))),
+                                    style: TextStyle(color: AppColors.mawsemTextMuted)),
                                 TextSpan(
                                     text: nextLevelName,
                                     style: const TextStyle(
-                                        color: Color(0xFFB8C4E0))),
+                                        color: AppColors.mawsemTextMuted,
+                                        fontWeight: FontWeight.w500)),
                               ],
                             ),
                           ),
                           RichText(
                             text: TextSpan(
                               style: const TextStyle(
-                                  fontSize: 13,
-                                  color: Color(0xFFB8C4E0),
+                                  fontSize: 12,
+                                  color: Colors.white,
                                   fontFamily: 'DM Sans'),
                               children: [
                                 TextSpan(
                                     text: '$nextLevelThreshold',
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.white)),
+                                        fontWeight: FontWeight.w800)),
                                 const TextSpan(
-                                    text: ' â˜…',
+                                    text: ' ★',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.white)),
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w800)),
                               ],
                             ),
                           ),
@@ -294,7 +291,7 @@ class MawsemHeroCard extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 18),
 
                 // Bottom Chips Row
                 Row(
@@ -332,10 +329,9 @@ class _InfoChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.mawsemDark.withValues(alpha: 0.3),
-        // Background #424446
+        color: AppColors.mawsemDark.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.05),
@@ -345,7 +341,7 @@ class _InfoChip extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 16, color: AppColors.gold),
+          Icon(icon, size: 16, color: AppColors.mawsemGoldBright),
           const SizedBox(width: 8),
           Flexible(
             child: Text(

@@ -5,6 +5,7 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/chips.dart';
 import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/floating_nav.dart';
@@ -97,12 +98,12 @@ class _BrowseScreenState extends State<BrowseScreen> {
       }).toList();
     }
 
-    if (_sortBy == 'Price: Low to High') {
+    if (_sortBy == 'Top Rated') {
+      results.sort((a, b) => b.rating.compareTo(a.rating));
+    } else if (_sortBy == 'Price: Low to High') {
       results.sort((a, b) => a.price.compareTo(b.price));
     } else if (_sortBy == 'Price: High to Low') {
       results.sort((a, b) => b.price.compareTo(a.price));
-    } else if (_sortBy == 'Top Rated') {
-      results.sort((a, b) => b.rating.compareTo(a.rating));
     }
 
     return results;
@@ -160,123 +161,147 @@ class _BrowseScreenState extends State<BrowseScreen> {
   Widget build(BuildContext context) {
     final results = _filteredResults;
 
-    return PhoneScaffold(
-      child: Stack(
-        children: [
-          ListView(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
-            children: [
-              SearchHeaderWithInput(
-                controller: _searchController,
-                onSubmitted: (v) => setState(() => _appliedSearchQuery = v),
-                onBack: () => Navigator.pop(context),
-                onFilter: () async {
-                  final result = await AppNavigation.goToFilters(context);
-                  if (result is Map<String, dynamic>) {
-                    setState(() => _filters = result);
-                  }
-                },
-              ),
-              if (_filters != null) ...[
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
+    return Scaffold(
+      backgroundColor: AppColors.cream,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            ListView(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
+              children: [
+                SearchHeaderWithInput(
+                  controller: _searchController,
+                  onSubmitted: (v) => setState(() => _appliedSearchQuery = v),
+                  onBack: () => Navigator.pop(context),
+                  onFilter: () async {
+                    final result = await AppNavigation.goToFilters(context);
+                    if (result is Map<String, dynamic>) {
+                      setState(() => _filters = result);
+                    }
+                  },
+                ),
+                const SizedBox(height: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    if (_filters!['dates'] != null)
-                      Pill('📅 ${_filters!['dates']}',
-                          bg: AppColors.goldSoft, fg: AppColors.navy),
-                    if (_filters!['guests'] != null && _filters!['guests'] > 0)
-                      Pill('👥 ${_filters!['guests']} Guests',
-                          bg: AppColors.goldSoft, fg: AppColors.navy),
-                    Pill('💰 ${_filters!['price']}',
-                        bg: AppColors.goldSoft, fg: AppColors.navy),
-                    if (_filters!['type'] != null)
-                      Pill('🏠 ${_filters!['type']}',
-                          bg: AppColors.goldSoft, fg: AppColors.navy),
-                    if (_filters!['beds'] != null)
-                      Pill('🛏️ ${_filters!['beds']} Beds',
-                          bg: AppColors.goldSoft, fg: AppColors.navy),
-                    for (var rule in (_filters!['rules'] as List? ?? []))
-                      Pill('📋 $rule',
-                          bg: AppColors.goldSoft, fg: AppColors.navy),
-                    for (var amenity in (_filters!['amenities'] as List? ?? []))
-                      Pill('✨ $amenity',
-                          bg: AppColors.goldSoft, fg: AppColors.navy),
+                    RichText(
+                      text: TextSpan(
+                        style: AppTheme.dm(size: 14, color: AppColors.textSecondary),
+                        children: [
+                          TextSpan(
+                            text: '${results.length} ',
+                            style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.navy),
+                          ),
+                          const TextSpan(text: 'stays in North Coast'),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: _showSortMenu,
+                      behavior: HitTestBehavior.opaque,
+                      child: Row(children: [
+                        const Icon(Icons.filter_list, size: 14, color: AppColors.navy),
+                        const SizedBox(width: 6),
+                        Text('Sort: ${_sortBy == 'Recommended' ? 'Recommended' : _sortBy.split(':').first}',
+                            style: AppTheme.dm(
+                                size: 13,
+                                weight: FontWeight.w600,
+                                color: AppColors.navy)),
+                      ]),
+                    ),
                   ],
                 ),
-              ],
-              const SizedBox(height: 18),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('${results.length} properties found',
-                      style: AppTheme.dm(
-                          size: 14,
-                          weight: FontWeight.w600,
-                          color: AppColors.muted)),
-                  GestureDetector(
-                    onTap: _showSortMenu,
-                    behavior: HitTestBehavior.opaque,
-                    child: Row(children: [
-                      Text('Sort: $_sortBy',
-                          style: AppTheme.dm(
-                              size: 13,
-                              weight: FontWeight.w600,
-                              color: AppColors.navy)),
-                      const Icon(Icons.keyboard_arrow_down,
-                          size: 16, color: AppColors.navy),
-                    ]),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (results.isEmpty)
-                const BrowseEmptyState()
-              else
-                for (var p in results) ...[
-                  PropertyCard(
-                    property: p,
-                    onTap: () =>
-                        AppNavigation.goToPropertyDetail(context, extra: p),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              if (results.isNotEmpty && _appliedSearchQuery.isEmpty) ...[
-                const SectionHeader(
-                    title: 'Top Rated in North Coast', action: null),
                 const SizedBox(height: 12),
+                // Filter Chips
                 SizedBox(
-                  height: 240,
+                  height: 40,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    clipBehavior: Clip.none,
                     children: [
-                      SmallPropCard(
-                          image: Sample.lagoon.image,
-                          name: 'Cyan Chalet',
-                          price: '3,200',
-                          rating: '4.9'),
-                      const SizedBox(width: 12),
-                      SmallPropCard(
-                          image: Sample.dunes.image,
-                          name: 'Sand Loft',
-                          price: '2,800',
-                          rating: '4.8'),
-                      const SizedBox(width: 12),
-                      SmallPropCard(
-                          image: Sample.lagoon.image,
-                          name: 'Wave Villa',
-                          price: '5,500',
-                          rating: '5.0'),
+                      ChoiceChipPill(
+                        'Top rated',
+                        selected: _sortBy == 'Top Rated',
+                        borderColor: _sortBy == 'Top Rated' ? AppColors.navy : AppColors.border,
+                        onTap: () => setState(() => _sortBy = 'Top Rated'),
+                      ),
+                      const SizedBox(width: 8),
+                      ChoiceChipPill(
+                        'Price ↑',
+                        selected: _sortBy == 'Price: Low to High',
+                        borderColor: _sortBy == 'Price: Low to High' ? AppColors.navy : AppColors.border,
+                        onTap: () => setState(() => _sortBy = 'Price: Low to High'),
+                      ),
+                      const SizedBox(width: 8),
+                      ChoiceChipPill(
+                        'Newest',
+                        selected: _sortBy == 'Recommended',
+                        borderColor: _sortBy == 'Recommended' ? AppColors.navy : AppColors.border,
+                        onTap: () => setState(() => _sortBy = 'Recommended'),
+                      ),
+                      const SizedBox(width: 8),
+                      ChoiceChipPill(
+                        'Beachfront',
+                        selected: _filters?['type'] == 'Beachfront',
+                        borderColor: _filters?['type'] == 'Beachfront' ? AppColors.navy : AppColors.border,
+                        onTap: () {
+                          setState(() {
+                            _filters ??= {};
+                            _filters!['type'] = 'Beachfront';
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 20),
+                if (results.isEmpty)
+                  const BrowseEmptyState()
+                else ...[
+                  for (var p in results) ...[
+                    PropertyCard(
+                      property: p,
+                      onTap: () =>
+                          AppNavigation.goToPropertyDetail(context, extra: p),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ],
+                if (results.isNotEmpty && _appliedSearchQuery.isEmpty && _filters == null) ...[
+                  const SectionHeader(
+                      title: 'Top Rated in North Coast', action: null),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    height: 240,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
+                      children: [
+                        SmallPropCard(
+                            image: Sample.lagoon.image,
+                            name: 'Cyan Chalet',
+                            price: '3,200',
+                            rating: '4.9'),
+                        const SizedBox(width: 12),
+                        SmallPropCard(
+                            image: Sample.dunes.image,
+                            name: 'Sand Loft',
+                            price: '2,800',
+                            rating: '4.8'),
+                        const SizedBox(width: 12),
+                        SmallPropCard(
+                            image: Sample.lagoon.image,
+                            name: 'Wave Villa',
+                            price: '5,500',
+                            rating: '5.0'),
+                      ],
+                    ),
+                  ),
+                ],
               ],
-            ],
-          ),
-          const FloatingNav(active: 0),
-        ],
+            ),
+            const FloatingNav(active: 0),
+          ],
+        ),
       ),
     );
   }

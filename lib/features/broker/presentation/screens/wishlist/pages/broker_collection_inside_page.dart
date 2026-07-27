@@ -1,15 +1,15 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
+import 'package:sahely/data/models.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/broker/domain/models/broker_wishlist_item.dart';
-import 'package:sahely/features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_collection_header.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_collection_members_actions.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_collection_property_card.dart';
-import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_share_collection_sheet.dart';
 
 class BrokerCollectionInsidePage extends StatefulWidget {
   final String collectionId;
@@ -37,7 +37,7 @@ class _BrokerCollectionInsidePageState
   @override
   void initState() {
     super.initState();
-    context.read<BrokerWishlistCubit>().loadWishlistItems(widget.collectionId);
+    context.read<WishlistCubit>().loadWishlistItems(widget.collectionId, Role.broker);
   }
 
   @override
@@ -65,34 +65,28 @@ class _BrokerCollectionInsidePageState
                 );
               },
               onShareTap: () {
-                final cubit = context.read<BrokerWishlistCubit>();
+                final cubit = context.read<WishlistCubit>();
                 final collection = cubit.state.collections.firstWhere(
                   (c) => c.id == widget.collectionId,
-                  orElse: () => BrokerWishlistCollection(
+                  orElse: () => WishlistCollection(
                       id: widget.collectionId,
                       name: widget.collectionName,
                       itemCount: widget.propertyCount),
                 );
 
-                showModalBottomSheet(
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  isScrollControlled: true,
-                  builder: (context) => BrokerShareCollectionSheet(
-                    collectionName: widget.collectionName,
-                    collectionImage: collection.coverImage ??
-                        'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
-                    placesCount: collection.itemCount,
-                    shareableLink:
-                        'sahely.app/broker/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
-                    isInviteOnly: false,
-                  ),
+                AppNavigation.goToShareCollection(
+                  context,
+                  collectionName: widget.collectionName,
+                  collectionImage: collection.coverImage ?? 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+                  placesCount: collection.itemCount,
+                  shareableLink: 'sahely.app/broker/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
                 );
               },
               onCompareTap: () {
-                // Navigate to comparison if needed, or show snackbar
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Comparing properties...')),
+                AppNavigation.goToCompare(
+                  context,
+                  collectionName: widget.collectionName,
+                  memberNames: widget.memberNames,
                 );
               },
             ),
@@ -101,9 +95,9 @@ class _BrokerCollectionInsidePageState
 
             // Property List
             Expanded(
-              child: BlocBuilder<BrokerWishlistCubit, BrokerWishlistState>(
+              child: BlocBuilder<WishlistCubit, WishlistState>(
                 builder: (context, state) {
-                  if (state.status == BrokerWishlistStatus.loading) {
+                  if (state.status == WishlistStatus.loading) {
                     return const Center(
                         child:
                             CircularProgressIndicator(color: AppColors.gold));

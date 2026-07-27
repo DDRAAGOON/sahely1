@@ -3,6 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/data/models.dart';
+import 'package:sahely/features/shared/screens/filters_screen.dart';
+
+import '../../features/renter/presentation/screens/wishlist/pages/collection_compare_screen.dart';
+import '../../features/shared/screens/compare_screen.dart';
+import '../../features/shared/screens/share_collection_screen.dart';
 
 class AppNavigation {
   AppNavigation._();
@@ -111,7 +116,23 @@ class AppNavigation {
   static void goToTransactionHistory(BuildContext context) => context.push(AppRoutes.transactionHistory);
   static void goToNotifications(BuildContext context) => context.push(AppRoutes.notifications);
   static void goToBrowse(BuildContext context, {Object? extra}) => context.push(AppRoutes.browse, extra: extra);
-  static Future<T?> goToFilters<T>(BuildContext context) => context.push<T>(AppRoutes.filters);
+  
+  static Future<T?> goToFilters<T>(BuildContext context) {
+    return showModalBottomSheet<T>(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.88,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) => const FiltersScreen(),
+      ),
+    );
+  }
+
   static void goToAiChat(BuildContext context, {Object? extra}) => context.push(AppRoutes.aiChat, extra: extra);
   static void goToPropertyReviews(BuildContext context, {Object? extra}) => context.push(AppRoutes.propertyReviews, extra: extra);
   static void goToBooking(BuildContext context, {Object? extra}) => context.push(AppRoutes.booking, extra: extra);
@@ -121,8 +142,36 @@ class AppNavigation {
   static void goToWriteReview(BuildContext context, {Object? extra}) => context.push(AppRoutes.writeReview, extra: extra);
   static void goToCollection(BuildContext context, {Object? extra}) => context.push(AppRoutes.collection, extra: extra);
   static void goToCollectionChat(BuildContext context) => context.push(AppRoutes.collectionChat);
-  static void goToCompare(BuildContext context) => context.push(AppRoutes.compare);
-  static void goToShareCollection(BuildContext context) => context.push(AppRoutes.shareCollection);
+  static void goToCompare(BuildContext context, {required String collectionName, required List<String> memberNames}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompareScreen(
+          collectionName: collectionName,
+          participantNames: memberNames,
+        ),
+      ),
+    );
+  }
+  static void goToShareCollection(BuildContext context, {
+    String collectionName = 'Beach Trip 2026',
+    String collectionImage = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800',
+    int placesCount = 5,
+    String shareableLink = 'sahely.app/c/beach-2026',
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ShareCollectionScreen(
+        collectionName: collectionName,
+        collectionImage: collectionImage,
+        placesCount: placesCount,
+        shareableLink: shareableLink,
+      ),
+    );
+  }
   static void goToShareEarn(BuildContext context) => context.push(AppRoutes.shareEarn);
   static void goToMawsemLevel(BuildContext context) => context.push(AppRoutes.mawsemLevel);
   static void goToStarsEarned(BuildContext context) => context.push(AppRoutes.starsEarned);

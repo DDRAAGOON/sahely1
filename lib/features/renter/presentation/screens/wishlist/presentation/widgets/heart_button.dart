@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/add_to_collection_sheet.dart';
 
@@ -25,12 +27,16 @@ class HeartButton extends StatefulWidget {
 }
 
 class _HeartButtonState extends State<HeartButton> {
+  Role get _currentRole => RoleState().currentRole;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<WishlistCubit>().checkStatus(widget.propertyId);
+        final cubit = context.read<WishlistCubit>();
+        cubit.checkStatus(widget.propertyId, _currentRole);
+        cubit.loadCollections(_currentRole);
       }
     });
   }
@@ -46,13 +52,14 @@ class _HeartButtonState extends State<HeartButton> {
           onTap: () async {
             HapticFeedback.lightImpact();
 
-            if (!isWishlisted && state.collections.length > 1) {
+            if (!isWishlisted) {
               _showAddToCollectionSheet(context);
             } else {
               context.read<WishlistCubit>().toggleWishlist(
                     propertyId: widget.propertyId,
                     propertyName: widget.propertyName,
                     propertyImage: widget.propertyImage,
+                    role: _currentRole,
                   );
             }
           },
@@ -95,6 +102,7 @@ class _HeartButtonState extends State<HeartButton> {
         propertyId: widget.propertyId,
         propertyName: widget.propertyName,
         propertyImage: widget.propertyImage,
+        role: _currentRole,
       ),
     );
   }

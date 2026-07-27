@@ -8,6 +8,7 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/data/models.dart';
+import 'package:sahely/features/owner/widgets/payout_selection_sheet.dart';
 
 class WithdrawAmountScreen extends StatefulWidget {
   const WithdrawAmountScreen({super.key});
@@ -20,6 +21,13 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
   final _amountController = TextEditingController(text: '20,000');
   final double _available = 38900;
   String _selectedP = '50%';
+  
+  PayoutAccount _selectedAccount = PayoutAccount(
+    id: '1',
+    bankName: 'CIB Bank',
+    accountNumber: 'EG••4821',
+    holderName: 'Layla Mansour',
+  );
 
   void _setPercent(String p, double factor) {
     setState(() {
@@ -41,12 +49,28 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
     }
   }
 
-  void _onChangeAccount() {
-    final role = context.read<RoleState>().currentRole;
-    if (role == Role.broker) {
-      AppNavigation.goToBrokerPayout(context);
-    } else {
-      AppNavigation.goToOwnerPayout(context);
+  void _onChangeAccount() async {
+    final result = await showModalBottomSheet<PayoutAccount>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => PayoutSelectionSheet(
+        selectedAccount: _selectedAccount,
+        onAddAccount: () {
+          final role = context.read<RoleState>().currentRole;
+          if (role == Role.broker) {
+            AppNavigation.goToBrokerPayout(context);
+          } else {
+            AppNavigation.goToOwnerPayout(context);
+          }
+        },
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedAccount = result;
+      });
     }
   }
 
@@ -193,10 +217,10 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                          Text('CIB Bank · EG••4821',
+                          Text('${_selectedAccount.bankName} · ${_selectedAccount.accountNumber}',
                               style: AppTheme.dm(
                                   size: 13, weight: FontWeight.w700)),
-                          Text('Layla Mansour',
+                          Text(_selectedAccount.holderName,
                               style: AppTheme.dm(
                                   size: 11, color: AppColors.muted)),
                         ])),

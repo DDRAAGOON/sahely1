@@ -2,7 +2,7 @@
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/property_card_base.dart' as base;
-import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_heart_button.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/heart_button.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 /// Broker-specific property card with heart/wishlist button and commission info.
@@ -32,7 +32,7 @@ class BrokerPropertyCard extends StatelessWidget {
           Positioned(
             top: 12,
             right: 12,
-            child: BrokerHeartButton(
+            child: HeartButton(
               propertyId: property.id,
               propertyName: property.name,
               propertyImage: property.image,

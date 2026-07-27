@@ -37,7 +37,7 @@ class EarnStarRow extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Row(
               children: [
                 // Icon
@@ -83,11 +83,10 @@ class EarnStarRow extends StatelessWidget {
                   ),
                 ),
 
-                // Stars
                 Text(
-                  '$stars â˜…',
+                  '$stars ★',
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: titleColor ?? AppColors.gold,
                     fontFamily: 'DM Sans',

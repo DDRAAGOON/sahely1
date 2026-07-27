@@ -24,43 +24,10 @@ class MawsemDashboardScreen extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // Header with Back Button only
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.chevron_left,
-                        color: AppColors.navy,
-                        size: 24,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
             // Hero Card
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
                 child: MawsemHeroCard(
                   levelName: levelData['name'],
                   levelNumber: levelData['level'],
@@ -87,7 +54,7 @@ class MawsemDashboardScreen extends StatelessWidget {
               ),
             ),
 
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
             // How to Earn Stars Section
             const SliverToBoxAdapter(
@@ -97,7 +64,7 @@ class MawsemDashboardScreen extends StatelessWidget {
               ),
             ),
 
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
             // Referral Code Card
             SliverToBoxAdapter(

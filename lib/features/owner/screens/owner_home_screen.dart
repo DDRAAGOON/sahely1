@@ -115,22 +115,22 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                       onTap: () => AppNavigation.goToBrowse(context),
                       behavior: HitTestBehavior.opaque,
                       child: Container(
-                        height: 52,
+                        height: 46,
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
                           color: AppColors.white,
-                          borderRadius: BorderRadius.circular(26),
+                          borderRadius: BorderRadius.circular(23),
                           border: Border.all(color: AppColors.borderDefault),
                         ),
                         child: Row(children: [
                           const Icon(Icons.search,
-                              color: AppColors.gold, size: 20),
+                              color: AppColors.gold, size: 18),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               'Find your perfect stay',
                               style: AppTheme.dm(
-                                  size: 12,
+                                  size: 11,
                                   color: AppColors.navy.withValues(alpha: 0.5)),
                             ),
                           ),
@@ -148,13 +148,13 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                     },
                     behavior: HitTestBehavior.opaque,
                     child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 46,
+                      height: 46,
                       decoration: BoxDecoration(
                           color: AppColors.navy,
-                          borderRadius: BorderRadius.circular(14)),
+                          borderRadius: BorderRadius.circular(12)),
                       child: const Icon(Icons.tune,
-                          color: AppColors.gold, size: 22),
+                          color: AppColors.gold, size: 20),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -162,27 +162,27 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                     onTap: () => AppNavigation.goToOwnerAiChat(context),
                     behavior: HitTestBehavior.opaque,
                     child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 46,
+                      height: 46,
                       decoration: BoxDecoration(
                           color: AppColors.gold,
-                          borderRadius: BorderRadius.circular(14)),
+                          borderRadius: BorderRadius.circular(12)),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
                           const Icon(Icons.chat_bubble_outline,
-                              color: AppColors.navy, size: 22),
+                              color: AppColors.navy, size: 20),
                           Positioned(
-                              top: 10,
-                              right: 10,
+                              top: 8,
+                              right: 8,
                               child: Container(
-                                  width: 10,
-                                  height: 10,
+                                  width: 8,
+                                  height: 8,
                                   decoration: BoxDecoration(
                                       color: const Color(0xFF34C759),
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                          color: AppColors.cream, width: 2)))),
+                                          color: AppColors.cream, width: 1.5)))),
                         ],
                       ),
                     ),
@@ -234,7 +234,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                             weight: FontWeight.w700,
                             color: AppColors.navy)),
                     GestureDetector(
-                      onTap: () => AppNavigation.goToOwnerAllTrending(context),
+                      onTap: () => AppNavigation.goToAllProperties(context),
                       behavior: HitTestBehavior.opaque,
                       child: Text('See All',
                           style: AppTheme.dm(

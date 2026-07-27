@@ -2,9 +2,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/broker/domain/models/broker_wishlist_item.dart';
-import 'package:sahely/features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
-import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_create_collection_sheet.dart';
+import 'package:sahely/data/models.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
+import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/create_collection_sheet.dart';
 
 class BrokerAddToCollectionSheet extends StatefulWidget {
   final String propertyId;
@@ -21,20 +22,20 @@ class BrokerAddToCollectionSheet extends StatefulWidget {
 
 class _BrokerAddToCollectionSheetState
     extends State<BrokerAddToCollectionSheet> {
-  List<BrokerWishlistCollection> _collections = [];
+  List<WishlistCollection> _collections = [];
   String? _selectedCollectionId;
 
   @override
   void initState() {
     super.initState();
-    context.read<BrokerWishlistCubit>().loadCollections();
+    context.read<WishlistCubit>().loadCollections(Role.broker);
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<BrokerWishlistCubit, BrokerWishlistState>(
+    return BlocConsumer<WishlistCubit, WishlistState>(
       listener: (context, state) {
-        if (state is BrokerCollectionsLoaded) {
+        if (state.status == WishlistStatus.loaded) {
           setState(() {
             _collections = state.collections;
             if (_selectedCollectionId == null && _collections.isNotEmpty) {
@@ -70,7 +71,7 @@ class _BrokerAddToCollectionSheetState
                       color: AppColors.navy,
                       fontFamily: 'DM Sans')),
               const SizedBox(height: 16),
-              if (state.status == BrokerWishlistStatus.loading &&
+              if (state.status == WishlistStatus.loading &&
                   _collections.isEmpty)
                 const Center(
                     child: Padding(
@@ -148,9 +149,10 @@ class _BrokerAddToCollectionSheetState
                 child: ElevatedButton(
                   onPressed: _selectedCollectionId != null
                       ? () {
-                          context.read<BrokerWishlistCubit>().addToCollection(
+                          context.read<WishlistCubit>().addToCollection(
                               propertyId: widget.propertyId,
-                              collectionId: _selectedCollectionId!);
+                              collectionId: _selectedCollectionId!,
+                              role: Role.broker);
                           Navigator.pop(context);
                         }
                       : null,
@@ -193,11 +195,11 @@ class _BrokerAddToCollectionSheetState
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (context) => const BrokerCreateCollectionSheet(),
+      builder: (context) => const CreateCollectionSheet(),
     );
 
     if (result != null && result.isNotEmpty && mounted) {
-      context.read<BrokerWishlistCubit>().createCollection(result);
+      context.read<WishlistCubit>().createCollection(result, Role.broker);
     }
   }
 }

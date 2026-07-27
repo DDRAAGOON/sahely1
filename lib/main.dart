@@ -9,12 +9,9 @@ import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
-// ✅ أضف هذا الاستيراد (تأكد من المسار الصحيح لملف RoleState في مشروعك)
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/broker/data/repositories/broker_bookings_repository.dart';
-import 'package:sahely/features/broker/data/repositories/broker_wishlist_repository.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/bloc/broker_bookings_cubit.dart';
-import 'package:sahely/features/broker/presentation/screens/wishlist/bloc/broker_wishlist_cubit.dart';
 import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
 import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
 import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
@@ -28,20 +25,18 @@ import 'package:sahely/features/renter/presentation/verification/presentation/bl
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 1. تهيئة الـ AuthProvider واستعادة حالة تسجيل الدخول
+  // 1. Initialize AuthProvider and restore login state
   final authProvider = AuthProvider();
   await authProvider.checkAuthStatus();
 
-  // 2. تهيئة الـ RoleState وتحديد دور المستخدم بناءً على بيانات الـ Auth
+  // 2. Initialize RoleState
   final roleState = RoleState();
 
   runApp(
     MultiProvider(
       providers: [
-        // توفير الـ instances التي تم تهيئتها مسبقاً
         ChangeNotifierProvider.value(value: authProvider),
         ChangeNotifierProvider.value(value: roleState),
-
         ChangeNotifierProvider(create: (_) => BookingsProvider()),
         ChangeNotifierProvider(create: (_) => CurrencyProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
@@ -51,7 +46,6 @@ Future<void> main() async {
         providers: [
           RepositoryProvider(create: (context) => VerificationRepository()),
           RepositoryProvider(create: (context) => WishlistRepository()),
-          RepositoryProvider(create: (context) => BrokerWishlistRepository()),
           RepositoryProvider(create: (context) => BrokerBookingsRepository()),
           RepositoryProvider<RenterRepository>(
             create: (context) => RenterRepositoryImpl(
@@ -59,37 +53,39 @@ Future<void> main() async {
             ),
           ),
         ],
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => VerificationCubit(
-                context.read<VerificationRepository>(),
-                authProvider: authProvider,
-              )..loadVerificationStatus(),
-            ),
-            BlocProvider(
-              create: (context) => WishlistCubit(
-                context.read<WishlistRepository>(),
-              )..loadCollections(),
-            ),
-            BlocProvider(
-              create: (context) => BrokerWishlistCubit(
-                context.read<BrokerWishlistRepository>(),
-              ),
-            ),
-            BlocProvider(
-              create: (context) => BrokerBookingsCubit(
-                context.read<BrokerBookingsRepository>(),
-              ),
-            ),
-            BlocProvider(
-              create: (context) => RenterHomeCubit(
-                repository: context.read<RenterRepository>(),
-              )..loadProperties(),
-            ),
-          ],
-          // 3. تشغيل التطبيق
-          child: const SahelyApp(),
+        child: Consumer<RoleState>(
+          builder: (context, roleState, child) {
+            return MultiBlocProvider(
+              // The Key ensures that whenever the Role changes, the entire Bloc tree 
+              // (including WishlistCubit) is DISPOSED and RECREATED.
+              // This is the architectural solution to prevent state leakage between roles.
+              key: ValueKey('bloc_tree_${roleState.currentRole.name}'),
+              providers: [
+                BlocProvider(
+                  create: (context) => VerificationCubit(
+                    context.read<VerificationRepository>(),
+                    authProvider: authProvider,
+                  )..loadVerificationStatus(),
+                ),
+                BlocProvider(
+                  create: (context) => WishlistCubit(
+                    context.read<WishlistRepository>(),
+                  )..loadCollections(roleState.currentRole),
+                ),
+                BlocProvider(
+                  create: (context) => BrokerBookingsCubit(
+                    context.read<BrokerBookingsRepository>(),
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => RenterHomeCubit(
+                    repository: context.read<RenterRepository>(),
+                  )..loadProperties(),
+                ),
+              ],
+              child: const SahelyApp(),
+            );
+          },
         ),
       ),
     ),

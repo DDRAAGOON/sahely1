@@ -4,8 +4,8 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/chips.dart';
-import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/features/shared/widgets/browse_empty_state.dart';
 import 'package:sahely/features/shared/widgets/hero_property_card.dart';
 
 class AllPropertiesScreen extends StatefulWidget {
@@ -28,184 +28,185 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PhoneScaffold(
-      child: Column(
-        children: [
-          // 1. Custom Header
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      border: Border.all(color: AppColors.border),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.chevron_left,
-                        size: 20, color: AppColors.navy),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Container(
-                    height: 48,
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.search,
-                            size: 18, color: AppColors.gold),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            onChanged: (v) => setState(() => _query = v),
-                            decoration: InputDecoration(
-                              hintText: 'Search properties',
-                              hintStyle:
-                                  AppTheme.dm(size: 13, color: AppColors.faint),
-                              border: InputBorder.none,
-                              isDense: true,
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                            style: AppTheme.dm(size: 13, color: AppColors.navy),
-                          ),
-                        ),
-                        if (_query.isNotEmpty)
-                          GestureDetector(
-                            onTap: () {
-                              _searchController.clear();
-                              setState(() => _query = '');
-                            },
-                            behavior: HitTestBehavior.opaque,
-                            child: const Icon(Icons.close,
-                                size: 16, color: AppColors.faint),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () async {
-                    final result = await AppNavigation.goToFilters(context);
-                    if (result is Map<String, dynamic> && context.mounted) {
-                      // Optionally navigate to browse results with these filters
-                      AppNavigation.goToSearchResults(context, extra: result);
-                    }
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.navy,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child:
-                        const Icon(Icons.tune, color: AppColors.gold, size: 20),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () => AppNavigation.goToAiChat(context),
-                  behavior: HitTestBehavior.opaque,
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD4B982),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(Icons.chat_bubble_outline,
-                            color: AppColors.navy, size: 20),
-                      ),
-                      Positioned(
-                        top: 4,
-                        right: 4,
-                        child: Container(
-                          width: 10,
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF34C759),
-                            shape: BoxShape.circle,
-                            border:
-                                Border.all(color: AppColors.cream, width: 2),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+    // Determine if we are in "Discovery Mode" (showing sections) or "Result Mode" (showing list)
+    final bool isSearching = _query.isNotEmpty || _selectedFilter != 'All';
 
-          // 2. Horizontal Categories
-          SizedBox(
-            height: 38,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                for (var f in [
-                  'All',
-                  'Trending Now',
-                  'Best Offers',
-                  'Newly Added'
-                ]) ...[
-                  ChoiceChipPill(
-                    f,
-                    selected: _selectedFilter == f,
-                    height: 38,
-                    onTap: () => setState(() => _selectedFilter = f),
+    return Scaffold(
+      backgroundColor: AppColors.cream,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 1. Custom Header (Slim Version)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        border: Border.all(color: AppColors.border),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.chevron_left,
+                          size: 20, color: AppColors.navy),
+                    ),
                   ),
                   const SizedBox(width: 8),
+                  Expanded(
+                    child: Container(
+                      height: 42,
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(21),
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.search,
+                              size: 18, color: AppColors.gold),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              controller: _searchController,
+                              onChanged: (v) => setState(() => _query = v),
+                              decoration: InputDecoration(
+                                hintText: 'Search properties',
+                                hintStyle: AppTheme.dm(
+                                    size: 12,
+                                    color: AppColors.navy.withValues(alpha: 0.5)),
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.zero,
+                              ),
+                              style: AppTheme.dm(size: 13, color: AppColors.navy),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () async {
+                      await AppNavigation.goToFilters(context);
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: AppColors.navy,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child:
+                          const Icon(Icons.tune, color: AppColors.gold, size: 18),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () => AppNavigation.goToAiChat(context),
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: AppColors.gold,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const Icon(Icons.chat_bubble_outline,
+                              color: AppColors.navy, size: 18),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: AppColors.success,
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: AppColors.gold, width: 1.5),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
-              ],
+              ),
             ),
-          ),
 
-          // 3. Properties List with Sections
-          Expanded(
-            child: _query.isNotEmpty ? _buildSearchResults() : _buildSections(),
-          ),
-        ],
+            // 2. Horizontal Categories
+            SizedBox(
+              height: 38,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  for (var f in [
+                    'All',
+                    'Trending Now',
+                    'Best Offers',
+                    'Newly Added'
+                  ]) ...[
+                    ChoiceChipPill(
+                      f,
+                      selected: _selectedFilter == f,
+                      height: 38,
+                      onTap: () => setState(() => _selectedFilter = f),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ],
+              ),
+            ),
+
+            // 3. Properties List (Discovery sections or Filtered results)
+            Expanded(
+              child: isSearching ? _buildFilteredResults() : _buildDiscoverySections(),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildSearchResults() {
+  Widget _buildFilteredResults() {
     final results = Sample.allTrending.where((p) {
-      final q = _query.toLowerCase();
-      return p.name.toLowerCase().contains(q) ||
-          p.area.toLowerCase().contains(q);
+      // 1. Search Query Filter
+      if (_query.isNotEmpty) {
+        final q = _query.toLowerCase();
+        if (!p.name.toLowerCase().contains(q) && !p.area.toLowerCase().contains(q)) {
+          return false;
+        }
+      }
+
+      // 2. Category Filter (Simplified mapping to existing data)
+      if (_selectedFilter == 'Trending Now') {
+        if (p.rating < 4.5) return false;
+      } else if (_selectedFilter == 'Best Offers') {
+        // Mock logic for best offers: prices below a certain point or even index
+        if (p.price > 10000) return false;
+      } else if (_selectedFilter == 'Newly Added') {
+        // Mock logic for new: guest favourites or high index
+        if (!p.guestFavourite) return false;
+      }
+
+      return true;
     }).toList();
 
     if (results.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.search_off, size: 64, color: AppColors.faint),
-            const SizedBox(height: 16),
-            Text('No properties found for "$_query"',
-                style: AppTheme.dm(size: 14, color: AppColors.muted)),
-          ],
-        ),
-      );
+      return const BrowseEmptyState();
     }
 
     return ListView.builder(
@@ -218,59 +219,53 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
           child: HeroPropertyCard(
             property: p,
             badge: p.rating >= 4.8 ? 'Top Rated' : 'Featured',
-            badgeColor:
-                p.rating >= 4.8 ? const Color(0xFFB22222) : AppColors.gold,
+            badgeColor: p.rating >= 4.8 ? AppColors.error : AppColors.gold,
           ),
         );
       },
     );
   }
 
-  Widget _buildSections() {
+  Widget _buildDiscoverySections() {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
       children: [
-        if (_selectedFilter == 'All' || _selectedFilter == 'Trending Now') ...[
-          _sectionHeader('🔥 TRENDING NOW'),
-          const HeroPropertyCard(
-            property: Sample.azure,
-            badge: 'Trending',
-            badgeColor: Color(0xFFB22222),
-          ),
-          const SizedBox(height: 16),
-          const HeroPropertyCard(
-            property: Sample.lagoon,
-            badge: 'Trending',
-            badgeColor: Color(0xFFB22222),
-          ),
-          const SizedBox(height: 24),
-        ],
-        if (_selectedFilter == 'All' || _selectedFilter == 'Best Offers') ...[
-          _sectionHeader('💰 BEST OFFERS'),
-          const HeroPropertyCard(
-            property: Sample.dunes,
-            badge: '-15%',
-            badgeColor: Color(0xFF1B6B3A),
-            grayscale: true,
-          ),
-          const SizedBox(height: 24),
-        ],
-        if (_selectedFilter == 'All' || _selectedFilter == 'Newly Added') ...[
-          _sectionHeader('✨ NEWLY ADDED'),
-          const HeroPropertyCard(
-            property: Sample.lagoon,
-            badge: 'New',
-            badgeColor: Color(0xFFC9A84C),
-            nameOverride: 'Marina Loft',
-          ),
-          const SizedBox(height: 16),
-          const HeroPropertyCard(
-            property: Sample.azure,
-            badge: 'New',
-            badgeColor: Color(0xFFC9A84C),
-            nameOverride: 'Palm Chalet',
-          ),
-        ],
+        _sectionHeader('🔥 TRENDING NOW'),
+        const HeroPropertyCard(
+          property: Sample.azure,
+          badge: 'Trending',
+          badgeColor: AppColors.error,
+        ),
+        const SizedBox(height: 16),
+        const HeroPropertyCard(
+          property: Sample.lagoon,
+          badge: 'Trending',
+          badgeColor: AppColors.error,
+        ),
+        const SizedBox(height: 24),
+
+        _sectionHeader('💰 BEST OFFERS'),
+        const HeroPropertyCard(
+          property: Sample.dunes,
+          badge: '-15%',
+          badgeColor: AppColors.success,
+        ),
+        const SizedBox(height: 24),
+
+        _sectionHeader('✨ NEWLY ADDED'),
+        const HeroPropertyCard(
+          property: Sample.lagoon,
+          badge: 'New',
+          badgeColor: AppColors.gold,
+          nameOverride: 'Marina Loft',
+        ),
+        const SizedBox(height: 16),
+        const HeroPropertyCard(
+          property: Sample.azure,
+          badge: 'New',
+          badgeColor: AppColors.gold,
+          nameOverride: 'Palm Chalet',
+        ),
       ],
     );
   }

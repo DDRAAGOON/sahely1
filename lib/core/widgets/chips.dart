@@ -41,7 +41,7 @@ class ChoiceChipPill extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         decoration: BoxDecoration(
           color: selected ? AppColors.navy : AppColors.white,
-          border: Border.all(color: AppColors.navy, width: borderWidth),
+          border: Border.all(color: borderColor, width: borderWidth),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Row(

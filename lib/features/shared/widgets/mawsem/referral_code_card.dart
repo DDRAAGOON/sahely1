@@ -129,7 +129,6 @@ class ReferralCodeCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Note Text
                 RichText(
                   text: const TextSpan(
                     style: TextStyle(
@@ -139,7 +138,7 @@ class ReferralCodeCard extends StatelessWidget {
                       height: 1.5,
                     ),
                     children: [
-                      TextSpan(text: 'Share it â€” when a friend you refer '),
+                      TextSpan(text: 'Share it — when a friend you refer '),
                       TextSpan(
                         text: 'books & completes a stay',
                         style: TextStyle(
@@ -147,7 +146,7 @@ class ReferralCodeCard extends StatelessWidget {
                       ),
                       TextSpan(text: ' you earn '),
                       TextSpan(
-                        text: '+15â˜…',
+                        text: '+15★',
                         style: TextStyle(
                             fontWeight: FontWeight.w800, color: AppColors.gold),
                       ),
@@ -159,7 +158,7 @@ class ReferralCodeCard extends StatelessWidget {
                       ),
                       TextSpan(text: ' and earn '),
                       TextSpan(
-                        text: '+50â˜…',
+                        text: '+50★',
                         style: TextStyle(
                             fontWeight: FontWeight.w800, color: AppColors.gold),
                       ),

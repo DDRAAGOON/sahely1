@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 
-class CompareInputBar extends StatelessWidget {
+class CompareInputBar extends StatefulWidget {
   final Function(String) onSendMessage;
   final Function(String) onAskAI;
 
@@ -11,6 +11,27 @@ class CompareInputBar extends StatelessWidget {
     required this.onSendMessage,
     required this.onAskAI,
   });
+
+  @override
+  State<CompareInputBar> createState() => _CompareInputBarState();
+}
+
+class _CompareInputBarState extends State<CompareInputBar> {
+  final TextEditingController _controller = TextEditingController();
+
+  void _handleSend() {
+    final text = _controller.text.trim();
+    if (text.isNotEmpty) {
+      widget.onSendMessage(text);
+      _controller.clear();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +65,7 @@ class CompareInputBar extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: _controller,
                         decoration: const InputDecoration(
                           hintText: 'Message or ask AI to compare...',
                           hintStyle: TextStyle(
@@ -59,7 +81,7 @@ class CompareInputBar extends StatelessWidget {
                           color: AppColors.dark,
                           fontFamily: 'DM Sans',
                         ),
-                        onSubmitted: onSendMessage,
+                        onSubmitted: (_) => _handleSend(),
                       ),
                     ),
                   ],
@@ -67,23 +89,28 @@ class CompareInputBar extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            // Send Button
-            GestureDetector(
-              onTap: () => onSendMessage(''),
-              // Placeholder for current implementation
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: const BoxDecoration(
-                  color: AppColors.gold,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.send,
-                  color: AppColors.navy,
-                  size: 20,
-                ),
-              ),
+            // AI/Send Button
+            ValueListenableBuilder<TextEditingValue>(
+              valueListenable: _controller,
+              builder: (context, value, child) {
+                final isTyping = value.text.trim().isNotEmpty;
+                return GestureDetector(
+                  onTap: isTyping ? _handleSend : () => widget.onAskAI('compare'),
+                  child: Container(
+                    width: 44,
+                    height: 44,
+                    decoration: const BoxDecoration(
+                      color: AppColors.gold,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      isTyping ? Icons.send : Icons.auto_awesome,
+                      color: AppColors.navy,
+                      size: 20,
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),

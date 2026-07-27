@@ -10,6 +10,7 @@ class AppColors {
   static const Color cream = Color(0xFFF5F0E8);
   static const Color goldTint = Color(0xFFFDF9F4);
   static const Color surface = Color(0xFFFFFFFF);
+  static const Color white = Color(0xFFFFFFFF);
 
   // ==================== TEXT COLORS ====================
   static const Color textPrimary = Color(0xFF2D2D2D);
@@ -77,7 +78,15 @@ class AppColors {
   static const Color secondary = textSecondary;
   static const Color placeholder = textPlaceholder;
   static const Color dark = textPrimary;
-  static const Color white = Color(0xFFFFFFFF);
+
+  // ==================== MAWSEM SPECIAL COLORS ====================
+  static const Color mawsemCardBgTop = Color(0xFF1D2D4D);
+  static const Color mawsemCardBgBottom = Color(0xFF24365C);
+  static const Color mawsemTealStart = Color(0xFF2CB5A0);
+  static const Color mawsemTealEnd = Color(0xFF268B8B);
+  static const Color mawsemGoldBright = Color(0xFFD8B95D);
+  static const Color mawsemProgressTrack = Color(0xFF2D3A5C);
+  static const Color mawsemTextMuted = Color(0xFFB8C4E0);
 
   // ==================== GRADIENTS ====================
   static const Gradient goldRadial = RadialGradient(

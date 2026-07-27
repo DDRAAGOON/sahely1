@@ -69,7 +69,7 @@ class MawsemLevelTile extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(13),
@@ -100,7 +100,7 @@ class MawsemLevelTile extends StatelessWidget {
                 color: effectiveIconBgColor,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: effectiveIconColor, size: 22),
+              child: Icon(icon, color: effectiveIconColor, size: 20),
             ),
             const SizedBox(width: 8),
 
@@ -112,7 +112,7 @@ class MawsemLevelTile extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '$number Â· $name',
+                        '$number · $name',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -144,11 +144,11 @@ class MawsemLevelTile extends StatelessWidget {
                       ],
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
                   Text(
                     perks,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 11.5,
                       color: perksColor ??
                           (isCurrent
                               ? Colors.white.withValues(alpha: 0.7)

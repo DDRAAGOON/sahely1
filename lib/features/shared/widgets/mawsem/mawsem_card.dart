@@ -16,7 +16,7 @@ class MawsemCard extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      useRootNavigator: true, // This makes it cover the bottom nav
+      useRootNavigator: true,
       builder: (context) => LevelDetailSheet(
         levelName: nextLevel['name'],
         levelIcon: nextLevel['icon'],
@@ -44,7 +44,6 @@ class MawsemCard extends StatelessWidget {
     final int starsToNext =
         nextLevel != null ? nextLevel['stars'] - currentStars : 0;
 
-    // Using the logic: Progress = currentStars / nextLevelThreshold
     double progress = 1.0;
     if (nextLevel != null) {
       final int nextLevelThreshold = nextLevel['stars'];
@@ -56,12 +55,24 @@ class MawsemCard extends StatelessWidget {
         AppNavigation.goToMawsem(context);
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: AppColors.navy,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-              color: AppColors.gold.withValues(alpha: 0.3), width: 1),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.mawsemCardBgTop,
+              AppColors.mawsemCardBgBottom,
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,17 +80,24 @@ class MawsemCard extends StatelessWidget {
             // Top Row: Icon + Level Info
             Row(
               children: [
-                // Level Icon
+                // Level Icon Box with Teal Gradient
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 38,
+                  height: 38,
                   decoration: BoxDecoration(
-                    color: AppColors.gold.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppColors.mawsemTealStart,
+                        AppColors.mawsemTealEnd,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     levelData['icon'],
-                    color: AppColors.gold,
+                    color: Colors.white,
                     size: 20,
                   ),
                 ),
@@ -91,27 +109,41 @@ class MawsemCard extends StatelessWidget {
                       Text(
                         levelData['name'],
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 17,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                           fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        '$currentStars â˜… this season',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.gold,
-                          fontFamily: 'DM Sans',
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            '$currentStars ',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.mawsemGoldBright,
+                              fontFamily: 'DM Sans',
+                            ),
+                          ),
+                          const Icon(Icons.star, color: AppColors.mawsemGoldBright, size: 12),
+                          const Text(
+                            ' this season',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: AppColors.mawsemGoldBright,
+                              fontFamily: 'DM Sans',
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
                 const Icon(
                   Icons.chevron_right,
-                  color: Colors.white54,
+                  color: Colors.white38,
                   size: 20,
                 ),
               ],
@@ -129,25 +161,39 @@ class MawsemCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(10),
                     child: LinearProgressIndicator(
                       value: progress,
-                      backgroundColor: Colors.white.withValues(alpha: 0.2),
+                      backgroundColor: AppColors.mawsemProgressTrack,
                       valueColor:
-                          const AlwaysStoppedAnimation<Color>(AppColors.gold),
-                      minHeight: 8,
+                          const AlwaysStoppedAnimation<Color>(AppColors.mawsemGoldBright),
+                      minHeight: 7,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    nextLevel != null
-                        ? '$starsToNext â˜… to ${nextLevel['name']}'
-                        : 'Max level reached!',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.white70,
-                      fontFamily: 'DM Sans',
-                    ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        '$starsToNext ',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.mawsemTextMuted,
+                          fontFamily: 'DM Sans',
+                        ),
+                      ),
+                      const Icon(Icons.star, color: AppColors.mawsemTextMuted, size: 11),
+                      Text(
+                        nextLevel != null
+                            ? ' to ${nextLevel['name']}'
+                            : ' Max level reached!',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.mawsemTextMuted,
+                          fontFamily: 'DM Sans',
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

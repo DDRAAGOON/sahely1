@@ -24,22 +24,22 @@ class SearchHeaderWithInput extends StatelessWidget {
         GestureDetector(
           onTap: onBack ?? () => Navigator.maybePop(context),
           child: Container(
-            width: 34,
-            height: 34,
+            width: 30,
+            height: 30,
             decoration: BoxDecoration(
               color: AppColors.white,
               border: Border.all(color: AppColors.border),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(6),
             ),
             child:
-                const Icon(Icons.chevron_left, size: 22, color: AppColors.navy),
+                const Icon(Icons.chevron_left, size: 20, color: AppColors.navy),
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         Expanded(
           child: Container(
-            height: 54,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            height: 38,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               color: AppColors.white,
               border: Border.all(color: AppColors.border),
@@ -50,9 +50,9 @@ class SearchHeaderWithInput extends StatelessWidget {
                 GestureDetector(
                   onTap: () => onSubmitted(controller.text),
                   child:
-                      const Icon(Icons.search, size: 20, color: AppColors.gold),
+                      const Icon(Icons.search, size: 18, color: AppColors.gold),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 6),
                 Expanded(
                   child: TextField(
                     onSubmitted: onSubmitted,
@@ -62,29 +62,29 @@ class SearchHeaderWithInput extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: 'Search properties',
                       hintStyle: AppTheme.dm(
-                          size: 13,
+                          size: 11,
                           color: AppColors.navy.withValues(alpha: 0.5)),
                       border: InputBorder.none,
                       isDense: true,
                     ),
-                    style: AppTheme.dm(size: 14, color: AppColors.ink),
+                    style: AppTheme.dm(size: 12, color: AppColors.ink),
                   ),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         GestureDetector(
           onTap: onFilter,
           child: Container(
-            width: 54,
-            height: 54,
+            width: 38,
+            height: 38,
             decoration: BoxDecoration(
               color: AppColors.navy,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.tune, size: 22, color: AppColors.gold),
+            child: const Icon(Icons.tune, size: 18, color: AppColors.gold),
           ),
         ),
       ],

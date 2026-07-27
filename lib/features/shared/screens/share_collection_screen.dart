@@ -10,16 +10,23 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/sheet_handle.dart';
 
-const _lagoon =
-    'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop';
-const _link = 'sahely.app/c/beach-2026';
-
 class ShareCollectionScreen extends StatelessWidget {
-  const ShareCollectionScreen({super.key});
+  final String collectionName;
+  final String collectionImage;
+  final int placesCount;
+  final String shareableLink;
+
+  const ShareCollectionScreen({
+    super.key,
+    this.collectionName = 'Beach Trip 2026',
+    this.collectionImage = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop',
+    this.placesCount = 5,
+    this.shareableLink = 'sahely.app/c/beach-2026',
+  });
 
   void _shareViaWhatsApp() async {
     final url =
-        'whatsapp://send?text=${Uri.encodeComponent('Check out this collection: $_link')}';
+        'whatsapp://send?text=${Uri.encodeComponent('Check out this collection "$collectionName": $shareableLink')}';
     try {
       if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
@@ -51,7 +58,7 @@ class ShareCollectionScreen extends StatelessWidget {
           return;
         }
       }
-      final response = await http.get(Uri.parse(_lagoon));
+      final response = await http.get(Uri.parse(collectionImage));
       if (response.statusCode == 200) {
         await Gal.putImageBytes(response.bodyBytes);
         if (context.mounted) {
@@ -68,23 +75,26 @@ class ShareCollectionScreen extends StatelessWidget {
   }
 
   void _openMoreSharing() {
-    Share.share('Check out this collection: $_link');
+    Share.share('Check out this collection "$collectionName": $shareableLink');
   }
 
   @override
   Widget build(BuildContext context) {
-    return _SheetScaffold(
-      bg: const LinearGradient(colors: [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
+    return Container(
+      decoration: const BoxDecoration(
+          color: Color(0xF5F5F0E8),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32))),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 26),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SheetHandle(),
-          const SizedBox(height: 6),
+          const SizedBox(height: 12),
           Row(children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(_lagoon,
+                child: Image.network(collectionImage,
                     width: 52,
                     height: 52,
                     fit: BoxFit.cover,
@@ -92,12 +102,12 @@ class ShareCollectionScreen extends StatelessWidget {
                         width: 52, height: 52, color: AppColors.cardWarm))),
             const SizedBox(width: 12),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Beach Trip 2026',
+              Text(collectionName,
                   style: AppTheme.dm(
                       size: 15,
                       weight: FontWeight.w700,
                       color: AppColors.navy)),
-              Text('5 places · shareable link',
+              Text('$placesCount places · shareable link',
                   style: AppTheme.dm(size: 12, color: AppColors.muted)),
             ]),
           ]),
@@ -113,11 +123,11 @@ class ShareCollectionScreen extends StatelessWidget {
               const Icon(Icons.link, size: 16, color: AppColors.gold),
               const SizedBox(width: 8),
               Expanded(
-                  child: Text(_link,
+                  child: Text(shareableLink,
                       style: AppTheme.dm(size: 12, color: AppColors.muted))),
               GestureDetector(
                 onTap: () {
-                  Clipboard.setData(const ClipboardData(text: _link));
+                  Clipboard.setData(ClipboardData(text: shareableLink));
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Link copied!')));
                 },
@@ -173,7 +183,7 @@ class ShareCollectionScreen extends StatelessWidget {
                   ]))),
               GestureDetector(
                 onTap: () =>
-                    Share.share('Help me add & vote on places: $_link'),
+                    Share.share('Help me add & vote on places: $shareableLink'),
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -230,33 +240,4 @@ class ShareCollectionScreen extends StatelessWidget {
           ],
         ),
       );
-}
-
-class _SheetScaffold extends StatelessWidget {
-  const _SheetScaffold({required this.child, required this.bg});
-
-  final Widget child;
-  final Gradient bg;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(children: [
-        Positioned.fill(
-            child: DecoratedBox(decoration: BoxDecoration(gradient: bg))),
-        const Positioned.fill(child: ColoredBox(color: Color(0x8C0B101C))),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            decoration: const BoxDecoration(
-                color: Color(0xF5F5F0E8),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 26),
-            child: SafeArea(top: false, child: child),
-          ),
-        ),
-      ]),
-    );
-  }
 }

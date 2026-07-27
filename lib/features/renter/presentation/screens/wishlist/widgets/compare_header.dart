@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -48,7 +49,7 @@ class CompareHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  collectionName,
+                  'Compare',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
@@ -58,7 +59,7 @@ class CompareHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'You, ${participantNames.take(2).join(', ')}${participantNames.length > 2 ? ', ${participantNames[2]}' : ''}',
+                  collectionName,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.secondary,
@@ -68,27 +69,61 @@ class CompareHeader extends StatelessWidget {
               ],
             ),
           ),
+          
+          // Share Button
+          GestureDetector(
+            onTap: () => AppNavigation.goToShareCollection(
+              context,
+              collectionName: collectionName,
+              shareableLink: 'sahely.app/compare/${collectionName.toLowerCase().replaceAll(' ', '-')}',
+            ),
+            child: Container(
+              height: 30,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: AppColors.gold,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.link, size: 14, color: AppColors.navy),
+                  SizedBox(width: 4),
+                  Text(
+                    'Share',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.navy,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          
+          const SizedBox(width: 10),
+          
           // Avatars
           SizedBox(
-            width: 60,
+            width: 40,
             child: Stack(
               children: [
-                for (int i = 0; i < participantNames.length && i < 3; i++)
+                for (int i = 0; i < participantNames.length && i < 2; i++)
                   Positioned(
-                    left: i * 20.0,
+                    left: i * 15.0,
                     child: Container(
-                      width: 28,
-                      height: 28,
+                      width: 24,
+                      height: 24,
                       decoration: BoxDecoration(
                         color: _getAvatarColor(i),
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.cream, width: 2),
+                        border: Border.all(color: AppColors.cream, width: 1.5),
                       ),
                       child: Center(
                         child: Text(
                           participantNames[i][0],
                           style: const TextStyle(
-                            fontSize: 11,
+                            fontSize: 10,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                             fontFamily: 'DM Sans',

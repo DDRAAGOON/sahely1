@@ -2,6 +2,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/data/models.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/create_collection_sheet.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
@@ -10,12 +11,14 @@ class AddToCollectionSheet extends StatefulWidget {
   final String propertyId;
   final String propertyName;
   final String propertyImage;
+  final Role role;
 
   const AddToCollectionSheet({
     super.key,
     required this.propertyId,
     required this.propertyName,
     required this.propertyImage,
+    this.role = Role.renter,
   });
 
   @override
@@ -29,14 +32,14 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
   @override
   void initState() {
     super.initState();
-    context.read<WishlistCubit>().loadCollections();
+    context.read<WishlistCubit>().loadCollections(widget.role);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<WishlistCubit, WishlistState>(
       listener: (context, state) {
-        if (state is CollectionsLoaded) {
+        if (state.status == WishlistStatus.loaded) {
           setState(() {
             _collections = state.collections;
             if (_selectedCollectionId == null && _collections.isNotEmpty) {
@@ -72,7 +75,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                       color: AppColors.navy,
                       fontFamily: 'DM Sans')),
               const SizedBox(height: 16),
-              if (state is WishlistLoading && _collections.isEmpty)
+              if (state.status == WishlistStatus.loading && _collections.isEmpty)
                 const Center(
                     child: Padding(
                         padding: EdgeInsets.all(20.0),
@@ -156,6 +159,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                                 propertyName: widget.propertyName,
                                 propertyImage: widget.propertyImage,
                                 collectionId: _selectedCollectionId!,
+                                role: widget.role,
                               );
                           Navigator.pop(context);
                         }
@@ -204,7 +208,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
     );
 
     if (result != null && result.isNotEmpty && mounted) {
-      context.read<WishlistCubit>().createCollection(result);
+      context.read<WishlistCubit>().createCollection(result, widget.role);
     }
   }
 }
