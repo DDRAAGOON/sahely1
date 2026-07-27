@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -44,7 +44,7 @@ class _BrokerCreateCollectionSheetState
               fontSize: 20,
               fontWeight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'Cairo',
+              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 16),
@@ -91,7 +91,7 @@ class _BrokerCreateCollectionSheetState
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,7 +58,7 @@ class ReferralCodeCard extends StatelessWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
-                        fontFamily: 'Cairo',
+                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],
@@ -91,7 +91,7 @@ class ReferralCodeCard extends StatelessWidget {
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
                               color: AppColors.gold,
-                              fontFamily: 'Cairo',
+                              fontFamily: 'DM Sans',
                               letterSpacing: 2,
                             ),
                           ),
@@ -135,11 +135,11 @@ class ReferralCodeCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12.5,
                       color: Color(0xFFB8C4E0),
-                      fontFamily: 'Cairo',
+                      fontFamily: 'DM Sans',
                       height: 1.5,
                     ),
                     children: [
-                      TextSpan(text: 'Share it — when a friend you refer '),
+                      TextSpan(text: 'Share it â€” when a friend you refer '),
                       TextSpan(
                         text: 'books & completes a stay',
                         style: TextStyle(
@@ -147,7 +147,7 @@ class ReferralCodeCard extends StatelessWidget {
                       ),
                       TextSpan(text: ' you earn '),
                       TextSpan(
-                        text: '+15★',
+                        text: '+15â˜…',
                         style: TextStyle(
                             fontWeight: FontWeight.w800, color: AppColors.gold),
                       ),
@@ -159,7 +159,7 @@ class ReferralCodeCard extends StatelessWidget {
                       ),
                       TextSpan(text: ' and earn '),
                       TextSpan(
-                        text: '+50★',
+                        text: '+50â˜…',
                         style: TextStyle(
                             fontWeight: FontWeight.w800, color: AppColors.gold),
                       ),

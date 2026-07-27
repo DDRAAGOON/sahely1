@@ -61,6 +61,8 @@ class OwnerPropertyCard extends StatelessWidget {
       property: displayProperty,
       imageHeight: 160,
       showGuestFav: false,
+      showLocation: false,
+      showRating: false,
       // Status badge overlay on image
       imageOverlay: Positioned(
         top: 12,

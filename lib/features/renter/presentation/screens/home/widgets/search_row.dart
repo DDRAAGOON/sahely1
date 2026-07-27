@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -41,7 +41,7 @@ class SearchRow extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         color: AppColors.navy.withValues(alpha: 0.5),
-                        fontFamily: 'Cairo',
+                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ),

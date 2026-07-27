@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
@@ -128,7 +128,7 @@ class _CollectionInsideSharedScreenState
                               'No properties in this collection yet',
                               style: TextStyle(
                                   color: AppColors.secondary,
-                                  fontFamily: 'Cairo'),
+                                  fontFamily: 'DM Sans'),
                             ),
                           ],
                         ),

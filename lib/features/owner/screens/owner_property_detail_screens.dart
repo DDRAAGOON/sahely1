@@ -23,259 +23,770 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.cream,
-      body: CreamBackground(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            Stack(children: [
+      body: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          // 1. Hero Header
+          Stack(
+            children: [
               SizedBox(
-                height: 170,
+                height: 220,
                 width: double.infinity,
-                child: SahelyImage(imageUrl: prop.image, enableViewer: true),
+                child: SahelyImage(
+                  imageUrl: prop.image,
+                  enableViewer: true,
+                  fadeColor: AppColors.navy.withValues(alpha: 0.6),
+                  fadeHeight: 80,
+                ),
               ),
+              // Back Button
               Positioned(
-                  top: 44,
-                  left: 16,
-                  child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      behavior: HitTestBehavior.opaque,
-                      child: Container(
-                          width: 34,
-                          height: 34,
-                          decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.92),
-                              shape: BoxShape.circle),
-                          child: const Icon(Icons.chevron_left,
-                              color: AppColors.navy)))),
+                top: 44,
+                left: 16,
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.chevron_left, color: AppColors.navy),
+                  ),
+                ),
+              ),
+              // SOS Button
               Positioned(
-                  top: 50,
-                  right: 16,
-                  child: GestureDetector(
-                      onTap: () => AppNavigation.goToSosOwner(context),
-                      behavior: HitTestBehavior.opaque,
-                      child: const StatusBadge('SOS', kind: BadgeKind.red))),
-              Positioned(
-                  left: 18,
-                  bottom: 12,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                top: 44,
+                right: 16,
+                child: GestureDetector(
+                  onTap: () => AppNavigation.goToSosOwner(context),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFB22222),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(prop.name,
-                            style: AppTheme.dm(
-                                size: 19,
-                                weight: FontWeight.w700,
-                                color: Colors.white)),
-                        Text('${prop.area} · Active',
-                            style:
-                                AppTheme.dm(size: 12, color: Colors.white70)),
-                      ])),
-            ]),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
+                        const Icon(Icons.warning_amber_rounded,
+                            color: Colors.white, size: 16),
+                        const SizedBox(width: 6),
+                        Text(
+                          'SOS',
+                          style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w800,
+                            color: Colors.white,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // Name & Status overlay
+              Positioned(
+                left: 18,
+                bottom: 16,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(children: [
-                      Expanded(
-                          child: WideButton(
-                              label: 'Edit property',
-                              icon: Icons.edit_outlined,
-                              color: AppColors.navy,
-                              height: 46,
-                              onTap: () =>
-                                  AppNavigation.goToOwnerEdit(context))),
-                      const SizedBox(width: 10),
-                      Expanded(
-                          child: WideButton(
-                              label: 'Preview listing',
-                              color: AppColors.navy,
-                              outline: true,
-                              height: 46,
-                              onTap: () =>
-                                  AppNavigation.goToOwnerPreview(context))),
-                    ]),
-                    const SizedBox(height: 16),
-                    const StatRow(cards: [
-                      StatCard(value: '1,284', label: 'Views ▲18%'),
-                      StatCard(value: '96', label: 'Saved'),
-                      StatCard(value: '12', label: 'Bookings')
-                    ]),
-                    const SizedBox(height: 10),
-                    const StatRow(cards: [
-                      StatCard(value: '88%', label: 'Occupancy'),
-                      StatCard(value: '★ 4.8', label: '124 reviews'),
-                      StatCard(value: '68.4k', label: 'Revenue/mo')
-                    ]),
-                    const SizedBox(height: 16),
-                    WhiteCard(
-                      padding: const EdgeInsets.all(14),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Views · last 7 days',
-                                            style: AppTheme.dm(
-                                                size: 13,
-                                                weight: FontWeight.w700,
-                                                color: AppColors.navy)),
-                                        Text('1,284 · ▲ 18% vs last week',
-                                            style: AppTheme.dm(
-                                                size: 12,
-                                                color: AppColors.success)),
-                                      ]),
-                                  Text('Peak Sat',
-                                      style: AppTheme.dm(
-                                          size: 12, color: AppColors.muted)),
-                                ]),
-                            const SizedBox(height: 14),
-                            SizedBox(
-                                height: 90,
-                                child: CustomPaint(
-                                    size: const Size(double.infinity, 90),
-                                    painter: _SparklinePainter())),
-                            const SizedBox(height: 6),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  for (final d in [
-                                    'M',
-                                    'T',
-                                    'W',
-                                    'T',
-                                    'F',
-                                    'S',
-                                    'S'
-                                  ])
-                                    Text(d,
-                                        style: AppTheme.dm(
-                                            size: 10, color: AppColors.faint))
-                                ]),
-                          ]),
+                    Text(
+                      prop.name,
+                      style: AppTheme.dm(
+                        size: 24,
+                        weight: FontWeight.w800,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
+                      ),
                     ),
-                    const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                          color: AppColors.navy,
-                          borderRadius: BorderRadius.circular(14)),
-                      child: Row(children: [
-                        Container(
-                            width: 38,
-                            height: 38,
-                            decoration: BoxDecoration(
-                                color: const Color(0xFF46B7A8),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Icon(Icons.lock_outline,
-                                color: Colors.white, size: 18)),
-                        const SizedBox(width: 12),
-                        Expanded(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                              Text('Door · Locked',
-                                  style: AppTheme.dm(
-                                      size: 13,
-                                      weight: FontWeight.w700,
-                                      color: Colors.white)),
-                              Text('Passcode active for current guest',
-                                  style: AppTheme.dm(
-                                      size: 11, color: Colors.white60)),
-                            ])),
-                        Row(children: [
-                          Container(
-                              width: 6,
-                              height: 6,
-                              decoration: const BoxDecoration(
-                                  color: Color(0xFF2BB673),
-                                  shape: BoxShape.circle)),
-                          const SizedBox(width: 5),
-                          Text('Online',
-                              style: AppTheme.dm(
-                                  size: 11, color: const Color(0xFF7BE0A0)))
-                        ]),
-                      ]),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${prop.area} · Active',
+                      style: AppTheme.dm(
+                        size: 13,
+                        weight: FontWeight.w500,
+                        color: Colors.white70,
+                      ),
                     ),
-                    const SizedBox(height: 12),
-                    WideButton(
-                        label: 'Manage smart lock',
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 2. Top Action Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: WideButton(
+                        label: 'Edit property',
+                        icon: Icons.edit_outlined,
+                        color: AppColors.navy,
+                        height: 48,
+                        radius: 12,
+                        onTap: () => AppNavigation.goToOwnerEdit(context),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: WideButton(
+                        label: 'Preview listing',
                         color: AppColors.navy,
                         outline: true,
-                        height: 44,
-                        onTap: () => AppNavigation.goToOwnerSmartLock(context)),
-                    const SizedBox(height: 16),
-                    Text('Availability',
+                        height: 48,
+                        radius: 12,
+                        onTap: () => AppNavigation.goToOwnerPreview(context),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // 3. Requests Card
+                GestureDetector(
+                  onTap: () => AppNavigation.goToOwnerRequests(context),
+                  child: WhiteCard(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFDF5E8),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(Icons.notes, color: Color(0xFFD2760A)),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Requests for this property',
+                                style: AppTheme.dm(
+                                  size: 15,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy,
+                                ),
+                              ),
+                              Text(
+                                '1 pending · tap to review',
+                                style: AppTheme.dm(
+                                  size: 12,
+                                  color: AppColors.muted,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right,
+                            color: AppColors.border, size: 20),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // 4. Stats Grid (3x2)
+                _buildStatsGrid(),
+                const SizedBox(height: 24),
+
+                // 5. Views Chart
+                Text(
+                  'Views · last 7 days',
+                  style: AppTheme.dm(
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: AppColors.navy,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                WhiteCard(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('1,284',
+                                  style: AppTheme.dm(
+                                      size: 20, weight: FontWeight.w800)),
+                              Text('▲ 18% vs last week',
+                                  style: AppTheme.dm(
+                                      size: 12,
+                                      weight: FontWeight.w600,
+                                      color: AppColors.success)),
+                            ],
+                          ),
+                          Text('Peak Sat',
+                              style:
+                                  AppTheme.dm(size: 12, color: AppColors.muted)),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 100,
+                        child: CustomPaint(
+                          size: const Size(double.infinity, 100),
+                          painter: _SparklinePainter(),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (final d in ['M', 'T', 'W', 'T', 'F', 'S', 'S'])
+                            Text(d,
+                                style: AppTheme.dm(
+                                    size: 10, color: AppColors.border)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 28),
+
+                // 6. Smart Lock
+                Text(
+                  'Smart Lock',
+                  style: AppTheme.dm(
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: AppColors.navy,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppColors.navy,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: AppColors.gold.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.lock_outline,
+                            color: AppColors.gold, size: 22),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Door · Locked',
+                              style: AppTheme.dm(
+                                size: 14,
+                                weight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Passcode active for current guest',
+                              style: AppTheme.dm(
+                                size: 11,
+                                color: Colors.white.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2E7D32).withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(999),
+                          border: Border.all(color: const Color(0xFF4CAF50), width: 0.5),
+                        ),
+                        child: Row(
+                          children: [
+                            const CircleAvatar(radius: 3, backgroundColor: Color(0xFF4CAF50)),
+                            const SizedBox(width: 6),
+                            Text('Online',
+                                style: AppTheme.dm(
+                                    size: 10,
+                                    weight: FontWeight.w700,
+                                    color: const Color(0xFF4CAF50))),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Recent Access Log
+                Text(
+                  'RECENT ACCESS',
+                  style: AppTheme.dm(
+                    size: 11,
+                    weight: FontWeight.w800,
+                    color: AppColors.muted,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                WhiteCard(
+                  child: Column(
+                    children: [
+                      _accessItem(Icons.login_rounded, const Color(0xFF2E7D32),
+                          'Guest entry', 'Nour A.', 'Today 3:12 PM'),
+                      const Divider(height: 1, indent: 44, endIndent: 16, color: AppColors.border),
+                      _accessItem(Icons.logout_rounded, AppColors.muted,
+                          'Guest exit', 'Nour A.', 'Today 9:40 AM'),
+                      const Divider(height: 1, indent: 44, endIndent: 16, color: AppColors.border),
+                      _accessItem(Icons.edit_outlined, const Color(0xFFD2760A),
+                          'Passcode set', 'by you', 'Jun 14'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                WideButton(
+                  label: 'Manage smart lock',
+                  color: AppColors.navy,
+                  outline: true,
+                  height: 48,
+                  radius: 12,
+                  onTap: () => AppNavigation.goToOwnerSmartLock(context),
+                ),
+                const SizedBox(height: 8),
+                Center(
+                  child: Text(
+                    'Passcode locked during an active stay · change after checkout',
+                    style: AppTheme.dm(size: 10, color: AppColors.muted),
+                  ),
+                ),
+                const SizedBox(height: 28),
+
+                // 7. Recent Reviews
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Recent Reviews',
+                      style: AppTheme.dm(
+                        size: 16,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => AppNavigation.goToMyReviews(context),
+                      child: Text(
+                        'See all',
                         style: AppTheme.dm(
-                            size: 15,
-                            weight: FontWeight.w700,
-                            color: AppColors.navy)),
-                    const SizedBox(height: 8),
-                    const AvailabilityCalendar(blocked: [
-                      4,
-                      5,
-                      6
-                    ], ongoing: [
-                      14,
-                      15,
-                      16,
-                      17,
-                      18
-                    ], upcoming: [
-                      21,
-                      22,
-                      23,
-                      24,
-                      25
-                    ], ownerOff: [
-                      28,
-                      29
-                    ], legend: [
-                      'Ongoing',
-                      'Upcoming',
-                      'Owner days-off',
-                      'Blocked'
-                    ]),
-                    const SizedBox(height: 12),
-                    const InfoNote(
-                        text:
-                            'Owner days-off — 2 personal days/month. Block them for yourself or keep renting. 2 left this month.'),
-                    const SizedBox(height: 16),
-                    Text('Inspection Checklist',
-                        style: AppTheme.dm(
-                            size: 15,
-                            weight: FontWeight.w700,
-                            color: AppColors.navy)),
-                    const SizedBox(height: 8),
-                    const WhiteCard(
-                        child: Column(children: [
-                      ChecklistTile(
-                          label: 'Pre check-in', done: true, trailing: 'Done'),
-                      ChecklistTile(
-                          label: 'Post check-out · window closes in 21h',
-                          done: false,
-                          warn: true,
-                          trailing: 'Start'),
-                    ])),
-                    const SizedBox(height: 12),
-                    const WideButton(
-                        label: 'Report damage · photos + receipt',
-                        color: Color(0xFFB22222),
-                        outline: true,
-                        height: 44),
-                  ]),
+                          size: 13,
+                          weight: FontWeight.w700,
+                          color: AppColors.gold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                _reviewItem(
+                    'Nour A.',
+                    'Stunning villa, the pool was the highlight. Will return!',
+                    5.0,
+                    const Color(0xFF457B9D)),
+                const SizedBox(height: 12),
+                _reviewItem(
+                    'Omar K.',
+                    'Exactly as pictured and spotless. Smooth check-in.',
+                    5.0,
+                    const Color(0xFFB39264)),
+                const SizedBox(height: 28),
+
+                // 8. Availability
+                Text(
+                  'Availability',
+                  style: AppTheme.dm(
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: AppColors.navy,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const AvailabilityCalendar(
+                  blocked: [4, 5, 6],
+                  ongoing: [14, 15, 16, 17, 18],
+                  upcoming: [21, 22, 23, 24, 25],
+                  ownerOff: [28, 29],
+                  legend: ['Ongoing', 'Upcoming', 'Owner days-off', 'Blocked'],
+                ),
+                const SizedBox(height: 16),
+                // Owner days-off card
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFDF9F4),
+                    border: Border.all(color: const Color(0xFFEAD9A8), width: 1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Owner days-off',
+                              style: AppTheme.dm(
+                                size: 14,
+                                weight: FontWeight.w700,
+                                color: const Color(0xFF9A7A22),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '2 personal days/month — block them for yourself or keep renting. 2 left this month.',
+                              style: AppTheme.dm(
+                                size: 11,
+                                weight: FontWeight.w500,
+                                color: const Color(0xFF8A6D1E),
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFC9A84C),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            'Block days',
+                            style: AppTheme.dm(
+                              size: 12,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 28),
+
+                // 9. Inspection Checklist
+                Text(
+                  'Inspection Checklist',
+                  style: AppTheme.dm(
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: AppColors.navy,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                WhiteCard(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      _checklistRow(
+                        icon: Icons.check_circle_rounded,
+                        iconColor: const Color(0xFF2E7D32),
+                        title: 'Pre check-in',
+                        sub: 'Clean & verify before guest',
+                        actionLabel: 'Done',
+                        isActionCompleted: true,
+                      ),
+                      const Divider(height: 32, color: AppColors.border),
+                      _checklistRow(
+                        icon: Icons.watch_later_rounded,
+                        iconColor: const Color(0xFFD2760A),
+                        title: 'Post check-out',
+                        sub: 'Window closes in 21h',
+                        actionLabel: 'Start',
+                        isActionCompleted: false,
+                        onActionTap: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Pre check-in opens up to 2 days & at least 4h before arrival. Post check-out must be done within 24h of departure.',
+                  style: AppTheme.dm(size: 11, color: AppColors.muted, height: 1.4),
+                ),
+                const SizedBox(height: 16),
+                WideButton(
+                  label: 'Report damage · photos + receipt',
+                  icon: Icons.warning_amber_rounded,
+                  color: const Color(0xFFB22222),
+                  outline: true,
+                  height: 48,
+                  radius: 12,
+                  onTap: () => AppNavigation.goToOwnerViolationReport(context),
+                ),
+                const SizedBox(height: 28),
+
+                // 10. Upcoming Bookings
+                Text(
+                  'Upcoming Bookings',
+                  style: AppTheme.dm(
+                    size: 16,
+                    weight: FontWeight.w700,
+                    color: AppColors.navy,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _upcomingBookingItem(
+                    'Omar K.', 'Jun 21–25', '4 guests', 'EGP 18,000', const Color(0xFF457B9D)),
+                const SizedBox(height: 120),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
+  Widget _buildStatsGrid() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(child: _statCard('1,284', 'Views', trend: '▲ 18% this wk')),
+            const SizedBox(width: 12),
+            Expanded(child: _statCard('96', 'Saved', trend: 'in wishlists')),
+            const SizedBox(width: 12),
+            Expanded(child: _statCard('12', 'Bookings', trend: 'this season', trendColor: const Color(0xFF2E7D32))),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(child: _statCard('88%', 'Occupancy')),
+            const SizedBox(width: 12),
+            Expanded(child: _statCard('★ 4.8', 'Rating', trend: '124 reviews')),
+            const SizedBox(width: 12),
+            Expanded(child: _statCard('68.4k', 'Revenue', trend: 'EGP / mo')),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _statCard(String v, String l, {String? trend, Color? trendColor}) =>
+      WhiteCard(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(v,
+                style: AppTheme.dm(
+                    size: 18, weight: FontWeight.w800, color: AppColors.navy)),
+            const SizedBox(height: 2),
+            Text(l, style: AppTheme.dm(size: 10, color: AppColors.muted)),
+            if (trend != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                trend,
+                style: AppTheme.dm(
+                  size: 9,
+                  weight: FontWeight.w700,
+                  color: trendColor ?? AppColors.success,
+                ),
+              ),
+            ],
+          ],
+        ),
+      );
+
+  Widget _accessItem(IconData icon, Color color, String type, String user, String time) =>
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          children: [
+            Icon(icon, color: color, size: 18),
+            const SizedBox(width: 12),
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                  style: AppTheme.dm(size: 13, color: AppColors.navy, weight: FontWeight.w700),
+                  children: [
+                    TextSpan(text: '$type · '),
+                    TextSpan(text: user, style: const TextStyle(fontWeight: FontWeight.w500, color: AppColors.muted)),
+                  ],
+                ),
+              ),
+            ),
+            Text(time, style: AppTheme.dm(size: 11, color: AppColors.faint)),
+          ],
+        ),
+      );
+
+  Widget _reviewItem(String name, String text, double rating, Color avatarColor) =>
+      WhiteCard(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(radius: 14, backgroundColor: avatarColor),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(name,
+                      style: AppTheme.dm(size: 13, weight: FontWeight.w700)),
+                ),
+                Row(
+                  children: List.generate(
+                      5,
+                      (i) => Icon(Icons.star,
+                          size: 12,
+                          color: i < rating ? AppColors.gold : AppColors.border)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              text,
+              style: AppTheme.dm(size: 12, color: AppColors.ink, height: 1.4),
+            ),
+          ],
+        ),
+      );
+
+  Widget _checklistRow({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String sub,
+    required String actionLabel,
+    required bool isActionCompleted,
+    VoidCallback? onActionTap,
+  }) =>
+      Row(
+        children: [
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: iconColor, size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    style: AppTheme.dm(size: 14, weight: FontWeight.w700)),
+                Text(sub, style: AppTheme.dm(size: 11, color: (title == 'Post check-out') ? const Color(0xFFD2760A) : AppColors.muted, weight: (title == 'Post check-out') ? FontWeight.w700 : FontWeight.w500)),
+              ],
+            ),
+          ),
+          if (isActionCompleted)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color(0xFFD7EEDD),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                actionLabel,
+                style: AppTheme.dm(
+                  size: 11,
+                  weight: FontWeight.w800,
+                  color: const Color(0xFF2E7D32),
+                ),
+              ),
+            )
+          else
+            GestureDetector(
+              onTap: onActionTap,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.navy,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  actionLabel,
+                  style: AppTheme.dm(
+                    size: 12,
+                    weight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      );
+
+  Widget _upcomingBookingItem(String name, String date, String guests, String price, Color avatarColor) =>
+      WhiteCard(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            CircleAvatar(radius: 20, backgroundColor: avatarColor),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy),
+                      children: [
+                        TextSpan(text: '$name · '),
+                        TextSpan(text: date, style: const TextStyle(fontWeight: FontWeight.w500, color: AppColors.muted)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text('$guests · $price', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.navy,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                'Upcoming',
+                style: AppTheme.dm(
+                  size: 10,
+                  weight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 }
 
 class _SparklinePainter extends CustomPainter {
@@ -952,11 +1463,16 @@ class OwnerPreviewListingScreen extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                            '★ 4.8 · 124 reviews · 88% occupancy',
-                                            style: AppTheme.dm(
-                                                size: 12,
-                                                color: AppColors.muted)),
+                                        Expanded(
+                                          child: Text(
+                                              '★ 4.8 · 124 reviews · 88% occupancy',
+                                              style: AppTheme.dm(
+                                                  size: 12,
+                                                  color: AppColors.muted),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                        const SizedBox(width: 8),
                                         const PriceTag(price: 4500, size: 15),
                                       ]),
                                   const SizedBox(height: 10),

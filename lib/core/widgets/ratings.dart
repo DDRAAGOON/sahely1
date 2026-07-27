@@ -27,11 +27,13 @@ class RatingRow extends StatelessWidget {
             style: AppTheme.dm(size: size, weight: FontWeight.w700)),
         if (reviews != null || suffix != null) ...[
           const SizedBox(width: 4),
-          Text(
-            '${reviews != null ? " ($reviews reviews)" : ""}${suffix != null ? "  ·  $suffix" : ""}',
-            style: AppTheme.dm(size: size, color: AppColors.muted),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Flexible(
+            child: Text(
+              '${reviews != null ? " ($reviews reviews)" : ""}${suffix != null ? "  ·  $suffix" : ""}',
+              style: AppTheme.dm(size: size, color: AppColors.muted),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ],

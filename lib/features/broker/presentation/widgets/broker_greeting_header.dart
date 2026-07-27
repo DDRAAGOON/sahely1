@@ -23,7 +23,7 @@ class BrokerGreetingHeader extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: AppColors.secondary,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 2),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -23,7 +23,7 @@ class StarRatingWidget extends StatelessWidget {
             fontSize: 20,
             fontWeight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'Cairo',
+            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 16),

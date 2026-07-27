@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -102,7 +102,7 @@ class _PromoBannerState extends State<PromoBanner> {
                             fontSize: 17,
                             fontWeight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'Cairo',
+                            fontFamily: 'DM Sans',
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -111,7 +111,7 @@ class _PromoBannerState extends State<PromoBanner> {
                           style: const TextStyle(
                             fontSize: 13,
                             color: AppColors.navy,
-                            fontFamily: 'Cairo',
+                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ],

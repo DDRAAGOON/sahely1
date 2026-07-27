@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class MawsemLevelTile extends StatelessWidget {
@@ -112,12 +112,12 @@ class MawsemLevelTile extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '$number · $name',
+                        '$number Â· $name',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: textColor,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                       if (isCurrent) ...[
@@ -137,7 +137,7 @@ class MawsemLevelTile extends StatelessWidget {
                               fontSize: 10,
                               fontWeight: FontWeight.w700,
                               color: AppColors.navy,
-                              fontFamily: 'Cairo',
+                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ),
@@ -153,7 +153,7 @@ class MawsemLevelTile extends StatelessWidget {
                           (isCurrent
                               ? Colors.white.withValues(alpha: 0.7)
                               : AppColors.secondary),
-                      fontFamily: 'Cairo',
+                      fontFamily: 'DM Sans',
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -178,7 +178,7 @@ class MawsemLevelTile extends StatelessWidget {
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: badgeText,
-                      fontFamily: 'Cairo',
+                      fontFamily: 'DM Sans',
                     ),
                   ),
                   Icon(Icons.star, size: 12, color: badgeText),

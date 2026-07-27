@@ -79,11 +79,7 @@ class _BookingScreenState extends State<BookingScreen> {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
               children: [
-                Text('Plan Your Stay',
-                    style: AppTheme.dm(
-                        size: 22,
-                        weight: FontWeight.w700,
-                        color: AppColors.navy)),
+                const TopBar(title: 'Plan Your Stay'),
                 const SizedBox(height: 14),
                 WhiteCard(
                   padding: const EdgeInsets.all(12),

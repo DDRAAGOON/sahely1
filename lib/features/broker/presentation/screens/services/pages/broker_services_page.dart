@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -21,7 +21,7 @@ class BrokerServicesPage extends StatelessWidget {
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'Cairo'),
+                    fontFamily: 'DM Sans'),
               ),
             ),
             Expanded(
@@ -49,7 +49,7 @@ class BrokerServicesPage extends StatelessWidget {
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'Cairo'),
+                            fontFamily: 'DM Sans'),
                       ),
                       const SizedBox(height: 12),
                       const Padding(
@@ -61,7 +61,7 @@ class BrokerServicesPage extends StatelessWidget {
                               fontSize: 15,
                               color: AppColors.secondary,
                               height: 1.4,
-                              fontFamily: 'Cairo'),
+                              fontFamily: 'DM Sans'),
                         ),
                       ),
                     ],

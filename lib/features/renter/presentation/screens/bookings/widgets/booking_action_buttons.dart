@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class BookingActionButtons extends StatelessWidget {
@@ -31,7 +31,7 @@ class BookingActionButtons extends StatelessWidget {
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
           ),

@@ -257,22 +257,11 @@ class ViolationsScreen extends StatelessWidget {
                   valueColor: Color(0xFFB22222)),
               const KeyValueRow('Reported on', 'Jun 18, 2026'),
               const SizedBox(height: 12),
-              Row(children: [
-                Expanded(
-                    child: WideButton(
-                        label: 'Dispute',
-                        onTap: () => AppNavigation.goToOwnerDispute(context),
-                        color: AppColors.navy,
-                        outline: true,
-                        height: 44)),
-                const SizedBox(width: 10),
-                Expanded(
-                    child: WideButton(
-                        label: 'View full report',
-                        onTap: () => AppNavigation.goToOwnerViolationReport(context),
-                        color: AppColors.navy,
-                        height: 44)),
-              ]),
+              WideButton(
+                  label: 'View full report',
+                  onTap: () => AppNavigation.goToOwnerViolationReport(context),
+                  color: AppColors.navy,
+                  height: 44),
             ]),
           ),
           const SizedBox(height: 16),

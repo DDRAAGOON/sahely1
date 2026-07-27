@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -22,10 +22,10 @@ class ConciergeBottomNav extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(14, 0, 14, 12),
       height: 62,
       decoration: BoxDecoration(
-        // جعل الخلفية شفافة جداً مثل الـ Home
+        // Ø¬Ø¹Ù„ Ø§Ù„Ø®Ù„ÙÙŠØ© Ø´ÙØ§ÙØ© Ø¬Ø¯Ø§Ù‹ Ù…Ø«Ù„ Ø§Ù„Ù€ Home
         color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(28),
-        // إضافة Border شفاف خفيف
+        // Ø¥Ø¶Ø§ÙØ© Border Ø´ÙØ§Ù Ø®ÙÙŠÙ
         border:
             Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
         boxShadow: [
@@ -67,7 +67,7 @@ class ConciergeBottomNav extends StatelessWidget {
                         color: isActive
                             ? AppColors.navy
                             : AppColors.navy.withValues(alpha: 0.4),
-                        fontFamily: 'Cairo', // توحيد الخط مع الـ Home
+                        fontFamily: 'DM Sans', // ØªÙˆØ­ÙŠØ¯ Ø§Ù„Ø®Ø· Ù…Ø¹ Ø§Ù„Ù€ Home
                       ),
                     ),
                   ],

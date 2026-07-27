@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class ConciergeScreen extends StatefulWidget {
@@ -11,7 +11,7 @@ class ConciergeScreen extends StatefulWidget {
 class _ConciergeScreenState extends State<ConciergeScreen> {
   final String _selectedCategory = 'All';
 
-  // قائمة الخدمات المتميزة مع التصنيفات
+  // Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø®Ø¯Ù…Ø§Øª Ø§Ù„Ù…ØªÙ…ÙŠØ²Ø© Ù…Ø¹ Ø§Ù„ØªØµÙ†ÙŠÙØ§Øª
   final List<Map<String, dynamic>> _allPremiumServices = [
     {
       'name': 'Private Chef',
@@ -38,7 +38,7 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // منطق الفلترة
+    // Ù…Ù†Ø·Ù‚ Ø§Ù„ÙÙ„ØªØ±Ø©
     _allPremiumServices.where((service) {
       if (_selectedCategory == 'All') return true;
       return service['category'] == _selectedCategory;
@@ -78,7 +78,7 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
                               color: AppColors.navy,
-                              fontFamily: 'Cairo',
+                              fontFamily: 'DM Sans',
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -90,7 +90,7 @@ class _ConciergeScreenState extends State<ConciergeScreen> {
                               style: TextStyle(
                                 fontSize: 14,
                                 color: AppColors.secondary,
-                                fontFamily: 'Cairo',
+                                fontFamily: 'DM Sans',
                               ),
                             ),
                           ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -36,7 +36,7 @@ class BioCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 13,
               color: AppColors.dark,
-              fontFamily: 'Cairo',
+              fontFamily: 'DM Sans',
               height: 1.5,
             ),
           ),
@@ -109,7 +109,7 @@ class _SocialChip extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.dark,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
           ],

@@ -91,7 +91,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                 onTap: () {
                   AppNavigation.safePush(
                     context,
-                    '/broker/smart-lock',
+                    '/smart-lock',
                     extra: {
                       'propertyName': pName,
                       'bookingRef': 'SHLY-8842',
@@ -99,8 +99,8 @@ class BookingConfirmedScreen extends StatelessWidget {
                       'checkIn':
                           DateTime.now().subtract(const Duration(hours: 2)),
                       'checkOut': DateTime.now().add(const Duration(days: 4)),
-                      'lat': 31.02,
-                      'lng': 29.60,
+                      'propertyLat': 31.02,
+                      'propertyLng': 29.60,
                     },
                   );
                 },

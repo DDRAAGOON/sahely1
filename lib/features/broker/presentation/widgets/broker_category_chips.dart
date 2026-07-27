@@ -66,7 +66,7 @@ class _BrokerCategoryChipsState extends State<BrokerCategoryChips> {
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                   color: isSelected ? AppColors.navy : AppColors.muted,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
@@ -70,7 +70,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'Cairo')),
+                      fontFamily: 'DM Sans')),
               const SizedBox(height: 16),
               if (state is WishlistLoading && _collections.isEmpty)
                 const Center(
@@ -122,12 +122,12 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                                             fontSize: 14,
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.navy,
-                                            fontFamily: 'Cairo')),
+                                            fontFamily: 'DM Sans')),
                                     Text('${collection.itemCount} places',
                                         style: const TextStyle(
                                             fontSize: 12,
                                             color: AppColors.secondary,
-                                            fontFamily: 'Cairo')),
+                                            fontFamily: 'DM Sans')),
                                   ],
                                 ),
                               ),
@@ -170,7 +170,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                       style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          fontFamily: 'Cairo')),
+                          fontFamily: 'DM Sans')),
                 ),
               ),
               const SizedBox(height: 12),
@@ -184,7 +184,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: AppColors.gold,
-                          fontFamily: 'Cairo')),
+                          fontFamily: 'DM Sans')),
                 ),
               ),
             ],

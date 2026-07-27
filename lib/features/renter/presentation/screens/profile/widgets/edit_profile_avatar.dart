@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +69,7 @@ class EditProfileAvatar extends StatelessWidget {
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: AppColors.gold,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
           ),

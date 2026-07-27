@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -141,7 +141,7 @@ class MawsemLevelBadge extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: textColor,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
             ],

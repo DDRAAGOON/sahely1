@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class DoorPasscodeSosButtons extends StatelessWidget {
@@ -30,7 +30,7 @@ class DoorPasscodeSosButtons extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
               style: ElevatedButton.styleFrom(
@@ -60,7 +60,7 @@ class DoorPasscodeSosButtons extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
               style: ElevatedButton.styleFrom(

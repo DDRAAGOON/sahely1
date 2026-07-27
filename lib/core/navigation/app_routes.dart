@@ -83,7 +83,6 @@ class AppRoutes {
   static const String ownerInsights = '/owner/insights';
   static const String ownerViolations = '/owner/violations';
   static const String ownerViolationReport = '/owner/violation-report';
-  static const String ownerDispute = '/owner/dispute';
   static const String ownerListingSubmitted = '/owner/listing-submitted';
   static const String ownerRateGuest = '/owner/rate-guest';
   static const String ownerRequests = '/owner/requests';

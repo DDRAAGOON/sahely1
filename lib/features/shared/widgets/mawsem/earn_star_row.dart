@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class EarnStarRow extends StatelessWidget {
@@ -66,7 +66,7 @@ class EarnStarRow extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: titleColor ?? AppColors.navy,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                         child: title,
                       ),
@@ -76,7 +76,7 @@ class EarnStarRow extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 11,
                           color: AppColors.secondary,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],
@@ -85,12 +85,12 @@ class EarnStarRow extends StatelessWidget {
 
                 // Stars
                 Text(
-                  '$stars ★',
+                  '$stars â˜…',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                     color: titleColor ?? AppColors.gold,
-                    fontFamily: 'Cairo',
+                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

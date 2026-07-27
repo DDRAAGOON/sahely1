@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -86,16 +86,16 @@ class MawsemSeasonPassCard extends StatelessWidget {
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '$levelName · $starsCount ★',
+                        '$levelName Â· $starsCount â˜…',
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.gold,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],
@@ -128,11 +128,11 @@ class MawsemSeasonPassCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  '33 ★ more to Coastal Regular',
+                  '33 â˜… more to Coastal Regular',
                   style: TextStyle(
                     fontSize: 11,
                     color: Color(0xFFB8C4E0),
-                    fontFamily: 'Cairo',
+                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

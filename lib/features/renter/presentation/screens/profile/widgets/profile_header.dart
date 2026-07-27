@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
@@ -93,7 +93,7 @@ class ProfileHeader extends StatelessWidget {
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'Cairo',
+                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -102,7 +102,7 @@ class ProfileHeader extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 13,
                     color: AppColors.secondary,
-                    fontFamily: 'Cairo',
+                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -114,7 +114,7 @@ class ProfileHeader extends StatelessWidget {
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: AppColors.gold,
-                      fontFamily: 'Cairo',
+                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ),

@@ -9,6 +9,7 @@ import 'package:sahely/features/shared/screens/add_payment_card_screen.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/widgets/blocked_action_gate.dart';
 
+import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booking_calendar.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booking_property_card.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/confirm_pay_button.dart';
@@ -353,29 +354,7 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
       color: AppColors.cream,
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: const Icon(Icons.chevron_left,
-                  color: AppColors.navy, size: 24),
-            ),
-          ),
-          const SizedBox(width: 12),
-          const Text(
-            'Plan Your Stay',
-            style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans'),
-          ),
+          const TopBar(title: 'Plan Your Stay'),
         ],
       ),
     );

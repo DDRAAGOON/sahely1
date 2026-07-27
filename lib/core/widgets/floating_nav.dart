@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +16,7 @@ class NavItem {
   final String? route;
 }
 
-/// The translucent, blurred "floating island" bottom nav from the design —
+/// The translucent, blurred "floating island" bottom nav from the design â€”
 /// 64px tall, inset 16px, 34px radius, frosted navy glass.
 class FloatingNav extends StatelessWidget {
   const FloatingNav({super.key, required this.active, this.items, this.onTap});
@@ -148,7 +148,7 @@ class _NavButton extends StatelessWidget {
               color: selected
                   ? AppColors.navy
                   : AppColors.navy.withValues(alpha: 0.4),
-              fontFamily: 'Cairo',
+              fontFamily: 'DM Sans',
             ),
           ),
         ],

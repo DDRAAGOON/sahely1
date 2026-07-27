@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class RateYourStaySection extends StatelessWidget {
@@ -27,7 +27,7 @@ class RateYourStaySection extends StatelessWidget {
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'Cairo',
+              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 12),
@@ -55,12 +55,12 @@ class RateYourStaySection extends StatelessWidget {
                   Icon(Icons.star, color: AppColors.gold, size: 18),
                   SizedBox(width: 10),
                   Text(
-                    'Write a review Â· earn +5 â˜…',
+                    'Write a review Ã‚Â· earn +5 Ã¢Ëœâ€¦',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
-                      fontFamily: 'Cairo',
+                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -47,7 +47,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
   @override
   void initState() {
     super.initState();
-    // تحميل البيانات المحفوظة بدقة
+    // ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ø­ÙÙˆØ¸Ø© Ø¨Ø¯Ù‚Ø©
     _selectedPropertyType = widget.initialFilters['propertyType'] ?? 'All';
     _selectedBedrooms = widget.initialFilters['bedrooms'] ?? 'Any';
     _currentRangeValues = RangeValues(
@@ -65,7 +65,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
 
   void _updateResultsCount() {
     setState(() {
-      // فلترة حقيقية لحساب العدد الدقيق
+      // ÙÙ„ØªØ±Ø© Ø­Ù‚ÙŠÙ‚ÙŠØ© Ù„Ø­Ø³Ø§Ø¨ Ø§Ù„Ø¹Ø¯Ø¯ Ø§Ù„Ø¯Ù‚ÙŠÙ‚
       var results = widget.allProperties;
 
       if (_selectedPropertyType != 'All') {
@@ -136,7 +136,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppColors.gold,
-                        fontFamily: 'Cairo'),
+                        fontFamily: 'DM Sans'),
                   ),
                 ),
               ],
@@ -182,7 +182,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo')),
+                fontFamily: 'DM Sans')),
         const SizedBox(height: 12),
         Row(
           children: [
@@ -227,7 +227,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                     fontSize: 13,
                     color:
                         date != null ? AppColors.dark : AppColors.placeholder,
-                    fontFamily: 'Cairo')),
+                    fontFamily: 'DM Sans')),
           ],
         ),
       ),
@@ -243,7 +243,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo')),
+                fontFamily: 'DM Sans')),
         const SizedBox(height: 12),
         Wrap(
           spacing: 8,
@@ -270,7 +270,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: isSelected ? AppColors.white : AppColors.navy,
-                        fontFamily: 'Cairo')),
+                        fontFamily: 'DM Sans')),
               ),
             );
           }).toList(),
@@ -288,7 +288,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo')),
+                fontFamily: 'DM Sans')),
         const SizedBox(height: 12),
         Row(
           children: _bedrooms.map((bedroom) {
@@ -318,7 +318,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                                 color: isSelected
                                     ? AppColors.white
                                     : AppColors.navy,
-                                fontFamily: 'Cairo'))),
+                                fontFamily: 'DM Sans'))),
                   ),
                 ),
               ),
@@ -338,7 +338,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo')),
+                fontFamily: 'DM Sans')),
         const SizedBox(height: 12),
         _buildGuestRow(
             label: 'Adults',
@@ -386,12 +386,12 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: AppColors.dark,
-                  fontFamily: 'Cairo')),
+                  fontFamily: 'DM Sans')),
           Text(subtitle,
               style: const TextStyle(
                   fontSize: 12,
                   color: AppColors.secondary,
-                  fontFamily: 'Cairo')),
+                  fontFamily: 'DM Sans')),
         ]),
         Row(children: [
           _buildStepperButton(
@@ -402,7 +402,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'Cairo')),
+                  fontFamily: 'DM Sans')),
           const SizedBox(width: 16),
           _buildStepperButton(icon: Icons.add, onTap: onAdd, isOutline: false),
         ]),
@@ -441,7 +441,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'Cairo')),
+                  fontFamily: 'DM Sans')),
           const SizedBox(width: 8),
           Text(
               'EGP ${_currentRangeValues.start.round()} - ${_currentRangeValues.end.round()}',
@@ -449,7 +449,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: AppColors.secondary,
-                  fontFamily: 'Cairo')),
+                  fontFamily: 'DM Sans')),
         ]),
         const SizedBox(height: 16),
         SliderTheme(
@@ -483,7 +483,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
 
   Widget _buildPriceLabel(String label, int value) {
     return RichText(
-      text: TextSpan(style: const TextStyle(fontFamily: 'Cairo'), children: [
+      text: TextSpan(style: const TextStyle(fontFamily: 'DM Sans'), children: [
         TextSpan(
             text: '$label ',
             style: const TextStyle(
@@ -515,7 +515,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo')),
+                fontFamily: 'DM Sans')),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
@@ -568,7 +568,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         Expanded(
             child: Text(label,
                 style: const TextStyle(
-                    fontSize: 14, color: AppColors.dark, fontFamily: 'Cairo'))),
+                    fontSize: 14, color: AppColors.dark, fontFamily: 'DM Sans'))),
         Switch(
             value: value,
             onChanged: onChanged,
@@ -589,7 +589,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo')),
+                fontFamily: 'DM Sans')),
         const SizedBox(height: 12),
         Wrap(
             spacing: 8,
@@ -628,7 +628,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: isSelected ? AppColors.white : AppColors.navy,
-                fontFamily: 'Cairo')),
+                fontFamily: 'DM Sans')),
       ),
     );
   }
@@ -652,7 +652,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
               style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
-                  fontFamily: 'Cairo')),
+                  fontFamily: 'DM Sans')),
         ),
       ),
     );

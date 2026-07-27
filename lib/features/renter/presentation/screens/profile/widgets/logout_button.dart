@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/auth_provider.dart';
@@ -34,7 +34,7 @@ class LogoutButton extends StatelessWidget {
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
                 color: AppColors.error,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
           ],

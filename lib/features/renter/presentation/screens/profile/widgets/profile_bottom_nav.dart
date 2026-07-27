@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -63,7 +63,7 @@ class ProfileBottomNav extends StatelessWidget {
                         color: isActive
                             ? AppColors.gold
                             : Colors.white.withValues(alpha: 0.5),
-                        fontFamily: 'Cairo',
+                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],

@@ -100,14 +100,6 @@ class ViolationReportScreen extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: NavyButton(
-              label: 'Dispute this Violation',
-              outline: true,
-              onTap: () => AppNavigation.goToOwnerDispute(context),
-            ),
-          ),
         ],
       ),
     );

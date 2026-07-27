@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -48,9 +48,9 @@ class CollectionBottomNav extends StatelessWidget {
               final isActive = index == activeIndex;
               return GestureDetector(
                 onTap: () {
-                  // الرجوع للهوم وفتح التبويب المختار
+                  // Ø§Ù„Ø±Ø¬ÙˆØ¹ Ù„Ù„Ù‡ÙˆÙ… ÙˆÙØªØ­ Ø§Ù„ØªØ¨ÙˆÙŠØ¨ Ø§Ù„Ù…Ø®ØªØ§Ø±
                   Navigator.of(context).popUntil((route) => route.isFirst);
-                  // في حالة استخدام GoRouter يمكن استخدام AppNavigation.goToRenterHome(context) مع باراميتر للتبويب
+                  // ÙÙŠ Ø­Ø§Ù„Ø© Ø§Ø³ØªØ®Ø¯Ø§Ù… GoRouter ÙŠÙ…ÙƒÙ† Ø§Ø³ØªØ®Ø¯Ø§Ù… AppNavigation.goToRenterHome(context) Ù…Ø¹ Ø¨Ø§Ø±Ø§Ù…ÙŠØªØ± Ù„Ù„ØªØ¨ÙˆÙŠØ¨
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +71,7 @@ class CollectionBottomNav extends StatelessWidget {
                         color: isActive
                             ? AppColors.navy
                             : AppColors.navy.withValues(alpha: 0.4),
-                        fontFamily: 'Cairo',
+                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],

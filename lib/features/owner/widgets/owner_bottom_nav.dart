@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -85,7 +85,7 @@ class OwnerBottomNav extends StatelessWidget {
                           color: isActive
                               ? AppColors.navy
                               : AppColors.navy.withValues(alpha: 0.4),
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],

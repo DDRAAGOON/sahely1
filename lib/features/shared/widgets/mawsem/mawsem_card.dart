@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
@@ -94,16 +94,16 @@ class MawsemCard extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '$currentStars ★ this season',
+                        '$currentStars â˜… this season',
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.gold,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],
@@ -141,12 +141,12 @@ class MawsemCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     nextLevel != null
-                        ? '$starsToNext ★ to ${nextLevel['name']}'
+                        ? '$starsToNext â˜… to ${nextLevel['name']}'
                         : 'Max level reached!',
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.white70,
-                      fontFamily: 'Cairo',
+                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

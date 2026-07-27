@@ -15,7 +15,6 @@ import 'package:sahely/features/owner/screens/owner_all_trending_screen.dart';
 import 'package:sahely/features/owner/screens/owner_earnings_screen.dart';
 import 'package:sahely/features/owner/screens/owner_edit_bio_screen.dart';
 import 'package:sahely/features/owner/screens/owner_history_screen.dart';
-import 'package:sahely/features/owner/screens/dispute_violation_screen.dart';
 import 'package:sahely/features/owner/screens/violation_report_screen.dart';
 import 'package:sahely/features/owner/screens/owner_manage_screen.dart';
 import 'package:sahely/features/owner/screens/owner_properties_screen.dart';
@@ -163,10 +162,6 @@ final List<GoRoute> ownerGoRoutes = [
       path: '/owner/violations',
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const ViolationsScreen()),
-  GoRoute(
-      path: '/owner/dispute',
-      parentNavigatorKey: rootNavigatorKey,
-      builder: (context, state) => const DisputeViolationScreen()),
   GoRoute(
       path: '/owner/violation-report',
       parentNavigatorKey: rootNavigatorKey,

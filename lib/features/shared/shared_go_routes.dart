@@ -356,6 +356,11 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) => const ChangePasswordScreen(),
   ),
   GoRoute(
+    path: '/verify-gate',
+    parentNavigatorKey: rootNavigatorKey,
+    builder: (context, state) => const BlockedGateScreen(),
+  ),
+  GoRoute(
     path: '/blocked-gate',
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) => const BlockedGateScreen(),

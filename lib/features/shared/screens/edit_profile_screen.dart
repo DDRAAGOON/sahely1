@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
@@ -111,7 +111,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           style: TextStyle(
             color: AppColors.navy,
             fontWeight: FontWeight.w700,
-            fontFamily: 'Cairo',
+            fontFamily: 'DM Sans',
           ),
         ),
       ),
@@ -138,7 +138,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'Cairo',
+                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -164,7 +164,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           style: const TextStyle(
                             fontSize: 14,
                             color: AppColors.navy,
-                            fontFamily: 'Cairo',
+                            fontFamily: 'DM Sans',
                             height: 1.4,
                           ),
                         ),
@@ -179,7 +179,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       style: TextStyle(
                         fontSize: 12,
                         color: _getCounterColor(),
-                        fontFamily: 'Cairo',
+                        fontFamily: 'DM Sans',
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -196,16 +196,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: AppColors.navy,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                       SizedBox(width: 6),
                       Text(
-                        '· optional',
+                        'Â· optional',
                         style: TextStyle(
                           fontSize: 14,
                           color: AppColors.gold,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],
@@ -267,7 +267,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
               ),
@@ -326,7 +326,7 @@ class _SocialLinkFieldState extends State<_SocialLinkField> {
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
               const Spacer(),

@@ -74,7 +74,6 @@ class AppNavigation {
   static void goToOwnerEarnings(BuildContext context) => context.push(AppRoutes.ownerEarnings);
   static void goToOwnerViolations(BuildContext context) => context.push(AppRoutes.ownerViolations);
   static void goToOwnerViolationReport(BuildContext context) => context.push(AppRoutes.ownerViolationReport);
-  static void goToOwnerDispute(BuildContext context) => context.push(AppRoutes.ownerDispute);
   static void goToOwnerListingSubmitted(BuildContext context, {Object? extra}) => context.push(AppRoutes.ownerListingSubmitted, extra: extra);
   static void goToOwnerRateGuest(BuildContext context, {Object? extra}) => context.push(AppRoutes.ownerRateGuest, extra: extra);
   static void goToOwnerRequests(BuildContext context) => context.push(AppRoutes.ownerRequests);

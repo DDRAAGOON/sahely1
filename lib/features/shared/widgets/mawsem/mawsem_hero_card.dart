@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
@@ -106,7 +106,7 @@ class MawsemHeroCard extends StatelessWidget {
                         // Restored original size
                         fontWeight: FontWeight.w700,
                         color: AppColors.gold,
-                        fontFamily: 'Cairo',
+                        fontFamily: 'DM Sans',
                         letterSpacing: 3, // Balanced spacing
                       ),
                     ),
@@ -118,12 +118,12 @@ class MawsemHeroCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Text(
-                        'Season 2026 · Battle Pass',
+                        'Season 2026 Â· Battle Pass',
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                           color: AppColors.mawsemGold, // Text #B1974C
-                          fontFamily: 'Cairo',
+                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ),
@@ -169,7 +169,7 @@ class MawsemHeroCard extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 12,
                               color: Color(0xFFB8C4E0),
-                              fontFamily: 'Cairo',
+                              fontFamily: 'DM Sans',
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -179,7 +179,7 @@ class MawsemHeroCard extends StatelessWidget {
                               fontSize: 24,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
-                              fontFamily: 'Cairo',
+                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ],
@@ -196,7 +196,7 @@ class MawsemHeroCard extends StatelessWidget {
                             fontSize: 32,
                             fontWeight: FontWeight.w800,
                             color: AppColors.gold,
-                            fontFamily: 'Cairo',
+                            fontFamily: 'DM Sans',
                           ),
                         ),
                         const Row(
@@ -210,7 +210,7 @@ class MawsemHeroCard extends StatelessWidget {
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.gold,
-                                fontFamily: 'Cairo',
+                                fontFamily: 'DM Sans',
                               ),
                             ),
                           ],
@@ -247,14 +247,14 @@ class MawsemHeroCard extends StatelessWidget {
                               style: const TextStyle(
                                   fontSize: 13,
                                   color: Colors.white,
-                                  fontFamily: 'Cairo'),
+                                  fontFamily: 'DM Sans'),
                               children: [
                                 TextSpan(
                                     text: '$starsToNext',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w900)),
                                 const TextSpan(
-                                    text: ' ★',
+                                    text: ' â˜…',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w900,
                                         color: Colors.white)),
@@ -273,7 +273,7 @@ class MawsemHeroCard extends StatelessWidget {
                               style: const TextStyle(
                                   fontSize: 13,
                                   color: Color(0xFFB8C4E0),
-                                  fontFamily: 'Cairo'),
+                                  fontFamily: 'DM Sans'),
                               children: [
                                 TextSpan(
                                     text: '$nextLevelThreshold',
@@ -281,7 +281,7 @@ class MawsemHeroCard extends StatelessWidget {
                                         fontWeight: FontWeight.w900,
                                         color: Colors.white)),
                                 const TextSpan(
-                                    text: ' ★',
+                                    text: ' â˜…',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w900,
                                         color: Colors.white)),
@@ -354,7 +354,7 @@ class _InfoChip extends StatelessWidget {
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: Colors.white,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
               overflow: TextOverflow.ellipsis,
             ),

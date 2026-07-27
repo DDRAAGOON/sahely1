@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -20,7 +20,7 @@ class GreetingHeader extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: AppColors.secondary,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 2),
@@ -53,7 +53,7 @@ class GreetingHeader extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: AppColors.navy,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
             ],

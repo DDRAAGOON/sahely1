@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
@@ -39,7 +39,7 @@ class ProfileListRows extends StatelessWidget {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: AppColors.gold,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
             onTap: () => AppNavigation.goToWallet(context),
@@ -50,11 +50,11 @@ class ProfileListRows extends StatelessWidget {
             icon: Icons.star_outline,
             label: 'My Reviews',
             trailing: Text(
-              '$reviewsGiven given · $reviewsReceived received',
+              '$reviewsGiven given Â· $reviewsReceived received',
               style: const TextStyle(
                 fontSize: 13,
                 color: AppColors.secondary,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
             onTap: () => AppNavigation.goToMyReviews(context),
@@ -87,12 +87,12 @@ class ProfileListRows extends StatelessWidget {
             label: 'Language',
             trailing: Text(
               context.watch<LocaleProvider>().locale.languageCode == 'ar'
-                  ? 'العربية'
+                  ? 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©'
                   : 'English',
               style: const TextStyle(
                 fontSize: 13,
                 color: AppColors.secondary,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
             onTap: () => AppNavigation.goToLanguage(context),
@@ -110,7 +110,7 @@ class ProfileListRows extends StatelessWidget {
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
             onTap: () {
@@ -160,7 +160,7 @@ class _ListRow extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 14,
                   color: AppColors.dark,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

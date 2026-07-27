@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
@@ -175,7 +175,7 @@ class MawsemLevelsList extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
             Text(
@@ -183,7 +183,7 @@ class MawsemLevelsList extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 color: AppColors.secondary,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
           ],

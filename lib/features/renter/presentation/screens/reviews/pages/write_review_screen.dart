@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
@@ -46,7 +46,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
   }
 
   Future<void> _submitReview() async {
-    // إذا لم يتم كتابة تعليق، لا تفعل شيئاً
+    // Ø¥Ø°Ø§ Ù„Ù… ÙŠØªÙ… ÙƒØªØ§Ø¨Ø© ØªØ¹Ù„ÙŠÙ‚ØŒ Ù„Ø§ ØªÙØ¹Ù„ Ø´ÙŠØ¦Ø§Ù‹
     if (_reviewController.text.trim().isEmpty) return;
 
     setState(() => _isSubmitting = true);
@@ -145,7 +145,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'Cairo',
+                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

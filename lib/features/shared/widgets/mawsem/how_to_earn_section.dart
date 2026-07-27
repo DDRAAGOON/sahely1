@@ -1,4 +1,4 @@
-import 'package:flutter/gestures.dart';
+﻿import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,7 +20,7 @@ class HowToEarnSection extends StatelessWidget {
             fontSize: 18,
             fontWeight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'Cairo',
+            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 6),
@@ -29,7 +29,7 @@ class HowToEarnSection extends StatelessWidget {
           style: TextStyle(
             fontSize: 13,
             color: AppColors.secondary,
-            fontFamily: 'Cairo',
+            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 16),
@@ -47,7 +47,7 @@ class HowToEarnSection extends StatelessWidget {
                 context,
                 icon: Icons.verified_user_outlined,
                 title: 'Verify your identity',
-                subtitle: 'One-time · ID + live selfie',
+                subtitle: 'One-time Â· ID + live selfie',
                 stars: '+5',
                 color: const Color(0xFF1B6B3A),
                 bgColor: const Color(0xFFE8F5E9),
@@ -56,7 +56,7 @@ class HowToEarnSection extends StatelessWidget {
                 context,
                 icon: Icons.calendar_today_outlined,
                 title: 'Complete first booking',
-                subtitle: 'One-time · must check in',
+                subtitle: 'One-time Â· must check in',
                 stars: '+10',
                 color: const Color(0xFF1565C0),
                 bgColor: const Color(0xFFE3F2FD),
@@ -65,7 +65,7 @@ class HowToEarnSection extends StatelessWidget {
                 context,
                 icon: Icons.person_add_outlined,
                 title: 'Refer a friend who stays',
-                subtitle: 'Per friend · must complete a stay',
+                subtitle: 'Per friend Â· must complete a stay',
                 stars: '+15',
                 color: const Color(0xFFBC9B43),
                 bgColor: const Color(0xFFFFF8E1),
@@ -83,7 +83,7 @@ class HowToEarnSection extends StatelessWidget {
                 context,
                 icon: Icons.star_border,
                 title: 'Review with text + photo',
-                subtitle: 'Per stay · both required',
+                subtitle: 'Per stay Â· both required',
                 stars: '+5',
                 color: const Color(0xFFBC9B43),
                 bgColor: const Color(0xFFFFF8E1),
@@ -94,7 +94,7 @@ class HowToEarnSection extends StatelessWidget {
                 icon: Icons.camera_alt_outlined,
                 isInstagram: true,
                 title: 'Share on IG Stories ',
-                subtitle: 'Per stay · keep up 24h+',
+                subtitle: 'Per stay Â· keep up 24h+',
                 stars: '+5',
                 color: const Color(0xFFC2185B),
                 bgColor: const Color(0xFFFCE4EC),
@@ -111,7 +111,7 @@ class HowToEarnSection extends StatelessWidget {
               _buildRow(
                 context,
                 icon: Icons.arrow_upward,
-                title: 'Stay 3+ nights · or book off-peak',
+                title: 'Stay 3+ nights Â· or book off-peak',
                 subtitle: 'Bonus per stay (each)',
                 stars: '+5',
                 color: const Color(0xFF1B6B3A),
@@ -120,9 +120,9 @@ class HowToEarnSection extends StatelessWidget {
               _buildRow(
                 context,
                 icon: Icons.history,
-                title: 'Come back · 2nd / 3rd+ booking',
+                title: 'Come back Â· 2nd / 3rd+ booking',
                 subtitle: 'Loyalty bonus',
-                stars: '+10–15',
+                stars: '+10â€“15',
                 color: const Color(0xFFBC9B43),
                 bgColor: const Color(0xFFFFF8E1),
               ),
@@ -130,7 +130,7 @@ class HowToEarnSection extends StatelessWidget {
                 context,
                 icon: Icons.home_outlined,
                 title: 'Refer an owner who lists',
-                subtitle: 'Huge · one-time',
+                subtitle: 'Huge Â· one-time',
                 stars: '+50',
                 color: const Color(0xFF9A7A22),
                 bgColor: const Color(0xFFBC9B43),

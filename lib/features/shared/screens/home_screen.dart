@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
@@ -49,26 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onCategoryChanged(String category) {
-    if (category == 'All') {
-      setState(() {
-        _selectedCategory = category;
-        _applyFilters();
-      });
-      return;
-    }
-
-    // Map category to a filter or search query
-    Map<String, dynamic> filters = Map.from(_appliedFilters);
-    if (category == 'Pool' || category == 'Beachfront') {
-      List<String> currentAmenities =
-          List<String>.from(filters['amenities'] ?? []);
-      if (!currentAmenities.contains(category)) {
-        currentAmenities.add(category);
-      }
-      filters['amenities'] = currentAmenities;
-    }
-
-    AppNavigation.goToAllProperties(context, filters: filters);
+    setState(() {
+      _selectedCategory = category;
+      _applyFilters();
+    });
   }
 
   void _applyFilters() {
@@ -121,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
               initialFilters: _appliedFilters,
               allProperties: _allProperties,
               onApplyFilters: (newFilters) {
-                // Return to original agreement: Filter from Home goes to AllProperties (See All)
                 AppNavigation.goToAllProperties(this.context,
                     filters: newFilters);
               },
@@ -175,8 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: SearchRow(
                             onFilterTap: _showFiltersSheet,
-                            onChatTap: () =>
-                                AppNavigation.goToAiChat(context),
+                            onChatTap: () => AppNavigation.goToAiChat(context),
                           ),
                         ),
                       ),
@@ -234,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: TextStyle(
                                     color: AppColors.gold,
                                     fontWeight: FontWeight.w600,
-                                    fontFamily: 'Cairo',
+                                    fontFamily: 'DM Sans',
                                   ),
                                 ),
                               ),
@@ -334,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'Cairo')),
+                  fontFamily: 'DM Sans')),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -448,7 +430,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 16),
         Text(
-          'You\'ve reached the end · North Coast, Egypt',
+          "You've reached the end · North Coast, Egypt",
           style: TextStyle(
               fontSize: 12, color: AppColors.secondary.withValues(alpha: 0.6)),
         ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
@@ -109,7 +109,7 @@ class SearchResultCard extends StatelessWidget {
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
                                 color: AppColors.white,
-                                fontFamily: 'Cairo',
+                                fontFamily: 'DM Sans',
                               ),
                             ),
                           ],
@@ -142,7 +142,7 @@ class SearchResultCard extends StatelessWidget {
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'Cairo',
+                            fontFamily: 'DM Sans',
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -156,11 +156,11 @@ class SearchResultCard extends StatelessWidget {
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
-                                '${property['location']} · ${property['distanceToBeach']}',
+                                '${property['location']} Â· ${property['distanceToBeach']}',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: AppColors.navy,
-                                  fontFamily: 'Cairo',
+                                  fontFamily: 'DM Sans',
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -199,7 +199,7 @@ class SearchResultCard extends StatelessWidget {
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
                               color: AppColors.dark,
-                              fontFamily: 'Cairo',
+                              fontFamily: 'DM Sans',
                             ),
                           ),
                           const SizedBox(width: 4),
@@ -208,7 +208,7 @@ class SearchResultCard extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 13,
                               color: AppColors.secondary,
-                              fontFamily: 'Cairo',
+                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ],
@@ -224,7 +224,7 @@ class SearchResultCard extends StatelessWidget {
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.navy,
-                                fontFamily: 'Cairo',
+                                fontFamily: 'DM Sans',
                               ),
                             ),
                             const TextSpan(
@@ -233,7 +233,7 @@ class SearchResultCard extends StatelessWidget {
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
                                 color: Color(0xFF717171),
-                                fontFamily: 'Cairo',
+                                fontFamily: 'DM Sans',
                               ),
                             ),
                           ],
@@ -303,7 +303,7 @@ class SearchResultCard extends StatelessWidget {
           fontSize: 11,
           fontWeight: FontWeight.w500,
           color: textColor,
-          fontFamily: 'Cairo',
+          fontFamily: 'DM Sans',
         ),
       ),
     );

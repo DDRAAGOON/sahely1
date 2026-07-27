@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/navigation/app_router.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -26,7 +26,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _activeChip = 'All';
 
-  // حفظ حالة الفلاتر المتقدمة بالكامل
+  // Ø­ÙØ¸ Ø­Ø§Ù„Ø© Ø§Ù„ÙÙ„Ø§ØªØ± Ø§Ù„Ù…ØªÙ‚Ø¯Ù…Ø© Ø¨Ø§Ù„ÙƒØ§Ù…Ù„
   late Map<String, dynamic> _appliedFilters;
 
   final List<Map<String, dynamic>> _allProperties = [
@@ -332,7 +332,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     String searchKeyword = _searchController.text.toLowerCase();
     List<Map<String, dynamic>> results = List.from(_allProperties);
 
-    // 1. الفلترة بكلمة البحث
+    // 1. Ø§Ù„ÙÙ„ØªØ±Ø© Ø¨ÙƒÙ„Ù…Ø© Ø§Ù„Ø¨Ø­Ø«
     if (searchKeyword.isNotEmpty) {
       results = results
           .where((p) =>
@@ -341,7 +341,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           .toList();
     }
 
-    // 2. الفلترة بـ Chips العلوية
+    // 2. Ø§Ù„ÙÙ„ØªØ±Ø© Ø¨Ù€ Chips Ø§Ù„Ø¹Ù„ÙˆÙŠØ©
     if (_activeChip != 'All') {
       if (_activeChip == 'Beachfront') {
         results = results
@@ -351,10 +351,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
         results = results.where((p) => p['isNew'] == true).toList();
       else if (_activeChip == 'Top rated')
         results = results.where((p) => p['rating'] >= 4.8).toList();
-      // Price ↑ handled at the end as sorting
+      // Price â†‘ handled at the end as sorting
     }
 
-    // 3. الفلترة من الـ Bottom Sheet
+    // 3. Ø§Ù„ÙÙ„ØªØ±Ø© Ù…Ù† Ø§Ù„Ù€ Bottom Sheet
     if (_appliedFilters['propertyType'] != 'All') {
       results = results
           .where((p) => p['type'] == _appliedFilters['propertyType'])
@@ -380,7 +380,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       }).toList();
     }
 
-    // فلترة القواعد (House Rules)
+    // ÙÙ„ØªØ±Ø© Ø§Ù„Ù‚ÙˆØ§Ø¹Ø¯ (House Rules)
     if (_appliedFilters['partyAllowed'] == true)
       results = results.where((p) => p['partyAllowed'] == true).toList();
     if (_appliedFilters['petsAllowed'] == true)
@@ -388,8 +388,8 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     if (_appliedFilters['mixedGroupsOK'] == true)
       results = results.where((p) => p['mixedGroupsOK'] == true).toList();
 
-    // 4. Sorting for Price ↑
-    if (_activeChip == 'Price ↑') {
+    // 4. Sorting for Price â†‘
+    if (_activeChip == 'Price â†‘') {
       results.sort((a, b) => (a['price'] as num).compareTo(b['price'] as num));
     }
 
@@ -413,7 +413,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
             return SearchFiltersSheet(
               initialFilters: _appliedFilters,
               allProperties: _allProperties,
-              // تمرير القائمة للحساب الدقيق للعدد
+              // ØªÙ…Ø±ÙŠØ± Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ù„Ù„Ø­Ø³Ø§Ø¨ Ø§Ù„Ø¯Ù‚ÙŠÙ‚ Ù„Ù„Ø¹Ø¯Ø¯
               onApplyFilters: (newFilters) {
                 setState(() {
                   _appliedFilters = newFilters;
@@ -461,7 +461,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: FilterChips(
-                    filters: const ['All', 'Beachfront', 'Newest', 'Top rated', 'Price ↑'],
+                    filters: const ['All', 'Beachfront', 'Newest', 'Top rated', 'Price â†‘'],
                     selectedFilter: _activeChip,
                     onFilterSelected: (chip) {
                       _activeChip = chip;
@@ -545,7 +545,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                         hintStyle: TextStyle(
                             fontSize: 14,
                             color: AppColors.placeholder,
-                            fontFamily: 'Cairo'),
+                            fontFamily: 'DM Sans'),
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
@@ -554,7 +554,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: AppColors.dark,
-                          fontFamily: 'Cairo'),
+                          fontFamily: 'DM Sans'),
                     ),
                   ),
                 ],
@@ -590,7 +590,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
               style: const TextStyle(
                 fontSize: 13,
                 color: AppColors.secondary,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
               children: [
                 TextSpan(
@@ -616,7 +616,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: AppColors.navy,
-                      fontFamily: 'Cairo'),
+                      fontFamily: 'DM Sans'),
                 ),
               ),
             ],
@@ -637,7 +637,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
             style: const TextStyle(
                 fontSize: 13,
                 color: AppColors.placeholder,
-                fontFamily: 'Cairo'),
+                fontFamily: 'DM Sans'),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -656,7 +656,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: AppColors.white,
-                      fontFamily: 'Cairo'), // White text
+                      fontFamily: 'DM Sans'), // White text
                 ),
               ],
             ),

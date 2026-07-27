@@ -23,6 +23,8 @@ class PropertyCardBase extends StatelessWidget {
     this.onTap,
     this.showGuestFav = false,
     this.nameOverride,
+    this.showLocation = true,
+    this.showRating = true,
   });
 
   final Property property;
@@ -33,6 +35,8 @@ class PropertyCardBase extends StatelessWidget {
   final VoidCallback? onTap;
   final bool showGuestFav;
   final String? nameOverride;
+  final bool showLocation;
+  final bool showRating;
 
   @override
   Widget build(BuildContext context) {
@@ -112,25 +116,29 @@ class PropertyCardBase extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: [
-                                const Icon(Icons.location_on_outlined,
-                                    size: 13, color: AppColors.muted),
-                                const SizedBox(width: 4),
-                                Expanded(
-                                  child: Text(
-                                    p.area,
-                                    style: AppTheme.dm(
-                                        size: 13, color: AppColors.muted),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                            if (showLocation) ...[
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  const Icon(Icons.location_on_outlined,
+                                      size: 13, color: AppColors.muted),
+                                  const SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      p.area,
+                                      style: AppTheme.dm(
+                                          size: 13, color: AppColors.muted),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            RatingRow(rating: p.rating, reviews: p.reviews),
+                                ],
+                              ),
+                            ],
+                            if (showRating) ...[
+                              const SizedBox(height: 4),
+                              RatingRow(rating: p.rating, reviews: p.reviews),
+                            ],
                           ],
                         ),
                       ),

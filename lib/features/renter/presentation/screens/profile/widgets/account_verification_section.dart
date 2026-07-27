@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
@@ -30,7 +30,7 @@ class AccountVerificationSection extends StatelessWidget {
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
             const SizedBox(width: 8),
@@ -79,7 +79,7 @@ class AccountVerificationSection extends StatelessWidget {
                 iconColor: AppColors.warning,
                 label: 'Identity Verified',
                 status: VerificationStatus.pending,
-                actionLabel: 'Verify Now →',
+                actionLabel: 'Verify Now â†’',
                 onAction: () => AppNavigation.goToIdVerification(context),
               ),
               _Divider(),
@@ -93,7 +93,7 @@ class AccountVerificationSection extends StatelessWidget {
                 status: paymentCardAdded
                     ? VerificationStatus.done
                     : VerificationStatus.pending,
-                actionLabel: 'Add Card →',
+                actionLabel: 'Add Card â†’',
                 onAction: () => AppNavigation.goToAddCard(context),
               ),
             ],
@@ -137,7 +137,7 @@ class _VerificationRow extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.dark,
-                fontFamily: 'Cairo',
+                fontFamily: 'DM Sans',
               ),
             ),
           ),
@@ -150,7 +150,7 @@ class _VerificationRow extends StatelessWidget {
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: AppColors.gold,
-                  fontFamily: 'Cairo',
+                  fontFamily: 'DM Sans',
                 ),
               ),
             )
