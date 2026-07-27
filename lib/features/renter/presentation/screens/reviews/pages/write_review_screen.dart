@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/stars/stars_earned_dialog.dart';
-import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/pages/level_up_celebration_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_property_card.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_text_field.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/star_rating_widget.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/submit_review_button.dart';
+
+import 'package:sahely/core/widgets/buttons.dart';
 
 class WriteReviewScreen extends StatefulWidget {
   final String propertyName;
@@ -99,29 +101,27 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
     final levelData = profile.levelData;
     final nextLevel = profile.nextLevelData;
 
-    Navigator.push(
+    AppNavigation.goToLevelUpCelebration(
       context,
-      MaterialPageRoute(
-        builder: (context) => LevelUpCelebrationScreen(
-          newLevel: level,
-          levelName: levelData['name'],
-          levelIcon: levelData['icon'],
-          levelColor: levelData['color'],
-          unlockBenefit: 'Premium benefits and exclusive access are now yours.',
-          unlockRewardTitle: 'Level Reward',
-          unlockRewardDescription: 'Exclusive Digital Badge',
-          currentSeasonStars: profile.stars,
-          starsToNextLevel:
-              nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
-          onShare: () {
-            // Share achievement logic
-          },
-          onKeepExploring: () {
-            Navigator.pop(context); // Close celebration
-            Navigator.pop(context, true); // Return to previous screen
-          },
-        ),
-      ),
+      extra: {
+        'newLevel': level,
+        'levelName': levelData['name'],
+        'levelIcon': levelData['icon'],
+        'levelColor': levelData['color'],
+        'unlockBenefit': 'Premium benefits and exclusive access are now yours.',
+        'unlockRewardTitle': 'Level Reward',
+        'unlockRewardDescription': 'Exclusive Digital Badge',
+        'currentSeasonStars': profile.stars,
+        'starsToNextLevel':
+            nextLevel != null ? nextLevel['stars'] - profile.stars : 0,
+        'onShare': () {
+          // Share achievement logic
+        },
+        'onKeepExploring': () {
+          Navigator.pop(context); // Close celebration
+          Navigator.pop(context, true); // Return to previous screen
+        },
+      },
     );
   }
 
@@ -129,45 +129,32 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.cream,
-      appBar: AppBar(
-        backgroundColor: AppColors.cream,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Container(
-            margin: const EdgeInsets.all(8),
-            width: 34,
-            height: 34,
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.border),
-            ),
-            child: const Icon(
-              Icons.chevron_left,
-              color: AppColors.navy,
-              size: 20,
-            ),
-          ),
-        ),
-        title: const Text(
-          'Write a Review',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
-            color: AppColors.navy,
-            fontFamily: 'DM Sans',
-          ),
-        ),
-        centerTitle: false,
-      ),
       body: SafeArea(
         child: Column(
           children: [
+            // Custom Header Row
+            const Padding(
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 20),
+              child: Row(
+                children: [
+                  BackChip(),
+                  SizedBox(width: 16),
+                  Text(
+                    'Write a Review',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.navy,
+                      fontFamily: 'Cairo',
+                    ),
+                  ),
+                ],
+              ),
+            ),
             // Scrollable Content
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -178,7 +165,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                       stayDates: widget.stayDates,
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 32),
 
                     // Star Rating
                     StarRatingWidget(
@@ -186,7 +173,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                       onRatingChanged: _onRatingChanged,
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 32),
 
                     // Review Text
                     ReviewTextField(

@@ -16,13 +16,13 @@ class _BrokerCreateCollectionSheetState
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).viewInsets.bottom + 32;
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.cream,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      padding: EdgeInsets.fromLTRB(
-          24, 12, 24, MediaQuery.of(context).viewInsets.bottom + 100),
+      padding: EdgeInsets.fromLTRB(24, 16, 24, bottomPadding),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

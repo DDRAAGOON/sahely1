@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_add_credit_button.dart';
@@ -6,7 +7,6 @@ import 'package:sahely/features/renter/presentation/screens/wallet/widgets/walle
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_recent_activity.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_stats_tiles.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/pages/add_credit_sheet.dart';
-import 'package:sahely/features/renter/presentation/screens/wallet/pages/transaction_history_screen.dart';
 
 class WalletScreen extends StatelessWidget {
   const WalletScreen({super.key});
@@ -120,14 +120,7 @@ class WalletScreen extends StatelessWidget {
                     'amount': -30000, // EGP -300
                   },
                 ],
-                onViewAll: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const TransactionHistoryScreen(),
-                    ),
-                  );
-                },
+                onViewAll: () => AppNavigation.goToTransactionHistory(context),
               ),
 
               const SizedBox(height: 24),
@@ -135,16 +128,9 @@ class WalletScreen extends StatelessWidget {
               // View Full History Link
               Center(
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TransactionHistoryScreen(),
-                      ),
-                    );
-                  },
+                  onTap: () => AppNavigation.goToTransactionHistory(context),
                   child: const Text(
-                    'View Full History →',
+                    'View Full History â†’',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

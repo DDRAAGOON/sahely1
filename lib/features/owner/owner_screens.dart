@@ -1,4 +1,3 @@
-/// Barrel exports for Owner feature screens.
 library;
 
 export 'screens/add_property_screen.dart';

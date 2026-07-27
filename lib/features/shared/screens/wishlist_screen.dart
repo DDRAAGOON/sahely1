@@ -282,23 +282,18 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         final collection = collections[index];
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    BrokerCollectionInsidePage(
-                                  collectionId: collection.id,
-                                  collectionName: collection.name,
-                                  propertyCount: collection.itemCount,
-                                  sharedWithCount: collection.isShared ? 3 : 0,
-                                  memberNames: const [
+                            AppNavigation.safePush(context, '/broker/collection',
+                                extra: {
+                                  'collectionId': collection.id,
+                                  'collectionName': collection.name,
+                                  'propertyCount': collection.itemCount,
+                                  'sharedWithCount': collection.isShared ? 3 : 0,
+                                  'memberNames': const [
                                     'Omar',
                                     'Nour',
                                     'Youssef'
                                   ],
-                                ),
-                              ),
-                            );
+                                });
                           },
                           child: BrokerWishlistCollectionCard(
                             name: collection.name,

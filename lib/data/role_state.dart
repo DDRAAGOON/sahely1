@@ -9,7 +9,7 @@ class RoleState extends ChangeNotifier {
 
   RoleState._internal();
 
-  Role _currentRole = Role.renter;
+  Role _currentRole = Role.owner;
 
   Role get currentRole => _currentRole;
 

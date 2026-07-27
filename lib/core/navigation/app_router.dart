@@ -226,7 +226,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
           path: AppRoutes.verificationComplete,
           builder: (context, state) => const VerificationCompleteScreen()),
 
-      // ---- Verification Gate Routes ----
+      // ---- Verification Gate Routes (also defined in shared_go_routes for renter gate) ----
       GoRoute(
         path: AppRoutes.verifyGate,
         builder: (context, state) => const BlockedGateScreen(),

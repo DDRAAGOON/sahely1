@@ -13,8 +13,8 @@ class NotLivePropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = property['status'] as String;
-    final statusDetail = property['statusDetail'] as String?;
+    final status = property['status']?.toString() ?? '';
+    final statusDetail = property['statusDetail']?.toString();
 
     Color getStatusColor() {
       switch (status) {
@@ -44,7 +44,7 @@ class NotLivePropertyCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                property['imageUrl'] as String,
+                property['imageUrl']?.toString() ?? '',
                 width: 56,
                 height: 56,
                 fit: BoxFit.cover,
@@ -69,7 +69,7 @@ class NotLivePropertyCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    property['name'] as String,
+                    property['name']?.toString() ?? '',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
@@ -79,7 +79,7 @@ class NotLivePropertyCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    property['owner'] as String,
+                    property['owner']?.toString() ?? '',
                     style: const TextStyle(
                       fontSize: 12,
                       color: AppColors.secondary,

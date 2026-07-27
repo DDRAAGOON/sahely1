@@ -38,7 +38,7 @@ class ReferredPropertyCard extends StatelessWidget {
                   child: AspectRatio(
                     aspectRatio: 4 / 3,
                     child: Image.network(
-                      property['imageUrl'] as String,
+                      property['imageUrl']?.toString() ?? '',
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
@@ -87,7 +87,7 @@ class ReferredPropertyCard extends StatelessWidget {
                 children: [
                   // Name & Location
                   Text(
-                    property['name'] as String,
+                    property['name']?.toString() ?? '',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -105,7 +105,7 @@ class ReferredPropertyCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        property['location'] as String,
+                        property['location']?.toString() ?? '',
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.secondary,
@@ -149,7 +149,7 @@ class ReferredPropertyCard extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: _formatPrice(
-                                  property['pricePerNight'] as int),
+                                  (property['pricePerNight'] ?? 0).toInt()),
                             ),
                             const TextSpan(
                               text: '/night',

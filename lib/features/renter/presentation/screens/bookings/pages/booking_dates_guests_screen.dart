@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/shared/screens/add_payment_card_screen.dart';
@@ -133,11 +134,7 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
             cardAdded: dataState.cardAdded,
             onCompleteSetup: () {
               Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AddPaymentCardScreen()),
-              );
+              AppNavigation.goToAddCard(context);
             },
             onNotNow: () {
               Navigator.pop(context);

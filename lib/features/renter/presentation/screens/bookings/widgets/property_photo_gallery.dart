@@ -14,8 +14,7 @@ class PropertyPhotoGallery extends StatelessWidget {
   void _openGallery(BuildContext context, int index) {
     if (photos == null || photos!.isEmpty) return;
     final photoList = photos!.map((e) => e.toString()).toList();
-    Navigator.push(
-      context,
+    Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => PhotoViewerScreen(
           photos: photoList,

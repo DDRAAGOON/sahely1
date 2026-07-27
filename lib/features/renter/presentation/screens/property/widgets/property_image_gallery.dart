@@ -34,8 +34,7 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
   ];
 
   void _openGallery(int index) {
-    Navigator.push(
-      context,
+    Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => PhotoViewerScreen(
           photos: _images,

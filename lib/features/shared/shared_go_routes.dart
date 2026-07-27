@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import 'package:sahely/data/models.dart';
+import 'package:sahely/data/role_state.dart';
 import 'package:sahely/core/navigation/app_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/features/shared/screens/add_payment_card_screen.dart';
@@ -31,11 +35,13 @@ import 'package:sahely/features/shared/screens/property_detail_screen.dart'
 import 'package:sahely/features/shared/screens/wallet_screen.dart';
 import 'package:sahely/features/shared/screens/my_reviews_screen.dart';
 import 'package:sahely/features/shared/screens/notification_settings_screen.dart';
+import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/pages/level_up_celebration_screen.dart';
 import 'package:sahely/features/shared/screens/collection_inside_screen.dart';
 import 'package:sahely/features/shared/screens/collection_chat_screen.dart';
 import 'package:sahely/features/shared/screens/compare_screen.dart';
 import 'package:sahely/features/shared/screens/share_collection_screen.dart';
 import 'package:sahely/features/shared/screens/share_earn_screen.dart';
+import 'package:sahely/features/shared/screens/transaction_history_screen.dart';
 import 'package:sahely/features/shared/screens/booking_screen.dart';
 import 'package:sahely/features/shared/screens/booking_confirmed_screen.dart';
 
@@ -105,9 +111,8 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Property) return PropertyReviewsScreen(property: args);
-      if (args is Map<String, dynamic>) {
+      if (args is Map<String, dynamic>)
         return PropertyReviewsScreen(property: Property.fromMap(args));
-      }
       return const PropertyReviewsScreen();
     },
   ),
@@ -117,9 +122,8 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Property) return BookingScreen(property: args);
-      if (args is Map<String, dynamic>) {
+      if (args is Map<String, dynamic>)
         return BookingScreen(property: Property.fromMap(args));
-      }
       return const BookingScreen();
     },
   ),
@@ -161,10 +165,9 @@ final List<GoRoute> sharedGoRoutes = [
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property) {
+      if (args is Property)
         return ActiveBookingDetailScreen(
             property: args, role: ActiveBookingRole.renter);
-      }
       if (args is Map<String, dynamic>) {
         final role = args['role'] is ActiveBookingRole
             ? args['role'] as ActiveBookingRole
@@ -321,6 +324,26 @@ final List<GoRoute> sharedGoRoutes = [
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) => const LevelUpScreen(),
   ),
+  GoRoute(
+    path: '/level-up-celebration',
+    parentNavigatorKey: rootNavigatorKey,
+    builder: (context, state) {
+      final args = state.extra as Map<String, dynamic>;
+      return LevelUpCelebrationScreen(
+        newLevel: args['newLevel'],
+        levelName: args['levelName'],
+        levelIcon: args['levelIcon'],
+        levelColor: args['levelColor'],
+        unlockBenefit: args['unlockBenefit'],
+        unlockRewardTitle: args['unlockRewardTitle'],
+        unlockRewardDescription: args['unlockRewardDescription'],
+        currentSeasonStars: args['currentSeasonStars'],
+        starsToNextLevel: args['starsToNextLevel'],
+        onShare: args['onShare'],
+        onKeepExploring: args['onKeepExploring'],
+      );
+    },
+  ),
   // Account utilities
   GoRoute(
     path: '/add-card',
@@ -340,14 +363,24 @@ final List<GoRoute> sharedGoRoutes = [
   GoRoute(
     path: '/sos',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) =>
-        const sos.SosScreen(role: sos.UserRole.renter),
+    builder: (context, state) {
+      try {
+        final role = context.read<RoleState>().currentRole;
+        final sosRole = switch (role) {
+          Role.owner => sos.UserRole.owner,
+          Role.broker => sos.UserRole.broker,
+          _ => sos.UserRole.renter,
+        };
+        return sos.SosScreen(role: sosRole);
+      } catch (_) {
+        return const sos.SosScreen(role: sos.UserRole.renter);
+      }
+    },
   ),
   GoRoute(
     path: '/sos-owner',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) =>
-        const sos.SosScreen(role: sos.UserRole.owner),
+    builder: (context, state) => const sos.SosScreen(role: sos.UserRole.owner),
   ),
   GoRoute(
     path: '/ai-chat',
@@ -376,10 +409,26 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) => const MyReviewsScreen(),
   ),
   GoRoute(
+    path: '/transaction-history',
+    parentNavigatorKey: rootNavigatorKey,
+    builder: (context, state) => const TransactionHistoryScreen(),
+  ),
+  GoRoute(
     path: '/notifications',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) =>
-        const NotificationSettingsScreen(role: NotificationRole.renter),
+    builder: (context, state) {
+      try {
+        final role = context.read<RoleState>().currentRole;
+        final notificationRole = switch (role) {
+          Role.owner => NotificationRole.owner,
+          Role.broker => NotificationRole.broker,
+          _ => NotificationRole.renter,
+        };
+        return NotificationSettingsScreen(role: notificationRole);
+      } catch (_) {
+        return const NotificationSettingsScreen(role: NotificationRole.renter);
+      }
+    },
   ),
   GoRoute(
     path: '/edit-profile',

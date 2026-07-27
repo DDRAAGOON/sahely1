@@ -16,6 +16,7 @@ import 'package:sahely/features/broker/presentation/screens/portfolio/pages/refe
 import 'package:sahely/features/broker/presentation/screens/portfolio/pages/referred_property_detail_page.dart';
 import 'package:sahely/features/broker/presentation/screens/smart_lock/pages/broker_smart_lock_screen.dart';
 import 'package:sahely/features/broker/presentation/screens/wallet/pages/broker_history_page.dart';
+import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_collection_inside_page.dart';
 
 // NOTE: Global Broker Routes (not nested in Tabs)
 // Tab-specific routes like Dashboard, Portfolio, Wallet are in AppRouter.
@@ -29,6 +30,19 @@ final List<GoRoute> brokerGoRoutes = [
       path: AppRoutes.brokerReferralIssue,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const ReferralIssuePage()),
+  GoRoute(
+      path: '/broker/collection',
+      parentNavigatorKey: rootNavigatorKey,
+      builder: (context, state) {
+        final args = state.extra as Map<String, dynamic>;
+        return BrokerCollectionInsidePage(
+          collectionId: args['collectionId'],
+          collectionName: args['collectionName'],
+          propertyCount: args['propertyCount'],
+          sharedWithCount: args['sharedWithCount'],
+          memberNames: args['memberNames'],
+        );
+      }),
   GoRoute(
       path: AppRoutes.brokerRefer,
       parentNavigatorKey: rootNavigatorKey,

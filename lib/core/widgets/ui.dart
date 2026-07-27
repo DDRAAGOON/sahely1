@@ -19,8 +19,9 @@ Future<void> showLogoutDialog(BuildContext context) async {
       title: Text('Log Out',
           style: AppTheme.dm(
               size: 18, weight: FontWeight.w700, color: AppColors.navy)),
-      content: Text('Are you sure you want to log out of your account?',
+      content: Text('Are you sure you want to log out?',
           style: AppTheme.dm(size: 14, color: AppColors.muted)),
+      actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx, false),
@@ -28,11 +29,20 @@ Future<void> showLogoutDialog(BuildContext context) async {
               style: AppTheme.dm(
                   size: 14, weight: FontWeight.w600, color: AppColors.muted)),
         ),
-        TextButton(
+        const SizedBox(width: 8),
+        ElevatedButton(
           onPressed: () => Navigator.pop(ctx, true),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.error,
+            foregroundColor: Colors.white,
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14)),
+          ),
           child: Text('Log Out',
               style: AppTheme.dm(
-                  size: 14, weight: FontWeight.w700, color: AppColors.danger)),
+                  size: 14, weight: FontWeight.w700, color: Colors.white)),
         ),
       ],
     ),

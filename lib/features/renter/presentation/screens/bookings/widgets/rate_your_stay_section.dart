@@ -11,43 +11,64 @@ class RateYourStaySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Rate your stay',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: AppColors.navy,
-            fontFamily: 'DM Sans',
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          width: double.infinity,
-          height: 52,
-          child: OutlinedButton.icon(
-            onPressed: onAddReview,
-            icon: const Icon(Icons.star, size: 18),
-            label: const Text(
-              'Add a review · earn +5',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'DM Sans',
-              ),
-            ),
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: AppColors.gold, width: 1.5),
-              foregroundColor: AppColors.gold,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'How was your stay?',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: AppColors.navy,
+              fontFamily: 'Cairo',
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          Row(
+            children: List.generate(5, (index) {
+              return const Padding(
+                padding: EdgeInsets.only(right: 6),
+                child: Icon(Icons.star_border, color: Color(0xFFE0E0E0), size: 28),
+              );
+            }),
+          ),
+          const SizedBox(height: 20),
+          GestureDetector(
+            onTap: onAddReview,
+            child: Container(
+              height: 54,
+              decoration: BoxDecoration(
+                color: AppColors.navy,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              alignment: Alignment.center,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.star, color: AppColors.gold, size: 18),
+                  SizedBox(width: 10),
+                  Text(
+                    'Write a review Â· earn +5 â˜…',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      fontFamily: 'Cairo',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

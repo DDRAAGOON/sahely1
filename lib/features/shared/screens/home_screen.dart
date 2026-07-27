@@ -293,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: _buildFooter(),
                       ),
 
-                      const SliverToBoxAdapter(child: SizedBox(height: 120)),
+                      const SliverToBoxAdapter(child: SizedBox(height: 140)),
                     ],
                   ),
                 ),

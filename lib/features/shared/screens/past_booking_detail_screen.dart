@@ -7,8 +7,6 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import 'package:sahely/features/shared/screens/property_detail_screen.dart';
-import 'package:sahely/features/renter/presentation/screens/reviews/pages/write_review_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/book_again_button.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/past_booking_hero_image.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/price_breakdown_card.dart';
@@ -376,16 +374,14 @@ class PastBookingDetailScreen extends StatelessWidget {
                 rating: rating,
                 reviewText: reviewText,
                 onWriteReview: () {
-                  Navigator.push(
+                  AppNavigation.goToWriteReview(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => WriteReviewScreen(
-                        propertyName: propertyName,
-                        propertyImage: imageUrl,
-                        stayDates:
-                            '${_formatDate(booking['checkIn'])} - ${_formatDate(booking['checkOut'])}',
-                      ),
-                    ),
+                    extra: {
+                      'propertyName': propertyName,
+                      'propertyImage': imageUrl,
+                      'stayDates':
+                          '${_formatDate(booking['checkIn'])} - ${_formatDate(booking['checkOut'])}',
+                    },
                   );
                 },
               ),
@@ -396,19 +392,17 @@ class PastBookingDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: BookAgainButton(
                 onTap: () {
-                  Navigator.push(
+                  AppNavigation.goToPropertyDetail(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => PropertyDetailScreen(
-                        propertyId: booking['propertyId']?.toString() ?? '1',
-                        propertyName: propertyName,
-                        propertyImage: imageUrl,
-                        location: location,
-                        rating: 4.8,
-                        reviewCount: 124,
-                        pricePerNight: pricePerNight,
-                      ),
-                    ),
+                    extra: {
+                      'propertyId': booking['propertyId']?.toString() ?? '1',
+                      'propertyName': propertyName,
+                      'imageUrl': imageUrl,
+                      'location': location,
+                      'rating': 4.8,
+                      'reviewCount': 124,
+                      'pricePerNight': pricePerNight,
+                    },
                   );
                 },
               ),

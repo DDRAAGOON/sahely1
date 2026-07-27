@@ -15,40 +15,35 @@ class StarRatingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Center(
-          child: Text(
-            'How was your stay?',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.navy,
-              fontFamily: 'DM Sans',
-            ),
+        const Text(
+          'How was your stay?',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: AppColors.navy,
+            fontFamily: 'Cairo',
           ),
         ),
         const SizedBox(height: 16),
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(5, (index) {
-              final starValue = index + 1;
-              final isSelected = starValue <= selectedRating;
-              return GestureDetector(
-                onTap: () => onRatingChanged(starValue),
-                child: AnimatedScale(
-                  scale: isSelected ? 1.1 : 1.0,
-                  duration: const Duration(milliseconds: 150),
-                  child: Icon(
-                    isSelected ? Icons.star : Icons.star_border,
-                    size: 40,
-                    color: isSelected ? AppColors.gold : AppColors.border,
-                  ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(5, (index) {
+            final starValue = index + 1;
+            final isSelected = starValue <= selectedRating;
+            return GestureDetector(
+              onTap: () => onRatingChanged(starValue),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Icon(
+                  isSelected ? Icons.star : Icons.star_border,
+                  size: 44,
+                  color: isSelected ? AppColors.gold : const Color(0xFFE0E0E0),
                 ),
-              );
-            }),
-          ),
+              ),
+            );
+          }),
         ),
       ],
     );

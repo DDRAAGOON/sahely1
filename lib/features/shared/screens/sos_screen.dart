@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 
-/// Enum representing the three user roles in Sahely.
 enum UserRole { renter, owner, broker }
 
 class SosScreen extends StatefulWidget {
@@ -42,7 +41,7 @@ class _SosScreenState extends State<SosScreen> {
       case UserRole.broker:
         return 'Hi, this is Sahely Broker Support. We see you flagged an issue for your client. How can we assist you today?';
       case UserRole.renter:
-      return 'Hi! This is Mona from Sahely Support. I can see your active stay at Lagoon Retreat. How can I help?';
+        return 'Hi! This is Mona from Sahely Support. I can see your active stay at Lagoon Retreat. How can I help?';
     }
   }
 
@@ -100,33 +99,33 @@ class _SosScreenState extends State<SosScreen> {
   String _responseMessage() {
     switch (widget.role) {
       case UserRole.owner:
-        return "Understood â€” we're dispatching a technician now and notifying the guest. ETA under 90 min. Can you confirm the unit/floor?";
+        return "Understood - we're dispatching a technician now and notifying the guest. ETA under 90 min. Can you confirm the unit/floor?";
       case UserRole.broker:
         return "Understood. We are dispatching a technician to the unit. We will notify you once they arrive.";
       case UserRole.renter:
-      return "Thanks for flagging â€” I'm dispatching a technician now. They'll arrive within 60 minutes. I'll stay on this chat until it's resolved. âœ…";
+        return "Thanks for flagging - I'm dispatching a technician now. They'll arrive within 60 minutes. I'll stay on this chat until it's resolved. Check mark";
     }
   }
 
   String _getTitle() {
     switch (widget.role) {
       case UserRole.owner:
-        return 'SOS Â· Live Support';
+        return 'SOS - Live Support';
       case UserRole.broker:
-        return 'Broker Support Â· SOS';
+        return 'Broker Support - SOS';
       case UserRole.renter:
-      return 'Sahely Support Â· SOS';
+        return 'Sahely Support - SOS';
     }
   }
 
   String _getStatusText() {
     switch (widget.role) {
       case UserRole.owner:
-        return 'Agent connected Â· priority';
+        return 'Agent connected - priority';
       case UserRole.broker:
-        return 'Agent connected Â· Priority';
+        return 'Agent connected - Priority';
       case UserRole.renter:
-      return 'Agent connected Â· live now';
+        return 'Agent connected - live now';
     }
   }
 
@@ -206,7 +205,7 @@ class _SosScreenState extends State<SosScreen> {
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Text(
-                            'Today Â· Emergency chat started',
+                            'Today - Emergency chat started',
                             style: AppTheme.dm(
                                 size: 12,
                                 weight: FontWeight.w600,
@@ -248,7 +247,7 @@ class _SosScreenState extends State<SosScreen> {
                         controller: _controller,
                         onSubmitted: _send,
                         decoration: InputDecoration(
-                          hintText: 'Message supportâ€¦',
+                          hintText: 'Message support...',
                           hintStyle: AppTheme.dm(
                               size: 13,
                               color: AppColors.navy.withValues(alpha: 0.5)),
@@ -344,4 +343,3 @@ class _SosScreenState extends State<SosScreen> {
         ]),
       );
 }
-

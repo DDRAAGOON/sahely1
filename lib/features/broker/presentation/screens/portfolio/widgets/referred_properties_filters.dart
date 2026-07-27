@@ -37,7 +37,7 @@ class ReferredPropertiesFilters extends StatelessWidget {
           final isSelected = filter['label'] == selectedFilter;
 
           return GestureDetector(
-            onTap: () => onFilterSelected(filter['label'] as String),
+            onTap: () => onFilterSelected(filter['label']?.toString() ?? ''),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -53,7 +53,7 @@ class ReferredPropertiesFilters extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    filter['label'] as String,
+                    filter['label']?.toString() ?? '',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,

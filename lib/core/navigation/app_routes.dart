@@ -126,6 +126,7 @@ class AppRoutes {
   static const String starsEarned = '/stars-earned';
   static const String starNudges = '/star-nudges';
   static const String levelUp = '/level-up';
+  static const String levelUpCelebration = '/level-up-celebration';
   static const String addCard = '/add-card';
   static const String changePassword = '/change-password';
   static const String blockedGate = '/blocked-gate';
@@ -134,6 +135,7 @@ class AppRoutes {
   static const String currency = '/currency';
   static const String language = '/language';
   static const String wallet = '/wallet';
+  static const String transactionHistory = '/transaction-history';
   static const String myReviews = '/my-reviews';
   static const String notificationsSettings = '/notifications-settings';
   static const String editProfile = '/edit-profile';

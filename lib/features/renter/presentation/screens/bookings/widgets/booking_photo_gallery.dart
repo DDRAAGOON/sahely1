@@ -13,8 +13,7 @@ class BookingPhotoGallery extends StatelessWidget {
 
   void _openGallery(BuildContext context, int index) {
     if (photos.isEmpty) return;
-    Navigator.push(
-      context,
+    Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => PhotoViewerScreen(
           photos: photos,

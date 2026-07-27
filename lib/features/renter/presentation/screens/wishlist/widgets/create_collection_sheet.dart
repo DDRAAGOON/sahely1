@@ -32,9 +32,6 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
 
     setState(() => _isCreating = true);
 
-    // TODO: Call API to create collection
-    // POST /wishlists {name: _controller.text}
-
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
         Navigator.pop(context, _controller.text.trim());
@@ -44,6 +41,7 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).viewInsets.bottom + 32;
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.cream,
@@ -51,12 +49,7 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
           top: Radius.circular(20),
         ),
       ),
-      padding: EdgeInsets.fromLTRB(
-        24,
-        12,
-        24,
-        MediaQuery.of(context).viewInsets.bottom + 100,
-      ),
+      padding: EdgeInsets.fromLTRB(24, 16, 24, bottomPadding),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,9 +65,7 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
               ),
             ),
           ),
-
           const SizedBox(height: 24),
-
           // Title
           const Text(
             'Create New Collection',
@@ -85,9 +76,7 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
               fontFamily: 'DM Sans',
             ),
           ),
-
           const SizedBox(height: 8),
-
           const Text(
             'Give your collection a name to organize your saved properties',
             style: TextStyle(
@@ -96,9 +85,7 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
               fontFamily: 'DM Sans',
             ),
           ),
-
-          const SizedBox(height: 24),
-
+          const SizedBox(height: 20),
           // Name Input
           TextField(
             controller: _controller,
@@ -136,9 +123,7 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
             ),
             onSubmitted: (_) => _createCollection(),
           ),
-
-          const SizedBox(height: 24),
-
+          const SizedBox(height: 20),
           // Create Button
           SizedBox(
             width: double.infinity,

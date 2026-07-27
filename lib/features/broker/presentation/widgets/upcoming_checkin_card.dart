@@ -78,7 +78,7 @@ class UpcomingCheckinCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  checkin['margin']?.toString() ?? '',
+                  checkin['margin']?.toString() ?? checkin['profit']?.toString() ?? '',
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,

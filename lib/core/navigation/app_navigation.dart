@@ -102,11 +102,14 @@ class AppNavigation {
   // Shared
   static Future<T?> goToPropertyDetail<T>(BuildContext context, {Object? extra}) => context.push<T>(AppRoutes.propertyDetail, extra: extra);
   static Future<T?> goToBookingDetail<T>(BuildContext context, {Object? extra}) => context.push<T>(AppRoutes.bookingDetail, extra: extra);
+  static void goToBookingUpcoming(BuildContext context, {Object? extra}) => context.push(AppRoutes.bookingUpcoming, extra: extra);
+  static void goToBookingPast(BuildContext context, {Object? extra}) => context.push(AppRoutes.bookingPast, extra: extra);
   static void goToSearch(BuildContext context) => context.push(AppRoutes.search);
   static void goToSearchResults(BuildContext context, {String query = '', Map<String, dynamic>? filters, Object? extra}) => context.push(AppRoutes.browse, extra: extra ?? filters ?? query);
   static void goToAllProperties(BuildContext context, {Map<String, dynamic>? filters, Object? extra}) => context.push(AppRoutes.allProperties, extra: extra ?? filters);
   static void goToMawsem(BuildContext context) => context.push(AppRoutes.mawsem);
   static void goToWallet(BuildContext context) => context.push(AppRoutes.wallet);
+  static void goToTransactionHistory(BuildContext context) => context.push(AppRoutes.transactionHistory);
   static void goToNotifications(BuildContext context) => context.push(AppRoutes.notifications);
   static void goToBrowse(BuildContext context, {Object? extra}) => context.push(AppRoutes.browse, extra: extra);
   static Future<T?> goToFilters<T>(BuildContext context) => context.push<T>(AppRoutes.filters);
@@ -126,6 +129,7 @@ class AppNavigation {
   static void goToStarsEarned(BuildContext context) => context.push(AppRoutes.starsEarned);
   static void goToStarNudges(BuildContext context) => context.push(AppRoutes.starNudges);
   static void goToLevelUp(BuildContext context) => context.push(AppRoutes.levelUp);
+  static void goToLevelUpCelebration(BuildContext context, {required Map<String, dynamic> extra}) => context.push(AppRoutes.levelUpCelebration, extra: extra);
   static void goToProperty(BuildContext context, {Object? extra}) => context.push(AppRoutes.propertyDetail, extra: extra);
   static void goToLanguage(BuildContext context) => context.push(AppRoutes.language);
   static void goToCurrency(BuildContext context) => context.push(AppRoutes.currency);

@@ -50,7 +50,7 @@ class UpcomingCheckinsSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           // Check-in Cards
-          ...checkins.map((checkin) {
+          ...checkins.where((c) => c != null).map((checkin) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: UpcomingCheckinCard(
@@ -58,7 +58,7 @@ class UpcomingCheckinsSection extends StatelessWidget {
                 onTap: () => onCheckinTap(checkin),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

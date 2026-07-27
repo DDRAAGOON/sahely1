@@ -17,8 +17,7 @@ class BookingHeroImage extends StatelessWidget {
 
   void _openGallery(BuildContext context) {
     final photos = allPhotos ?? [imageUrl];
-    Navigator.push(
-      context,
+    Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (context) => PhotoViewerScreen(
           photos: photos,

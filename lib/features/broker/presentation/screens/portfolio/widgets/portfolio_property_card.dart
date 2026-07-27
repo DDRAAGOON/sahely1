@@ -13,7 +13,7 @@ class PortfolioPropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = property['status'] as String;
+    final status = property['status']?.toString() ?? '';
     final isLive = status == 'Live';
     final isPending = status == 'Pending';
 
@@ -32,7 +32,7 @@ class PortfolioPropertyCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                property['imageUrl'] as String,
+                property['imageUrl']?.toString() ?? '',
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
@@ -61,7 +61,7 @@ class PortfolioPropertyCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          property['name'] as String,
+                          property['name']?.toString() ?? '',
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w700,

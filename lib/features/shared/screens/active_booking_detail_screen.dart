@@ -237,12 +237,12 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
           // Ask Sahely AI
           const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 24),
               child: AskSahelyAiSection(),
             ),
           ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          const SliverToBoxAdapter(child: SizedBox(height: 140)),
         ],
       ),
     );

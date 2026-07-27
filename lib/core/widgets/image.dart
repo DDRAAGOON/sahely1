@@ -149,8 +149,7 @@ class SahelyImage extends StatelessWidget {
       final List<String> images = allImages ?? [imageUrl];
       final int initialIndex = images.indexOf(imageUrl);
       return GestureDetector(
-        onTap: () => Navigator.push(
-          context,
+        onTap: () => Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
             builder: (_) => SahelyImageViewer(
               images: images,

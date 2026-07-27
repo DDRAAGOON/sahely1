@@ -11,7 +11,7 @@ class RecentCommissionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final status = commission['status'] as String;
+    final status = commission['status']?.toString() ?? '';
     final isPaid = status == 'Paid';
 
     return Container(
@@ -25,7 +25,7 @@ class RecentCommissionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  commission['propertyName'] as String,
+                  commission['propertyName']?.toString() ?? '',
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
@@ -35,7 +35,7 @@ class RecentCommissionCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  commission['date'] as String,
+                  commission['date']?.toString() ?? '',
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.secondary,

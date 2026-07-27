@@ -52,20 +52,20 @@ class ListingIssueScreen extends StatelessWidget {
 
               // Issue Alert Card
               IssueAlertCard(
-                title: issueData['title'] as String,
-                flaggedBy: issueData['flaggedBy'] as String,
-                flaggedDate: issueData['flaggedDate'] as String,
+                title: issueData['title']?.toString() ?? '',
+                flaggedBy: issueData['flaggedBy']?.toString() ?? '',
+                flaggedDate: issueData['flaggedDate']?.toString() ?? '',
               ),
 
               const SizedBox(height: 16),
 
               // Property Info Card
               PropertyInfoCard(
-                propertyName: issueData['propertyName'] as String,
-                propertyType: issueData['propertyType'] as String,
-                location: issueData['location'] as String,
-                referralCode: issueData['referralCode'] as String,
-                imageUrl: issueData['propertyImage'] as String,
+                propertyName: issueData['propertyName']?.toString() ?? '',
+                propertyType: issueData['propertyType']?.toString() ?? '',
+                location: issueData['location']?.toString() ?? '',
+                referralCode: issueData['referralCode']?.toString() ?? '',
+                imageUrl: issueData['propertyImage']?.toString() ?? '',
               ),
 
               const SizedBox(height: 24),
@@ -79,30 +79,30 @@ class ListingIssueScreen extends StatelessWidget {
 
               // Sahely AI Suggestion
               SahelyAiSuggestion(
-                suggestion: issueData['aiSuggestion'] as String,
+                suggestion: issueData['aiSuggestion']?.toString() ?? '',
               ),
 
               const SizedBox(height: 24),
 
               // Why it isn't listed yet
               WhyNotListedSection(
-                explanation: issueData['whyNotListed'] as String,
+                explanation: issueData['whyNotListed']?.toString() ?? '',
               ),
 
               const SizedBox(height: 24),
 
               // Status Cards Row
               StatusCardsRow(
-                status: issueData['status'] as String,
-                flaggedDate: issueData['flaggedDate'] as String,
-                reReviewTime: issueData['reReviewTime'] as String,
+                status: issueData['status']?.toString() ?? '',
+                flaggedDate: issueData['flaggedDate']?.toString() ?? '',
+                reReviewTime: issueData['reReviewTime']?.toString() ?? '',
               ),
 
               const SizedBox(height: 16),
 
               // Contact Owner Card
               ContactOwnerCard(
-                ownerName: issueData['ownerName'] as String,
+                ownerName: issueData['ownerName']?.toString() ?? '',
                 onTap: () {
                   // Contact owner (call/message)
                 },
