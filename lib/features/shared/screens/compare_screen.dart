@@ -3,7 +3,6 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/property_comparison_bar.dart';
 
 const _azure = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=72&auto=format&fit=crop';
 const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
@@ -25,8 +24,8 @@ class CompareScreen extends StatefulWidget {
 class _CompareScreenState extends State<CompareScreen> {
   final TextEditingController _commentController = TextEditingController();
   final List<Map<String, dynamic>> _comments = [
-    {'name': 'Omar', 'text': "Azure's free beach access seals it for me.", 'color': Color(0xFFC19E67)},
-    {'name': 'Nour', 'text': 'True, but Dunes is cheaper / night 🧐', 'color': Color(0xFF6789A5)},
+    {'name': 'Omar', 'text': "Azure's free beach access seals it for me.", 'color': const Color(0xFFC19E67)},
+    {'name': 'Nour', 'text': 'True, but Dunes is cheaper / night 🧐', 'color': const Color(0xFF6789A5)},
   ];
 
   @override
@@ -177,9 +176,9 @@ class _CompareScreenState extends State<CompareScreen> {
                           const SizedBox(height: 20),
 
                           // Action Buttons
-                          Row(children: [
+                          const Row(children: [
                             Expanded(child: WideButton(label: 'Book Azure', color: AppColors.navy, height: 48, radius: 14)),
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12),
                             Expanded(child: WideButton(label: 'Book Dunes', color: AppColors.gold, textColor: AppColors.navy, height: 48, radius: 14)),
                           ]),
 

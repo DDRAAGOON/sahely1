@@ -2,7 +2,6 @@
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
-import 'package:sahely/features/shared/screens/edit_profile_screen.dart';
 
 class BioCard extends StatelessWidget {
   final String bio;

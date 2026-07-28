@@ -21,7 +21,6 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
   // ✅ متغيرات للـ state عشان البطاقة تتحدث فوراً
   String _displayExpiry = 'MM / YY';
   String _displayName = 'YOUR NAME HERE';
-  String _displayCvv = '•••';
 
   final List<Map<String, dynamic>> _linkedCards = [
     {'type': CardType.visa, 'name': 'Visa Platinum', 'last4': '8842'},
@@ -67,7 +66,6 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
   // ✅ تحديث CVV في البطاقة (اختياري - CVV عادة لا يظهر على البطاقة)
   void _onCvvChanged(String value) {
     setState(() {
-      _displayCvv = value.isEmpty ? '•••' : value;
     });
   }
 

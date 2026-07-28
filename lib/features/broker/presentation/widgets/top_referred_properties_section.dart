@@ -60,7 +60,7 @@ class TopReferredPropertiesSection extends StatelessWidget {
                 onTap: () => onPropertyTap(property),
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

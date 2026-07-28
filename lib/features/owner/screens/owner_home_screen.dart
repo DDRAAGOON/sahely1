@@ -278,7 +278,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                       label: 'Active bookings',
                       onTap: () => AppNavigation.goToOwnerBookings(context)),
                   StatCard(
-                      value: '${dashboard?.monthlyEarnings ?? '68.4k'}',
+                      value: dashboard?.monthlyEarnings ?? '68.4k',
                       label: 'EGP / month',
                       onTap: () => AppNavigation.goToOwnerEarnings(context)),
                 ]),

@@ -101,7 +101,7 @@ class OwnerPropertyCard extends StatelessWidget {
               note!,
               style: AppTheme.dm(
                 size: 12,
-                color: Color(0xFFD2760A),
+                color: const Color(0xFFD2760A),
                 weight: FontWeight.w600,
               ),
             ),

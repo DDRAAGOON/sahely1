@@ -9,7 +9,6 @@ import 'package:sahely/features/renter/presentation/screens/wishlist/presentatio
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_header.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_members_actions.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_property_card.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/pages/collection_compare_screen.dart';
 
 class CollectionInsideSharedScreen extends StatefulWidget {
   final String collectionId;

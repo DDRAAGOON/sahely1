@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +20,6 @@ import 'package:sahely/features/shared/screens/arrival_checklist_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/pages/write_review_screen.dart';
 import 'package:sahely/features/shared/screens/browse_screen.dart';
 import 'package:sahely/features/shared/screens/all_properties_screen.dart';
-import 'package:sahely/features/shared/screens/filters_screen.dart';
 import 'package:sahely/features/shared/screens/property_reviews_screen.dart';
 import 'package:sahely/features/shared/screens/services_screen.dart';
 import 'package:sahely/features/shared/screens/mawsem/mawsem_dashboard_screen.dart';
@@ -39,7 +37,6 @@ import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/p
 import 'package:sahely/features/shared/screens/collection_inside_screen.dart';
 import 'package:sahely/features/shared/screens/collection_chat_screen.dart';
 import 'package:sahely/features/shared/screens/compare_screen.dart';
-import 'package:sahely/features/shared/screens/share_collection_screen.dart';
 import 'package:sahely/features/shared/screens/share_earn_screen.dart';
 import 'package:sahely/features/shared/screens/transaction_history_screen.dart';
 import 'package:sahely/features/shared/screens/booking_screen.dart';
@@ -108,8 +105,9 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Property) return PropertyReviewsScreen(property: args);
-      if (args is Map<String, dynamic>)
+      if (args is Map<String, dynamic>) {
         return PropertyReviewsScreen(property: Property.fromMap(args));
+      }
       return const PropertyReviewsScreen();
     },
   ),
@@ -119,8 +117,9 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Property) return BookingScreen(property: args);
-      if (args is Map<String, dynamic>)
+      if (args is Map<String, dynamic>) {
         return BookingScreen(property: Property.fromMap(args));
+      }
       return const BookingScreen();
     },
   ),
@@ -162,9 +161,10 @@ final List<GoRoute> sharedGoRoutes = [
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) {
       final args = state.extra;
-      if (args is Property)
+      if (args is Property) {
         return ActiveBookingDetailScreen(
             property: args, role: ActiveBookingRole.renter);
+      }
       if (args is Map<String, dynamic>) {
         final role = args['role'] is ActiveBookingRole
             ? args['role'] as ActiveBookingRole

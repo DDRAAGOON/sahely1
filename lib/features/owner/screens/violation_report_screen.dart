@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 
 class ViolationReportScreen extends StatelessWidget {
   const ViolationReportScreen({super.key});

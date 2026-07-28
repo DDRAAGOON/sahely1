@@ -91,12 +91,15 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         }).toList();
       }
 
-      if (_partyAllowed)
+      if (_partyAllowed) {
         results = results.where((p) => p['partyAllowed'] == true).toList();
-      if (_petsAllowed)
+      }
+      if (_petsAllowed) {
         results = results.where((p) => p['petsAllowed'] == true).toList();
-      if (_mixedGroupsOK)
+      }
+      if (_mixedGroupsOK) {
         results = results.where((p) => p['mixedGroupsOK'] == true).toList();
+      }
 
       _resultsCount = results.length;
     });

@@ -35,33 +35,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     return;
 
-    try {
-      final storedToken = await _secureStorage.read(key: _tokenKey);
-      final storedRole = await _secureStorage.read(key: _roleKey);
-
-      final storedVerified = await _secureStorage.read(key: _verifiedKey);
-
-      if (storedToken != null && storedToken.isNotEmpty) {
-        _token = storedToken;
-        _isAuthenticated = true;
-        _isVerified = storedVerified == 'true';
-        // Restore role if present
-        if (storedRole != null) {
-          RoleState().setRoleFromString(storedRole);
-        }
-      } else {
-        _token = null;
-        _isAuthenticated = false;
-        _isVerified = false;
-      }
-    } catch (e) {
-      // On any error, treat as not authenticated
-      _token = null;
-      _isAuthenticated = false;
-      _isVerified = false;
-    }
-
-    notifyListeners();
   }
 
   /// Stores token and role in secure storage and marks user as authenticated.

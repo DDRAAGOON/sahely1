@@ -7,7 +7,6 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/chips.dart';
 import 'package:sahely/core/widgets/common.dart';
-import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/floating_nav.dart';
 import 'package:sahely/core/widgets/property_card.dart';
 import 'package:sahely/data/sample_data.dart';

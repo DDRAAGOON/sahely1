@@ -4,8 +4,6 @@ import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/features/shared/screens/filters_screen.dart';
-
-import '../../features/renter/presentation/screens/wishlist/pages/collection_compare_screen.dart';
 import '../../features/shared/screens/compare_screen.dart';
 import '../../features/shared/screens/share_collection_screen.dart';
 

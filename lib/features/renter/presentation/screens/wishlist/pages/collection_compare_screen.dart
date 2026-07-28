@@ -146,10 +146,10 @@ class CollectionCompareScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Row(
+                    const Row(
                       children: [
                         Expanded(child: WideButton(label: 'Book Azure', color: AppColors.navy, height: 48, radius: 14)),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12),
                         Expanded(child: WideButton(label: 'Book Lagoon', color: AppColors.gold, textColor: AppColors.navy, height: 48, radius: 14)),
                       ],
                     ),

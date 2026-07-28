@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/shared/screens/add_payment_card_screen.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/widgets/blocked_action_gate.dart';
 
@@ -352,9 +351,9 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
       color: AppColors.cream,
-      child: Row(
+      child: const Row(
         children: [
-          const TopBar(title: 'Plan Your Stay'),
+          TopBar(title: 'Plan Your Stay'),
         ],
       ),
     );

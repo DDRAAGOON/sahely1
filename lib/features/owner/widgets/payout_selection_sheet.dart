@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/sheet_handle.dart';
 
 class PayoutAccount {

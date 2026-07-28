@@ -151,8 +151,9 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                           contentPadding: EdgeInsets.zero,
                         ),
                         onChanged: (v) {
-                          if (_selectedP.isNotEmpty)
+                          if (_selectedP.isNotEmpty) {
                             setState(() => _selectedP = '');
+                          }
                         },
                       ),
                     ),
