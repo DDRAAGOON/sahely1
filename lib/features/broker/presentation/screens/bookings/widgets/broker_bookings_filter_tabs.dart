@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class BrokerBookingsFilterTabs extends StatelessWidget {
   final List<String> tabs;
@@ -20,33 +23,29 @@ class BrokerBookingsFilterTabs extends StatelessWidget {
         children: tabs.map((tab) {
           final isSelected = tab == selectedTab;
           return Expanded(
-            child: GestureDetector(
-              onTap: () => onTabSelected(tab),
-              child: Container(
-                height: 44,
-                margin: EdgeInsets.only(
-                  right: tab == tabs.last ? 0 : 8,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF1B2744) : Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                  border: Border.all(
-                    color: isSelected
-                        ? const Color(0xFF1B2744)
-                        : const Color(0xFFE0D8CC),
-                    width: 1,
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: tab == tabs.last ? 0 : 8,
+              ),
+              child: BouncyButton(
+                onTap: () => onTabSelected(tab),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.navy : Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                    border : null,
                   ),
-                ),
-                child: Center(
-                  child: Text(
-                    tab,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight:
-                          isSelected ? FontWeight.w700 : FontWeight.w500,
-                      color:
-                          isSelected ? Colors.white : const Color(0xFF1B2744),
-                      fontFamily: 'DM Sans',
+                  child: Center(
+                    child: Text(
+                      tab,
+                      style: AppTheme.dm(
+                        size: 14,
+                        weight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        color: isSelected ? Colors.white : AppColors.navy,
+                      ),
                     ),
                   ),
                 ),

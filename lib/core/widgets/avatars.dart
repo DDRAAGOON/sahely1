@@ -24,8 +24,7 @@ class AvatarCircle extends StatelessWidget {
             end: Alignment.bottomRight),
       ),
       child: icon != null
-          ? Icon(icon, size: size * 0.5, color: Colors.white)
-          : null,
+          ? Icon(icon, size: size * 0.5, color: Colors.white) : null,
     );
   }
 }

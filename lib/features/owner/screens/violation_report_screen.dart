@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
 
 class ViolationReportScreen extends StatelessWidget {
@@ -59,8 +60,8 @@ class ViolationReportScreen extends StatelessWidget {
                           style: AppTheme.dm(
                               size: 14, weight: FontWeight.w700, color: AppColors.navy)),
                       const SizedBox(height: 12),
-                      const KeyValueRow('Deduction Amount', '− EGP 1,500',
-                          valueColor: Color(0xFFB22222)),
+                      KeyValueRow('Deduction Amount', '− ${CurrencyFormatter.format(1500)}',
+                          valueColor: const Color(0xFFB22222)),
                       const KeyValueRow('Date Reported', 'Jun 18, 2026'),
                       const KeyValueRow('Applied to Payout', 'Pending'),
                     ],
@@ -113,7 +114,7 @@ class ViolationReportScreen extends StatelessWidget {
             image: NetworkImage(url),
             fit: BoxFit.cover,
           ),
-          border: Border.all(color: AppColors.border),
+          border : null,
         ),
       ),
     );

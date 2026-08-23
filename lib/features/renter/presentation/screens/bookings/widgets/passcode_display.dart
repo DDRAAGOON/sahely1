@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PasscodeDisplay extends StatelessWidget {
   final String passcode;
@@ -27,20 +28,19 @@ class PasscodeDisplay extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
+          Text(
             'ACCESS PASSCODE',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFFC49F45),
-              fontFamily: 'DM Sans',
+            style: AppTheme.dm(
+              size: 11,
+              weight: FontWeight.w700,
+              color: const Color(0xFFC49F45),
               letterSpacing: 2,
             ),
           ),
           const SizedBox(height: 28),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(6, (index) {
+            children: List.generate(passcode.length, (index) {
               String digit = (isInRange && index < passcode.length)
                   ? passcode[index]
                   : '•';
@@ -51,21 +51,17 @@ class PasscodeDisplay extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E293B).withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.1),
-                    width: 1,
-                  ),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
                 ),
                 child: Center(
                   child: Text(
                     digit,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 22,
+                      weight: FontWeight.w700,
                       color: isInRange
                           ? Colors.white
                           : Colors.white.withValues(alpha: 0.2),
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ),
@@ -92,11 +88,10 @@ class PasscodeDisplay extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     isInRange ? 'Copy code' : 'Locked until in range',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                    style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w600,
                       color: isInRange ? Colors.white : const Color(0xFFE57373),
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

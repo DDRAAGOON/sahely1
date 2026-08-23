@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class GuestCounterRow extends StatelessWidget {
   final String label;
@@ -32,20 +33,18 @@ class GuestCounterRow extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 15,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -59,13 +58,10 @@ class GuestCounterRow extends StatelessWidget {
                 child: Container(
                   width: 34,
                   height: 34,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: AppColors.white,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: canDecrement ? AppColors.navy : AppColors.border,
-                      width: 1.5,
-                    ),
+                    border : null,
                   ),
                   child: Icon(
                     Icons.remove,
@@ -80,11 +76,10 @@ class GuestCounterRow extends StatelessWidget {
                 child: Text(
                   '$value',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 16,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),

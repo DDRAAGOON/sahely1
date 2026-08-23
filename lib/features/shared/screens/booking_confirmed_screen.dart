@@ -5,7 +5,7 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class BookingConfirmedScreen extends StatelessWidget {
   final Map<String, dynamic>? arguments;
@@ -21,8 +21,7 @@ class BookingConfirmedScreen extends StatelessWidget {
     final pName =
         property?.name ?? args?['propertyName'] ?? 'Azure Beach Villa';
 
-    String format(num n) => n.toStringAsFixed(0).replaceAllMapped(
-        RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},");
+
 
     return PhoneScaffold(
       child: SingleChildScrollView(
@@ -52,7 +51,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                   KeyValueRow('Guests', '$guests adults'),
                   const KeyValueRow('Unit · Floor', 'B-214 · Floor 2'),
                   const KeyValueRow('Booking ref', 'SHLY-8842'),
-                  KeyValueRow('Total paid', 'EGP ${format(total)}',
+                  KeyValueRow('Total paid', CurrencyFormatter.format(total.toInt()),
                       bold: true, topBorder: true),
                 ],
               ),

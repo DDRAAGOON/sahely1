@@ -8,20 +8,35 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 import 'package:sahely/features/owner/screens/payout_bank_screen.dart';
 import 'package:sahely/features/owner/screens/withdraw_amount_screen.dart';
 import 'package:sahely/features/owner/screens/withdraw_receipt_screen.dart';
+import 'package:sahely/features/broker/presentation/screens/dashboard/pages/broker_dashboard_page.dart';
 import 'package:sahely/features/broker/presentation/screens/dashboard/pages/tier_dashboard_page.dart';
 import 'package:sahely/features/broker/presentation/screens/dashboard/pages/tier_upgrade_page.dart';
 import 'package:sahely/features/broker/presentation/screens/mawsem/pages/broker_mawsem_page.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_page.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/pages/refer_property_page.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/pages/referral_issue_page.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/pages/referred_property_detail_page.dart';
 import 'package:sahely/features/broker/presentation/screens/smart_lock/pages/broker_smart_lock_screen.dart';
 import 'package:sahely/features/broker/presentation/screens/wallet/pages/broker_history_page.dart';
+import 'package:sahely/features/broker/presentation/screens/wallet/pages/broker_wallet_page.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/pages/broker_collection_inside_page.dart';
 
 // NOTE: Global Broker Routes (not nested in Tabs)
 // Tab-specific routes like Dashboard, Portfolio, Wallet are in AppRouter.
 
 final List<GoRoute> brokerGoRoutes = [
+  GoRoute(
+      path: AppRoutes.brokerDashboard,
+      parentNavigatorKey: rootNavigatorKey,
+      builder: (context, state) => const BrokerDashboardPage()),
+  GoRoute(
+      path: AppRoutes.brokerPortfolio,
+      parentNavigatorKey: rootNavigatorKey,
+      builder: (context, state) => const BrokerPortfolioPage()),
+  GoRoute(
+      path: AppRoutes.brokerWallet,
+      parentNavigatorKey: rootNavigatorKey,
+      builder: (context, state) => const BrokerWalletPage()),
   GoRoute(
       path: AppRoutes.brokerReferredDetail,
       parentNavigatorKey: rootNavigatorKey,

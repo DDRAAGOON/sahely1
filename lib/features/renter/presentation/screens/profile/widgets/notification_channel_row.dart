@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class NotificationChannelRow extends StatelessWidget {
   final IconData icon;
@@ -38,20 +39,18 @@ class NotificationChannelRow extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                  style: AppTheme.dm(
+                    size: 14,
+                    weight: FontWeight.w600,
                     color: AppColors.dark,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 import 'package:sahely/features/shared/widgets/mawsem/earn_star_row.dart';
 
@@ -12,22 +13,20 @@ class BrokerHowToEarnSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section Header
-        const Text(
+        Text(
           'How to Earn Stars',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 18,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 6),
-        const Text(
+        Text(
           'Complete broker milestones to climb faster.',
-          style: TextStyle(
-            fontSize: 13,
+          style: AppTheme.dm(
+            size: 13,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 16),
@@ -44,7 +43,7 @@ class BrokerHowToEarnSection extends StatelessWidget {
               _buildRow(
                 icon: Icons.verified_user_outlined,
                 title: 'Verify your broker identity',
-                subtitle: 'One-time Â· ID + Business Proof',
+                subtitle: 'One-time · ID + Business Proof',
                 stars: '+10',
                 color: const Color(0xFF1B6B3A),
                 bgColor: const Color(0xFFE8F5E9),
@@ -52,7 +51,7 @@ class BrokerHowToEarnSection extends StatelessWidget {
               _buildRow(
                 icon: Icons.add_home_outlined,
                 title: 'Refer your first property',
-                subtitle: 'One-time Â· must be verified',
+                subtitle: 'One-time · must be verified',
                 stars: '+20',
                 color: const Color(0xFF1565C0),
                 bgColor: const Color(0xFFE3F2FD),
@@ -60,7 +59,7 @@ class BrokerHowToEarnSection extends StatelessWidget {
               _buildRow(
                 icon: Icons.person_add_outlined,
                 title: 'Refer a guest who books',
-                subtitle: 'Per booking Â· over 5k EGP',
+                subtitle: 'Per booking · over 5k EGP',
                 stars: '+15',
                 color: const Color(0xFFBC9B43),
                 bgColor: const Color(0xFFFFF8E1),

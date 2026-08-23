@@ -4,6 +4,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/stars/stars_earned_dialog.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_property_card.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_text_field.dart';
@@ -133,19 +134,18 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
         child: Column(
           children: [
             // Custom Header Row
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16, 12, 16, 20),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
               child: Row(
                 children: [
-                  BackChip(),
-                  SizedBox(width: 16),
+                  const BackChip(),
+                  const SizedBox(width: 16),
                   Text(
                     'Write a Review',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 22,
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

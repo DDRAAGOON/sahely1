@@ -1,6 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class ReferPropertyBanner extends StatelessWidget {
   final VoidCallback onTap;
@@ -12,7 +14,7 @@ class ReferPropertyBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -40,22 +42,20 @@ class ReferPropertyBanner extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Refer a property',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 15,
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Earn 4% on every booking ط¢آ· share your code',
-                    style: TextStyle(
-                      fontSize: 12,
+                    'Earn 4% on every booking · share your code',
+                    style: AppTheme.dm(
+                      size: 12,
                       color: AppColors.navy.withValues(alpha: 0.7),
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

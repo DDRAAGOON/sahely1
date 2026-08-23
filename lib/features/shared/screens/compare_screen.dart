@@ -3,18 +3,22 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-
-const _azure = 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=72&auto=format&fit=crop';
-const _dunes = 'https://images.unsplash.com/photo-1776619316276-b1b461af9f15?w=800&q=72&auto=format&fit=crop';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class CompareScreen extends StatefulWidget {
   final String collectionName;
   final List<String> participantNames;
+  final Property? propertyA;
+  final Property? propertyB;
 
   const CompareScreen({
     super.key,
     this.collectionName = 'All Saved',
     this.participantNames = const ['Omar', 'Nour', 'Sara'],
+    this.propertyA,
+    this.propertyB,
   });
 
   @override
@@ -22,40 +26,170 @@ class CompareScreen extends StatefulWidget {
 }
 
 class _CompareScreenState extends State<CompareScreen> {
-  final TextEditingController _commentController = TextEditingController();
-  final List<Map<String, dynamic>> _comments = [
-    {'name': 'Omar', 'text': "Azure's free beach access seals it for me.", 'color': const Color(0xFFC19E67)},
-    {'name': 'Nour', 'text': 'True, but Dunes is cheaper / night 🧐', 'color': const Color(0xFF6789A5)},
-  ];
+  Property? _propA;
+  Property? _propB;
 
   @override
-  void dispose() {
-    _commentController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _propA = widget.propertyA;
+    _propB = widget.propertyB;
+    
+    // If only one property is provided, prompt to select the second one
+    if (widget.propertyA != null && widget.propertyB == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _selectProperty(false);
+      });
+    } else if (widget.propertyA == null && widget.propertyB == null) {
+      // If none provided, prompt for the first one
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _selectProperty(true);
+      });
+    }
   }
 
-  void _addComment() {
-    if (_commentController.text.trim().isEmpty) return;
-    setState(() {
-      _comments.add({
-        'name': 'You',
-        'text': _commentController.text.trim(),
-        'color': AppColors.navy,
-      });
-      _commentController.clear();
-    });
+  void _selectProperty(bool isA) {
+    String searchQuery = '';
+    showModalBottomSheet(
+      useRootNavigator: true, context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setModalState) {
+          final filteredList = Sample.allTrending.where((p) {
+            final nameMatch = p.name.toLowerCase().contains(searchQuery.toLowerCase());
+            final areaMatch = p.area.toLowerCase().contains(searchQuery.toLowerCase());
+            return nameMatch || areaMatch;
+          }).toList();
+
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.85,
+            decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'Select Property to Compare',
+                  style: AppTheme.dm(size: 20, weight: FontWeight.w800, color: AppColors.navy),
+                ),
+                const SizedBox(height: 16),
+                // Search Bar
+                Container(
+                  height: 46,
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  decoration: BoxDecoration(
+                    color: AppColors.cream,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.border),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search, size: 18, color: AppColors.gold),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          onChanged: (v) => setModalState(() => searchQuery = v),
+                          decoration: InputDecoration(
+                            hintText: 'Search by name or area...',
+                            hintStyle: AppTheme.dm(size: 13, color: AppColors.textPlaceholder),
+                            border: InputBorder.none,
+                            isDense: true,
+                          ),
+                          style: AppTheme.dm(size: 14),
+                        ),
+                      ),
+                      if (searchQuery.isNotEmpty)
+                        GestureDetector(
+                          onTap: () => setModalState(() => searchQuery = ''),
+                          child: const Icon(Icons.close, size: 18, color: AppColors.muted),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: filteredList.isEmpty
+                      ? Center(
+                          child: Text(
+                            'No properties found.',
+                            style: AppTheme.dm(color: AppColors.muted),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: filteredList.length,
+                          itemBuilder: (context, index) {
+                            final p = filteredList[index];
+                            return ListTile(
+                              contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(p.image, width: 60, height: 60, fit: BoxFit.cover),
+                              ),
+                              title: Row(
+                                children: [
+                                  Expanded(child: Text(p.name, style: AppTheme.dm(weight: FontWeight.w700))),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: p.saved ? AppColors.gold.withValues(alpha: 0.2) : AppColors.border.withValues(alpha: 0.3),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      p.saved ? widget.collectionName : 'All Properties',
+                                      style: AppTheme.dm(size: 9, weight: FontWeight.w600, color: p.saved ? AppColors.navy : AppColors.muted),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              subtitle: Text(
+                                '${p.area} · ${CurrencyFormatter.format(p.price)}',
+                                style: AppTheme.dm(size: 12, color: AppColors.muted),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  if (isA) {
+                                    _propA = p;
+                                  } else {
+                                    _propB = p;
+                                  }
+                                });
+                                Navigator.pop(ctx);
+                              },
+                            );
+                          },
+                        ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.navy,
-      // Ensures the screen resizes when keyboard appears
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Header (Navy Part)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
               child: Row(children: [
@@ -76,17 +210,15 @@ class _CompareScreenState extends State<CompareScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Compare',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.gold,
-                              fontFamily: 'DM Sans')),
+                      Text('Compare',
+                          style: AppTheme.dm(
+                              size: 18,
+                              weight: FontWeight.w700,
+                              color: AppColors.gold)),
                       Text(widget.collectionName,
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white.withValues(alpha: 0.6),
-                              fontFamily: 'DM Sans')),
+                          style: AppTheme.dm(
+                              size: 12,
+                              color: Colors.white.withValues(alpha: 0.6))),
                     ],
                   ),
                 ),
@@ -102,32 +234,18 @@ class _CompareScreenState extends State<CompareScreen> {
                       decoration: BoxDecoration(
                           color: AppColors.gold,
                           borderRadius: BorderRadius.circular(16)),
-                      child: const Row(children: [
-                        Icon(Icons.link, size: 14, color: AppColors.navy),
-                        SizedBox(width: 4),
+                      child: Row(children: [
+                        const Icon(Icons.link, size: 14, color: AppColors.navy),
+                        const SizedBox(width: 4),
                         Text('Share',
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.navy,
-                                fontFamily: 'DM Sans'))
+                            style: AppTheme.dm(
+                                size: 12,
+                                weight: FontWeight.w700,
+                                color: AppColors.navy))
                       ])),
                 ),
-                const SizedBox(width: 10),
-                GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.12),
-                            shape: BoxShape.circle),
-                        child: const Icon(Icons.close,
-                            size: 16, color: Colors.white))),
               ]),
             ),
-
-            // 2. Main Content (Cream Part)
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
@@ -139,132 +257,100 @@ class _CompareScreenState extends State<CompareScreen> {
                       child: ListView(
                         padding: const EdgeInsets.all(16),
                         children: [
-                          // Property Image Teasers
                           Row(children: [
-                            Expanded(child: _teaserCard(_azure, 'Azure Villa', 'EGP 4,500')),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () => _selectProperty(true),
+                                child: _propA != null 
+                                    ? _teaserCard(_propA!.image, _propA!.name, CurrencyFormatter.format(_propA!.price))
+                                    : _emptyTeaserCard('Add Property'),
+                              ),
+                            ),
                             const SizedBox(width: 12),
-                            Expanded(child: _teaserCard(_dunes, 'Golden Dunes', 'EGP 3,800')),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () => _selectProperty(false),
+                                child: _propB != null 
+                                    ? _teaserCard(_propB!.image, _propB!.name, CurrencyFormatter.format(_propB!.price))
+                                    : _emptyTeaserCard('Add Property'),
+                              ),
+                            ),
                           ]),
                           
                           const SizedBox(height: 16),
 
-                          // Comparison Table Card
                           WhiteCard(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             radius: 20,
                             child: Column(children: [
-                              _tableRow('Location', 'Marassi · N.Coast', 'Hacienda Bay', 1),
+                              _tableRow(
+                                'Collection',
+                                _propA == null ? '-' : (_propA!.saved ? widget.collectionName : 'All Properties'),
+                                _propB == null ? '-' : (_propB!.saved ? widget.collectionName : 'All Properties'),
+                                0,
+                              ),
                               _divider(),
-                              _tableRow('Type', 'Villa', 'Chalet', 2),
+                              _tableRow('Location', _propA?.area ?? '-', _propB?.area ?? '-', 1),
                               _divider(),
-                              _tableRow('Rating', '★ 4.8', '★ 4.7', 1),
+                              _tableRow('Type', _propA?.type ?? '-', _propB?.type ?? '-', 2),
                               _divider(),
-                              _tableRow('Bedrooms', '4 bdr · 6 beds', '3 bdr · 5 beds', 1),
+                              _tableRow(
+                                'Price', 
+                                _propA != null ? CurrencyFormatter.format(_propA!.price) : '-', 
+                                _propB != null ? CurrencyFormatter.format(_propB!.price) : '-', 
+                                1
+                              ),
                               _divider(),
-                              _tableRow('Bathrooms', '3', '2', 1),
+                              _tableRow(
+                                'Rating', 
+                                _propA != null ? '★ ${_propA!.rating} (${_propA!.reviews})' : '-', 
+                                _propB != null ? '★ ${_propB!.rating} (${_propB!.reviews})' : '-', 
+                                1
+                              ),
                               _divider(),
-                              _tableRow('View', 'Sea view', 'Dune view', 1),
+                              _tableRow('Bedrooms', _propA != null ? '${_propA!.beds} bdr' : '-', _propB != null ? '${_propB!.beds} bdr' : '-', 1),
                               _divider(),
-                              _tableRow('Beach', 'Marina Beach', 'Lagoon Beach', 1),
+                              _tableRow('Guests', _propA != null ? '${_propA!.guests} guests' : '-', _propB != null ? '${_propB!.guests} guests' : '-', 1),
                               _divider(),
-                              _tableRow('Beach access', 'Free', 'EGP 150 / day', 1),
+                              _tableRow(
+                                'Beach', 
+                                _propA != null ? (_propA!.minutesToBeach != null ? '${_propA!.minutesToBeach} min' : '-') : '-', 
+                                _propB != null ? (_propB!.minutesToBeach != null ? '${_propB!.minutesToBeach} min' : '-') : '-', 
+                                1
+                              ),
                               _divider(),
-                              _tableRow('Pool', '✓', '×', 1),
+                              _tableRow('Pets OK', _propA != null ? (_propA!.petsOk ? '✓' : '×') : '-', _propB != null ? (_propB!.petsOk ? '✓' : '×') : '-', 1),
                             ]),
                           ),
 
                           const SizedBox(height: 20),
 
-                          // Action Buttons
-                          const Row(children: [
-                            Expanded(child: WideButton(label: 'Book Azure', color: AppColors.navy, height: 48, radius: 14)),
-                            SizedBox(width: 12),
-                            Expanded(child: WideButton(label: 'Book Dunes', color: AppColors.gold, textColor: AppColors.navy, height: 48, radius: 14)),
-                          ]),
-
-                          const SizedBox(height: 32),
-
-                          // Collection Comments Header
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Collection comments',
-                                  style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
-                              Row(children: [
-                                const Icon(Icons.auto_awesome, size: 14, color: AppColors.muted),
-                                const SizedBox(width: 4),
-                                Text(widget.collectionName, style: AppTheme.dm(size: 11, color: AppColors.muted)),
-                              ]),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Comments List
-                          ..._comments.map((c) => Padding(
-                            padding: const EdgeInsets.only(bottom: 14),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CircleAvatar(radius: 14, backgroundColor: c['color']),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: AppTheme.dm(size: 13, color: AppColors.navy),
-                                      children: [
-                                        TextSpan(text: '${c['name']} ', style: const TextStyle(fontWeight: FontWeight.w800)),
-                                        TextSpan(text: c['text']),
-                                      ]
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          Row(children: [
+                            Expanded(
+                              child: WideButton(
+                                label: _propA != null ? 'Book ${_propA!.name.split(" ").first}' : 'Select A',
+                                color: AppColors.navy,
+                                enabled: _propA != null,
+                                height: 48,
+                                radius: 14,
+                                onTap: _propA != null ? () => AppNavigation.goToPropertyDetail(context, extra: _propA) : () => _selectProperty(true),
+                              ),
                             ),
-                          )),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: WideButton(
+                                label: _propB != null ? 'Book ${_propB!.name.split(" ").first}' : 'Select B',
+                                color: AppColors.gold,
+                                textColor: AppColors.navy,
+                                enabled: _propB != null,
+                                height: 48,
+                                radius: 14,
+                                onTap: _propB != null ? () => AppNavigation.goToPropertyDetail(context, extra: _propB) : () => _selectProperty(false),
+                              ),
+                            ),
+                          ]),
                         ],
                       ),
-                    ),
-
-                    // 3. Comment Input Bar (Now properly placed at bottom of Column)
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFF5F0E8),
-                        border: Border(top: BorderSide(color: Color(0xFFE0D8CC))),
-                      ),
-                      child: Row(children: [
-                        Expanded(
-                          child: Container(
-                            height: 44,
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFEEE7DE),
-                              borderRadius: BorderRadius.circular(22),
-                            ),
-                            child: TextField(
-                              controller: _commentController,
-                              decoration: const InputDecoration(
-                                hintText: 'Comment on this compare...',
-                                hintStyle: TextStyle(fontSize: 13, color: AppColors.textPlaceholder),
-                                border: InputBorder.none,
-                                isDense: true,
-                              ),
-                              style: const TextStyle(fontSize: 13),
-                              onSubmitted: (_) => _addComment(),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        GestureDetector(
-                          onTap: _addComment,
-                          child: Container(
-                            width: 44,
-                            height: 44,
-                            decoration: const BoxDecoration(color: AppColors.gold, shape: BoxShape.circle),
-                            child: const Icon(Icons.send, color: AppColors.navy, size: 20),
-                          ),
-                        ),
-                      ]),
                     ),
                   ],
                 ),
@@ -298,6 +384,25 @@ class _CompareScreenState extends State<CompareScreen> {
                       Text(price, style: AppTheme.dm(size: 11, weight: FontWeight.w700, color: AppColors.gold)),
                     ])),
           ]),
+        ),
+      );
+
+  Widget _emptyTeaserCard(String label) => Container(
+        height: 106,
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          border : null,
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.add_circle_outline, color: AppColors.gold, size: 28),
+              const SizedBox(height: 4),
+              Text(label, style: AppTheme.dm(size: 12, weight: FontWeight.w600, color: AppColors.navy)),
+            ],
+          ),
         ),
       );
 

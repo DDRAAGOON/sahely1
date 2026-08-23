@@ -5,6 +5,7 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/avatars.dart';
 import 'package:sahely/core/widgets/cards.dart';
 import 'package:sahely/core/widgets/common.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class CollabCard extends StatelessWidget {
   const CollabCard({
@@ -19,11 +20,13 @@ class CollabCard extends StatelessWidget {
     required this.reviews,
     required this.price,
     required this.comment,
+    this.onCompareTap,
   });
 
   final String image, name, loc, pet, rating, reviews, price, comment;
   final List<String> tags;
   final bool petOk;
+  final VoidCallback? onCompareTap;
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +36,12 @@ class CollabCard extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         ClipRRect(
           borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: Image.network(
-            image,
+          child: SahelyImage(
+            imageUrl: image,
             height: 180,
             width: double.infinity,
-            fit: BoxFit.cover,
-            loadingBuilder: (c, child, p) => p == null
-                ? child
-                : Container(height: 180, color: const Color(0xFFE8E4DC)),
-            errorBuilder: (_, __, ___) =>
-                Container(height: 180, color: const Color(0xFFE8E4DC)),
+            enableViewer: false,
+            fadeHeight: 60,
           ),
         ),
         Padding(
@@ -84,19 +83,25 @@ class CollabCard extends StatelessWidget {
                       color: AppColors.navy)),
             ]),
             const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: AppColors.cream,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Row(children: [
-                const AvatarCircle(
-                    size: 22, colors: [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
-                const SizedBox(width: 8),
+            Row(
+              children: [
                 Expanded(
-                    child: Text(comment,
-                        style: AppTheme.dm(size: 12, color: AppColors.ink))),
-              ]),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: AppColors.cream,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(children: [
+                      const AvatarCircle(
+                          size: 22, colors: [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
+                      const SizedBox(width: 8),
+                      Expanded(
+                          child: Text(comment,
+                              style: AppTheme.dm(size: 12, color: AppColors.ink))),
+                    ]),
+                  ),
+                ),
+              ],
             ),
           ]),
         ),

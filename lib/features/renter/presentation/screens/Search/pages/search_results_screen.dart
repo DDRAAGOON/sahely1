@@ -1,11 +1,13 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-import 'package:sahely/core/navigation/app_router.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/filter_chips.dart';
-import 'package:sahely/features/renter/presentation/screens/Search/widgets/search_result_card.dart';
-import 'package:sahely/features/renter/presentation/screens/Search/pages/search_empty_state.dart';
-import 'package:sahely/features/renter/presentation/screens/Search/pages/search_filters_sheet.dart';
+import 'package:sahely/features/renter/presentation/screens/search/widgets/search_result_card.dart';
+import 'package:sahely/features/renter/presentation/screens/search/pages/search_empty_state.dart';
+import 'package:sahely/core/widgets/entrance_faded.dart';
 
 class SearchResultsScreen extends StatefulWidget {
   final String initialQuery;
@@ -22,14 +24,13 @@ class SearchResultsScreen extends StatefulWidget {
 }
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
-  final String _selectedSort = 'Rating';
   final TextEditingController _searchController = TextEditingController();
   String _activeChip = 'All';
+  bool _priceAscending = true;
 
-  // Ø­ÙØ¸ Ø­Ø§Ù„Ø© Ø§Ù„ÙÙ„Ø§ØªØ± Ø§Ù„Ù…ØªÙ‚Ø¯Ù…Ø© Ø¨Ø§Ù„ÙƒØ§Ù…Ù„
   late Map<String, dynamic> _appliedFilters;
 
-  final List<Map<String, dynamic>> _allProperties = [
+  final List<Map<String, dynamic>> _allData = [
     {
       'id': '1',
       'name': 'Lagoon Retreat',
@@ -37,13 +38,13 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'distanceToBeach': '3 min to beach',
       'rating': 4.9,
       'reviewCount': 86,
-      'price': 620000,
+      'price': 6200,
       'type': 'Villa',
       'beds': 3,
       'guests': 6,
       'imageUrl':
           'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
-      'features': ['Pool', 'WiFi', 'Beachfront', 'AC'],
+      'features': ['Pool', 'Wi-Fi', 'Beachfront', 'AC'],
       'isFavorite': false,
       'badge': 'Guest favourite',
       'isNew': false,
@@ -58,7 +59,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'distanceToBeach': '7 min to beach',
       'rating': 4.7,
       'reviewCount': 53,
-      'price': 380000,
+      'price': 3800,
       'type': 'Chalet',
       'beds': 2,
       'guests': 4,
@@ -67,7 +68,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'features': ['Pool', 'Budget'],
       'isFavorite': true,
       'badge': null,
-      'isNew': true,
+      'isNew': false,
       'partyAllowed': false,
       'petsAllowed': false,
       'mixedGroupsOK': true,
@@ -76,19 +77,19 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'id': '3',
       'name': 'Azure Villa',
       'location': 'North Coast',
-      'distanceToBeach': '5 min to beach',
+      'distanceToBeach': '2 min to beach',
       'rating': 4.8,
       'reviewCount': 124,
-      'price': 450000,
+      'price': 4500,
       'type': 'Villa',
       'beds': 4,
       'guests': 8,
       'imageUrl':
           'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
-      'features': ['Beachfront', 'Pool', 'Smart Lock'],
+      'features': ['Beachfront', 'Pool'],
       'isFavorite': false,
-      'badge': 'New',
-      'isNew': true,
+      'badge': 'Top Rated',
+      'isNew': false,
       'partyAllowed': true,
       'petsAllowed': false,
       'mixedGroupsOK': true,
@@ -97,16 +98,16 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'id': '4',
       'name': 'Sea Breeze Chalet',
       'location': 'Amwaj',
-      'distanceToBeach': '2 min to beach',
+      'distanceToBeach': '5 min to beach',
       'rating': 4.5,
       'reviewCount': 42,
-      'price': 250000,
+      'price': 2500,
       'type': 'Chalet',
       'beds': 2,
       'guests': 4,
       'imageUrl':
           'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800',
-      'features': ['Beachfront', 'Budget', 'Parking'],
+      'features': ['Beachfront', 'Budget'],
       'isFavorite': false,
       'badge': null,
       'isNew': false,
@@ -121,15 +122,15 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'distanceToBeach': '1 min to beach',
       'rating': 5.0,
       'reviewCount': 15,
-      'price': 950000,
+      'price': 9500,
       'type': 'Villa',
       'beds': 5,
-      'guests': 12,
+      'guests': 10,
       'imageUrl':
           'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800',
-      'features': ['Pool', 'Garden', 'Beachfront', 'Sea View'],
+      'features': ['Pool', 'Beachfront'],
       'isFavorite': false,
-      'badge': 'Premium',
+      'badge': 'Elite',
       'isNew': true,
       'partyAllowed': true,
       'petsAllowed': true,
@@ -139,13 +140,13 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'id': '6',
       'name': 'Golden Sands Chalet',
       'location': 'Telal',
-      'distanceToBeach': '5 min to beach',
+      'distanceToBeach': '3 min to beach',
       'rating': 4.6,
       'reviewCount': 65,
-      'price': 320000,
+      'price': 3200,
       'type': 'Chalet',
       'beds': 2,
-      'guests': 4,
+      'guests': 5,
       'imageUrl':
           'https://images.unsplash.com/photo-1515263487990-61b07816b324?w=800',
       'features': ['Beachfront', 'Pool'],
@@ -160,18 +161,18 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'id': '7',
       'name': 'Pine Wood Villa',
       'location': 'Hacienda White',
-      'distanceToBeach': '6 min to beach',
+      'distanceToBeach': '4 min to beach',
       'rating': 4.9,
       'reviewCount': 28,
-      'price': 850000,
+      'price': 8500,
       'type': 'Villa',
       'beds': 4,
       'guests': 8,
       'imageUrl':
           'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800',
-      'features': ['Pool', 'WiFi'],
+      'features': ['Pool', 'Wi-Fi'],
       'isFavorite': false,
-      'badge': null,
+      'badge': 'Premium',
       'isNew': false,
       'partyAllowed': true,
       'petsAllowed': true,
@@ -181,16 +182,16 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'id': '8',
       'name': 'Sunset Bay Apartment',
       'location': 'Marina 7',
-      'distanceToBeach': '10 min to beach',
+      'distanceToBeach': '6 min to beach',
       'rating': 4.4,
       'reviewCount': 92,
-      'price': 210000,
+      'price': 2100,
       'type': 'Apartment',
       'beds': 1,
       'guests': 2,
       'imageUrl':
           'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
-      'features': ['Budget', 'WiFi'],
+      'features': ['Budget', 'Wi-Fi'],
       'isFavorite': false,
       'badge': null,
       'isNew': false,
@@ -202,10 +203,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'id': '9',
       'name': 'Palm Breeze Villa',
       'location': 'Fouka Bay',
-      'distanceToBeach': '4 min to beach',
+      'distanceToBeach': '2 min to beach',
       'rating': 4.8,
       'reviewCount': 55,
-      'price': 580000,
+      'price': 5800,
       'type': 'Villa',
       'beds': 3,
       'guests': 6,
@@ -226,13 +227,13 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'distanceToBeach': '3 min to beach',
       'rating': 4.7,
       'reviewCount': 34,
-      'price': 420000,
+      'price': 4200,
       'type': 'Chalet',
       'beds': 2,
       'guests': 4,
       'imageUrl':
           'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800',
-      'features': ['Beachfront', 'WiFi'],
+      'features': ['Beachfront', 'Wi-Fi'],
       'isFavorite': false,
       'badge': null,
       'isNew': false,
@@ -244,10 +245,10 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'id': '11',
       'name': 'Urban Loft',
       'location': 'New Alamein',
-      'distanceToBeach': '15 min to beach',
+      'distanceToBeach': '10 min to beach',
       'rating': 4.3,
       'reviewCount': 110,
-      'price': 150000,
+      'price': 1500,
       'type': 'Apartment',
       'beds': 1,
       'guests': 2,
@@ -268,13 +269,13 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'distanceToBeach': '1 min to beach',
       'rating': 5.0,
       'reviewCount': 12,
-      'price': 1200000,
+      'price': 12000,
       'type': 'Villa',
       'beds': 6,
       'guests': 12,
       'imageUrl':
-          'https://images.unsplash.com/photo-1512918766775-d263234b4b73?w=800',
-      'features': ['Pool', 'Beachfront', 'WiFi'],
+          'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
+      'features': ['Pool', 'Beachfront', 'Wi-Fi'],
       'isFavorite': false,
       'badge': 'Elite',
       'isNew': true,
@@ -289,12 +290,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       'distanceToBeach': '8 min to beach',
       'rating': 4.6,
       'reviewCount': 78,
-      'price': 350000,
+      'price': 3500,
       'type': 'Chalet',
       'beds': 2,
       'guests': 4,
       'imageUrl':
-          'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800',
+          'https://images.unsplash.com/photo-1515263487990-61b07816b324?w=800',
       'features': ['Pool', 'Budget'],
       'isFavorite': false,
       'badge': null,
@@ -305,14 +306,16 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     },
   ];
 
-  List<Map<String, dynamic>> _filteredProperties = [];
+  List<Property> get _allProperties =>
+      _allData.map((m) => Property.fromMap(m)).toList();
+
+  List<Property> _filteredProperties = [];
 
   @override
   void initState() {
     super.initState();
     _searchController.text = widget.initialQuery;
 
-    // Initialize with provided filters or defaults
     _appliedFilters = widget.initialFilters ??
         {
           'propertyType': 'All',
@@ -320,9 +323,11 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           'minPrice': 0.0,
           'maxPrice': 100000.0,
           'amenities': <String>[],
-          'partyAllowed': true,
+          'partyAllowed': false,
           'petsAllowed': false,
-          'mixedGroupsOK': true,
+          'mixedGroupsOK': false,
+          'adults': 0,
+          'children': 0,
         };
 
     _applyCombinedFilter();
@@ -330,101 +335,80 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
 
   void _applyCombinedFilter() {
     String searchKeyword = _searchController.text.toLowerCase();
-    List<Map<String, dynamic>> results = List.from(_allProperties);
+    List<Property> results = List.from(_allProperties);
 
-    // 1. Ø§Ù„ÙÙ„ØªØ±Ø© Ø¨ÙƒÙ„Ù…Ø© Ø§Ù„Ø¨Ø­Ø«
+    // 1. Text Search
     if (searchKeyword.isNotEmpty) {
       results = results
           .where((p) =>
-              p["name"].toLowerCase().contains(searchKeyword) ||
-              p["location"].toLowerCase().contains(searchKeyword))
+              p.name.toLowerCase().contains(searchKeyword) ||
+              p.area.toLowerCase().contains(searchKeyword))
           .toList();
     }
 
-    // 2. Ø§Ù„ÙÙ„ØªØ±Ø© Ø¨Ù€ Chips Ø§Ù„Ø¹Ù„ÙˆÙŠØ©
-    if (_activeChip != 'All') {
-      if (_activeChip == 'Beachfront') {
-        results = results
-            .where((p) => (p['features'] as List).contains('Beachfront'))
-            .toList();
-      } else if (_activeChip == 'Newest')
-        results = results.where((p) => p['isNew'] == true).toList();
-      else if (_activeChip == 'Top rated')
-        results = results.where((p) => p['rating'] >= 4.8).toList();
-      // Price â†‘ handled at the end as sorting
+    // 2. Chip Filtering (Categorical)
+    if (_activeChip == 'Beachfront') {
+      results = results.where((p) => p.tags.contains('Beachfront')).toList();
     }
 
-    // 3. Ø§Ù„ÙÙ„ØªØ±Ø© Ù…Ù† Ø§Ù„Ù€ Bottom Sheet
+    // 3. Persistent Filters (from Bottom Sheet)
     if (_appliedFilters['propertyType'] != 'All') {
       results = results
-          .where((p) => p['type'] == _appliedFilters['propertyType'])
+          .where((p) => p.type == _appliedFilters['propertyType'])
           .toList();
     }
 
     results = results.where((p) {
-      double priceEgp = p['price'] / 100;
-      return priceEgp >= _appliedFilters['minPrice'] &&
-          priceEgp <= _appliedFilters['maxPrice'];
+      // Note: p.price is already in EGP based on the Property class definition
+      double priceEgp = p.price.toDouble();
+      return priceEgp >= (_appliedFilters['minPrice'] as num).toDouble() &&
+          priceEgp <= (_appliedFilters['maxPrice'] as num).toDouble();
     }).toList();
 
     if (_appliedFilters['bedrooms'] != 'Any') {
       int needed = int.parse(_appliedFilters['bedrooms'].replaceAll('+', ''));
-      results = results.where((p) => p['beds'] >= needed).toList();
+      results = results.where((p) => p.beds >= needed).toList();
     }
 
     if ((_appliedFilters['amenities'] as List).isNotEmpty) {
       results = results.where((p) {
-        List pFeatures = p['features'] as List;
         return (_appliedFilters['amenities'] as List)
-            .every((amenity) => pFeatures.contains(amenity));
+            .every((amenity) => p.tags.contains(amenity));
       }).toList();
     }
 
-    // ÙÙ„ØªØ±Ø© Ø§Ù„Ù‚ÙˆØ§Ø¹Ø¯ (House Rules)
-    if (_appliedFilters['partyAllowed'] == true)
-      results = results.where((p) => p['partyAllowed'] == true).toList();
-    if (_appliedFilters['petsAllowed'] == true)
-      results = results.where((p) => p['petsAllowed'] == true).toList();
-    if (_appliedFilters['mixedGroupsOK'] == true)
-      results = results.where((p) => p['mixedGroupsOK'] == true).toList();
+    if (_appliedFilters['partyAllowed'] == true) {
+      results = results.where((p) => p.partyAllowed).toList();
+    }
+    if (_appliedFilters['petsAllowed'] == true) {
+      results = results.where((p) => p.petsOk).toList();
+    }
+    if (_appliedFilters['mixedGroupsOK'] == true) {
+      results = results.where((p) => p.mixedGroupsOK).toList();
+    }
 
-    // 4. Sorting for Price â†‘
-    if (_activeChip == 'Price â†‘') {
-      results.sort((a, b) => (a['price'] as num).compareTo(b['price'] as num));
+    final int totalGuests = ((_appliedFilters['adults'] ?? 0) as int) +
+        ((_appliedFilters['children'] ?? 0) as int);
+    if (totalGuests > 0) {
+      results = results.where((p) => p.guests >= totalGuests).toList();
+    }
+
+    // 4. Sorting (from Chips or Sort Menu)
+    if (_activeChip.startsWith('Price')) {
+      if (_priceAscending) {
+        results.sort((a, b) => a.price.compareTo(b.price));
+      } else {
+        results.sort((a, b) => b.price.compareTo(a.price));
+      }
+    } else if (_activeChip == 'Top rated') {
+      results.sort((a, b) => b.rating.compareTo(a.rating));
+    } else if (_activeChip == 'Newest') {
+      results.sort((a, b) => b.id.compareTo(a.id));
     }
 
     setState(() {
       _filteredProperties = results;
     });
-  }
-
-  void _showFiltersSheet() {
-    showModalBottomSheet(
-      context: rootNavigatorKey.currentContext ?? context,
-      isScrollControlled: true,
-      useRootNavigator: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.78,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          builder: (context, scrollController) {
-            return SearchFiltersSheet(
-              initialFilters: _appliedFilters,
-              allProperties: _allProperties,
-              // ØªÙ…Ø±ÙŠØ± Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ù„Ù„Ø­Ø³Ø§Ø¨ Ø§Ù„Ø¯Ù‚ÙŠÙ‚ Ù„Ù„Ø¹Ø¯Ø¯
-              onApplyFilters: (newFilters) {
-                setState(() {
-                  _appliedFilters = newFilters;
-                  _applyCombinedFilter();
-                });
-              },
-            );
-          },
-        );
-      },
-    );
   }
 
   void _clearFilters() {
@@ -437,12 +421,28 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
         'minPrice': 0.0,
         'maxPrice': 100000.0,
         'amenities': <String>[],
-        'partyAllowed': true,
+        'partyAllowed': false,
         'petsAllowed': false,
-        'mixedGroupsOK': true,
+        'mixedGroupsOK': false,
+        'adults': 0,
+        'children': 0,
       };
       _applyCombinedFilter();
     });
+  }
+
+  void _showFiltersSheet() {
+    AppNavigation.goToFilters(
+      context,
+      initialFilters: _appliedFilters,
+      allProperties: _allProperties,
+      onApplyFilters: (newFilters) {
+        setState(() {
+          _appliedFilters = newFilters;
+          _applyCombinedFilter();
+        });
+      },
+    );
   }
 
   @override
@@ -450,86 +450,50 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     return Scaffold(
       backgroundColor: AppColors.cream,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(child: _buildTopBar()),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            if (_filteredProperties.isNotEmpty) ...[
-              SliverToBoxAdapter(child: _buildResultsHeader()),
-              const SliverToBoxAdapter(child: SizedBox(height: 12)),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: FilterChips(
-                    filters: const ['All', 'Beachfront', 'Newest', 'Top rated', 'Price â†‘'],
-                    selectedFilter: _activeChip,
-                    onFilterSelected: (chip) {
-                      _activeChip = chip;
-                      _applyCombinedFilter();
-                    },
-                  ),
-                ),
+        bottom: false,
+        child: EntranceFaded(
+          child: Column(
+            children: [
+              _buildHeader(),
+              const SizedBox(height: 12),
+              _buildFilterChips(),
+              const SizedBox(height: 16),
+              Expanded(
+                child: _buildResultsList(),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
-              SliverToBoxAdapter(child: _buildShowingCount()),
-              const SliverToBoxAdapter(child: SizedBox(height: 12)),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: SearchResultCard(
-                            property: _filteredProperties[index]),
-                      );
-                    },
-                    childCount: _filteredProperties.length,
-                  ),
-                ),
-              ),
-            ] else
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: SearchEmptyState(
-                  searchQuery: _searchController.text,
-                  onClearFilters: _clearFilters,
-                  onBack: () => Navigator.pop(context),
-                ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTopBar() {
+  Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
-              width: 34,
-              height: 34,
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
+                shape: BoxShape.circle,
                 border: Border.all(color: AppColors.border),
               ),
-              child: const Icon(Icons.chevron_left,
-                  color: AppColors.navy, size: 20),
+              child: const Icon(Icons.chevron_left, color: AppColors.navy),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Expanded(
             child: Container(
-              height: 46,
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              height: 44,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.border),
               ),
               child: Row(
@@ -539,22 +503,15 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                   Expanded(
                     child: TextField(
                       controller: _searchController,
-                      onChanged: (value) => _applyCombinedFilter(),
+                      onChanged: (_) => _applyCombinedFilter(),
+                      onSubmitted: (_) => _applyCombinedFilter(),
                       decoration: const InputDecoration(
-                        hintText: 'Beachfront villas',
-                        hintStyle: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.placeholder,
-                            fontFamily: 'DM Sans'),
+                        hintText: 'Where to?',
                         border: InputBorder.none,
                         isDense: true,
                         contentPadding: EdgeInsets.zero,
                       ),
-                      style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.dark,
-                          fontFamily: 'DM Sans'),
+                      style: AppTheme.dm(size: 13),
                     ),
                   ),
                 ],
@@ -563,15 +520,15 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           ),
           const SizedBox(width: 10),
           GestureDetector(
-            onTap: _showFiltersSheet,
+            onTap: _showFiltersSheet, // Restore filters sheet
             child: Container(
-              width: 46,
-              height: 46,
+              width: 44,
+              height: 44,
               decoration: BoxDecoration(
                 color: AppColors.navy,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.tune, color: AppColors.gold, size: 20),
+              child: const Icon(Icons.tune, color: AppColors.gold, size: 18),
             ),
           ),
         ],
@@ -579,96 +536,116 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     );
   }
 
-  Widget _buildResultsHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          RichText(
-            text: TextSpan(
-              style: const TextStyle(
-                fontSize: 13,
-                color: AppColors.secondary,
-                fontFamily: 'DM Sans',
+  Widget _buildFilterChips() {
+    final isPriceActive = _activeChip.startsWith('Price');
+    final priceLabel = isPriceActive ? (_priceAscending ? 'Price ↑' : 'Price ↓') : 'Price';
+    final filters = ['All', 'Beachfront', 'Newest', 'Top rated', priceLabel];
+
+    return SahelyFilterChips(
+      selectedFilter: _activeChip,
+      onFilterSelected: (chip) {
+        setState(() {
+          if (chip == 'Price' || chip.startsWith('Price')) {
+            if (isPriceActive) {
+              _priceAscending = !_priceAscending;
+            } else {
+              _priceAscending = true;
+            }
+            _activeChip = _priceAscending ? 'Price ↑' : 'Price ↓';
+          } else {
+            if (_activeChip == chip && chip != 'All') {
+              _activeChip = 'All';
+            } else {
+              _activeChip = chip;
+            }
+          }
+          _applyCombinedFilter();
+        });
+      },
+      filters: filters,
+    );
+  }
+
+  Widget _buildResultsList() {
+    return CustomScrollView(
+      slivers: [
+        if (_filteredProperties.isNotEmpty) ...[
+          SliverToBoxAdapter(child: _buildShowingCount()),
+          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return StaggeredListItem(
+                    index: index,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: SearchResultCard(
+                        property: _filteredProperties[index],
+                        onTap: () {},
+                      ),
+                    ),
+                  );
+                },
+                childCount: _filteredProperties.length,
               ),
-              children: [
-                TextSpan(
-                  text: '${_filteredProperties.length}',
-                  style: const TextStyle(
-                    color: AppColors.navy,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const TextSpan(text: ' stays in North Coast'),
-              ],
             ),
           ),
-          Row(
-            children: [
-              const Icon(Icons.sort, size: 16, color: AppColors.navy),
-              const SizedBox(width: 4),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  'Sort: $_selectedSort',
-                  style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.navy,
-                      fontFamily: 'DM Sans'),
-                ),
-              ),
-            ],
+        ] else
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: SearchEmptyState(
+              searchQuery: _searchController.text,
+              onClearFilters: _clearFilters,
+              onBack: () => Navigator.pop(context),
+            ),
           ),
-        ],
-      ),
+      ],
     );
   }
 
   Widget _buildShowingCount() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Showing 1-${_filteredProperties.length}',
-            style: const TextStyle(
-                fontSize: 13,
-                color: AppColors.placeholder,
-                fontFamily: 'DM Sans'),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-                color: AppColors.navy, borderRadius: BorderRadius.circular(20)),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.star_border_rounded,
-                    color: AppColors.gold, size: 18),
-                // Gold border, hollow inside
-                SizedBox(width: 6),
-                Text(
-                  'Map view',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                      fontFamily: 'DM Sans'), // White text
-                ),
-              ],
-            ),
-          ),
-        ],
+      child: Text(
+        'Showing ${_filteredProperties.length} results',
+        style: AppTheme.dm(
+          size: 13,
+          weight: FontWeight.w600,
+          color: AppColors.muted,
+        ),
       ),
     );
   }
+}
+
+class StaggeredListItem extends StatelessWidget {
+  final int index;
+  final Widget child;
+
+  const StaggeredListItem({
+    super.key,
+    required this.index,
+    required this.child,
+  });
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 400 + (index * 100).clamp(0, 500)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeOutQuart,
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, 30 * (1 - value)),
+            child: child,
+          ),
+        );
+      },
+      child: child,
+    );
   }
 }

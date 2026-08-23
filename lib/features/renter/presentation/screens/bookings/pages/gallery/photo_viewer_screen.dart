@@ -60,7 +60,7 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
 
   void _showDownloadOptions() {
     showModalBottomSheet(
-      context: context,
+      useRootNavigator: true, context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -69,22 +69,21 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(
                 'Download Photos',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 18,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),
             ListTile(
               leading: const Icon(Icons.image_outlined, color: AppColors.navy),
-              title: const Text('Download current photo',
-                  style: TextStyle(fontFamily: 'DM Sans')),
+              title: Text('Download current photo',
+                  style: AppTheme.dm()),
               onTap: () {
                 Navigator.pop(context);
                 _downloadImage(widget.photos[_currentIndex]);
@@ -94,7 +93,7 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
               leading:
                   const Icon(Icons.copy_all_outlined, color: AppColors.navy),
               title: Text('Download all photos (${widget.photos.length})',
-                  style: const TextStyle(fontFamily: 'DM Sans')),
+                  style: AppTheme.dm()),
               onTap: () {
                 Navigator.pop(context);
                 _downloadAllImages();

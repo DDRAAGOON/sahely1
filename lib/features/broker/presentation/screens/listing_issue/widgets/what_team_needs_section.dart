@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class WhatTeamNeedsSection extends StatelessWidget {
   final List<String> needs;
@@ -17,13 +18,12 @@ class WhatTeamNeedsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section Title
-          const Text(
+          Text(
             'What the team needs',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 14,
+              weight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 12),
@@ -57,10 +57,9 @@ class WhatTeamNeedsSection extends StatelessWidget {
                     Expanded(
                       child: Text(
                         need,
-                        style: const TextStyle(
-                          fontSize: 13,
+                        style: AppTheme.dm(
+                          size: 13,
                           color: AppColors.dark,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ),

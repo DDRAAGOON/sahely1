@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerTierCard extends StatelessWidget {
   final String currentTier;
@@ -55,20 +56,18 @@ class BrokerTierCard extends StatelessWidget {
                   children: [
                     Text(
                       currentTier,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                      style: AppTheme.dm(
+                        size: 16,
+                        weight: FontWeight.w700,
                         color: AppColors.gold,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       '$progressToNext to $nextTier',
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: AppTheme.dm(
+                        size: 12,
                         color: Colors.white70,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],
@@ -131,20 +130,18 @@ class _StatItem extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 18,
+            weight: FontWeight.w700,
             color: AppColors.gold,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 2),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 11,
+          style: AppTheme.dm(
+            size: 11,
             color: Colors.white70,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReviewReceivedCard extends StatelessWidget {
   final String hostName;
@@ -84,11 +85,10 @@ class ReviewReceivedCard extends StatelessWidget {
                       children: [
                         Text(
                           hostName,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 15,
+                            weight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -105,11 +105,10 @@ class ReviewReceivedCard extends StatelessWidget {
                           ),
                           child: Text(
                             hostRole,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
+                            style: AppTheme.dm(
+                              size: 10,
+                              weight: FontWeight.w600,
                               color: roleColor,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ),
@@ -137,10 +136,9 @@ class ReviewReceivedCard extends StatelessWidget {
           // Review Text
           Text(
             reviewText,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF424446), // Muted dark grey from image
-              fontFamily: 'DM Sans',
+            style: AppTheme.dm(
+              size: 14,
+              color: const Color(0xFF424446), // Muted dark grey from image
               height: 1.4,
             ),
           ),

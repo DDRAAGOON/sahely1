@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerCategoryChips extends StatefulWidget {
   final Function(String)? onCategorySelected;
@@ -57,16 +58,15 @@ class _BrokerCategoryChipsState extends State<BrokerCategoryChips> {
                           offset: const Offset(0, 4),
                         )
                       ]
-                    : null,
+                    : const [],
               ),
               alignment: Alignment.center,
               child: Text(
                 _categories[index],
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: isSelected ? FontWeight.w700 : FontWeight.w500,
                   color: isSelected ? AppColors.navy : AppColors.muted,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

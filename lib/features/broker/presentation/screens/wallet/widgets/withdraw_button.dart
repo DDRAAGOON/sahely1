@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class WithdrawButton extends StatelessWidget {
   final bool isVerified;
@@ -29,23 +30,21 @@ class WithdrawButton extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 'Withdraw to Bank',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
                   color: isVerified ? AppColors.navy : const Color(0xFFC0A975),
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),
           ),
           if (!isVerified) ...[
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'Locked until your account is verified',
-              style: TextStyle(
-                fontSize: 12,
+              style: AppTheme.dm(
+                size: 12,
                 color: AppColors.muted,
-                fontFamily: 'DM Sans',
               ),
             ),
           ],

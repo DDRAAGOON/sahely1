@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class StickyBottomBar extends StatelessWidget {
   final int pricePerNight;
@@ -40,19 +41,17 @@ class StickyBottomBar extends StatelessWidget {
                 children: [
                   Text(
                     currencyProvider.formatPrice(pricePerNight.toDouble()),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 20,
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
-                  const Text(
+                  Text(
                     '/ night',
-                    style: TextStyle(
-                      fontSize: 13,
+                    style: AppTheme.dm(
+                      size: 13,
                       color: AppColors.secondary,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],
@@ -74,12 +73,12 @@ class StickyBottomBar extends StatelessWidget {
                   ),
                   elevation: 0,
                 ),
-                child: const Text(
+                child: Text(
                   'Book Now',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'DM Sans',
+                  style: AppTheme.dm(
+                    size: 15,
+                    weight: FontWeight.w700,
+                    color: AppColors.white,
                   ),
                 ),
               ),

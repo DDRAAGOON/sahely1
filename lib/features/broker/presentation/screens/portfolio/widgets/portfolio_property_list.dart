@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/portfolio_property_card.dart';
 
 class PortfolioPropertyList extends StatelessWidget {
@@ -24,11 +25,10 @@ class PortfolioPropertyList extends StatelessWidget {
           // Section Title
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 11,
+              weight: FontWeight.w700,
               color: AppColors.secondary,
-              fontFamily: 'DM Sans',
               letterSpacing: 1.2,
             ),
           ),

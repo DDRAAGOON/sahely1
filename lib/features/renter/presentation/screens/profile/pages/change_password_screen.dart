@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 import 'package:sahely/features/renter/presentation/screens/profile/widgets/password_input_field.dart';
 import 'package:sahely/features/renter/presentation/screens/profile/widgets/password_strength_meter.dart';
@@ -39,17 +40,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       setState(() => _isUpdating = false);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Row(
             children: [
-              Icon(Icons.check_circle, color: AppColors.green),
-              SizedBox(width: 8),
+              const Icon(Icons.check_circle, color: AppColors.green),
+              const SizedBox(width: 8),
               Text(
                 'Password updated successfully',
-                style: TextStyle(
+                style: AppTheme.dm(
                   color: AppColors.navy,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'DM Sans',
+                  weight: FontWeight.w600,
                 ),
               ),
             ],
@@ -87,13 +87,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ),
           ),
         ),
-        title: const Text(
+        title: Text(
           'Change Password',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 20,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         centerTitle: false,
@@ -130,14 +129,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 const SizedBox(height: 16),
 
                 // Instructions
-                const Center(
+                Center(
                   child: Text(
                     'Use at least 8 characters with a mix of letters,\nnumbers & symbols.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
+                    style: AppTheme.dm(
+                      size: 13,
                       color: AppColors.secondary,
-                      fontFamily: 'DM Sans',
                       height: 1.5,
                     ),
                   ),
@@ -237,12 +235,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               ),
                             ),
                           )
-                        : const Text(
+                        : Text(
                             'Update Password',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'DM Sans',
+                            style: AppTheme.dm(
+                              size: 15,
+                              weight: FontWeight.w700,
+                              color: AppColors.white
                             ),
                           ),
                   ),

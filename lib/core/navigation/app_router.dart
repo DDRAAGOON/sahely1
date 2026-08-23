@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/shells/broker_shell.dart';
+import 'package:sahely/core/navigation/route_transitions.dart';
 import 'package:sahely/core/navigation/shells/owner_shell.dart';
 import 'package:sahely/core/navigation/shells/renter_shell.dart';
 import 'package:sahely/core/providers/auth_provider.dart';
@@ -9,12 +10,10 @@ import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/auth/auth_screens.dart';
 import 'package:sahely/features/broker/broker_go_routes.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/pages/broker_bookings_page.dart';
-import 'package:sahely/features/broker/presentation/screens/dashboard/pages/broker_dashboard_page.dart';
 import 'package:sahely/features/broker/presentation/screens/home/pages/broker_home_page.dart';
 import 'package:sahely/features/broker/presentation/screens/profile/pages/broker_profile_page.dart';
-import 'package:sahely/features/broker/presentation/screens/portfolio/pages/broker_portfolio_page.dart';
 import 'package:sahely/features/broker/presentation/screens/services/pages/broker_services_page.dart';
-import 'package:sahely/features/broker/presentation/screens/wallet/pages/broker_wallet_page.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/shared/screens/notification_settings_screen.dart';
 import 'package:sahely/features/owner/owner_go_routes.dart';
 import 'package:sahely/features/owner/screens/owner_bookings_screen.dart';
@@ -44,7 +43,6 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
     redirect: (BuildContext context, GoRouterState state) {
       final loc = state.uri.toString();
       final isAuth = authProvider.isAuthenticated;
-      final isVerified = authProvider.isVerified;
       final role = roleState.currentRole;
 
       // Public (unauthenticated) routes using constants
@@ -64,7 +62,6 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         AppRoutes.idVerification,
         AppRoutes.facialScan,
         AppRoutes.verificationComplete,
-        AppRoutes.verifyGate,
       ];
 
       bool isPublic(String path) =>
@@ -87,24 +84,6 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
           Role.owner => AppRoutes.ownerHome,
           _ => AppRoutes.renterHome,
         };
-      }
-
-      // Verification Gate: Renter-only guard.
-      final verifyGateRoutes = <String>[
-        AppRoutes.verifyGate,
-        AppRoutes.addCard,
-        AppRoutes.blockedGate,
-      ];
-      final isOnVerifyRoute = verifyGateRoutes.any(
-        (r) => loc == r || loc.startsWith(r),
-      );
-
-      if (isAuth &&
-          role == Role.renter &&
-          !isVerified &&
-          !isOnVerifyRoute &&
-          !isPublic(loc)) {
-        return AppRoutes.verifyGate;
       }
 
       // Role-based guarding: prevent access to broker/owner sections if role mismatches
@@ -130,8 +109,12 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
     routes: [
       // ---- Global Routes ----
       GoRoute(
-          path: AppRoutes.notificationsSettings,
-          builder: (context, state) => const NotificationSettingsScreen()),
+        path: AppRoutes.notificationsSettings,
+        pageBuilder: (context, state) => fadeSlideTransition(
+          key: state.pageKey,
+          child: const NotificationSettingsScreen(),
+        ),
+      ),
 
       // ---- Auth ----
       GoRoute(
@@ -196,8 +179,8 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
             const TextSpan(text: 'Sent to '),
             TextSpan(
                 text: (state.extra as Map<String, dynamic>?)?['email'] ?? '',
-                style: const TextStyle(
-                    fontWeight: FontWeight.w700, color: Color(0xFF2D2D2D))),
+                style: AppTheme.dm(
+                    weight: FontWeight.w700, color: const Color(0xFF2D2D2D))),
           ],
           icon: Icons.mail_outline,
           hint: 'Check your inbox — and your spam folder',
@@ -222,7 +205,13 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
           builder: (context, state) => const VerificationCompleteScreen()),
 
       // ---- Renter (Shell) ----
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
+        navigatorContainerBuilder: (context, navigationShell, children) {
+          return AnimatedBranchContainer(
+            currentIndex: navigationShell.currentIndex,
+            children: children,
+          );
+        },
         builder: (context, state, navigationShell) =>
             RenterShell(navigationShell: navigationShell),
         branches: [
@@ -256,7 +245,13 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
       ),
 
       // ---- Broker (Shell) ----
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
+        navigatorContainerBuilder: (context, navigationShell, children) {
+          return AnimatedBranchContainer(
+            currentIndex: navigationShell.currentIndex,
+            children: children,
+          );
+        },
         builder: (context, state, navigationShell) =>
             BrokerShell(navigationShell: navigationShell),
         branches: [
@@ -285,21 +280,18 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
             GoRoute(
                 path: AppRoutes.brokerProfile,
                 builder: (context, state) => const BrokerProfilePage()),
-            GoRoute(
-                path: AppRoutes.brokerDashboard,
-                builder: (context, state) => const BrokerDashboardPage()),
-            GoRoute(
-                path: AppRoutes.brokerPortfolio,
-                builder: (context, state) => const BrokerPortfolioPage()),
-            GoRoute(
-                path: AppRoutes.brokerWallet,
-                builder: (context, state) => const BrokerWalletPage()),
           ]),
         ],
       ),
 
       // ---- Owner (Shell) ----
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
+        navigatorContainerBuilder: (context, navigationShell, children) {
+          return AnimatedBranchContainer(
+            currentIndex: navigationShell.currentIndex,
+            children: children,
+          );
+        },
         builder: (context, state, navigationShell) =>
             OwnerShell(navigationShell: navigationShell),
         branches: [
@@ -365,3 +357,33 @@ class _RouterRefresh extends ChangeNotifier {
     super.dispose();
   }
 }
+
+/// A container that animates between GoRouter's StatefulShellRoute branches
+/// while keeping them in the widget tree (via Stack & Offstage/IgnorePointer) 
+/// so they preserve their state.
+class AnimatedBranchContainer extends StatelessWidget {
+  const AnimatedBranchContainer(
+      {super.key, required this.currentIndex, required this.children});
+  
+  final int currentIndex;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: List.generate(children.length, (index) {
+        final isActive = index == currentIndex;
+        return IgnorePointer(
+          ignoring: !isActive,
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOutCubic,
+            opacity: isActive ? 1.0 : 0.0,
+            child: children[index],
+          ),
+        );
+      }),
+    );
+  }
+}
+

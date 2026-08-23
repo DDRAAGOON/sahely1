@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 
 class WithdrawReceiptScreen extends StatelessWidget {
   const WithdrawReceiptScreen({super.key});
@@ -32,26 +32,26 @@ class WithdrawReceiptScreen extends StatelessWidget {
                       text: TextSpan(
                           style: AppTheme.dm(
                               size: 14, color: AppColors.muted, height: 1.5),
-                          children: const [
+                          children: [
                             TextSpan(
                                 text:
-                                    'EGP 20,000 is on its way. Expect it in your account within '),
+                                    '${CurrencyFormatter.format(20000)} is on its way. Expect it in your account within '),
                             TextSpan(
                                 text: '2 working days',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700,
+                                style: AppTheme.dm(
+                                    weight: FontWeight.w700,
                                     color: AppColors.ink)),
-                            TextSpan(text: '.')
+                            const TextSpan(text: '.')
                           ]))),
               const SizedBox(height: 20),
-              const WhiteCard(
-                  padding: EdgeInsets.all(16),
+              WhiteCard(
+                  padding: const EdgeInsets.all(16),
                   child: Column(children: [
-                    KeyValueRow('Amount', 'EGP 20,000'),
-                    KeyValueRow('To', 'CIB ••4821'),
-                    KeyValueRow('Reference', 'PO-4471-2026'),
-                    KeyValueRow('Requested', 'Jun 18, 9:41 AM'),
-                    KeyValueRow('Est. arrival', 'Jun 20',
+                    KeyValueRow('Amount', CurrencyFormatter.format(20000)),
+                    const KeyValueRow('To', 'CIB ••4821'),
+                    const KeyValueRow('Reference', 'PO-4471-2026'),
+                    const KeyValueRow('Requested', 'Jun 18, 9:41 AM'),
+                    const KeyValueRow('Est. arrival', 'Jun 20',
                         valueColor: AppColors.success,
                         bold: true,
                         topBorder: true),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class WhiteCard extends StatelessWidget {
   const WhiteCard(
@@ -48,11 +49,12 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           color: dark ? Colors.white.withValues(alpha: 0.08) : AppColors.white,
           borderRadius: BorderRadius.circular(14),
@@ -67,6 +69,7 @@ class StatCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(value,
                 style: AppTheme.dm(
@@ -89,13 +92,16 @@ class StatRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        for (var i = 0; i < cards.length; i++) ...[
-          Expanded(child: cards[i]),
-          if (i < cards.length - 1) const SizedBox(width: 10),
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var i = 0; i < cards.length; i++) ...[
+            Expanded(child: cards[i]),
+            if (i < cards.length - 1) const SizedBox(width: 10),
+          ],
         ],
-      ],
+      ),
     );
   }
 }

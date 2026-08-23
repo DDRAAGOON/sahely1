@@ -2,6 +2,8 @@
 
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class SearchRow extends StatelessWidget {
   final VoidCallback? onFilterTap;
@@ -13,9 +15,9 @@ class SearchRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // ... (keep search bar)
+        // Search bar
         Expanded(
-          child: GestureDetector(
+          child: BouncyButton(
             onTap: () => AppNavigation.goToSearchResults(context),
             child: Container(
               height: 54,
@@ -38,10 +40,9 @@ class SearchRow extends StatelessWidget {
                       'Find your perfect stay',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
+                      style: AppTheme.dm(
+                        size: 13,
                         color: AppColors.navy.withValues(alpha: 0.5),
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ),
@@ -53,7 +54,7 @@ class SearchRow extends StatelessWidget {
         const SizedBox(width: 10),
 
         // Filter Button
-        GestureDetector(
+        BouncyButton(
           onTap: onFilterTap,
           child: Container(
             width: 54,
@@ -74,8 +75,8 @@ class SearchRow extends StatelessWidget {
 
         const SizedBox(width: 10),
 
-        // AI Chat Button - Kept as is
-        GestureDetector(
+        // AI Chat Button
+        BouncyButton(
           onTap: onChatTap,
           child: Container(
             width: 54,
@@ -85,25 +86,23 @@ class SearchRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
             ),
             child: Stack(
+              alignment: Alignment.center,
               children: [
-                const Center(
-                  child: Icon(
-                    Icons.chat_bubble_outline,
-                    color: AppColors.navy,
-                    size: 20,
-                  ),
+                const Icon(
+                  Icons.chat_bubble_outline,
+                  color: AppColors.navy,
+                  size: 20,
                 ),
                 // Green presence dot
                 Positioned(
-                  top: 8,
-                  right: 8,
+                  top: 10,
+                  right: 10,
                   child: Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: AppColors.success,
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF34C759),
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.gold, width: 2),
                     ),
                   ),
                 ),

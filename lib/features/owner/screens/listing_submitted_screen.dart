@@ -3,7 +3,6 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 
 class ListingSubmittedScreen extends StatelessWidget {
   final String? propertyName;
@@ -51,8 +50,8 @@ class ListingSubmittedScreen extends StatelessWidget {
                                 const TextSpan(text: 'Thank you! '),
                                 TextSpan(
                                     text: name,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
+                                    style: AppTheme.dm(
+                                        weight: FontWeight.w700,
                                         color: AppColors.goldBright)),
                                 const TextSpan(
                                     text: ' is now with our team for review.'),

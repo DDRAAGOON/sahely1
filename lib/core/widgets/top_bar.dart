@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 /// Simple top app bar: back button + title (+ optional subtitle / trailing).
 class TopBar extends StatelessWidget {
@@ -10,33 +11,37 @@ class TopBar extends StatelessWidget {
       required this.title,
       this.subtitle,
       this.trailing,
-      this.onBack});
+      this.onBack,
+      this.showBack = true});
 
   final String title;
   final String? subtitle;
   final Widget? trailing;
   final VoidCallback? onBack;
+  final bool showBack;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        GestureDetector(
-          onTap: onBack ?? () => Navigator.maybePop(context),
-          child: Container(
-            width: 34,
-            height: 34,
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              border: Border.all(color: AppColors.border),
-              borderRadius: BorderRadius.circular(10),
+        if (showBack) ...[
+          BouncyButton(
+            onTap: onBack ?? () => Navigator.maybePop(context),
+            child: Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                border : null,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.chevron_left,
+                  size: 22, color: AppColors.navy),
             ),
-            child:
-                const Icon(Icons.chevron_left, size: 22, color: AppColors.navy),
           ),
-        ),
-        const SizedBox(width: 12),
+          const SizedBox(width: 12),
+        ],
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

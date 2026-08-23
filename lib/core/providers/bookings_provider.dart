@@ -30,7 +30,7 @@ class Booking {
   }) : checklist = checklist ??
             [
               {'label': 'Key collection / Smart lock', 'completed': false},
-              {'label': 'WiFi connectivity', 'completed': false},
+              {'label': 'Wi-Fi connectivity', 'completed': false},
               {'label': 'AC performance', 'completed': false},
               {'label': 'Cleaning standard', 'completed': false},
               {'label': 'Hot water availability', 'completed': false},

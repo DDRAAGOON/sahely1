@@ -100,43 +100,6 @@ class WishlistCollectionCard extends StatelessWidget {
               ),
             ),
 
-            // Shared Badge (top-right)
-            if (isShared)
-              Positioned(
-                top: 10,
-                right: 10,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.navy.withValues(alpha: 0.85),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.people,
-                        color: AppColors.gold,
-                        size: 12,
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        'Shared',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.white,
-                          fontFamily: 'DM Sans',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
             // Name & Count (bottom-left)
             Positioned(
               bottom: 12,

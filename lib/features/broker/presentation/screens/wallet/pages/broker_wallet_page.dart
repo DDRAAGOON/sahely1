@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
-
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
+
+import '../../../../../../core/utils/currency_formatter.dart';
 
 class BrokerWalletPage extends StatefulWidget {
   const BrokerWalletPage({super.key});
@@ -61,8 +61,25 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 120),
           children: [
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.border),
+                  ),
+                  child: const Icon(Icons.chevron_left, color: AppColors.navy),
+                ),
+              ),
+            ),
             Container(
-              margin: const EdgeInsets.only(top: 8, bottom: 8),
+              margin: const EdgeInsets.only(top: 16, bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: const BoxDecoration(
                   color: Color(0xFFFEF4E8),
@@ -112,7 +129,7 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
                         style: AppTheme.dm(
                             size: 13, color: const Color(0xFFCDD4E0))),
                     const SizedBox(height: 6),
-                    Text('EGP 12,840',
+                    Text(CurrencyFormatter.format(12840),
                         style: AppTheme.dm(
                             size: 30,
                             weight: FontWeight.w700,
@@ -120,15 +137,17 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
                   ]),
             ),
             const SizedBox(height: 12),
-            const InfoNote(
+            InfoNote(
                 text:
-                    'Commissions clear 48h after guest check-in. Pending balance: EGP 5,400.',
+                    'Commissions clear 48h after guest check-in. Pending balance: ${CurrencyFormatter.format(5400)}.',
                 icon: Icons.schedule),
             const SizedBox(height: 12),
             const Opacity(
                 opacity: 0.4,
                 child: GoldButton(
-                    label: 'Withdraw to Bank', color: Color(0xFFE2D1A6))),
+                    label: 'Withdraw to Bank', 
+                    color: Color(0xFFE2D1A6),
+                    onTap: null)),
             const SizedBox(height: 6),
             Center(
                 child: Text('Locked until your account is verified',
@@ -169,15 +188,15 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
                                 size: 13,
                                 weight: FontWeight.w700,
                                 color: AppColors.navy)),
-                        Text('avg EGP 1,300 per booking',
+                        Text('avg ${CurrencyFormatter.format(1300)} per booking',
                             style:
                                 AppTheme.dm(size: 11, color: AppColors.muted)),
                       ])),
-                  const Text('45 to Elite',
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF9A7A22))),
+                  Text('45 to Elite',
+                      style: AppTheme.dm(
+                          size: 12,
+                          weight: FontWeight.w600,
+                          color: const Color(0xFF9A7A22))),
                 ])),
             const SizedBox(height: 14),
             Text('Recent commissions',

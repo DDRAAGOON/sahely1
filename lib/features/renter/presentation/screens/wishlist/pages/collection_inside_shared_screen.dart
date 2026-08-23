@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/data/role_state.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/domain/models/wishlist_item.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_header.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/collection_members_actions.dart';
@@ -114,11 +115,10 @@ class _CollectionInsideSharedScreenState
                                 color:
                                     AppColors.secondary.withValues(alpha: 0.3)),
                             const SizedBox(height: 16),
-                            const Text(
+                            Text(
                               'No properties in this collection yet',
-                              style: TextStyle(
-                                  color: AppColors.secondary,
-                                  fontFamily: 'DM Sans'),
+                              style: AppTheme.dm(
+                                  color: AppColors.secondary),
                             ),
                           ],
                         ),
@@ -140,7 +140,7 @@ class _CollectionInsideSharedScreenState
                           // Default
                           beds: 3,
                           // Default
-                          amenities: const ['Pool', 'WiFi'],
+                          amenities: const ['Pool', 'Wi-Fi'],
                           rating: 4.8,
                           reviewCount: 12,
                           pricePerNight: 4500,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class WalletStatsTiles extends StatelessWidget {
   final int addedThisSeason; // In piastres
@@ -40,7 +41,7 @@ class WalletStatsTiles extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'EGP ${egpAdded.toStringAsFixed(0)}',
+                  'EGP ${CurrencyFormatter.formatNumber(egpAdded)}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,

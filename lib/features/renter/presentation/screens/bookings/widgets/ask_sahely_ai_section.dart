@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class AskSahelyAiSection extends StatefulWidget {
   const AskSahelyAiSection({super.key});
@@ -58,22 +59,20 @@ class _AskSahelyAiSectionState extends State<AskSahelyAiSection> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Ask Sahely AI',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 16,
+                      weight: FontWeight.w700,
                       color: Colors.white,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Questions about this stay â€” directions, parking, check-in',
-                    style: TextStyle(
-                      fontSize: 12,
+                    'Questions about this stay — directions, parking, check-in',
+                    style: AppTheme.dm(
+                      size: 12,
                       color: Colors.white.withValues(alpha: 0.7),
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

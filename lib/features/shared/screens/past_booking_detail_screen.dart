@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
-import 'package:sahely/data/sample_data.dart';
-import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/book_again_button.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/past_booking_hero_image.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/price_breakdown_card.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/reservation_details_card.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/review_section.dart';
-import 'package:sahely/features/renter/presentation/screens/bookings/widgets/whats_included_section.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-/// Enum for the user role to customize the past booking detail screen.
-enum PastBookingRole { renter, owner }
+import '../../../core/navigation/app_navigation.dart';
 
-/// Unified Past Booking Detail Screen shared across Renter and Owner roles.
+enum PastBookingRole { renter, owner, broker }
+
 class PastBookingDetailScreen extends StatelessWidget {
   final Map<String, dynamic>? bookingData;
   final Property? property;
@@ -27,271 +18,111 @@ class PastBookingDetailScreen extends StatelessWidget {
     super.key,
     this.bookingData,
     this.property,
-    this.role = PastBookingRole.renter,
+    required this.role,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isOwner = role == PastBookingRole.owner;
-    final prop = property ?? Sample.dunes;
-
-    if (isOwner) {
-      return _buildOwnerView(context, prop);
+    if (role == PastBookingRole.owner || role == PastBookingRole.broker) {
+      return _buildBusinessView(context);
     }
     return _buildRenterView(context);
   }
 
-  /// Owner view using original OwnerPastDetailScreen structure
-  Widget _buildOwnerView(BuildContext context, Property prop) {
-    return Scaffold(
-      backgroundColor: AppColors.cream,
-      body: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: [
-            ListView(
-              padding: EdgeInsets.zero,
-              physics: const BouncingScrollPhysics(),
+  Widget _buildBusinessView(BuildContext context) {
+    final name = property?.name ?? bookingData?['propertyName'] ?? 'Property';
+    final loc = property?.area ?? bookingData?['location'] ?? 'Location';
+    final img = property?.image ?? bookingData?['imageUrl'] ?? '';
+    final guestName = bookingData?['guestName'] ?? 'Mariam Hassan';
+    final amount = bookingData?['total'] ?? '5,400';
+
+    return PhoneScaffold(
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
               children: [
-                // 1. Hero Image
-                SizedBox(
-                  height: 280,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      SahelyImage(
-                        imageUrl: prop.image,
-                        enableViewer: true,
-                        fadeHeight: 0,
+                TopBar(title: role == PastBookingRole.owner ? 'Booking History' : 'Past Referral'),
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () => AppNavigation.goToPropertyDetail(context, extra: {
+                    'name': name,
+                    'location': loc,
+                    'imageUrl': img,
+                  }),
+                  child: WhiteCard(
+                    padding: const EdgeInsets.all(12),
+                    child: Row(children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(img, width: 64, height: 64, fit: BoxFit.cover,
+                          errorBuilder: (_,__,___) => Container(width: 64, height: 64, color: AppColors.cardWarm)),
                       ),
-                      const DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.transparent,
-                              Color(0x441B2744),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 18,
-                        bottom: 20,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(prop.name,
-                                style: AppTheme.dm(
-                                    size: 26,
-                                    weight: FontWeight.w700,
-                                    color: Colors.white)),
-                            const SizedBox(height: 4),
-                            Row(children: [
-                              const Icon(Icons.location_on_outlined,
-                                  size: 14, color: Colors.white70),
-                              const SizedBox(width: 4),
-                              Text('Marassi · North Coast',
-                                  style: AppTheme.dm(
-                                      size: 13, color: Colors.white70)),
-                            ]),
-                          ],
-                        ),
-                      ),
-                    ],
+                      const SizedBox(width: 14),
+                      Expanded(child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(name, style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.navy)),
+                          Text(loc, style: AppTheme.dm(size: 13, color: AppColors.muted)),
+                        ],
+                      )),
+                      const Icon(Icons.chevron_right, size: 18, color: AppColors.faint),
+                    ]),
                   ),
                 ),
-                Container(
-                  color: AppColors.cream,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // 2. Reservation
-                        Text('Reservation',
-                            style: AppTheme.dm(
-                                size: 19,
-                                weight: FontWeight.w700,
-                                color: AppColors.navy)),
-                        const SizedBox(height: 14),
-                        const WhiteCard(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-                          child: Column(children: [
-                            KeyValueRow('Order no.', 'SHLY-7120'),
-                            Divider(height: 1, color: AppColors.border),
-                            KeyValueRow('Check-in', 'May 18 · 3:00 PM'),
-                            Divider(height: 1, color: AppColors.border),
-                            KeyValueRow('Check-out', 'May 22 · 11:00 AM'),
-                            Divider(height: 1, color: AppColors.border),
-                            KeyValueRow('Guests', '2 adults'),
-                            Divider(height: 1, color: AppColors.border),
-                            KeyValueRow('Nights', '4'),
-                          ]),
-                        ),
-                        const SizedBox(height: 32),
-
-                        // 3. What was included
-                        Text('What was included',
-                            style: AppTheme.dm(
-                                size: 19,
-                                weight: FontWeight.w700,
-                                color: AppColors.navy)),
-                        const SizedBox(height: 14),
-                        Wrap(spacing: 8, runSpacing: 8, children: [
-                          _includedPill('Pool'),
-                          _includedPill('WiFi'),
-                          _includedPill('Beach'),
-                          _includedPill('Smart Lock'),
-                          const Pill('🐾 Pets OK',
-                              bg: Color(0xFFD7EEDD),
-                              fg: AppColors.success,
-                              radius: 10),
-                        ]),
-                        const SizedBox(height: 32),
-
-                        // 4. Price
-                        Text('Price',
-                            style: AppTheme.dm(
-                                size: 19,
-                                weight: FontWeight.w700,
-                                color: AppColors.navy)),
-                        const SizedBox(height: 14),
-                        const WhiteCard(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-                          child: Column(children: [
-                            KeyValueRow('EGP 3,800 × 4', '15,200'),
-                            Divider(height: 1, color: AppColors.border),
-                            KeyValueRow('Cleaning + VAT', '2,500'),
-                            Divider(height: 1, color: AppColors.border),
-                            KeyValueRow('Total paid', 'EGP 17,700', bold: true),
-                          ]),
-                        ),
-                        const SizedBox(height: 32),
-
-                        // 5. Rate Guest Card
-                        WhiteCard(
-                          padding: const EdgeInsets.all(18),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text('How was the guest?',
-                                  style: AppTheme.dm(
-                                      size: 15,
-                                      weight: FontWeight.w700,
-                                      color: AppColors.navy)),
-                              const SizedBox(height: 14),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  for (var i = 0; i < 5; i++)
-                                    const Icon(Icons.star,
-                                        size: 36, color: Color(0xFFE0E0E0)),
-                                ],
-                              ),
-                              const SizedBox(height: 18),
-                              WideButton(
-                                label: 'Rate guest · earn +5 ★',
-                                icon: Icons.star,
-                                color: AppColors.navy,
-                                height: 52,
-                                radius: 14,
-                                onTap: () => AppNavigation.goToOwnerRateGuest(
-                                    context,
-                                    extra: prop),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        WideButton(
-                          label: 'Book again',
-                          color: AppColors.navy,
-                          textColor: AppColors.navy,
-                          outline: true,
-                          height: 52,
-                          radius: 14,
-                          onTap: () => Navigator.pop(context),
-                        ),
-                      ],
-                    ),
-                  ),
+                const SizedBox(height: 24),
+                Text('Guest Summary', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+                const SizedBox(height: 12),
+                WhiteCard(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(children: [
+                    Row(children: [
+                      const AvatarCircle(size: 40, colors: [AppColors.gold, AppColors.goldBright]),
+                      const SizedBox(width: 12),
+                      Expanded(child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(guestName, style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+                          Text('Stayed · May 12 - May 16', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                        ],
+                      )),
+                    ]),
+                    const SizedBox(height: 16),
+                    Row(children: [
+                      Expanded(child: _stat('Payout', 'EGP $amount')),
+                      const SizedBox(width: 12),
+                      Expanded(child: _stat('Rating', '5.0 ★')),
+                    ]),
+                  ]),
                 ),
               ],
             ),
-            // Top Bar
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: SafeArea(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        behavior: HitTestBehavior.opaque,
-                        child: Container(
-                          width: 42,
-                          height: 42,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(color: Colors.black12, blurRadius: 4)
-                            ],
-                          ),
-                          child: const Icon(Icons.chevron_left,
-                              color: AppColors.navy, size: 28),
-                        ),
-                      ),
-                      const StatusBadge('Past', kind: BadgeKind.gray),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  /// Renter view using original PastBookingDetailScreen structure
+  Widget _stat(String l, String v) => Container(
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(color: AppColors.cream, borderRadius: BorderRadius.circular(10)),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(l, style: AppTheme.dm(size: 10, color: AppColors.muted)),
+      Text(v, style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy)),
+    ]),
+  );
+
   Widget _buildRenterView(BuildContext context) {
     final booking = bookingData ?? {};
-    final String propertyName =
-        (booking['propertyName'] ?? 'Property').toString();
+    final String propertyName = (booking['propertyName'] ?? 'Property').toString();
     final String location = (booking['location'] ?? 'Location').toString();
     final String imageUrl = (booking['imageUrl'] ?? '').toString();
-    final String orderNumber = (booking['orderNumber'] ?? '').toString();
-    final String guests = (booking['guests'] ?? '2 adults').toString();
-    final int nights =
-        (booking['nights'] is num) ? (booking['nights'] as num).toInt() : 1;
-    final int pricePerNight = (booking['pricePerNight'] is num)
-        ? (booking['pricePerNight'] as num).toInt()
-        : 0;
-    final int cleaningVat = (booking['cleaningVat'] is num)
-        ? (booking['cleaningVat'] as num).toInt()
-        : 0;
-    final int total =
-        (booking['total'] is num) ? (booking['total'] as num).toInt() : 0;
+    final int total = (booking['total'] is num) ? (booking['total'] as num).toInt() : 0;
     final List<String> photos = (booking['photos'] is List)
-        ? (booking['photos'] as List).map((e) => e.toString()).toList()
-        : [];
+        ? (booking['photos'] as List).map((e) => e.toString()).toList() : [];
     final List<String> included = (booking['included'] is List)
-        ? (booking['included'] as List).map((e) => e.toString()).toList()
-        : ['Pool', 'WiFi', 'Beach', 'Smart Lock', 'Pets OK'];
-    final bool hasReview = booking['hasReview'] ?? false;
-    final int? rating = booking['rating'];
-    final String? reviewText = booking['reviewText'];
+        ? (booking['included'] as List).map((e) => e.toString()).toList() : ['Pool', 'Wi-Fi', 'Beach'];
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -306,139 +137,43 @@ class PastBookingDetailScreen extends StatelessWidget {
               onBackTap: () => Navigator.pop(context),
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Reservation',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.navy,
-                          fontFamily: 'DM Sans')),
-                  const SizedBox(height: 12),
-                  ReservationDetailsCard(
-                    orderNumber: orderNumber,
-                    checkIn: _formatDate(booking['checkIn']),
-                    checkOut: _formatDate(booking['checkOut']),
-                    guests: guests,
-                    nights: nights,
+                  Text('Included in your stay', style: AppTheme.dm(size: 18, weight: FontWeight.w700)),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: included.map((a) => _includedPill(a)).toList(),
                   ),
+                  const SizedBox(height: 32),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                    Text('Total Paid', style: AppTheme.dm(size: 16, weight: FontWeight.w600)),
+                    Text('EGP $total', style: AppTheme.dm(size: 18, weight: FontWeight.w800, color: AppColors.navy)),
+                  ]),
+                  const SizedBox(height: 32),
+                  NavyButton(label: 'Rebook Property', onTap: () {}),
+                  const SizedBox(height: 120),
                 ],
               ),
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: WhatsIncludedSection(
-                included: included,
-                title: 'What was included',
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Price',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.navy,
-                          fontFamily: 'DM Sans')),
-                  const SizedBox(height: 12),
-                  PriceBreakdownCard(
-                    pricePerNight: pricePerNight,
-                    nights: nights,
-                    cleaningVat: cleaningVat,
-                    total: total,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ReviewSection(
-                hasReview: hasReview,
-                rating: rating,
-                reviewText: reviewText,
-                onWriteReview: () {
-                  AppNavigation.goToWriteReview(
-                    context,
-                    extra: {
-                      'propertyName': propertyName,
-                      'propertyImage': imageUrl,
-                      'stayDates':
-                          '${_formatDate(booking['checkIn'])} - ${_formatDate(booking['checkOut'])}',
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: BookAgainButton(
-                onTap: () {
-                  AppNavigation.goToPropertyDetail(
-                    context,
-                    extra: {
-                      'propertyId': booking['propertyId']?.toString() ?? '1',
-                      'propertyName': propertyName,
-                      'imageUrl': imageUrl,
-                      'location': location,
-                      'rating': 4.8,
-                      'reviewCount': 124,
-                      'pricePerNight': pricePerNight,
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
         ],
       ),
     );
   }
 
-  String _formatDate(dynamic date) {
-    try {
-      DateTime? parsed;
-      if (date is DateTime) {
-        parsed = date;
-      } else if (date is String) {
-        parsed = DateTime.tryParse(date);
-      }
-      if (parsed != null) {
-        return DateFormat('MMM d · h:mm a').format(parsed);
-      }
-    } catch (e) {
-      debugPrint('Error formatting date: $e');
-    }
-    return date?.toString() ?? 'N/A';
-  }
-
   Widget _includedPill(String label) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-            color: Colors.transparent,
-            border: Border.all(color: AppColors.border),
-            borderRadius: BorderRadius.circular(10)),
-        child: Text(label,
-            style: AppTheme.dm(
-                size: 13, weight: FontWeight.w600, color: AppColors.navy)),
-      );
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+    decoration: BoxDecoration(
+      color: AppColors.white,
+      border: Border.all(color: AppColors.borderDefault),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Text(label, style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.navy)),
+  );
 }

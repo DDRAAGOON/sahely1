@@ -1,6 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class PromoBanner extends StatefulWidget {
   const PromoBanner({super.key});
@@ -60,15 +62,17 @@ class _PromoBannerState extends State<PromoBanner> {
     return Column(
       children: [
         // Main Banner Container
-        Container(
-          height: 120,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: AppColors.promoBannerGold,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Stack(
-            children: [
+        BouncyButton(
+          onTap: () {}, // Make it interactable
+          child: Container(
+            height: 120,
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: AppColors.promoBannerGold,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Stack(
+              children: [
               // Decorative circle
               Positioned(
                 right: -20,
@@ -98,20 +102,18 @@ class _PromoBannerState extends State<PromoBanner> {
                       children: [
                         Text(
                           _slides[index]['title']!,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 17,
+                            weight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           _slides[index]['subtitle']!,
-                          style: const TextStyle(
-                            fontSize: 13,
+                          style: AppTheme.dm(
+                            size: 13,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ],
@@ -122,8 +124,9 @@ class _PromoBannerState extends State<PromoBanner> {
             ],
           ),
         ),
+      ),
 
-        const SizedBox(height: 12),
+      const SizedBox(height: 12),
 
         // Pagination Dots - Now Outside the Container
         Row(

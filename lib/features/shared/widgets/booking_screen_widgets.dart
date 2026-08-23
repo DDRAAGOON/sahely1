@@ -73,8 +73,7 @@ class _BookingCalendarCardState extends State<BookingCalendarCard> {
                 color: (isStart || isEnd)
                     ? AppColors.navy
                     : isInRange
-                        ? AppColors.gold.withValues(alpha: 0.3)
-                        : null,
+                        ? AppColors.gold.withValues(alpha: 0.3) : null,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Center(
@@ -190,9 +189,7 @@ class BookingGuestRow extends StatelessWidget {
             color: filled ? AppColors.navy : Colors.transparent,
             border: filled
                 ? null
-                : Border.all(
-                    color: enabled ? AppColors.navy : AppColors.border,
-                    width: 1.5),
+                : Border.all(color: AppColors.borderDefault),
             shape: BoxShape.circle,
           ),
           child: Icon(icon,

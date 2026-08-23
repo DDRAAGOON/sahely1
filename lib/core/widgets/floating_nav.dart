@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class NavItem {
   const NavItem(this.icon, this.activeIcon, this.label, [this.route]);
@@ -16,7 +18,7 @@ class NavItem {
   final String? route;
 }
 
-/// The translucent, blurred "floating island" bottom nav from the design â€”
+/// The translucent, blurred "floating island" bottom nav from the design —
 /// 64px tall, inset 16px, 34px radius, frosted navy glass.
 class FloatingNav extends StatelessWidget {
   const FloatingNav({super.key, required this.active, this.items, this.onTap});
@@ -95,7 +97,7 @@ class FloatingNav extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(28),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -126,9 +128,9 @@ class _NavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return BouncyButton(
       onTap: onTap,
+      scale: 0.9,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -142,13 +144,12 @@ class _NavButton extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             item.label,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
+            style: AppTheme.dm(
+              size: 11,
+              weight: FontWeight.w600,
               color: selected
                   ? AppColors.navy
                   : AppColors.navy.withValues(alpha: 0.4),
-              fontFamily: 'DM Sans',
             ),
           ),
         ],

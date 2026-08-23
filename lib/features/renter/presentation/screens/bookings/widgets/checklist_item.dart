@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ChecklistItem extends StatelessWidget {
   final String label;
@@ -37,24 +38,22 @@ class ChecklistItem extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTheme.dm(
+                      size: 14,
                       color: isCompleted
                           ? AppColors.secondary
                           : const Color(0xFF1B2744),
-                      fontFamily: 'DM Sans',
-                      fontWeight:
+                      weight:
                           isCompleted ? FontWeight.w400 : FontWeight.w600,
                     ),
                   ),
                   if (issueReported)
-                    const Text(
+                    Text(
                       'Issue reported',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Color(0xFFD2760A),
-                        fontFamily: 'DM Sans',
-                        fontWeight: FontWeight.w600,
+                      style: AppTheme.dm(
+                        size: 11,
+                        color: const Color(0xFFD2760A),
+                        weight: FontWeight.w600,
                       ),
                     ),
                 ],
@@ -113,13 +112,13 @@ class ChecklistItem extends StatelessWidget {
           border: Border.all(color: const Color(0xFFD2760A), width: 1.5),
           shape: BoxShape.circle,
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             '!',
-            style: TextStyle(
-              color: Color(0xFFD2760A),
-              fontWeight: FontWeight.w900,
-              fontSize: 14,
+            style: AppTheme.dm(
+              color: const Color(0xFFD2760A),
+              weight: FontWeight.w900,
+              size: 14,
             ),
           ),
         ),
@@ -129,7 +128,7 @@ class ChecklistItem extends StatelessWidget {
       width: 26,
       height: 26,
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFA08050), width: 1.5),
+        border: Border.all(color: AppColors.borderDefault),
         borderRadius: BorderRadius.circular(8),
       ),
     );

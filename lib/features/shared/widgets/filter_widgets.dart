@@ -98,7 +98,7 @@ class StepBtn extends StatelessWidget {
           decoration: BoxDecoration(
             color: filled ? AppColors.navy : Colors.transparent,
             border:
-                filled ? null : Border.all(color: AppColors.navy, width: 1.5),
+                filled ? null : null,
             shape: BoxShape.circle,
           ),
           child: Icon(filled ? Icons.add : Icons.remove,

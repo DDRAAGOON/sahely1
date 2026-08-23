@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CommissionEarnedCard extends StatelessWidget {
   final String totalEarned;
@@ -30,23 +31,21 @@ class CommissionEarnedCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title
-          const Text(
+          Text(
             'Commission earned · this season',
-            style: TextStyle(
-              fontSize: 13,
+            style: AppTheme.dm(
+              size: 13,
               color: Colors.white70,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 8),
           // Total Earned
           Text(
             'EGP $totalEarned',
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 28,
+              weight: FontWeight.w700,
               color: AppColors.gold,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 20),
@@ -104,20 +103,18 @@ class _StatColumn extends StatelessWidget {
             children: [
               Text(
                 value,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 20,
+                  weight: FontWeight.w700,
                   color: valueColor ?? AppColors.gold,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 11,
+                style: AppTheme.dm(
+                  size: 11,
                   color: Colors.white70,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ],

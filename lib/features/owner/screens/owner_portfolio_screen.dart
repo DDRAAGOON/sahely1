@@ -4,6 +4,8 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 
+import '../../../core/utils/currency_formatter.dart';
+
 class PortfolioInsightsScreen extends StatelessWidget {
   const PortfolioInsightsScreen({super.key});
 
@@ -28,7 +30,7 @@ class PortfolioInsightsScreen extends StatelessWidget {
                   style: AppTheme.dm(size: 13, color: const Color(0xFFCDD4E0))),
               const SizedBox(height: 6),
               Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                Text('EGP 102,600',
+                Text(CurrencyFormatter.format(102600),
                     style: AppTheme.dm(
                         size: 28,
                         weight: FontWeight.w700,
@@ -66,18 +68,18 @@ class PortfolioInsightsScreen extends StatelessWidget {
           Text('Ranked by occupancy & revenue',
               style: AppTheme.dm(size: 12, color: AppColors.muted)),
           const SizedBox(height: 12),
-          _barCard('Azure Beach Villa', 'EGP 68,400 this month', 0.88,
+          _barCard('Azure Beach Villa', '${CurrencyFormatter.format(68400)} this month', 0.88,
               AppColors.gold,
               top: true),
           const SizedBox(height: 10),
           _barCard(
-              'Golden Dunes', 'EGP 27,200 this month', 0.62, AppColors.navy),
+              'Golden Dunes', '${CurrencyFormatter.format(27200)} this month', 0.62, AppColors.navy),
           const SizedBox(height: 10),
-          _barCard('Marina Loft', 'EGP 0 this month', 0.0, AppColors.navy),
+          _barCard('Marina Loft', '${CurrencyFormatter.format(0)} this month', 0.0, AppColors.navy),
           const SizedBox(height: 16),
-          const InfoNote(
+          InfoNote(
               text:
-                  'Azure leads on every metric. Marina Loft isn\'t published — finishing its setup could add ~EGP 30k/mo.'),
+                  'Azure leads on every metric. Marina Loft isn\'t published — finishing its setup could add ~${CurrencyFormatter.format(30000)}/mo.'),
         ],
       ),
     );

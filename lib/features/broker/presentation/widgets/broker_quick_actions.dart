@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerQuickActions extends StatelessWidget {
   const BrokerQuickActions({super.key});
@@ -72,11 +73,10 @@ class _QuickActionButton extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+              style: AppTheme.dm(
+                size: 13,
+                weight: FontWeight.w600,
                 color: Colors.white,
-                fontFamily: 'DM Sans',
               ),
             ),
           ],

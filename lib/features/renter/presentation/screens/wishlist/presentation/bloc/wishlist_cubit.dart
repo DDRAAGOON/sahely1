@@ -2,8 +2,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
 
-import 'package:sahely/features/renter/presentation/screens/wishlist/data/repositories/wishlist_repository.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/domain/use_cases/get_wishlist_collections_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/get_wishlist_items_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/toggle_wishlist_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/add_to_wishlist_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/remove_from_wishlist_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/add_to_collection_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/remove_from_collection_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/create_collection_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/rename_collection_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/delete_collection_use_case.dart';
+import 'package:sahely/features/renter/domain/use_cases/check_wishlist_status_use_case.dart';
+import 'package:sahely/features/renter/domain/models/wishlist_item.dart';
 
 enum WishlistStatus { initial, loading, loaded, error }
 
@@ -44,17 +54,41 @@ class WishlistState {
 }
 
 class WishlistCubit extends Cubit<WishlistState> {
-  final WishlistRepository _repository;
+  final GetWishlistCollectionsUseCase _getCollectionsUseCase;
+  final GetWishlistItemsUseCase _getItemsUseCase;
+  final ToggleWishlistUseCase _toggleUseCase;
+  final AddToWishlistUseCase _addToWishlistUseCase;
+  final AddToCollectionUseCase _addToCollectionUseCase;
+  final CreateCollectionUseCase _createCollectionUseCase;
+  final CheckWishlistStatusUseCase _checkStatusUseCase;
 
-  WishlistCubit(this._repository) : super(WishlistState());
+  WishlistCubit({
+    required GetWishlistCollectionsUseCase getCollectionsUseCase,
+    required GetWishlistItemsUseCase getItemsUseCase,
+    required ToggleWishlistUseCase toggleUseCase,
+    required AddToWishlistUseCase addToWishlistUseCase,
+    required RemoveFromWishlistUseCase removeFromWishlistUseCase,
+    required AddToCollectionUseCase addToCollectionUseCase,
+    required RemoveFromCollectionUseCase removeFromCollectionUseCase,
+    required CreateCollectionUseCase createCollectionUseCase,
+    required RenameCollectionUseCase renameCollectionUseCase,
+    required DeleteCollectionUseCase deleteCollectionUseCase,
+    required CheckWishlistStatusUseCase checkStatusUseCase,
+  })  : _getCollectionsUseCase = getCollectionsUseCase,
+        _getItemsUseCase = getItemsUseCase,
+        _toggleUseCase = toggleUseCase,
+        _addToWishlistUseCase = addToWishlistUseCase,
+        _addToCollectionUseCase = addToCollectionUseCase,
+        _createCollectionUseCase = createCollectionUseCase,
+        _checkStatusUseCase = checkStatusUseCase,
+        super(WishlistState());
 
-  /// Helper to get current role from RoleState
   Role get _activeRole => RoleState().currentRole;
 
   Future<void> checkStatus(String propertyId, [Role? role]) async {
     final targetRole = role ?? _activeRole;
     try {
-      final isWishlisted = await _repository.isWishlisted(propertyId, targetRole);
+      final isWishlisted = await _checkStatusUseCase.execute(propertyId, targetRole);
       emit(state.copyWith(
         toggledPropertyId: propertyId,
         isToggledStatus: isWishlisted,
@@ -73,23 +107,14 @@ class WishlistCubit extends Cubit<WishlistState> {
   }) async {
     final targetRole = role ?? _activeRole;
     try {
-      final isWishlisted = await _repository.toggleWishlist(
+      await _toggleUseCase.execute(
         propertyId: propertyId,
         propertyName: propertyName,
         propertyImage: propertyImage,
         role: targetRole,
       );
 
-      final collections = await _repository.getCollections(targetRole);
-      final items = await _repository.getAllWishlistItems(targetRole);
-
-      emit(state.copyWith(
-        collections: collections,
-        items: items,
-        toggledPropertyId: propertyId,
-        isToggledStatus: isWishlisted,
-        status: WishlistStatus.loaded,
-      ));
+      await loadCollections(targetRole);
     } catch (e) {
       emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to toggle'));
     }
@@ -104,7 +129,7 @@ class WishlistCubit extends Cubit<WishlistState> {
   }) async {
     final targetRole = role ?? _activeRole;
     try {
-      await _repository.addToWishlist(
+      await _addToWishlistUseCase.execute(
         propertyId: propertyId,
         propertyName: propertyName,
         propertyImage: propertyImage,
@@ -124,7 +149,7 @@ class WishlistCubit extends Cubit<WishlistState> {
   }) async {
     final targetRole = role ?? _activeRole;
     try {
-      await _repository.addToCollection(
+      await _addToCollectionUseCase.execute(
         propertyId: propertyId,
         collectionId: collectionId,
         role: targetRole,
@@ -138,7 +163,7 @@ class WishlistCubit extends Cubit<WishlistState> {
   Future<void> createCollection(String name, [Role? role]) async {
     final targetRole = role ?? _activeRole;
     try {
-      await _repository.addCollection(name, targetRole);
+      await _createCollectionUseCase.execute(name, targetRole);
       await loadCollections(targetRole);
     } catch (e) {
       emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to create collection'));
@@ -149,8 +174,8 @@ class WishlistCubit extends Cubit<WishlistState> {
     final targetRole = role ?? _activeRole;
     emit(state.copyWith(status: WishlistStatus.loading));
     try {
-      final collections = await _repository.getCollections(targetRole);
-      final items = await _repository.getAllWishlistItems(targetRole);
+      final collections = await _getCollectionsUseCase.execute(targetRole);
+      final items = await _getItemsUseCase.execute(role: targetRole);
 
       emit(state.copyWith(
         collections: collections,
@@ -166,7 +191,7 @@ class WishlistCubit extends Cubit<WishlistState> {
     final targetRole = role ?? _activeRole;
     emit(state.copyWith(status: WishlistStatus.loading));
     try {
-      final items = await _repository.getWishlistItems(collectionId, targetRole);
+      final items = await _getItemsUseCase.execute(collectionId: collectionId, role: targetRole);
       emit(state.copyWith(items: items, status: WishlistStatus.loaded));
     } catch (e) {
       emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to load wishlist items'));

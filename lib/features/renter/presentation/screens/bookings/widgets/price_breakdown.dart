@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class PriceBreakdown extends StatelessWidget {
   final int nights;
@@ -19,10 +21,8 @@ class PriceBreakdown extends StatelessWidget {
     required this.total,
   });
 
-  String _formatPrice(int piastres) {
-    final amount = piastres / 100;
-    // Format with commas for thousands
-    return 'EGP ${amount.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}';
+  String _formatPrice(int amount) {
+    return CurrencyFormatter.format(amount);
   }
 
   @override
@@ -43,10 +43,9 @@ class PriceBreakdown extends StatelessWidget {
           if (nights > 0) ...[
             Text(
               '$nights night${nights > 1 ? 's' : ''} · $totalGuests guest${totalGuests > 1 ? 's' : ''}',
-              style: const TextStyle(
-                fontSize: 14,
+              style: AppTheme.dm(
+                size: 14,
                 color: AppColors.secondary,
-                fontFamily: 'DM Sans',
               ),
             ),
             const SizedBox(height: 16),
@@ -61,34 +60,31 @@ class PriceBreakdown extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Total',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 16,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 Text(
                   _formatPrice(total),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 18,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
             ),
           ] else
-            const Center(
+            Center(
               child: Text(
                 'Select dates to see pricing',
-                style: TextStyle(
-                  fontSize: 14,
+                style: AppTheme.dm(
+                  size: 14,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),
@@ -103,19 +99,17 @@ class PriceBreakdown extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTheme.dm(
+            size: 14,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+          style: AppTheme.dm(
+            size: 14,
+            weight: FontWeight.w600,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

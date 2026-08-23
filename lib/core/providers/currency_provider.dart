@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class CurrencyProvider extends ChangeNotifier {
   String _selectedCurrency = 'EGP';
@@ -32,7 +33,7 @@ class CurrencyProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Helper to format price (Mock implementation for now)
+  // Helper to format price
   String formatPrice(double priceInEGP) {
     // In a real app, you'd have exchange rates here
     // For now, we'll just show the symbol and the value
@@ -40,6 +41,6 @@ class CurrencyProvider extends ChangeNotifier {
     if (_selectedCurrency == 'USD') convertedPrice = priceInEGP / 50;
     if (_selectedCurrency == 'EUR') convertedPrice = priceInEGP / 54;
 
-    return '$symbol ${convertedPrice.toStringAsFixed(0)}';
+    return '$symbol ${CurrencyFormatter.formatNumber(convertedPrice.round())}';
   }
 }

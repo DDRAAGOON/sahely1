@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class DescriptionSection extends StatefulWidget {
   const DescriptionSection({super.key});
@@ -24,10 +25,9 @@ class _DescriptionSectionState extends State<DescriptionSection> {
               maxLines: _isExpanded ? null : 3,
               overflow:
                   _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 14,
+              style: AppTheme.dm(
+                size: 14,
                 color: AppColors.dark,
-                fontFamily: 'DM Sans',
                 height: 1.55,
               ),
             ),
@@ -41,11 +41,10 @@ class _DescriptionSectionState extends State<DescriptionSection> {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   _isExpanded ? 'Show Less' : 'Show More',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                  style: AppTheme.dm(
+                    size: 14,
+                    weight: FontWeight.w600,
                     color: AppColors.gold,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),

@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class GreetingHeader extends StatelessWidget {
   const GreetingHeader({super.key});
@@ -14,19 +15,19 @@ class GreetingHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Good morning,',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w400,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 'Mariam Hassan',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: AppTheme.dm(
+                    size: 24, weight: FontWeight.w700, color: AppColors.navy),
               ),
             ],
           ),
@@ -38,22 +39,21 @@ class GreetingHeader extends StatelessWidget {
             color: AppColors.renterPillBg,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Icons.person_outline,
                 size: 16,
                 color: AppColors.navy,
               ),
-              SizedBox(width: 6),
+              const SizedBox(width: 6),
               Text(
                 'Renter',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 12,
+                  weight: FontWeight.w600,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ],

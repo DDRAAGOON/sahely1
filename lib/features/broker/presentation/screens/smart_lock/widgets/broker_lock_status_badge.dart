@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerLockStatusBadge extends StatelessWidget {
   final bool isInRange;
@@ -44,11 +45,10 @@ class BrokerLockStatusBadge extends StatelessWidget {
             isInRange
                 ? 'In range · ${distance.toStringAsFixed(1)} km'
                 : 'Out of range · ${distance.toStringAsFixed(1)} km',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
+            style: AppTheme.dm(
+              size: 13,
+              weight: FontWeight.w600,
               color: statusColor,
-              fontFamily: 'DM Sans',
             ),
           ),
         ],

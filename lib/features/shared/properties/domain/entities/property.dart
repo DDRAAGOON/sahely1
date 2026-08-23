@@ -12,6 +12,8 @@ class Property {
     this.guests = 6,
     this.tags = const [],
     this.petsOk = true,
+    this.partyAllowed = false,
+    this.mixedGroupsOK = true,
     this.minutesToBeach,
     this.guestFavourite = false,
     this.saved = false,
@@ -29,6 +31,8 @@ class Property {
   final int guests;
   final List<String> tags;
   final bool petsOk;
+  final bool partyAllowed;
+  final bool mixedGroupsOK;
   final int? minutesToBeach;
   final bool guestFavourite;
   final bool saved;
@@ -37,20 +41,22 @@ class Property {
     int parseInt(dynamic value, [int fallback = 0]) {
       if (value is int) return value;
       if (value is double) return value.toInt();
-      if (value is String)
+      if (value is String) {
         return int.tryParse(value) ??
             int.tryParse(value.replaceAll(RegExp(r'[^0-9]'), '')) ??
             fallback;
+      }
       return fallback;
     }
 
     double parseDouble(dynamic value, [double fallback = 0.0]) {
       if (value is double) return value;
       if (value is int) return value.toDouble();
-      if (value is String)
+      if (value is String) {
         return double.tryParse(value) ??
             double.tryParse(value.replaceAll(RegExp(r'[^0-9\.]'), '')) ??
             fallback;
+      }
       return fallback;
     }
 
@@ -77,6 +83,8 @@ class Property {
       guests: parseInt(map['guests'], 6),
       tags: List<String>.from(map['features'] ?? map['tags'] ?? []),
       petsOk: parseBool(map['petsAllowed'] ?? map['petsOk'], true),
+      partyAllowed: parseBool(map['partyAllowed'], false),
+      mixedGroupsOK: parseBool(map['mixedGroupsOK'], true),
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 
 class ArrivalChecklistScreen extends StatefulWidget {
   final String? bookingId;
@@ -30,7 +29,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
     _items = widget.checklistItems ??
         [
           {'label': 'Pool clean & usable', 'done': true, 'issue': false},
-          {'label': 'WiFi works (password on fridge)', 'done': true, 'issue': false},
+          {'label': 'Wi-Fi works (password on fridge)', 'done': true, 'issue': false},
           {'label': 'AC in all rooms', 'done': true, 'issue': false},
           {'label': '5 beds made & linens fresh', 'done': true, 'issue': false},
           {'label': 'Beach access tags (4)', 'done': false, 'issue': false},
@@ -112,13 +111,10 @@ class _CheckItem extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                     color: done ? AppColors.success : Colors.transparent,
-                    border: Border.all(
-                        color: done ? AppColors.success : AppColors.border,
-                        width: 2),
+                    border : null,
                     borderRadius: BorderRadius.circular(6)),
                 child: done
-                    ? const Icon(Icons.check, size: 16, color: Colors.white)
-                    : null,
+                    ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
               ),
             ),
             const SizedBox(width: 12),

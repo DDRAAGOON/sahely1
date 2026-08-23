@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReviewTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -15,13 +16,12 @@ class ReviewTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Your review',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+          style: AppTheme.dm(
+            size: 14,
+            weight: FontWeight.w600,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 8),
@@ -35,25 +35,23 @@ class ReviewTextField extends StatelessWidget {
             controller: controller,
             maxLines: 5,
             maxLength: 500,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText:
                   'Tell others about the property, cleanliness, check-in...',
-              hintStyle: TextStyle(
-                fontSize: 13,
+              hintStyle: AppTheme.dm(
+                size: 13,
                 color: AppColors.placeholder,
-                fontFamily: 'DM Sans',
               ),
               border: InputBorder.none,
-              contentPadding: EdgeInsets.all(14),
-              counterStyle: TextStyle(
-                fontSize: 11,
+              contentPadding: const EdgeInsets.all(14),
+              counterStyle: AppTheme.dm(
+                size: 11,
                 color: AppColors.secondary,
               ),
             ),
-            style: const TextStyle(
-              fontSize: 13,
+            style: AppTheme.dm(
+              size: 13,
               color: AppColors.dark,
-              fontFamily: 'DM Sans',
               height: 1.5,
             ),
           ),

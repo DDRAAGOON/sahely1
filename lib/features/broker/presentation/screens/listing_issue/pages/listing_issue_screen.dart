@@ -29,9 +29,9 @@ class ListingIssueScreen extends StatelessWidget {
         'Compound layout with unit marked',
       ],
       'aiSuggestion':
-      'Reach out to Tarek â€” a quick morning re-shoot usually clears this within a day.',
+      'Reach out to Tarek — a quick morning re-shoot usually clears this within a day.',
       'whyNotListed':
-      'The review team paused this listing because the current photos don\'t meet Sahely\'s quality bar â€” they\'re low-light and don\'t show the full space, so guests can\'t see what they\'re booking. The listing stays offline until the items above are added and it passes a re-review (about 24h). No commission is earned while a referred property is offline.',
+      'The review team paused this listing because the current photos don\'t meet Sahely\'s quality bar — they\'re low-light and don\'t show the full space, so guests can\'t see what they\'re booking. The listing stays offline until the items above are added and it passes a re-review (about 24h). No commission is earned while a referred property is offline.',
       'status': 'Offline',
       'reReviewTime': '~24h',
       'ownerName': 'Tarek S.',

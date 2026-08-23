@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerPromoBanner extends StatefulWidget {
   const BrokerPromoBanner({super.key});
@@ -97,20 +98,18 @@ class _BrokerPromoBannerState extends State<BrokerPromoBanner> {
                       children: [
                         Text(
                           _slides[index]['title']!,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 18,
+                            weight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           _slides[index]['subtitle']!,
-                          style: const TextStyle(
-                            fontSize: 13,
+                          style: AppTheme.dm(
+                            size: 13,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ],

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/data/models.dart';
-import 'package:sahely/features/shared/screens/filters_screen.dart';
+import '../../features/shared/properties/domain/entities/property.dart';
+import '../../features/shared/screens/currency_screen.dart';
+import '../../features/shared/screens/language_screen.dart';
+import '../../features/renter/presentation/screens/search/pages/search_filters_sheet.dart';
 import '../../features/shared/screens/compare_screen.dart';
 import '../../features/shared/screens/share_collection_screen.dart';
+import '../../features/shared/screens/share_earn_screen.dart';
 
 class AppNavigation {
   AppNavigation._();
@@ -29,7 +34,6 @@ class AppNavigation {
   static void goToFacialScan(BuildContext context, {Object? extra}) => context.push(AppRoutes.facialScan, extra: extra);
 
   // Verification
-  static void goToVerifyGate(BuildContext context) => context.push(AppRoutes.verifyGate);
   static void goToVerifyEmail(BuildContext context, {Object? extra}) => context.push(AppRoutes.verifyEmail, extra: extra);
   static void goToVerifyPhone(BuildContext context, {Object? extra}) => context.push(AppRoutes.verifyPhone, extra: extra);
   static void goToIdVerification(BuildContext context, {Object? extra}) => context.push(AppRoutes.idVerification, extra: extra);
@@ -43,7 +47,13 @@ class AppNavigation {
 
   // Broker
   static void goToBrokerHome(BuildContext context) => context.go(AppRoutes.brokerHome);
-  static void goToBrokerBookings(BuildContext context) => context.push(AppRoutes.brokerBookings);
+  static void goToBrokerBookings(BuildContext context, {String? tab}) {
+    if (tab != null) {
+      context.go('${AppRoutes.brokerBookings}?tab=$tab');
+    } else {
+      context.go(AppRoutes.brokerBookings);
+    }
+  }
   static void goToBrokerDashboard(BuildContext context) => context.push(AppRoutes.brokerDashboard);
   static void goToBrokerWallet(BuildContext context) => context.push(AppRoutes.brokerWallet);
   static void goToBrokerPortfolio(BuildContext context) => context.push(AppRoutes.brokerPortfolio); 
@@ -91,13 +101,13 @@ class AppNavigation {
 
   // Multi-role
   static void goToMyBookings(BuildContext context) {
-    final role = RoleState().currentRole;
+    final role = context.read<RoleState>().currentRole;
     if (role == Role.owner) {
-      safeGo(context, '/owner/bookings?tab=stays');
+      safeGo(context, AppRoutes.ownerBookings);
     } else if (role == Role.broker) {
-      safeGo(context, '/broker/bookings');
+      safeGo(context, AppRoutes.brokerBookings);
     } else {
-      safeGo(context, '/renter/bookings');
+      safeGo(context, AppRoutes.renterBookings);
     }
   }
 
@@ -106,7 +116,7 @@ class AppNavigation {
   static Future<T?> goToBookingDetail<T>(BuildContext context, {Object? extra}) => context.push<T>(AppRoutes.bookingDetail, extra: extra);
   static void goToBookingUpcoming(BuildContext context, {Object? extra}) => context.push(AppRoutes.bookingUpcoming, extra: extra);
   static void goToBookingPast(BuildContext context, {Object? extra}) => context.push(AppRoutes.bookingPast, extra: extra);
-  static void goToSearch(BuildContext context) => context.push(AppRoutes.search);
+  static void goToSearch(BuildContext context) => context.push(AppRoutes.browse);
   static void goToSearchResults(BuildContext context, {String query = '', Map<String, dynamic>? filters, Object? extra}) => context.push(AppRoutes.browse, extra: extra ?? filters ?? query);
   static void goToAllProperties(BuildContext context, {Map<String, dynamic>? filters, Object? extra}) => context.push(AppRoutes.allProperties, extra: extra ?? filters);
   static void goToMawsem(BuildContext context) => context.push(AppRoutes.mawsem);
@@ -115,18 +125,38 @@ class AppNavigation {
   static void goToNotifications(BuildContext context) => context.push(AppRoutes.notifications);
   static void goToBrowse(BuildContext context, {Object? extra}) => context.push(AppRoutes.browse, extra: extra);
   
-  static Future<T?> goToFilters<T>(BuildContext context) {
-    return showModalBottomSheet<T>(
+  static void goToFilters(BuildContext context, {
+    Map<String, dynamic>? initialFilters,
+    List<dynamic>? allProperties,
+    Function(Map<String, dynamic>)? onApplyFilters,
+  }) {
+    showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      useRootNavigator: true,
       backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
+      useRootNavigator: true,
       builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.88,
+        initialChildSize: 0.8,
         minChildSize: 0.5,
         maxChildSize: 0.95,
         expand: false,
-        builder: (context, scrollController) => const FiltersScreen(),
+        builder: (context, scrollController) => SearchFiltersSheet(
+          initialFilters: initialFilters ?? {
+            'propertyType': 'All',
+            'bedrooms': 'Any',
+            'minPrice': 0.0,
+            'maxPrice': 100000.0,
+            'amenities': <String>[],
+            'partyAllowed': false,
+            'petsAllowed': false,
+            'mixedGroupsOK': false,
+            'adults': 0,
+            'children': 0,
+          },
+          allProperties: (allProperties ?? []).whereType<Property>().toList(),
+          onApplyFilters: onApplyFilters ?? (f) => goToAllProperties(context, filters: f),
+        ),
       ),
     );
   }
@@ -136,17 +166,25 @@ class AppNavigation {
   static void goToBooking(BuildContext context, {Object? extra}) => context.push(AppRoutes.booking, extra: extra);
   static void goToBookingConfirmed(BuildContext context, {Object? extra}) => context.push(AppRoutes.bookingConfirmed, extra: extra);
   static void goToSmartLock(BuildContext context, {Object? extra}) => context.push(AppRoutes.smartLock, extra: extra);
+  static void goToArrivalChecklist(BuildContext context) => context.push(AppRoutes.arrivalChecklist);
   static void goToSos(BuildContext context, {Object? extra}) => context.push(AppRoutes.sos, extra: extra);
   static void goToWriteReview(BuildContext context, {Object? extra}) => context.push(AppRoutes.writeReview, extra: extra);
   static void goToCollection(BuildContext context, {Object? extra}) => context.push(AppRoutes.collection, extra: extra);
   static void goToCollectionChat(BuildContext context) => context.push(AppRoutes.collectionChat);
-  static void goToCompare(BuildContext context, {required String collectionName, required List<String> memberNames}) {
+  static void goToCompare(BuildContext context, {
+    required String collectionName,
+    required List<String> memberNames,
+    Property? propertyA,
+    Property? propertyB,
+  }) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => CompareScreen(
           collectionName: collectionName,
           participantNames: memberNames,
+          propertyA: propertyA,
+          propertyB: propertyB,
         ),
       ),
     );
@@ -162,6 +200,7 @@ class AppNavigation {
       isScrollControlled: true,
       useRootNavigator: true,
       backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
       builder: (context) => ShareCollectionScreen(
         collectionName: collectionName,
         collectionImage: collectionImage,
@@ -170,15 +209,42 @@ class AppNavigation {
       ),
     );
   }
-  static void goToShareEarn(BuildContext context) => context.push(AppRoutes.shareEarn);
+  static void goToShareEarn(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
+      useRootNavigator: true,
+      builder: (context) => const ShareEarnScreen(),
+    );
+  }
   static void goToMawsemLevel(BuildContext context) => context.push(AppRoutes.mawsemLevel);
   static void goToStarsEarned(BuildContext context) => context.push(AppRoutes.starsEarned);
   static void goToStarNudges(BuildContext context) => context.push(AppRoutes.starNudges);
   static void goToLevelUp(BuildContext context) => context.push(AppRoutes.levelUp);
   static void goToLevelUpCelebration(BuildContext context, {required Map<String, dynamic> extra}) => context.push(AppRoutes.levelUpCelebration, extra: extra);
   static void goToProperty(BuildContext context, {Object? extra}) => context.push(AppRoutes.propertyDetail, extra: extra);
-  static void goToLanguage(BuildContext context) => context.push(AppRoutes.language);
-  static void goToCurrency(BuildContext context) => context.push(AppRoutes.currency);
+  static void goToLanguage(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
+      useRootNavigator: true,
+      builder: (context) => const LanguageScreen(),
+    );
+  }
+  static void goToCurrency(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.transparent,
+      useRootNavigator: true,
+      builder: (context) => const CurrencyScreen(),
+    );
+  }
   static void goToAddCard(BuildContext context) => context.push(AppRoutes.addCard);
   static void goToChangePassword(BuildContext context) => context.push(AppRoutes.changePassword);
   static void goToNotificationsSettings(BuildContext context) => context.push(AppRoutes.notificationsSettings);

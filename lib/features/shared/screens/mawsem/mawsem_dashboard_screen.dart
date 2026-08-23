@@ -24,10 +24,34 @@ class MawsemDashboardScreen extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
+            // Back Button
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.border),
+                      ),
+                      child:
+                          const Icon(Icons.chevron_left, color: AppColors.navy),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             // Hero Card
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
                 child: MawsemHeroCard(
                   levelName: levelData['name'],
                   levelNumber: levelData['level'],

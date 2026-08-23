@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ShareAchievementButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -25,12 +26,11 @@ class ShareAchievementButton extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        child: const Text(
+        child: Text(
           'Share achievement',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'DM Sans',
+          style: AppTheme.dm(
+            size: 15,
+            weight: FontWeight.w700,
           ),
         ),
       ),

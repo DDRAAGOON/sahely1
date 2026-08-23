@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/not_live_property_card.dart';
 
 class NotLiveSection extends StatelessWidget {
@@ -20,13 +21,12 @@ class NotLiveSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section Title
-          const Text(
+          Text(
             'NOT LIVE',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 11,
+              weight: FontWeight.w700,
               color: AppColors.secondary,
-              fontFamily: 'DM Sans',
               letterSpacing: 1.2,
             ),
           ),

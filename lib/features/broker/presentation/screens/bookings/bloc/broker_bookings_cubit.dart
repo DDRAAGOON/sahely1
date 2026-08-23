@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:sahely/features/broker/data/repositories/broker_bookings_repository.dart';
+import 'package:sahely/features/broker/domain/entities/broker_booking.dart';
+import 'package:sahely/features/broker/domain/use_cases/get_broker_bookings_use_case.dart';
+import 'package:sahely/features/broker/domain/use_cases/filter_broker_bookings_use_case.dart';
 
 enum BrokerBookingsStatus { initial, loading, loaded, error }
 
@@ -29,14 +30,18 @@ class BrokerBookingsState {
 }
 
 class BrokerBookingsCubit extends Cubit<BrokerBookingsState> {
-  final BrokerBookingsRepository _repository;
+  final GetBrokerBookingsUseCase _getBrokerBookingsUseCase;
 
-  BrokerBookingsCubit(this._repository) : super(BrokerBookingsState());
+  BrokerBookingsCubit({
+    required GetBrokerBookingsUseCase getBrokerBookingsUseCase,
+    required FilterBrokerBookingsUseCase filterBrokerBookingsUseCase,
+  })  : _getBrokerBookingsUseCase = getBrokerBookingsUseCase,
+        super(BrokerBookingsState());
 
   Future<void> loadBookings() async {
     emit(state.copyWith(status: BrokerBookingsStatus.loading));
     try {
-      final bookings = await _repository.getBookings();
+      final bookings = await _getBrokerBookingsUseCase.execute();
       emit(state.copyWith(
           bookings: bookings, status: BrokerBookingsStatus.loaded));
     } catch (e) {
@@ -44,5 +49,9 @@ class BrokerBookingsCubit extends Cubit<BrokerBookingsState> {
           status: BrokerBookingsStatus.error,
           errorMessage: 'Failed to load bookings'));
     }
+  }
+
+  void filterBookings(String query) {
+    // Implementation for filtering if needed
   }
 }

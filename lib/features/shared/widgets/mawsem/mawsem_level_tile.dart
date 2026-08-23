@@ -74,8 +74,7 @@ class MawsemLevelTile extends StatelessWidget {
           color: bgColor,
           borderRadius: BorderRadius.circular(13),
           border: (isCurrent || hasGoldBorder)
-              ? Border.all(color: AppColors.gold, width: 2)
-              : null,
+              ? Border.all(color: AppColors.gold, width: 2) : null,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),

@@ -180,7 +180,7 @@ class _SocialButton extends StatelessWidget {
       height: 50,
       decoration: BoxDecoration(
         color: dark ? Colors.black : AppColors.white,
-        border: dark ? null : Border.all(color: AppColors.border),
+        border: dark ? null : null,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(

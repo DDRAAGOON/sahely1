@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CollectionStrip extends StatelessWidget {
   final String collectionName;
@@ -24,12 +25,11 @@ class CollectionStrip extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Text(
+          Text(
             'Add from collection:',
-            style: TextStyle(
-              fontSize: 12,
+            style: AppTheme.dm(
+              size: 12,
               color: AppColors.secondary,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(width: 8),

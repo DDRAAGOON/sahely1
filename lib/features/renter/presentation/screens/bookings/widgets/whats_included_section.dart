@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class WhatsIncludedSection extends StatelessWidget {
   final List<dynamic>? included;
@@ -19,11 +20,10 @@ class WhatsIncludedSection extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 16,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 12),
@@ -43,12 +43,7 @@ class WhatsIncludedSection extends StatelessWidget {
                       ? const Color(0xFFE8F5E9)
                       : const Color(0xFFF3EFE7),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: isPets
-                        ? const Color(0xFF2E7D32)
-                        : AppColors.navy.withValues(alpha: 0.8),
-                    width: 1,
-                  ),
+                  border: Border.all(color: AppColors.borderDefault, width: 1),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -60,12 +55,11 @@ class WhatsIncludedSection extends StatelessWidget {
                     ],
                     Text(
                       text,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
+                      style: AppTheme.dm(
+                        size: 13,
+                        weight: FontWeight.w500,
                         color:
                             isPets ? const Color(0xFF2E7D32) : AppColors.navy,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],

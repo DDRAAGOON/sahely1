@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ActiveBookingCard extends StatelessWidget {
   final String propertyName;
@@ -68,18 +69,17 @@ class ActiveBookingCard extends StatelessWidget {
                     color: const Color(0xFF1B6B3A),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.circle, color: Colors.white, size: 6),
-                      SizedBox(width: 6),
+                      const Icon(Icons.circle, color: Colors.white, size: 6),
+                      const SizedBox(width: 6),
                       Text(
                         'Active • Checked in',
-                        style: TextStyle(
+                        style: AppTheme.dm(
                           color: Colors.white,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'DM Sans',
+                          size: 11,
+                          weight: FontWeight.w700,
                         ),
                       ),
                     ],
@@ -108,11 +108,10 @@ class ActiveBookingCard extends StatelessWidget {
                     children: [
                       Text(
                         propertyName,
-                        style: const TextStyle(
+                        style: AppTheme.dm(
                           color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'DM Sans',
+                          size: 18,
+                          weight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -123,10 +122,9 @@ class ActiveBookingCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             location,
-                            style: const TextStyle(
+                            style: AppTheme.dm(
                               color: Colors.white70,
-                              fontSize: 11,
-                              fontFamily: 'DM Sans',
+                              size: 11,
                             ),
                           ),
                         ],
@@ -162,19 +160,18 @@ class ActiveBookingCard extends StatelessWidget {
                             color: const Color(0xFF1B2744),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.lock_outline,
+                              const Icon(Icons.lock_outline,
                                   color: Color(0xFFC9A84C), size: 18),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(
                                 'Digital Lock',
-                                style: TextStyle(
+                                style: AppTheme.dm(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                  fontFamily: 'DM Sans',
+                                  weight: FontWeight.w700,
+                                  size: 14,
                                 ),
                               ),
                             ],
@@ -192,19 +189,18 @@ class ActiveBookingCard extends StatelessWidget {
                             color: AppColors.sos, // Updated to sosRed color
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.warning_amber_rounded,
+                              const Icon(Icons.warning_amber_rounded,
                                   color: Colors.white, size: 18),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(
                                 'SOS',
-                                style: TextStyle(
+                                style: AppTheme.dm(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                  fontFamily: 'DM Sans',
+                                  weight: FontWeight.w700,
+                                  size: 14,
                                 ),
                               ),
                             ],
@@ -220,13 +216,12 @@ class ActiveBookingCard extends StatelessWidget {
                 // View Details
                 GestureDetector(
                   onTap: onViewDetailsTap,
-                  child: const Text(
+                  child: Text(
                     'View booking details →',
-                    style: TextStyle(
-                      color: Color(0xFFC9A84C),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      color: const Color(0xFFC9A84C),
+                      size: 13,
+                      weight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -244,19 +239,17 @@ class ActiveBookingCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF9A9A9A),
-            fontSize: 13,
-            fontFamily: 'DM Sans',
+          style: AppTheme.dm(
+            color: const Color(0xFF9A9A9A),
+            size: 13,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
-            color: Color(0xFF1B2744),
-            fontSize: 13,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'DM Sans',
+          style: AppTheme.dm(
+            color: const Color(0xFF1B2744),
+            size: 13,
+            weight: FontWeight.w700,
           ),
         ),
       ],

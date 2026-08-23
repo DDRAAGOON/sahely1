@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/chips.dart';
 
 class BookingsFilterTabs extends StatelessWidget {
   final List<String> tabs;
@@ -14,43 +16,24 @@ class BookingsFilterTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: tabs.map((tab) {
           final isSelected = tab == selectedTab;
-          return Expanded(
-            child: GestureDetector(
+          return Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: ChoiceChipPill(
+              tab,
+              selected: isSelected,
               onTap: () => onTabSelected(tab),
-              child: Container(
-                height: 44,
-                margin: EdgeInsets.only(
-                  right: tab == tabs.last ? 0 : 8,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF1B2744) : Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                  border: Border.all(
-                    color: isSelected
-                        ? const Color(0xFF1B2744)
-                        : const Color(0xFFE0D8CC),
-                    width: 1,
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    tab,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight:
-                          isSelected ? FontWeight.w700 : FontWeight.w500,
-                      color:
-                          isSelected ? Colors.white : const Color(0xFF1B2744),
-                      fontFamily: 'DM Sans',
-                    ),
-                  ),
-                ),
-              ),
+              height: 44,
+              fontSize: 14,
+              horizontalPadding: 24,
+              borderRadius: 22,
+              borderColor: isSelected ? AppColors.navy : AppColors.borderDefault,
             ),
           );
         }).toList(),

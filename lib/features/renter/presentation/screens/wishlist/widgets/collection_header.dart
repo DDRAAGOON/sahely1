@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CollectionHeader extends StatelessWidget {
   final String collectionName;
@@ -51,20 +52,18 @@ class CollectionHeader extends StatelessWidget {
               children: [
                 Text(
                   collectionName,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 20,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '$propertyCount places · shared with $sharedWithCount',
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: AppTheme.dm(
+                    size: 13,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

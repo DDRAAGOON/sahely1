@@ -2,8 +2,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/data/models.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/domain/models/wishlist_item.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/create_collection_sheet.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 
@@ -68,12 +69,11 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                           color: AppColors.border,
                           borderRadius: BorderRadius.circular(2)))),
               const SizedBox(height: 24),
-              const Text('Add to collection',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.navy,
-                      fontFamily: 'DM Sans')),
+              Text('Add to collection',
+                  style: AppTheme.dm(
+                      size: 20,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
               const SizedBox(height: 16),
               if (state.status == WishlistStatus.loading && _collections.isEmpty)
                 const Center(
@@ -97,11 +97,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                                 ? AppColors.white
                                 : AppColors.white.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                                color: isSelected
-                                    ? AppColors.gold
-                                    : AppColors.border,
-                                width: isSelected ? 2 : 1),
+                            border : null,
                           ),
                           child: Row(
                             children: [
@@ -121,16 +117,14 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(collection.name,
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: AppColors.navy,
-                                            fontFamily: 'DM Sans')),
+                                        style: AppTheme.dm(
+                                            size: 14,
+                                            weight: FontWeight.w600,
+                                            color: AppColors.navy)),
                                     Text('${collection.itemCount} places',
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            color: AppColors.secondary,
-                                            fontFamily: 'DM Sans')),
+                                        style: AppTheme.dm(
+                                            size: 12,
+                                            color: AppColors.secondary)),
                                   ],
                                 ),
                               ),
@@ -162,19 +156,18 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                                 role: widget.role,
                               );
                           Navigator.pop(context);
-                        }
-                      : null,
+                        } : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.navy,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Save to Collection',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'DM Sans')),
+                  child: Text('Save to Collection',
+                      style: AppTheme.dm(
+                          size: 15,
+                          color: AppColors.white,
+                          weight: FontWeight.w700)),
                 ),
               ),
               const SizedBox(height: 12),
@@ -183,12 +176,11 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
                   onPressed: () {
                     _showCreateSheet(context);
                   },
-                  child: const Text('+ New Collection',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gold,
-                          fontFamily: 'DM Sans')),
+                  child: Text('+ New Collection',
+                      style: AppTheme.dm(
+                          size: 14,
+                          weight: FontWeight.w600,
+                          color: AppColors.gold)),
                 ),
               ),
             ],

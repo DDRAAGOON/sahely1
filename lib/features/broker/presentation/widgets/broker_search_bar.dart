@@ -1,6 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class BrokerSearchBar extends StatelessWidget {
   final VoidCallback onSearchTap;
@@ -21,7 +23,7 @@ class BrokerSearchBar extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: GestureDetector(
+            child: BouncyButton(
               onTap: onSearchTap,
               child: Container(
                 height: 44,
@@ -31,20 +33,19 @@ class BrokerSearchBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(color: AppColors.border),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.search,
                       size: 18,
                       color: AppColors.gold,
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(
                       'Find your perfect stay',
-                      style: TextStyle(
-                        fontSize: 13,
+                      style: AppTheme.dm(
+                        size: 13,
                         color: AppColors.secondary,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],
@@ -53,7 +54,7 @@ class BrokerSearchBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          GestureDetector(
+          BouncyButton(
             onTap: onFilterTap,
             child: Container(
               width: 44,
@@ -63,14 +64,14 @@ class BrokerSearchBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Icon(
-                Icons.filter_list,
-                color: Colors.white,
+                Icons.tune,
+                color: AppColors.gold,
                 size: 20,
               ),
             ),
           ),
           const SizedBox(width: 8),
-          GestureDetector(
+          BouncyButton(
             onTap: onChatTap,
             child: Container(
               width: 44,
@@ -80,13 +81,12 @@ class BrokerSearchBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  const Center(
-                    child: Icon(
-                      Icons.chat_bubble_outline,
-                      color: AppColors.navy,
-                      size: 20,
-                    ),
+                  const Icon(
+                    Icons.chat_bubble_outline,
+                    color: AppColors.navy,
+                    size: 20,
                   ),
                   Positioned(
                     top: 8,
@@ -94,10 +94,9 @@ class BrokerSearchBar extends StatelessWidget {
                     child: Container(
                       width: 8,
                       height: 8,
-                      decoration: BoxDecoration(
-                        color: AppColors.green,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF34C759),
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.gold, width: 2),
                       ),
                     ),
                   ),

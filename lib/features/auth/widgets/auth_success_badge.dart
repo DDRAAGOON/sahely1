@@ -14,8 +14,13 @@ class AuthSuccessBadge extends StatefulWidget {
 class _AuthSuccessBadgeState extends State<AuthSuccessBadge>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 1800))
-    ..repeat();
+      vsync: this, duration: const Duration(milliseconds: 900))
+    ..forward();
+
+  late final Animation<double> _anim = CurvedAnimation(
+    parent: _c,
+    curve: Curves.easeOut,
+  );
 
   @override
   void dispose() {
@@ -25,24 +30,25 @@ class _AuthSuccessBadgeState extends State<AuthSuccessBadge>
 
   @override
   Widget build(BuildContext context) {
-    final size = widget.navy ? 108.0 : 104.0;
+    final size = widget.navy ? 128.0 : 124.0;
     return SizedBox(
-      width: size + 30,
-      height: size + 30,
+      width: size + 60,
+      height: size + 60,
       child: Stack(
         alignment: Alignment.center,
         children: [
           AnimatedBuilder(
-            animation: _c,
+            animation: _anim,
             builder: (_, __) {
-              final t = _c.value;
+              final t = _anim.value;
+              // ring starts at circle size and expands outward to a fixed halo
               return Container(
-                width: size * (0.7 + t * 1.4),
-                height: size * (0.7 + t * 1.4),
+                width: size * (1.0 + t * 0.45),
+                height: size * (1.0 + t * 0.45),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: AppColors.gold.withValues(alpha: 0.55 * (1 - t)),
+                      color: AppColors.gold.withValues(alpha: 0.45 * (1 - t * 0.5)),
                       width: 3),
                 ),
               );
@@ -70,7 +76,7 @@ class _AuthSuccessBadgeState extends State<AuthSuccessBadge>
             child: Icon(
                 widget.navy ? Icons.verified_user_outlined : Icons.check,
                 color: widget.navy ? AppColors.gold : AppColors.white,
-                size: widget.navy ? 50 : 50),
+                size: widget.navy ? 60 : 60),
           ),
         ],
       ),

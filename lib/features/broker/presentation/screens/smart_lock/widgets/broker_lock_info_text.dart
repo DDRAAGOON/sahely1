@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerLockInfoText extends StatelessWidget {
   final bool isInRange;
@@ -29,10 +30,9 @@ class BrokerLockInfoText extends StatelessWidget {
               isInRange
                   ? 'Revealed because you\'re within 2 km of the property. Enter it on the door keypad — it won\'t change until you check out.'
                   : 'The code appears automatically once you\'re within 2 km of the property. Head over — it won\'t change until you check out.',
-              style: const TextStyle(
-                fontSize: 13,
-                color: Color(0xFF94A3B8),
-                fontFamily: 'DM Sans',
+              style: AppTheme.dm(
+                size: 13,
+                color: const Color(0xFF94A3B8),
                 height: 1.5,
               ),
             ),

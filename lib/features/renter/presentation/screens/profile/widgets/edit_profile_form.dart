@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class EditProfileForm extends StatelessWidget {
   final TextEditingController firstNameController;
@@ -89,12 +90,11 @@ class EditProfileForm extends StatelessWidget {
         // Date of Birth
         _buildDateOfBirthField(context),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'For birthday surprises 🎁',
-          style: TextStyle(
-            fontSize: 11,
+          style: AppTheme.dm(
+            size: 11,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],
@@ -112,11 +112,10 @@ class EditProfileForm extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+          style: AppTheme.dm(
+            size: 13,
+            weight: FontWeight.w600,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 6),
@@ -124,10 +123,9 @@ class EditProfileForm extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: const TextStyle(
-              fontSize: 14,
+            hintStyle: AppTheme.dm(
+              size: 14,
               color: AppColors.placeholder,
-              fontFamily: 'DM Sans',
             ),
             filled: true,
             fillColor: AppColors.white,
@@ -156,10 +154,9 @@ class EditProfileForm extends StatelessWidget {
               vertical: 14,
             ),
           ),
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTheme.dm(
+            size: 14,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
           validator: validator,
           textInputAction: TextInputAction.next,
@@ -172,13 +169,12 @@ class EditProfileForm extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Date of Birth',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+          style: AppTheme.dm(
+            size: 13,
+            weight: FontWeight.w600,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 6),
@@ -190,10 +186,7 @@ class EditProfileForm extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: selectedDob != null ? AppColors.gold : AppColors.border,
-                width: selectedDob != null ? 2 : 1,
-              ),
+              border : null,
             ),
             child: Row(
               children: [
@@ -208,12 +201,11 @@ class EditProfileForm extends StatelessWidget {
                     selectedDob != null
                         ? _formatDate(selectedDob!)
                         : 'Select your date of birth',
-                    style: TextStyle(
-                      fontSize: 14,
+                    style: AppTheme.dm(
+                      size: 14,
                       color: selectedDob != null
                           ? AppColors.dark
                           : AppColors.placeholder,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class LevelStatsRow extends StatelessWidget {
   final int currentStars;
@@ -31,30 +32,28 @@ class LevelStatsRow extends StatelessWidget {
               children: [
                 RichText(
                   text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      size: 24,
+                      weight: FontWeight.w700,
                     ),
                     children: [
                       TextSpan(
                         text: '$currentStars',
-                        style: const TextStyle(color: AppColors.gold),
+                        style: AppTheme.dm(color: AppColors.gold, size: 24, weight: FontWeight.w700),
                       ),
-                      const TextSpan(
+                      TextSpan(
                         text: ' ★',
-                        style: TextStyle(color: AppColors.gold),
+                        style: AppTheme.dm(color: AppColors.gold, size: 24, weight: FontWeight.w700),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
+                Text(
                   'This season',
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -75,20 +74,18 @@ class LevelStatsRow extends StatelessWidget {
               children: [
                 Text(
                   '$starsToNextLevel',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 24,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '★ to Level $nextLevel',
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

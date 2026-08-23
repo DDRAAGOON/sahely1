@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReviewSection extends StatelessWidget {
   final bool hasReview;
@@ -27,13 +28,12 @@ class ReviewSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'How was your stay?',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 16,
+              weight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 16),
@@ -53,10 +53,9 @@ class ReviewSection extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 reviewText!,
-                style: const TextStyle(
-                  fontSize: 14,
+                style: AppTheme.dm(
+                  size: 14,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                   height: 1.5,
                 ),
               ),
@@ -88,17 +87,17 @@ class ReviewSection extends StatelessWidget {
                   ),
                   elevation: 0,
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.star, color: Color(0xFFC9A84C), size: 18),
-                    SizedBox(width: 8),
+                    const Icon(Icons.star, color: Color(0xFFC9A84C), size: 18),
+                    const SizedBox(width: 8),
                     Text(
                       'Write a review · earn +5 ★',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'DM Sans',
+                      style: AppTheme.dm(
+                        size: 15,
+                        weight: FontWeight.w700,
+                        color: Colors.white,
                       ),
                     ),
                   ],

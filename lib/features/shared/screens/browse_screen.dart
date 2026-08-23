@@ -25,6 +25,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _appliedSearchQuery = '';
   String _sortBy = 'Recommended';
+  bool _priceAscending = true;
   Map<String, dynamic>? _filters;
   bool _isInit = true;
 
@@ -86,8 +87,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
         }
         final selectedAmenities = activeFilters['amenities'] as List<String>?;
         if (selectedAmenities != null && selectedAmenities.isNotEmpty) {
-          if (!selectedAmenities.every((am) => p.tags.contains(am)))
+          if (!selectedAmenities.every((am) => p.tags.contains(am))) {
             return false;
+          }
         }
         final selectedRules = activeFilters['rules'] as List<String>?;
         if (selectedRules != null && selectedRules.contains('Pets allowed')) {
@@ -99,10 +101,12 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
     if (_sortBy == 'Top Rated') {
       results.sort((a, b) => b.rating.compareTo(a.rating));
-    } else if (_sortBy == 'Price: Low to High') {
+    } else if (_sortBy == 'Price ↑') {
       results.sort((a, b) => a.price.compareTo(b.price));
-    } else if (_sortBy == 'Price: High to Low') {
+    } else if (_sortBy == 'Price ↓') {
       results.sort((a, b) => b.price.compareTo(a.price));
+    } else if (_sortBy == 'Newest') {
+      results.sort((a, b) => b.id.compareTo(a.id));
     }
 
     return results;
@@ -110,7 +114,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
   void _showSortMenu() {
     showModalBottomSheet(
-      context: context,
+      useRootNavigator: true, context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         decoration: const BoxDecoration(
@@ -129,30 +133,34 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       weight: FontWeight.w700,
                       color: AppColors.navy)),
             ),
-            ...[
-              'Recommended',
-              'Top Rated',
-              'Price: Low to High',
-              'Price: High to Low'
-            ].map((s) => ListTile(
-                  title: Text(s,
-                      style: AppTheme.dm(
-                          size: 14,
-                          color: _sortBy == s ? AppColors.gold : AppColors.navy,
-                          weight: _sortBy == s
-                              ? FontWeight.w700
-                              : FontWeight.w400)),
-                  trailing: _sortBy == s
-                      ? const Icon(Icons.check, color: AppColors.gold)
-                      : null,
-                  onTap: () {
-                    setState(() => _sortBy = s);
-                    Navigator.pop(ctx);
-                  },
-                )),
+            _sortOption(ctx, 'Recommended', 'Recommended'),
+            _sortOption(ctx, 'Newest', 'Newest'),
+            _sortOption(ctx, 'Top Rated', 'Top Rated'),
+            _sortOption(ctx, 'Price: Low to High', 'Price ↑'),
+            _sortOption(ctx, 'Price: High to Low', 'Price ↓'),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _sortOption(BuildContext ctx, String label, String value) {
+    final isSelected = _sortBy == value;
+    return ListTile(
+      title: Text(label,
+          style: AppTheme.dm(
+              size: 14,
+              color: isSelected ? AppColors.gold : AppColors.navy,
+              weight: isSelected ? FontWeight.w700 : FontWeight.w400)),
+      trailing: isSelected ? const Icon(Icons.check, color: AppColors.gold) : null,
+      onTap: () {
+        setState(() {
+          _sortBy = value;
+          if (value == 'Price ↑') _priceAscending = true;
+          if (value == 'Price ↓') _priceAscending = false;
+        });
+        Navigator.pop(ctx);
+      },
     );
   }
 
@@ -172,11 +180,14 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   controller: _searchController,
                   onSubmitted: (v) => setState(() => _appliedSearchQuery = v),
                   onBack: () => Navigator.pop(context),
-                  onFilter: () async {
-                    final result = await AppNavigation.goToFilters(context);
-                    if (result is Map<String, dynamic>) {
-                      setState(() => _filters = result);
-                    }
+                  onFilter: () {
+                    AppNavigation.goToFilters(
+                      context,
+                      initialFilters: _filters,
+                      onApplyFilters: (result) {
+                        setState(() => _filters = result);
+                      },
+                    );
                   },
                 ),
                 const SizedBox(height: 18),
@@ -189,7 +200,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         children: [
                           TextSpan(
                             text: '${results.length} ',
-                            style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.navy),
+                            style: AppTheme.dm(weight: FontWeight.w700, color: AppColors.navy),
                           ),
                           const TextSpan(text: 'stays in North Coast'),
                         ],
@@ -201,7 +212,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       child: Row(children: [
                         const Icon(Icons.filter_list, size: 14, color: AppColors.navy),
                         const SizedBox(width: 6),
-                        Text('Sort: ${_sortBy == 'Recommended' ? 'Recommended' : _sortBy.split(':').first}',
+                        Text('Sort: ${_sortBy.replaceAll(' ↑', '').replaceAll(' ↓', '')}',
                             style: AppTheme.dm(
                                 size: 13,
                                 weight: FontWeight.w600,
@@ -221,21 +232,38 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         'Top rated',
                         selected: _sortBy == 'Top Rated',
                         borderColor: _sortBy == 'Top Rated' ? AppColors.navy : AppColors.border,
-                        onTap: () => setState(() => _sortBy = 'Top Rated'),
+                        onTap: () {
+                          setState(() {
+                            _sortBy = (_sortBy == 'Top Rated') ? 'Recommended' : 'Top Rated';
+                          });
+                        },
                       ),
                       const SizedBox(width: 8),
                       ChoiceChipPill(
-                        'Price ↑',
-                        selected: _sortBy == 'Price: Low to High',
-                        borderColor: _sortBy == 'Price: Low to High' ? AppColors.navy : AppColors.border,
-                        onTap: () => setState(() => _sortBy = 'Price: Low to High'),
+                        _sortBy.startsWith('Price') ? (_priceAscending ? 'Price ↑' : 'Price ↓') : 'Price',
+                        selected: _sortBy.startsWith('Price'),
+                        borderColor: _sortBy.startsWith('Price') ? AppColors.navy : AppColors.border,
+                        onTap: () {
+                          setState(() {
+                            if (_sortBy.startsWith('Price')) {
+                              _priceAscending = !_priceAscending;
+                            } else {
+                              _priceAscending = true;
+                            }
+                            _sortBy = _priceAscending ? 'Price ↑' : 'Price ↓';
+                          });
+                        },
                       ),
                       const SizedBox(width: 8),
                       ChoiceChipPill(
                         'Newest',
-                        selected: _sortBy == 'Recommended',
-                        borderColor: _sortBy == 'Recommended' ? AppColors.navy : AppColors.border,
-                        onTap: () => setState(() => _sortBy = 'Recommended'),
+                        selected: _sortBy == 'Newest',
+                        borderColor: _sortBy == 'Newest' ? AppColors.navy : AppColors.border,
+                        onTap: () {
+                          setState(() {
+                             _sortBy = (_sortBy == 'Newest') ? 'Recommended' : 'Newest';
+                          });
+                        },
                       ),
                       const SizedBox(width: 8),
                       ChoiceChipPill(
@@ -245,7 +273,11 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         onTap: () {
                           setState(() {
                             _filters ??= {};
-                            _filters!['type'] = 'Beachfront';
+                            if (_filters!['type'] == 'Beachfront') {
+                              _filters!.remove('type');
+                            } else {
+                              _filters!['type'] = 'Beachfront';
+                            }
                           });
                         },
                       ),

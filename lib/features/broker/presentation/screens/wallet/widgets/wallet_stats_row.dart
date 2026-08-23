@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class WalletStatsRow extends StatelessWidget {
   final String earned;
@@ -64,27 +65,25 @@ class _StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        border : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 11,
+            style: AppTheme.dm(
+              size: 11,
               color: AppColors.secondary,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 20,
+              weight: FontWeight.w700,
               color: valueColor ?? AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerCollectionMembersActions extends StatelessWidget {
   final List<String> memberNames;
@@ -56,11 +57,10 @@ class BrokerCollectionMembersActions extends StatelessWidget {
                           child: Center(
                             child: Text(
                               memberNames[i][0],
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
+                              style: AppTheme.dm(
+                                size: 12,
+                                weight: FontWeight.w600,
                                 color: Colors.white,
-                                fontFamily: 'DM Sans',
                               ),
                             ),
                           ),
@@ -79,14 +79,13 @@ class BrokerCollectionMembersActions extends StatelessWidget {
                             border:
                                 Border.all(color: AppColors.cream, width: 2),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               '+1',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
+                              style: AppTheme.dm(
+                                size: 10,
+                                weight: FontWeight.w600,
                                 color: Colors.white,
-                                fontFamily: 'DM Sans',
                               ),
                             ),
                           ),
@@ -99,10 +98,9 @@ class BrokerCollectionMembersActions extends StatelessWidget {
               Expanded(
                 child: Text(
                   'You, ${memberNames.take(2).join(', ')}${memberNames.length > 2 ? ' & ${memberNames.length - 2} more' : ''}',
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),
@@ -119,12 +117,11 @@ class BrokerCollectionMembersActions extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed: onChatTap,
                     icon: const Icon(Icons.chat_bubble_outline, size: 18),
-                    label: const Text(
+                    label: Text(
                       'Chat',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'DM Sans',
+                      style: AppTheme.dm(
+                        size: 13,
+                        weight: FontWeight.w600,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -146,12 +143,11 @@ class BrokerCollectionMembersActions extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed: onShareTap,
                     icon: const Icon(Icons.share, size: 18),
-                    label: const Text(
+                    label: Text(
                       'Share',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'DM Sans',
+                      style: AppTheme.dm(
+                        size: 13,
+                        weight: FontWeight.w600,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -173,12 +169,11 @@ class BrokerCollectionMembersActions extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed: onCompareTap,
                     icon: const Icon(Icons.compare_arrows, size: 18),
-                    label: const Text(
+                    label: Text(
                       'Compare',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'DM Sans',
+                      style: AppTheme.dm(
+                        size: 13,
+                        weight: FontWeight.w600,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(

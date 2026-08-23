@@ -4,8 +4,8 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
-import 'package:sahely/features/renter/presentation/screens/profile/pages/currency_selector_sheet.dart';
 
 class ProfileListRows extends StatelessWidget {
   final int walletBalance;
@@ -35,11 +35,10 @@ class ProfileListRows extends StatelessWidget {
             label: 'Wallet & Credit',
             trailing: Text(
               'EGP $walletBalance',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+              style: AppTheme.dm(
+                size: 14,
+                weight: FontWeight.w600,
                 color: AppColors.gold,
-                fontFamily: 'DM Sans',
               ),
             ),
             onTap: () => AppNavigation.goToWallet(context),
@@ -50,11 +49,10 @@ class ProfileListRows extends StatelessWidget {
             icon: Icons.star_outline,
             label: 'My Reviews',
             trailing: Text(
-              '$reviewsGiven given Â· $reviewsReceived received',
-              style: const TextStyle(
-                fontSize: 13,
+              '$reviewsGiven given · $reviewsReceived received',
+              style: AppTheme.dm(
+                size: 13,
                 color: AppColors.secondary,
-                fontFamily: 'DM Sans',
               ),
             ),
             onTap: () => AppNavigation.goToMyReviews(context),
@@ -87,12 +85,11 @@ class ProfileListRows extends StatelessWidget {
             label: 'Language',
             trailing: Text(
               context.watch<LocaleProvider>().locale.languageCode == 'ar'
-                  ? 'Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©'
+                  ? 'العربية'
                   : 'English',
-              style: const TextStyle(
-                fontSize: 13,
+              style: AppTheme.dm(
+                size: 13,
                 color: AppColors.secondary,
-                fontFamily: 'DM Sans',
               ),
             ),
             onTap: () => AppNavigation.goToLanguage(context),
@@ -106,22 +103,13 @@ class ProfileListRows extends StatelessWidget {
             label: 'Currency',
             trailing: Text(
               context.watch<CurrencyProvider>().selectedCurrency,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+              style: AppTheme.dm(
+                size: 14,
+                weight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
               ),
             ),
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.transparent,
-                isScrollControlled: true,
-                useRootNavigator: true,
-                builder: (context) => const CurrencySelectorSheet(),
-              );
-            },
+            onTap: () => AppNavigation.goToCurrency(context),
           ),
         ],
       ),
@@ -157,10 +145,9 @@ class _ListRow extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 14,
+                style: AppTheme.dm(
+                  size: 14,
                   color: AppColors.dark,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

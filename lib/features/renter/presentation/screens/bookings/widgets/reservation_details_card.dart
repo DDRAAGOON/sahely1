@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReservationDetailsCard extends StatelessWidget {
   final String orderNumber;
@@ -64,19 +65,17 @@ class ReservationDetailsCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTheme.dm(
+            size: 14,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 15,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

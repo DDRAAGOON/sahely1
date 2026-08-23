@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ListingIssueHeader extends StatelessWidget {
   final String title;
@@ -37,11 +38,10 @@ class ListingIssueHeader extends StatelessWidget {
           // Title
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 20,
+              weight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
         ],

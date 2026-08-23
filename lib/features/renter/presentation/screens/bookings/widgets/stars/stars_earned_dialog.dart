@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/stars/animated_star_icon.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/stars/stars_progress_bar.dart';
 
@@ -153,11 +154,10 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                       children: [
                         Text(
                           '+${_counterAnimation.value.toInt()}',
-                          style: const TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 36,
+                            weight: FontWeight.w700,
                             color: AppColors.gold,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -171,23 +171,21 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                   },
                 ),
                 const SizedBox(height: 8),
-                const Text(
+                Text(
                   'Stars earned!',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 22,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'For ${widget.reason}\n${widget.propertyName}',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: AppTheme.dm(
+                    size: 14,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                     height: 1.4,
                   ),
                 ),
@@ -217,12 +215,12 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                       ),
                       elevation: 0,
                     ),
-                    child: const Text(
+                    child: Text(
                       'Keep earning',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'DM Sans',
+                      style: AppTheme.dm(
+                        size: 15,
+                        weight: FontWeight.w700,
+                        color: AppColors.white
                       ),
                     ),
                   ),

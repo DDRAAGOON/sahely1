@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerHeader extends StatelessWidget {
   final String name;
@@ -22,22 +23,20 @@ class BrokerHeader extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Good morning,',
-                style: TextStyle(
-                  fontSize: 13,
+                style: AppTheme.dm(
+                  size: 13,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 name,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 22,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ],
@@ -60,11 +59,10 @@ class BrokerHeader extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   role,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                  style: AppTheme.dm(
+                    size: 13,
+                    weight: FontWeight.w600,
                     color: AppColors.gold,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

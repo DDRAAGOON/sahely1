@@ -2,6 +2,7 @@
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 
 import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
@@ -112,11 +113,10 @@ class MawsemSeasonPassCard extends StatelessWidget {
                     children: [
                       Text(
                         levelName,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
+                        style: AppTheme.dm(
+                          size: 17,
+                          weight: FontWeight.w700,
                           color: Colors.white,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -124,20 +124,18 @@ class MawsemSeasonPassCard extends StatelessWidget {
                         children: [
                           Text(
                             '$starsCount ',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
+                            style: AppTheme.dm(
+                              size: 13,
+                              weight: FontWeight.w700,
                               color: AppColors.mawsemGoldBright,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                           const Icon(Icons.star, color: AppColors.mawsemGoldBright, size: 12),
-                          const Text(
+                          Text(
                             ' this season',
-                            style: TextStyle(
-                              fontSize: 13,
+                            style: AppTheme.dm(
+                              size: 13,
                               color: AppColors.mawsemGoldBright,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ],
@@ -175,11 +173,10 @@ class MawsemSeasonPassCard extends StatelessWidget {
                   children: [
                     Text(
                       '$starsToNext ',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                      style: AppTheme.dm(
+                        size: 12,
+                        weight: FontWeight.w600,
                         color: AppColors.mawsemTextMuted,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                     const Icon(Icons.star, color: AppColors.mawsemTextMuted, size: 11),
@@ -187,10 +184,9 @@ class MawsemSeasonPassCard extends StatelessWidget {
                       nextLevel != null
                           ? ' to ${nextLevel['name']}'
                           : ' Max level reached!',
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: AppTheme.dm(
+                        size: 12,
                         color: AppColors.mawsemTextMuted,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],

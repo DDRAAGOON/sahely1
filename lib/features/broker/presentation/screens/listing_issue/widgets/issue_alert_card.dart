@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class IssueAlertCard extends StatelessWidget {
   final String title;
@@ -47,20 +48,18 @@ class IssueAlertCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 15,
+                    weight: FontWeight.w700,
                     color: AppColors.red,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '$flaggedBy · $flaggedDate',
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

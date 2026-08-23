@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class UnlockRewardCard extends StatelessWidget {
   final String title;
@@ -43,24 +44,22 @@ class UnlockRewardCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'YOUR UNLOCK REWARD',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 10,
+                    weight: FontWeight.w700,
                     color: AppColors.gold,
-                    fontFamily: 'DM Sans',
                     letterSpacing: 1,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 15,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

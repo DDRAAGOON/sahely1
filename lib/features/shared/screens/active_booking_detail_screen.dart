@@ -52,9 +52,9 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
 
   String get _location {
     if (widget.property != null) {
-      return '${widget.property!.area} Â· North Coast';
+      return '${widget.property!.area} · North Coast';
     }
-    return widget.bookingData?['location'] ?? 'Marassi Â· North Coast';
+    return widget.bookingData?['location'] ?? 'Marassi · North Coast';
   }
 
   String get _imageUrl {
@@ -67,11 +67,11 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
   }
 
   String get _dates {
-    return widget.bookingData?['dates'] ?? 'Jun 14â€“18';
+    return widget.bookingData?['dates'] ?? 'Jun 14–18';
   }
 
   String get _guests {
-    return widget.bookingData?['guests'] ?? '2A Â· 1C';
+    return widget.bookingData?['guests'] ?? '2A · 1C';
   }
 
   @override
@@ -199,7 +199,7 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
                 checklist: const [
                   {'label': 'Pool clean & usable', 'completed': true},
                   {
-                    'label': 'WiFi works (password on fridge)',
+                    'label': 'Wi-Fi works (password on fridge)',
                     'completed': true
                   },
                   {'label': 'AC in all rooms', 'completed': true},

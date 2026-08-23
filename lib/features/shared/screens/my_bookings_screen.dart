@@ -9,6 +9,9 @@ import 'package:sahely/features/renter/presentation/screens/bookings/widgets/boo
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/bookings_header.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/past_stays_section.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/upcoming_booking_card.dart';
+import 'package:sahely/core/widgets/entrance_faded.dart';
+import 'package:sahely/core/widgets/smooth_transition.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({super.key});
@@ -27,26 +30,31 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
       color: AppColors.cream,
       child: SafeArea(
         bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 12),
-            const BookingsHeader(),
-            const SizedBox(height: 20),
-            BookingsFilterTabs(
-              tabs: _tabs,
-              selectedTab: _selectedTab,
-              onTabSelected: (tab) {
-                setState(() {
-                  _selectedTab = tab;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: _buildContent(),
-            ),
-          ],
+        child: EntranceFaded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
+              const BookingsHeader(),
+              const SizedBox(height: 20),
+              BookingsFilterTabs(
+                tabs: _tabs,
+                selectedTab: _selectedTab,
+                onTabSelected: (tab) {
+                  setState(() {
+                    _selectedTab = tab;
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: SmoothListTransition(
+                  transitionKey: _selectedTab,
+                  child: _buildContent(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -62,12 +70,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
         children: [
           if (_selectedTab == 'Active') ...[
             if (bookingsProvider.activeBookings.isEmpty)
-              const Center(
+              Center(
                   child: Padding(
-                padding: EdgeInsets.only(top: 60),
+                padding: const EdgeInsets.only(top: 60),
                 child: Text('No active bookings found',
-                    style: TextStyle(
-                        color: AppColors.secondary, fontFamily: 'DM Sans')),
+                    style: AppTheme.dm(color: AppColors.secondary)),
               ))
             else
               ...bookingsProvider.activeBookings.map((booking) => Padding(
@@ -115,12 +122,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   )),
           ] else if (_selectedTab == 'Upcoming') ...[
             if (bookingsProvider.upcomingBookings.isEmpty)
-              const Center(
+              Center(
                   child: Padding(
-                padding: EdgeInsets.only(top: 60),
+                padding: const EdgeInsets.only(top: 60),
                 child: Text('No upcoming bookings found',
-                    style: TextStyle(
-                        color: AppColors.secondary, fontFamily: 'DM Sans')),
+                    style: AppTheme.dm(color: AppColors.secondary)),
               ))
             else
               ...bookingsProvider.upcomingBookings.map((booking) => Padding(
@@ -178,12 +184,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   )),
           ] else ...[
             if (bookingsProvider.pastBookings.isEmpty)
-              const Center(
+              Center(
                   child: Padding(
-                padding: EdgeInsets.only(top: 60),
+                padding: const EdgeInsets.only(top: 60),
                 child: Text('No past stays found',
-                    style: TextStyle(
-                        color: AppColors.secondary, fontFamily: 'DM Sans')),
+                    style: AppTheme.dm(color: AppColors.secondary)),
               ))
             else
               PastStaysSection(

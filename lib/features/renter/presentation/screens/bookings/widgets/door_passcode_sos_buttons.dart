@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class DoorPasscodeSosButtons extends StatelessWidget {
   final VoidCallback onDoorPasscodeTap;
@@ -24,13 +25,12 @@ class DoorPasscodeSosButtons extends StatelessWidget {
               onPressed: onDoorPasscodeTap,
               icon: const Icon(Icons.lock_open_outlined,
                   size: 18, color: AppColors.navy),
-              label: const Text(
+              label: Text(
                 'Door Passcode',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 14,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               style: ElevatedButton.styleFrom(
@@ -54,13 +54,12 @@ class DoorPasscodeSosButtons extends StatelessWidget {
               onPressed: onSOSTap,
               icon: const Icon(Icons.warning_amber_rounded,
                   size: 18, color: Colors.white),
-              label: const Text(
+              label: Text(
                 'SOS',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 14,
+                  weight: FontWeight.w700,
                   color: Colors.white,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               style: ElevatedButton.styleFrom(

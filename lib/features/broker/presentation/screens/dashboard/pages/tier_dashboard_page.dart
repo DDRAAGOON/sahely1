@@ -4,7 +4,6 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 
 class TierDashboardPage extends StatelessWidget {
   const TierDashboardPage({super.key});
@@ -116,13 +115,14 @@ class TierDashboardPage extends StatelessWidget {
                     text: TextSpan(
                         style: AppTheme.dm(
                             size: 11, color: const Color(0xFF9FB0CF)),
-                        children: const [
+                        children: [
                       TextSpan(
                           text: '45 more',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                              size: 11,
+                              weight: FontWeight.w700,
                               color: AppColors.gold)),
-                      TextSpan(text: ' to Elite (5%)')
+                      const TextSpan(text: ' to Elite (5%)')
                     ])),
                 Text('100',
                     style:

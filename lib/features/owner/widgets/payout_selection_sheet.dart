@@ -88,10 +88,7 @@ class PayoutSelectionSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isSelected ? AppColors.gold : AppColors.border,
-                        width: isSelected ? 2 : 1,
-                      ),
+                      border : null,
                     ),
                     child: Row(
                       children: [
@@ -143,7 +140,7 @@ class PayoutSelectionSheet extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.white.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border, style: BorderStyle.solid),
+                border : null,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

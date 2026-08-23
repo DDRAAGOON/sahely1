@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class HomeHeader extends StatelessWidget {
   final VoidCallback onFilterTap;
@@ -53,15 +54,15 @@ class HomeHeader extends StatelessWidget {
               child: TextField(
                 controller: searchController,
                 onChanged: onSearchChanged,
-                style: const TextStyle(fontSize: 13, fontFamily: 'DM Sans'),
-                decoration: const InputDecoration(
+                style: AppTheme.dm(size: 13),
+                decoration: InputDecoration(
                   hintText: 'Search properties',
                   hintStyle:
-                      TextStyle(color: AppColors.secondary, fontSize: 13),
+                      AppTheme.dm(color: AppColors.secondary, size: 13),
                   prefixIcon:
-                      Icon(Icons.search, size: 18, color: AppColors.secondary),
+                      const Icon(Icons.search, size: 18, color: AppColors.secondary),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 10),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
                 ),
               ),
             ),

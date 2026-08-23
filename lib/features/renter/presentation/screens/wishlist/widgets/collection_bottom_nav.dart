@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CollectionBottomNav extends StatelessWidget {
   final int activeIndex;
@@ -65,13 +66,12 @@ class CollectionBottomNav extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       items[index].label,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                      style: AppTheme.dm(
+                        size: 11,
+                        weight: FontWeight.w600,
                         color: isActive
                             ? AppColors.navy
                             : AppColors.navy.withValues(alpha: 0.4),
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],

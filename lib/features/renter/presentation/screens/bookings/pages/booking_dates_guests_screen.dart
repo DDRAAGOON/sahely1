@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
-import 'package:sahely/features/renter/presentation/verification/presentation/widgets/blocked_action_gate.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/booking_calendar.dart';
@@ -118,32 +116,6 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
 
   Future<void> _confirmAndPay() async {
     if (_checkInDate == null || _checkOutDate == null) return;
-
-    final verificationCubit = context.read<VerificationCubit>();
-    if (!verificationCubit.canPerformAction()) {
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        isScrollControlled: true,
-        builder: (context) {
-          final dataState = verificationCubit.currentDataState;
-          return BlockedActionGate(
-            emailVerified: dataState.emailVerified,
-            phoneVerified: dataState.phoneVerified,
-            idVerified: dataState.idVerified,
-            cardAdded: dataState.cardAdded,
-            onCompleteSetup: () {
-              Navigator.pop(context);
-              AppNavigation.goToAddCard(context);
-            },
-            onNotNow: () {
-              Navigator.pop(context);
-            },
-          );
-        },
-      );
-      return;
-    }
 
     setState(() => _isConfirming = true);
 
@@ -331,17 +303,16 @@ class _BookingDatesGuestsScreenState extends State<BookingDatesGuestsScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-              fontSize: 12, color: AppColors.secondary, fontFamily: 'DM Sans'),
+          style: AppTheme.dm(
+              size: 12, color: AppColors.secondary),
         ),
         const SizedBox(height: 4),
         Text(
           date != null ? _formatDate(date) : 'Select',
-          style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: AppColors.navy,
-              fontFamily: 'DM Sans'),
+          style: AppTheme.dm(
+              size: 16,
+              weight: FontWeight.w700,
+              color: AppColors.navy),
         ),
       ],
     );

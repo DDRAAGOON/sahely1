@@ -63,8 +63,7 @@ class BrokerPropertyCard extends StatelessWidget {
                   ),
                 ],
               ),
-            )
-          : null,
+            ) : null,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class WhyNotListedSection extends StatelessWidget {
   final String explanation;
@@ -17,13 +18,12 @@ class WhyNotListedSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section Title
-          const Text(
+          Text(
             'Why it isn\'t listed yet',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 14,
+              weight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 12),
@@ -36,25 +36,24 @@ class WhyNotListedSection extends StatelessWidget {
               border: Border.all(color: AppColors.border),
             ),
             child: RichText(
-              text: const TextSpan(
-                style: TextStyle(
-                  fontSize: 13,
+              text: TextSpan(
+                style: AppTheme.dm(
+                  size: 13,
                   color: AppColors.dark,
-                  fontFamily: 'DM Sans',
                   height: 1.5,
                 ),
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text: 'The review team paused this listing because the current photos don\'t meet Sahely\'s quality bar — they\'re low-light and don\'t show the full space, so guests can\'t see what they\'re booking. The listing stays ',
                   ),
                   TextSpan(
                     text: 'offline',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      weight: FontWeight.w700,
                       color: AppColors.red,
                     ),
                   ),
-                  TextSpan(
+                  const TextSpan(
                     text: ' until the items above are added and it passes a re-review (about 24h). No commission is earned while a referred property is offline.',
                   ),
                 ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class ReferredPropertyCard extends StatelessWidget {
   final Map<String, dynamic> property;
@@ -12,7 +14,7 @@ class ReferredPropertyCard extends StatelessWidget {
   });
 
   String _formatPrice(int piastres) {
-    return 'EGP ${(piastres / 100).toStringAsFixed(0)}';
+    return 'EGP ${CurrencyFormatter.formatNumber(piastres ~/ 100)}';
   }
 
   @override
@@ -23,7 +25,7 @@ class ReferredPropertyCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: AppColors.borderDefault),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,16 +65,15 @@ class ReferredPropertyCard extends StatelessWidget {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.green,
+                      color: AppColors.success,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Accepted · Live',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                      style: AppTheme.dm(
+                        size: 11,
+                        weight: FontWeight.w600,
                         color: Colors.white,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ),
@@ -88,11 +89,10 @@ class ReferredPropertyCard extends StatelessWidget {
                   // Name & Location
                   Text(
                     property['name']?.toString() ?? '',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 16,
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -106,10 +106,9 @@ class ReferredPropertyCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         property['location']?.toString() ?? '',
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style: AppTheme.dm(
+                          size: 12,
                           color: AppColors.secondary,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],
@@ -129,33 +128,31 @@ class ReferredPropertyCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             '${property['rating']} · ${property['reviews']}',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.dark,
-                              fontFamily: 'DM Sans',
+                            style: AppTheme.dm(
+                              size: 12,
+                              weight: FontWeight.w600,
+                              color: AppColors.ink,
                             ),
                           ),
                         ],
                       ),
                       RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 14,
+                            weight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                           children: [
                             TextSpan(
                               text: _formatPrice(
                                   (property['pricePerNight'] ?? 0).toInt()),
                             ),
-                            const TextSpan(
+                            TextSpan(
                               text: '/night',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400,
+                              style: AppTheme.dm(
+                                size: 11,
+                                weight: FontWeight.w400,
                                 color: AppColors.secondary,
                               ),
                             ),
@@ -169,9 +166,10 @@ class ReferredPropertyCard extends StatelessWidget {
                   Wrap(
                     spacing: 6,
                     runSpacing: 6,
-                    children: (property['amenities'] as List<String>)
+                    children: (property['amenities'] as List<dynamic>? ?? [])
                         .map((amenity) {
-                      final isPets = amenity == 'Pets';
+                      final name = amenity.toString();
+                      final isPets = name == 'Pets' || name == 'Pets OK';
                       return Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
@@ -182,11 +180,7 @@ class ReferredPropertyCard extends StatelessWidget {
                               ? const Color(0xFFE8F5E9)
                               : AppColors.cream,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: isPets
-                                ? const Color(0xFF2E7D32)
-                                : AppColors.border,
-                          ),
+                          border: Border.all(color: AppColors.borderDefault),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -199,14 +193,13 @@ class ReferredPropertyCard extends StatelessWidget {
                               ),
                             if (isPets) const SizedBox(width: 4),
                             Text(
-                              amenity,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w500,
+                              name,
+                              style: AppTheme.dm(
+                                size: 11,
+                                weight: FontWeight.w500,
                                 color: isPets
                                     ? const Color(0xFF2E7D32)
-                                    : AppColors.dark,
-                                fontFamily: 'DM Sans',
+                                    : AppColors.ink,
                               ),
                             ),
                           ],

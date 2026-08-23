@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
 
 class OwnerAiChatScreen extends StatefulWidget {
@@ -40,7 +41,7 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
 
     if (text.toLowerCase().contains('price')) {
       response =
-          "For Hacienda Bay villas your size, August peak runs EGP 5,200–5,800/night. Azure is at 4,500 — raising to 5,400 could add ~EGP 16k/month at your current occupancy. Want me to update it?";
+          "For Hacienda Bay villas your size, August peak runs ${CurrencyFormatter.defaultSymbol} 5,200–5,800/night. Azure is at 4,500 — raising to 5,400 could add ~${CurrencyFormatter.format(16000)}/month at your current occupancy. Want me to update it?";
       showAction = true;
     } else if (text.toLowerCase().contains('pending')) {
       response =
@@ -343,7 +344,7 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-              border: Border.all(color: AppColors.gold),
+              border : null,
               borderRadius: BorderRadius.circular(18)),
           child: Text(t,
               style: AppTheme.dm(size: 12, color: const Color(0xFF9A7A22)))));

@@ -1,7 +1,37 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/renter/presentation/screens/wallet/pages/add_credit_sheet.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+
+class PaymentMethod {
+  final String name;
+  final String subtitle;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBgColor;
+  final String processingTime;
+
+  const PaymentMethod({
+    required this.name,
+    required this.subtitle,
+    required this.icon,
+    required this.iconColor,
+    required this.iconBgColor,
+    required this.processingTime,
+  });
+}
+
+class RegisteredPaymentMethod {
+  final String methodId;
+  final String displayLabel;
+  final bool isDefault;
+
+  const RegisteredPaymentMethod({
+    required this.methodId,
+    required this.displayLabel,
+    this.isDefault = false,
+  });
+}
 
 class PaymentMethodTile extends StatelessWidget {
   final PaymentMethod method;
@@ -58,11 +88,10 @@ class PaymentMethodTile extends StatelessWidget {
                       Expanded(
                         child: Text(
                           method.name,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.dark,
-                            fontFamily: 'DM Sans',
+                          style: AppTheme.dm(
+                            size: 14,
+                            weight: FontWeight.w600,
+                            color: AppColors.navy,
                           ),
                         ),
                       ),
@@ -77,22 +106,21 @@ class PaymentMethodTile extends StatelessWidget {
                             color: const Color(0xFFE8F5E9),
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.check_circle,
                                 size: 10,
                                 color: Color(0xFF2E7D32),
                               ),
-                              SizedBox(width: 3),
+                              const SizedBox(width: 3),
                               Text(
                                 'Registered',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF2E7D32),
-                                  fontFamily: 'DM Sans',
+                                style: AppTheme.dm(
+                                  size: 10,
+                                  weight: FontWeight.w600,
+                                  color: const Color(0xFF2E7D32),
                                 ),
                               ),
                             ],
@@ -105,21 +133,19 @@ class PaymentMethodTile extends StatelessWidget {
                     children: [
                       Text(
                         method.subtitle,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.secondary,
-                          fontFamily: 'DM Sans',
+                        style: AppTheme.dm(
+                          size: 12,
+                          color: AppColors.muted,
                         ),
                       ),
                       if (isRegistered && registeredData != null) ...[
                         const SizedBox(width: 6),
                         Text(
                           '· ${registeredData!.displayLabel}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                          style: AppTheme.dm(
+                            size: 12,
+                            weight: FontWeight.w600,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ],
@@ -131,15 +157,14 @@ class PaymentMethodTile extends StatelessWidget {
                       const Icon(
                         Icons.schedule,
                         size: 11,
-                        color: AppColors.secondary,
+                        color: AppColors.muted,
                       ),
                       const SizedBox(width: 3),
                       Text(
                         method.processingTime,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppColors.secondary,
-                          fontFamily: 'DM Sans',
+                        style: AppTheme.dm(
+                          size: 11,
+                          color: AppColors.muted,
                         ),
                       ),
                     ],
@@ -158,7 +183,7 @@ class PaymentMethodTile extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected ? AppColors.navy : AppColors.border,
+                    color: isSelected ? AppColors.navy : AppColors.borderDefault,
                     width: 1.5,
                   ),
                 ),
@@ -172,8 +197,7 @@ class PaymentMethodTile extends StatelessWidget {
                             color: AppColors.navy,
                           ),
                         ),
-                      )
-                    : null,
+                      ) : null,
               )
             else
               GestureDetector(
@@ -186,15 +210,13 @@ class PaymentMethodTile extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.gold.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.gold, width: 0.5),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Add',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
+                    style: AppTheme.dm(
+                      size: 11,
+                      weight: FontWeight.w600,
                       color: AppColors.gold,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ),

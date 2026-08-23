@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class RecentCommissionCard extends StatelessWidget {
   final Map<String, dynamic> commission;
@@ -26,20 +27,18 @@ class RecentCommissionCard extends StatelessWidget {
               children: [
                 Text(
                   commission['propertyName']?.toString() ?? '',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 15,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   commission['date']?.toString() ?? '',
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -51,11 +50,10 @@ class RecentCommissionCard extends StatelessWidget {
             children: [
               Text(
                 '${commission['amount']}',
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 15,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 4),
@@ -67,11 +65,10 @@ class RecentCommissionCard extends StatelessWidget {
                 ),
                 child: Text(
                   status,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 10,
+                    weight: FontWeight.w700,
                     color: Colors.white,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
-class FilterChips extends StatelessWidget {
+class SahelyFilterChips extends StatelessWidget {
   final List<String> filters;
   final String selectedFilter;
   final ValueChanged<String> onFilterSelected;
 
-  const FilterChips({
+  const SahelyFilterChips({
     super.key,
     required this.filters,
     required this.selectedFilter,
@@ -35,19 +36,15 @@ class FilterChips extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.navy : AppColors.white,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: isSelected ? AppColors.navy : AppColors.border,
-                  width: 1,
-                ),
+                border : null,
               ),
               alignment: Alignment.center,
               child: Text(
                 filter,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
                   color: isSelected ? AppColors.white : AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

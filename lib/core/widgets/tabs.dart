@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class SegmentTabs extends StatelessWidget {
   const SegmentTabs(
@@ -17,15 +18,17 @@ class SegmentTabs extends StatelessWidget {
       children: [
         for (var i = 0; i < tabs.length; i++) ...[
           Expanded(
-            child: GestureDetector(
+            child: BouncyButton(
               onTap: () => onTap?.call(i),
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
                 height: 36,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: i == active ? AppColors.navy : AppColors.white,
-                  border:
-                      i == active ? null : Border.all(color: AppColors.navy),
+                  border: i == active
+                      ? Border.all(color: AppColors.navy, width: 0) : null,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(tabs[i],

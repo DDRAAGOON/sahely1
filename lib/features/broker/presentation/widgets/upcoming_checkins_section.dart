@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 import 'package:sahely/features/broker/presentation/widgets/upcoming_checkin_card.dart';
 
 class UpcomingCheckinsSection extends StatelessWidget {
@@ -25,24 +27,22 @@ class UpcomingCheckinsSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Upcoming Check-ins',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
-              GestureDetector(
+              BouncyButton(
                 onTap: onSeeAllTap,
-                child: const Text(
-                  'See all',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                child: Text(
+                  'See All',
+                  style: AppTheme.dm(
+                    size: 14,
+                    weight: FontWeight.w600,
                     color: AppColors.gold,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),
@@ -50,7 +50,7 @@ class UpcomingCheckinsSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           // Check-in Cards
-          ...checkins.where((c) => c != null).map((checkin) {
+          ...checkins.map((checkin) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: UpcomingCheckinCard(

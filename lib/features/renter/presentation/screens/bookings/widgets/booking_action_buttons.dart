@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BookingActionButtons extends StatelessWidget {
   final VoidCallback onViewBookings;
@@ -26,12 +27,12 @@ class BookingActionButtons extends StatelessWidget {
               ),
               elevation: 0,
             ),
-            child: const Text(
+            child: Text(
               'View My Bookings',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'DM Sans',
+              style: AppTheme.dm(
+                size: 15,
+                weight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
           ),

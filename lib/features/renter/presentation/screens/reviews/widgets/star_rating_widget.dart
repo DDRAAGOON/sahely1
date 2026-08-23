@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class StarRatingWidget extends StatelessWidget {
   final int selectedRating;
@@ -17,13 +18,12 @@ class StarRatingWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
+        Text(
           'How was your stay?',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 20,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 16),

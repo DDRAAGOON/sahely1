@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReferredPropertiesDescription extends StatelessWidget {
   final String text;
@@ -15,10 +16,9 @@ class ReferredPropertiesDescription extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Text(
         text,
-        style: const TextStyle(
-          fontSize: 13,
+        style: AppTheme.dm(
+          size: 13,
           color: AppColors.secondary,
-          fontFamily: 'DM Sans',
           height: 1.4,
         ),
       ),

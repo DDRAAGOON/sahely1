@@ -1,8 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReportIssueSection extends StatelessWidget {
   final TextEditingController controller;
@@ -30,18 +29,17 @@ class ReportIssueSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
-          const Row(
+          Row(
             children: [
-              Icon(Icons.warning_amber_rounded,
+              const Icon(Icons.warning_amber_rounded,
                   color: Color(0xFF991B1B), size: 20),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 'Report an issue',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF991B1B),
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
+                  color: const Color(0xFF991B1B),
                 ),
               ),
             ],
@@ -65,16 +63,15 @@ class ReportIssueSection extends StatelessWidget {
             child: TextField(
               controller: controller,
               maxLines: 3,
-              style: const TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFF4B5563),
-                  fontFamily: 'DM Sans',
+              style: AppTheme.dm(
+                  size: 13,
+                  color: const Color(0xFF4B5563),
                   height: 1.5),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'e.g. Microwave doesn\'t turn on...',
-                hintStyle: TextStyle(color: Color(0xFF9CA3AF)),
+                hintStyle: AppTheme.dm(color: const Color(0xFF9CA3AF), size: 13),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.all(12),
+                contentPadding: const EdgeInsets.all(12),
               ),
             ),
           ),
@@ -103,23 +100,20 @@ class ReportIssueSection extends StatelessWidget {
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      border: Border.all(
-                          color: AppColors.gold,
-                          width: 1,
-                          style: BorderStyle.solid),
+                      border: Border.all(color: AppColors.borderDefault, width: 1),
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.transparent,
                     ),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.add, color: AppColors.gold, size: 24),
-                        SizedBox(height: 4),
+                        const Icon(Icons.add, color: AppColors.gold, size: 24),
+                        const SizedBox(height: 4),
                         Text('Photo',
-                            style: TextStyle(
+                            style: AppTheme.dm(
                                 color: AppColors.gold,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600)),
+                                size: 11,
+                                weight: FontWeight.w600)),
                       ],
                     ),
                   ),

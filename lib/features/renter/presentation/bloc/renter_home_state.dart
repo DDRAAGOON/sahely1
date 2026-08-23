@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 abstract class RenterHomeState extends Equatable {
   const RenterHomeState();
@@ -12,7 +13,7 @@ class RenterHomeInitial extends RenterHomeState {}
 class RenterHomeLoading extends RenterHomeState {}
 
 class RenterHomeLoaded extends RenterHomeState {
-  final List<Map<String, dynamic>> properties;
+  final List<Property> properties;
 
   const RenterHomeLoaded(this.properties);
 

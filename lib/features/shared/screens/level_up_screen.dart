@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 
 class LevelUpScreen extends StatelessWidget {
   const LevelUpScreen({super.key});

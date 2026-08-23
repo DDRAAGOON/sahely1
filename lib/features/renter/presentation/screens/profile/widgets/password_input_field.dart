@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PasswordInputField extends StatefulWidget {
   final TextEditingController controller;
@@ -49,11 +50,10 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
       children: [
         Text(
           widget.label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+          style: AppTheme.dm(
+            size: 13,
+            weight: FontWeight.w600,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 8),
@@ -65,10 +65,9 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
           validator: widget.validator,
           decoration: InputDecoration(
             hintText: '••••••••',
-            hintStyle: const TextStyle(
-              fontSize: 14,
+            hintStyle: AppTheme.dm(
+              size: 14,
               color: AppColors.placeholder,
-              fontFamily: 'DM Sans',
             ),
             filled: true,
             fillColor: AppColors.white,
@@ -109,10 +108,9 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
               ),
             ),
           ),
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTheme.dm(
+            size: 14,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

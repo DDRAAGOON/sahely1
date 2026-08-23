@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReferralCodeCard extends StatelessWidget {
   final String code;
@@ -32,22 +33,20 @@ class ReferralCodeCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Your referral code',
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   code,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 18,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -62,22 +61,21 @@ class ReferralCodeCard extends StatelessWidget {
                 color: AppColors.navy,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.copy,
                     color: Colors.white,
                     size: 16,
                   ),
-                  SizedBox(width: 6),
+                  const SizedBox(width: 6),
                   Text(
                     'Copy',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                    style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w600,
                       color: Colors.white,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

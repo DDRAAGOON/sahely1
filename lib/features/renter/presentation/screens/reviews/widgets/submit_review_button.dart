@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class SubmitReviewButton extends StatelessWidget {
   final bool isLoading;
@@ -39,19 +40,19 @@ class SubmitReviewButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
                 ),
               )
-            : const Row(
+            : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Submit Review & earn +5',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      size: 15,
+                      weight: FontWeight.w700,
+                      color: AppColors.white,
                     ),
                   ),
-                  SizedBox(width: 6),
-                  Icon(
+                  const SizedBox(width: 6),
+                  const Icon(
                     Icons.star,
                     size: 18,
                     color: AppColors.gold,

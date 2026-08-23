@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ProfileHeader extends StatelessWidget {
   final String name;
@@ -89,32 +90,29 @@ class ProfileHeader extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 18,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   email,
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: AppTheme.dm(
+                    size: 13,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 6),
                 GestureDetector(
                   onTap: () => AppNavigation.goToEditProfile(context),
-                  child: const Text(
+                  child: Text(
                     'Edit Profile',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                    style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w600,
                       color: AppColors.gold,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ),

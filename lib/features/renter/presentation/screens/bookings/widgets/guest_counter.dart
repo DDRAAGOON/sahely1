@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class GuestCounter extends StatelessWidget {
   final String label;
@@ -27,7 +28,7 @@ class GuestCounter extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.borderDefault),
       ),
       child: Row(
         children: [
@@ -38,20 +39,18 @@ class GuestCounter extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                  style: AppTheme.dm(
+                    size: 14,
+                    weight: FontWeight.w600,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
+                  style: AppTheme.dm(
+                    size: 11,
+                    color: AppColors.muted,
                   ),
                 ),
               ],
@@ -66,17 +65,14 @@ class GuestCounter extends StatelessWidget {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: canDecrement ? AppColors.white : AppColors.border,
+                    color: canDecrement ? AppColors.white : AppColors.faint,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: canDecrement ? AppColors.navy : AppColors.border,
-                      width: 1.5,
-                    ),
+                    border: Border.all(color: canDecrement ? AppColors.navy : AppColors.borderDefault),
                   ),
                   child: Icon(
                     Icons.remove,
                     size: 16,
-                    color: canDecrement ? AppColors.navy : AppColors.border,
+                    color: canDecrement ? AppColors.navy : AppColors.borderDefault,
                   ),
                 ),
               ),
@@ -86,11 +82,10 @@ class GuestCounter extends StatelessWidget {
                 child: Text(
                   '$value',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 16,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),

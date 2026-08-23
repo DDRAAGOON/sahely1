@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class WalletBalanceCard extends StatelessWidget {
   final int balance; // In piastres
@@ -67,7 +68,7 @@ class WalletBalanceCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'EGP ${egpBalance.toStringAsFixed(0)}',
+                  '${CurrencyFormatter.defaultSymbol} ${CurrencyFormatter.formatNumber(egpBalance)}',
                   style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w700,

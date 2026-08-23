@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class GuestSummaryNote extends StatelessWidget {
   final int totalGuests;
@@ -45,10 +46,9 @@ class GuestSummaryNote extends StatelessWidget {
           Expanded(
             child: Text(
               '$guestText — the host is notified of your party size',
-              style: const TextStyle(
-                fontSize: 12,
+              style: AppTheme.dm(
+                size: 12,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
                 height: 1.4,
               ),
             ),

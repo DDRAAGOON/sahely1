@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ExpiryCvvFields extends StatefulWidget {
   final TextEditingController expiryController;
@@ -29,13 +30,12 @@ class _ExpiryCvvFieldsState extends State<ExpiryCvvFields> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Expiry Date',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
                   color: AppColors.dark,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 8),
@@ -49,10 +49,9 @@ class _ExpiryCvvFieldsState extends State<ExpiryCvvFields> {
                 maxLength: 5,
                 decoration: InputDecoration(
                   hintText: 'MM/YY',
-                  hintStyle: const TextStyle(
-                    fontSize: 14,
+                  hintStyle: AppTheme.dm(
+                    size: 14,
                     color: AppColors.placeholder,
-                    fontFamily: 'DM Sans',
                   ),
                   filled: true,
                   fillColor: AppColors.white,
@@ -75,10 +74,9 @@ class _ExpiryCvvFieldsState extends State<ExpiryCvvFields> {
                   ),
                   counterText: '',
                 ),
-                style: const TextStyle(
-                  fontSize: 14,
+                style: AppTheme.dm(
+                  size: 14,
                   color: AppColors.dark,
-                  fontFamily: 'DM Sans',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -101,13 +99,12 @@ class _ExpiryCvvFieldsState extends State<ExpiryCvvFields> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'CVV',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
                   color: AppColors.dark,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 8),
@@ -121,10 +118,9 @@ class _ExpiryCvvFieldsState extends State<ExpiryCvvFields> {
                 ],
                 decoration: InputDecoration(
                   hintText: '•••',
-                  hintStyle: const TextStyle(
-                    fontSize: 14,
+                  hintStyle: AppTheme.dm(
+                    size: 14,
                     color: AppColors.placeholder,
-                    fontFamily: 'DM Sans',
                   ),
                   filled: true,
                   fillColor: AppColors.white,
@@ -165,10 +161,9 @@ class _ExpiryCvvFieldsState extends State<ExpiryCvvFields> {
                   ),
                   counterText: '',
                 ),
-                style: const TextStyle(
-                  fontSize: 14,
+                style: AppTheme.dm(
+                  size: 14,
                   color: AppColors.dark,
-                  fontFamily: 'DM Sans',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {

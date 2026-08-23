@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class StarsEarnedCard extends StatelessWidget {
   final int starsEarned;
@@ -28,11 +29,10 @@ class StarsEarnedCard extends StatelessWidget {
           Expanded(
             child: Text(
               'You earned $starsEarned Sahel Stars on this booking!',
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+              style: AppTheme.dm(
+                size: 13,
+                weight: FontWeight.w600,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
               ),
             ),
           ),

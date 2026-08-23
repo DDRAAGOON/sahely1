@@ -1,6 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class BrokerLevelProgressCard extends StatelessWidget {
   final String currentLevelName;
@@ -26,7 +28,7 @@ class BrokerLevelProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -59,20 +61,18 @@ class BrokerLevelProgressCard extends StatelessWidget {
                     children: [
                       Text(
                         currentLevelName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                        style: AppTheme.dm(
+                          size: 16,
+                          weight: FontWeight.w700,
                           color: Colors.white,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         '$currentStars ★ this season',
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style: AppTheme.dm(
+                          size: 12,
                           color: AppColors.gold,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],
@@ -106,10 +106,9 @@ class BrokerLevelProgressCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               '$starsToNextLevel ★ to $nextLevelName',
-              style: const TextStyle(
-                fontSize: 12,
+              style: AppTheme.dm(
+                size: 12,
                 color: Colors.white70,
-                fontFamily: 'DM Sans',
               ),
             ),
           ],

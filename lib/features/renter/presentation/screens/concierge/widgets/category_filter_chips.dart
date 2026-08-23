@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CategoryFilterChips extends StatelessWidget {
   final List<String> categories;
@@ -34,17 +35,15 @@ class CategoryFilterChips extends StatelessWidget {
                 color: isSelected ? AppColors.navy : AppColors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: isSelected
-                    ? null
-                    : Border.all(color: AppColors.navy, width: 1),
+                    ? null : null,
               ),
               alignment: Alignment.center,
               child: Text(
                 category,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
                   color: isSelected ? AppColors.white : AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

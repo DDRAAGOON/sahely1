@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerStatsRow extends StatelessWidget {
   final String thisMonth;
@@ -16,9 +17,9 @@ class BrokerStatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+    return IntrinsicHeight(
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: _StatCard(
@@ -27,7 +28,7 @@ class BrokerStatsRow extends StatelessWidget {
               onTap: () => AppNavigation.goToBrokerWallet(context),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           Expanded(
             child: _StatCard(
               label: 'Total Earned',
@@ -35,7 +36,7 @@ class BrokerStatsRow extends StatelessWidget {
               onTap: () => AppNavigation.goToBrokerWallet(context),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 10),
           Expanded(
             child: _StatCard(
               label: 'Live Props',
@@ -65,31 +66,40 @@ class _StatCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.border),
+          border : null,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 11,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTheme.dm(
+                size: 11,
                 color: AppColors.secondary,
-                fontFamily: 'DM Sans',
+                height: 1.2,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+              style: AppTheme.dm(
+                size: 17,
+                weight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
               ),
             ),
           ],

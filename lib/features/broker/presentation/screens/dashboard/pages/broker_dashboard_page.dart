@@ -13,8 +13,25 @@ class BrokerDashboardPage extends StatelessWidget {
       backgroundColor: AppColors.cream,
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 120),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.border),
+                  ),
+                  child: const Icon(Icons.chevron_left, color: AppColors.navy),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             // 1. Header
             Row(children: [
               const AvatarCircle(
@@ -104,20 +121,24 @@ class BrokerDashboardPage extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                   child: _actionTile(context, 'Refer', Icons.person_add_outlined,
-                      () => AppNavigation.goToBrokerRefer(context))),
+                      () => AppNavigation.goToShareEarn(context))),
             ]),
             const SizedBox(height: 12),
 
             // 4. White Stats Row
-            Row(children: [
-              _whiteStat(context, 'This Month', '18.2k',
-                  () => AppNavigation.goToBrokerWallet(context)),
-              const SizedBox(width: 10),
-              _whiteStat(context, 'Total Earned', '312k',
-                  () => AppNavigation.goToBrokerWallet(context)),
-              const SizedBox(width: 10),
-              _whiteStat(context, 'Live Props', '51',
-                  () => AppNavigation.goToBrokerPortfolio(context)),
+            StatRow(cards: [
+              StatCard(
+                  value: '18.2k',
+                  label: 'This Month',
+                  onTap: () => AppNavigation.goToBrokerWallet(context)),
+              StatCard(
+                  value: '312k',
+                  label: 'Total Earned',
+                  onTap: () => AppNavigation.goToBrokerWallet(context)),
+              StatCard(
+                  value: '51',
+                  label: 'Live Props',
+                  onTap: () => AppNavigation.goToBrokerPortfolio(context)),
             ]),
             const SizedBox(height: 12),
 
@@ -162,8 +183,8 @@ class BrokerDashboardPage extends StatelessWidget {
                   style: AppTheme.dm(
                       size: 18, weight: FontWeight.w700, color: AppColors.navy)),
               GestureDetector(
-                onTap: () => AppNavigation.goToBrokerBookings(context),
-                child: Text('See all',
+                onTap: () => AppNavigation.goToBrokerBookings(context, tab: 'Upcoming'),
+                child: Text('See All',
                     style: AppTheme.dm(
                         size: 13,
                         weight: FontWeight.w600,
@@ -240,39 +261,17 @@ class BrokerDashboardPage extends StatelessWidget {
             ])),
       );
 
-  Widget _whiteStat(
-          BuildContext context, String l, String v, VoidCallback onTap) =>
-      Expanded(
-        child: GestureDetector(
-          onTap: onTap,
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.border)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(l,
-                    style: AppTheme.dm(size: 10, color: AppColors.muted),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis),
-                const SizedBox(height: 4),
-                Text(v,
-                    style: AppTheme.dm(
-                        size: 16, weight: FontWeight.w700, color: AppColors.navy)),
-              ],
-            ),
-          ),
-        ),
-      );
-
   Widget _checkInItem(BuildContext context, String name, String meta, String img,
           String margin) =>
       GestureDetector(
-        onTap: () => AppNavigation.goToBrokerBookings(context),
+        onTap: () => AppNavigation.goToBookingUpcoming(context, extra: {
+          'propertyName': name,
+          'location': 'Marassi · North Coast',
+          'imageUrl': img,
+          'total': margin,
+          'guests': '4 guests',
+          'nights': 4,
+        }),
         behavior: HitTestBehavior.opaque,
         child: WhiteCard(
           padding: const EdgeInsets.all(12),

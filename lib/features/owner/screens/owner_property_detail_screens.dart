@@ -12,6 +12,8 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/sample_data.dart';
 
+import '../../../core/utils/currency_formatter.dart';
+
 class OwnerPropertyInsightsScreen extends StatelessWidget {
   final Property? property;
 
@@ -394,7 +396,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () => AppNavigation.goToMyReviews(context),
                       child: Text(
-                        'See all',
+                        'See All',
                         style: AppTheme.dm(
                           size: 13,
                           weight: FontWeight.w700,
@@ -558,7 +560,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 _upcomingBookingItem(
-                    'Omar K.', 'Jun 21–25', '4 guests', 'EGP 18,000', const Color(0xFF457B9D)),
+                    'Omar K.', 'Jun 21–25', '4 guests', CurrencyFormatter.format(18000), const Color(0xFF457B9D)),
                 const SizedBox(height: 120),
               ],
             ),
@@ -587,7 +589,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(child: _statCard('★ 4.8', 'Rating', trend: '124 reviews')),
             const SizedBox(width: 12),
-            Expanded(child: _statCard('68.4k', 'Revenue', trend: 'EGP / mo')),
+            Expanded(child: _statCard('68.4k', 'Revenue', trend: '${CurrencyFormatter.defaultSymbol} / mo')),
           ],
         ),
       ],
@@ -633,7 +635,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                   style: AppTheme.dm(size: 13, color: AppColors.navy, weight: FontWeight.w700),
                   children: [
                     TextSpan(text: '$type · '),
-                    TextSpan(text: user, style: const TextStyle(fontWeight: FontWeight.w500, color: AppColors.muted)),
+                    TextSpan(text: user, style: AppTheme.dm(weight: FontWeight.w500, color: AppColors.muted)),
                   ],
                 ),
               ),
@@ -760,7 +762,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                       style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy),
                       children: [
                         TextSpan(text: '$name · '),
-                        TextSpan(text: date, style: const TextStyle(fontWeight: FontWeight.w500, color: AppColors.muted)),
+                        TextSpan(text: date, style: AppTheme.dm(weight: FontWeight.w500, color: AppColors.muted)),
                       ],
                     ),
                   ),
@@ -851,7 +853,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
     Sample.lagoon.image,
     Sample.dunes.image
   ];
-  final List<String> _amenities = ['Pool', 'WiFi', 'AC', 'Smart Lock'];
+  final List<String> _amenities = ['Pool', 'Wi-Fi', 'AC', 'Smart Lock'];
   final ImagePicker _picker = ImagePicker();
 
   void _updatePrice(int delta) {
@@ -921,8 +923,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String format(num n) => n.toStringAsFixed(0).replaceAllMapped(
-        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+
 
     return PhoneScaffold(
       child: Column(
@@ -942,7 +943,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: AppColors.borderDefault),
                         ),
                         child: const Icon(Icons.chevron_left,
                             size: 24, color: AppColors.navy),
@@ -1008,8 +1009,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                               height: 54,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: AppColors.navy, width: 1.5),
+                                border: Border.all(color: AppColors.borderDefault),
                               ),
                               child: const Icon(Icons.remove,
                                   color: AppColors.navy, size: 24),
@@ -1018,13 +1018,13 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                           // Price Display
                           Column(
                             children: [
-                              Text('EGP / night',
+                              Text('${CurrencyFormatter.defaultSymbol} / night',
                                   style: AppTheme.dm(
                                       size: 12,
                                       weight: FontWeight.w500,
                                       color: AppColors.muted)),
                               const SizedBox(height: 2),
-                              Text(format(_price),
+                              Text(CurrencyFormatter.formatNumber(_price),
                                   style: AppTheme.dm(
                                       size: 38,
                                       weight: FontWeight.w800,
@@ -1057,7 +1057,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          'Applies immediately to new bookings · current EGP ${format(_price)}',
+                          'Applies immediately to new bookings · current ${CurrencyFormatter.format(_price)}',
                           textAlign: TextAlign.center,
                           style: AppTheme.dm(
                             size: 11,
@@ -1147,14 +1147,17 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                                       size: 11,
                                       color: const Color(0xFF8A6D1E),
                                       height: 1.4),
-                                  children: const [
-                                    TextSpan(
+                                  children: [
+                                    const TextSpan(
                                         text:
                                             "Existing photos can't be deleted here. "),
                                     TextSpan(
                                       text: "Request removal from support →",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
+                                      style: AppTheme.dm(
+                                          weight: FontWeight.w700,
+                                          size: 11,
+                                          color: const Color(0xFF8A6D1E))
+                                      .copyWith(
                                           decoration: TextDecoration.underline),
                                     ),
                                   ],
@@ -1210,7 +1213,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                       const SizedBox(height: 16),
                       TextField(
                         controller: _descController,
-                        maxLines: null,
+                        maxLines : null,
                         style: AppTheme.dm(
                             size: 14, color: AppColors.navy, height: 1.5),
                         decoration: const InputDecoration(
@@ -1307,7 +1310,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.navy, width: 1),
+                        border : null,
                       ),
                       child: Text('Discard',
                           style: AppTheme.dm(

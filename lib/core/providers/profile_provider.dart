@@ -6,7 +6,7 @@ class ProfileProvider extends ChangeNotifier {
   String _email = 'mariam@example.com';
   String _phone = '+20 100 123 4567';
   String _bio =
-      'Sun-chaser & North Coast regular. Always hunting the next great beachfront escape ðŸ–ï¸';
+      'Sun-chaser & North Coast regular. Always hunting the next great beachfront escape 🏖️';
   String? _instagram = '@mariam.h';
   String? _tiktok;
   String? _facebook;

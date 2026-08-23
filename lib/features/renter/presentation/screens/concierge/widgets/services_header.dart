@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ServicesHeader extends StatelessWidget {
   const ServicesHeader({super.key});
@@ -14,12 +15,11 @@ class ServicesHeader extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         const SizedBox(height: 6),
-        const Text(
+        Text(
           'Elevate your stay with premium services',
-          style: TextStyle(
-            fontSize: 14,
+          style: AppTheme.dm(
+            size: 14,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

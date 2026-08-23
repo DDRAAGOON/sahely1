@@ -230,7 +230,7 @@ class OwnerManageScreen extends StatelessWidget {
         decoration: BoxDecoration(
             gradient: LinearGradient(colors: colors),
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.gold.withValues(alpha: 0.4))),
+            border : null),
         child: Row(children: [
           Container(
               width: 38,

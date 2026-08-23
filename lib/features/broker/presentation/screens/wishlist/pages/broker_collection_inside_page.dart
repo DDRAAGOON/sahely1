@@ -1,11 +1,12 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/domain/models/wishlist_item.dart';
+import 'package:sahely/features/renter/domain/models/wishlist_item.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_collection_header.dart';
 import 'package:sahely/features/broker/presentation/screens/wishlist/widgets/broker_collection_members_actions.dart';
@@ -113,11 +114,10 @@ class _BrokerCollectionInsidePageState
                               color:
                                   AppColors.secondary.withValues(alpha: 0.3)),
                           const SizedBox(height: 16),
-                          const Text(
+                          Text(
                             'No properties in this collection yet',
-                            style: TextStyle(
-                                color: AppColors.secondary,
-                                fontFamily: 'DM Sans'),
+                            style: AppTheme.dm(
+                                color: AppColors.secondary),
                           ),
                         ],
                       ),
@@ -136,7 +136,7 @@ class _BrokerCollectionInsidePageState
                         location: 'North Coast, Egypt',
                         propertyType: 'Villa',
                         beds: 3,
-                        amenities: const ['Pool', 'WiFi'],
+                        amenities: const ['Pool', 'Wi-Fi'],
                         rating: 4.8,
                         reviewCount: 12,
                         pricePerNight: 4500,

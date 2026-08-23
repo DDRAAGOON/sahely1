@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class PriceBreakdownCard extends StatelessWidget {
   final dynamic pricePerNight;
@@ -17,10 +19,8 @@ class PriceBreakdownCard extends StatelessWidget {
   });
 
   String _formatNumber(dynamic number) {
-    return number.toString().replaceAllMapped(
-          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-          (Match m) => '${m[1]},',
-        );
+    if (number is! num) return '0';
+    return CurrencyFormatter.formatNumber(number);
   }
 
   @override
@@ -66,20 +66,18 @@ class PriceBreakdownCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: isTotal ? FontWeight.w500 : FontWeight.w400,
+          style: AppTheme.dm(
+            size: 14,
+            weight: isTotal ? FontWeight.w500 : FontWeight.w400,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 15,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

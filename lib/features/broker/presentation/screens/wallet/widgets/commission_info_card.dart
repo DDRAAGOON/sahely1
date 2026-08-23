@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CommissionInfoCard extends StatelessWidget {
   final String pendingBalance;
@@ -32,20 +33,18 @@ class CommissionInfoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Commissions clear 48h after guest check-in.',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF8A6A1E),
-                    fontFamily: 'DM Sans',
+                  style: AppTheme.dm(
+                    size: 13,
+                    color: const Color(0xFF8A6A1E),
                   ),
                 ),
                 const SizedBox(height: 2),
                 RichText(
                   text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      size: 13,
                     ),
                     children: [
                       const TextSpan(
@@ -54,9 +53,9 @@ class CommissionInfoCard extends StatelessWidget {
                       ),
                       TextSpan(
                         text: 'EGP $pendingBalance',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFFD2760A),
+                        style: AppTheme.dm(
+                          weight: FontWeight.w700,
+                          color: const Color(0xFFD2760A),
                         ),
                       ),
                     ],

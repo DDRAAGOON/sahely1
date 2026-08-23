@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PremiumServicesList extends StatelessWidget {
   final int userLevel;
@@ -23,13 +25,12 @@ class PremiumServicesList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Premium & Concierge',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 18,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 16),
@@ -105,19 +106,18 @@ class _PremiumServiceCard extends StatelessWidget {
                         color: AppColors.gold,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             '15% off',
-                            style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.navy,
-                                fontFamily: 'DM Sans'),
+                            style: AppTheme.dm(
+                                size: 11,
+                                weight: FontWeight.w700,
+                                color: AppColors.navy),
                           ),
-                          SizedBox(width: 4),
-                          Icon(Icons.star, size: 12, color: AppColors.navy),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.star, size: 12, color: AppColors.navy),
                         ],
                       ),
                     ),
@@ -135,17 +135,15 @@ class _PremiumServiceCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(name,
-                          style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.navy,
-                              fontFamily: 'DM Sans')),
+                          style: AppTheme.dm(
+                              size: 15,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy)),
                       const SizedBox(height: 4),
-                      Text('From EGP ${price.toStringAsFixed(0)}',
-                          style: const TextStyle(
-                              fontSize: 13,
-                              color: AppColors.secondary,
-                              fontFamily: 'DM Sans')),
+                      Text('From EGP ${CurrencyFormatter.formatNumber(price)}',
+                          style: AppTheme.dm(
+                              size: 13,
+                              color: AppColors.secondary)),
                     ],
                   ),
                 ),
@@ -161,11 +159,10 @@ class _PremiumServiceCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8)),
                       elevation: 0,
                     ),
-                    child: const Text('Request',
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'DM Sans')),
+                    child: Text('Request',
+                        style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w700)),
                   ),
                 ),
               ],

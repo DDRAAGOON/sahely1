@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BookAgainButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -23,13 +24,12 @@ class BookAgainButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(14),
           ),
         ),
-        child: const Text(
+        child: Text(
           'Book again',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 16,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
       ),

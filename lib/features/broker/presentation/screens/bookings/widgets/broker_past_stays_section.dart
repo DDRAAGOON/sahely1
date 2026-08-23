@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
-import 'package:sahely/features/broker/data/repositories/broker_bookings_repository.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/features/broker/domain/entities/broker_booking.dart';
 
 class BrokerPastStaysSection extends StatelessWidget {
   final List<BrokerBooking> pastBookings;
@@ -20,16 +21,15 @@ class BrokerPastStaysSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'PAST STAYS',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF717171),
+            style: AppTheme.dm(
+              size: 11,
+              weight: FontWeight.w700,
+              color: const Color(0xFF717171),
               letterSpacing: 0.8,
-              fontFamily: 'DM Sans',
             ),
           ),
         ),
@@ -77,11 +77,10 @@ class BrokerPastStaysSection extends StatelessWidget {
                     children: [
                       Text(
                         booking.propertyName,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1B2744),
-                          fontFamily: 'DM Sans',
+                        style: AppTheme.dm(
+                          size: 15,
+                          weight: FontWeight.w700,
+                          color: const Color(0xFF1B2744),
                         ),
                       ),
                       Container(
@@ -91,13 +90,12 @@ class BrokerPastStaysSection extends StatelessWidget {
                           color: const Color(0xFF9A9A9A).withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Past',
-                          style: TextStyle(
-                            color: Color(0xFF717171),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'DM Sans',
+                          style: AppTheme.dm(
+                            color: const Color(0xFF717171),
+                            size: 10,
+                            weight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -111,10 +109,9 @@ class BrokerPastStaysSection extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         booking.area,
-                        style: const TextStyle(
-                          color: Color(0xFF9A9A9A),
-                          fontSize: 11,
-                          fontFamily: 'DM Sans',
+                        style: AppTheme.dm(
+                          color: const Color(0xFF9A9A9A),
+                          size: 11,
                         ),
                       ),
                     ],
@@ -122,10 +119,9 @@ class BrokerPastStaysSection extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     booking.dates,
-                    style: const TextStyle(
-                      color: Color(0xFF717171),
-                      fontSize: 11,
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      color: const Color(0xFF717171),
+                      size: 11,
                     ),
                   ),
                 ],

@@ -65,7 +65,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
     ('Air conditioning (all rooms)', Icons.ac_unit),
     ('Smart TV', Icons.tv),
     ('Private pool', Icons.pool),
-    ('WiFi 200 Mbps', Icons.wifi),
+    ('Wi-Fi 200 Mbps', Icons.wifi),
     ('Fully equipped kitchen', Icons.restaurant),
     ('Cleaning before arrival', Icons.clean_hands),
     ('Safe box', Icons.lock_outline),
@@ -149,7 +149,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                         color: AppColors.white,
-                        border: Border.all(color: AppColors.border),
+                        border : null,
                         borderRadius: BorderRadius.circular(9)),
                     child: const Icon(Icons.chevron_left,
                         size: 20, color: AppColors.navy))),
@@ -192,11 +192,13 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                         size: 14,
                         weight: FontWeight.w700,
                         color: AppColors.gold))),
-            NavyButton(
-                label: step == 3 ? 'Submit Listing' : 'Continue',
-                height: 45,
-                width: 170,
-                onTap: () => step == 3 ? _submit() : setState(() => step++)),
+            SizedBox(
+              width: 170,
+              child: NavyButton(
+                  label: step == 3 ? 'Submit Listing' : 'Continue',
+                  height: 45,
+                  onTap: () => step == 3 ? _submit() : setState(() => step++)),
+            ),
           ]),
         ),
       ]),
@@ -213,7 +215,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                   color: AppColors.white,
-                  border: Border.all(color: AppColors.border),
+                  border : null,
                   borderRadius: BorderRadius.circular(10)),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -288,13 +290,13 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                 text: TextSpan(
                   style: AppTheme.dm(
                       size: 13, weight: FontWeight.w600, color: AppColors.navy),
-                  children: const [
-                    TextSpan(text: 'Mixed groups allowed? '),
+                  children: [
+                    const TextSpan(text: 'Mixed groups allowed? '),
                     TextSpan(
                         text: '(unrelated men & women)',
-                        style: TextStyle(
-                            color: Color(0xFF9A9A9A),
-                            fontWeight: FontWeight.w400)),
+                        style: AppTheme.dm(
+                            color: const Color(0xFF9A9A9A),
+                            weight: FontWeight.w400)),
                   ],
                 ),
               ),
@@ -306,13 +308,13 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                 text: TextSpan(
                   style: AppTheme.dm(
                       size: 13, weight: FontWeight.w600, color: AppColors.navy),
-                  children: const [
-                    TextSpan(text: 'Referral code '),
+                  children: [
+                    const TextSpan(text: 'Referral code '),
                     TextSpan(
                         text: '(optional)',
-                        style: TextStyle(
-                            color: Color(0xFF9A9A9A),
-                            fontWeight: FontWeight.w400)),
+                        style: AppTheme.dm(
+                            color: const Color(0xFF9A9A9A),
+                            weight: FontWeight.w400)),
                   ],
                 ),
               ),
@@ -346,8 +348,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                 color: const Color(0xFFCFE0E8),
                 borderRadius: BorderRadius.circular(16),
                 image: _selectedLatLng != null
-                    ? null
-                    : null, // Could add a static map preview here
+                    ? null : null, // Could add a static map preview here
               ),
               child: Stack(
                 children: [
@@ -450,14 +451,14 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                           color: AppColors.white,
-                          border: Border.all(color: AppColors.border),
+                          border : null,
                           borderRadius: BorderRadius.circular(10)),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: _propertyView,
                           hint: Text('Select view',
                               style: AppTheme.dm(
-                                  size: 14, color: AppColors.faint)),
+                                  size: 14, color: AppColors.muted.withValues(alpha: 0.6))),
                           isExpanded: true,
                           icon: const Icon(Icons.keyboard_arrow_down,
                               size: 18, color: AppColors.muted),
@@ -794,7 +795,7 @@ class _NumericInput extends StatelessWidget {
       height: 50,
       decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border.all(color: AppColors.border),
+        border : null,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
@@ -804,11 +805,11 @@ class _NumericInput extends StatelessWidget {
           textAlign: TextAlign.center,
           style: AppTheme.dm(
               size: 16, weight: FontWeight.w700, color: AppColors.navy),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             border: InputBorder.none,
             isDense: true,
             hintText: '0',
-            hintStyle: TextStyle(color: AppColors.faint, fontSize: 16),
+            hintStyle: AppTheme.dm(color: AppColors.muted.withValues(alpha: 0.6), size: 16),
             contentPadding: EdgeInsets.zero,
           ),
         ),
@@ -829,7 +830,7 @@ class _SegmentToggle extends StatelessWidget {
       height: 50,
       decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border.all(color: AppColors.border),
+        border : null,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(

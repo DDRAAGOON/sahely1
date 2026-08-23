@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CompareInputBar extends StatefulWidget {
   final Function(String) onSendMessage;
@@ -66,20 +67,18 @@ class _CompareInputBarState extends State<CompareInputBar> {
                     Expanded(
                       child: TextField(
                         controller: _controller,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Message or ask AI to compare...',
-                          hintStyle: TextStyle(
-                            fontSize: 13,
+                          hintStyle: AppTheme.dm(
+                            size: 13,
                             color: AppColors.placeholder,
-                            fontFamily: 'DM Sans',
                           ),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.zero,
                         ),
-                        style: const TextStyle(
-                          fontSize: 13,
+                        style: AppTheme.dm(
+                          size: 13,
                           color: AppColors.dark,
-                          fontFamily: 'DM Sans',
                         ),
                         onSubmitted: (_) => _handleSend(),
                       ),

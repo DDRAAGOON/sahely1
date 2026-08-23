@@ -27,14 +27,15 @@ class AuthProvider extends ChangeNotifier {
 
   /// Reads token+role from secure storage and updates local state.
   Future<void> checkAuthStatus() async {
-    // MOCKED for direct Renter access
+    // MOCKED for direct access
     _isAuthenticated = true;
     _isVerified = true;
     _token = "mock_token";
-    RoleState().setRole(Role.renter);
-    notifyListeners();
-    return;
 
+    // Restore persisted role
+    await RoleState().init();
+
+    notifyListeners();
   }
 
   /// Stores token and role in secure storage and marks user as authenticated.
@@ -79,8 +80,9 @@ class AuthProvider extends ChangeNotifier {
       // ignore
     }
 
-    // Reset role to default (renter)
-    RoleState().setRole(Role.renter);
+    // Reset role to default (renter) and clear persistence
+    await RoleState().setRole(Role.renter);
+    await RoleState().clearPersistedRole();
 
     notifyListeners();
   }

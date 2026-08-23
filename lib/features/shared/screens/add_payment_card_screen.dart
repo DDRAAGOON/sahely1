@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class AddPaymentCardScreen extends StatefulWidget {
   const AddPaymentCardScreen({super.key});
@@ -8,6 +9,8 @@ class AddPaymentCardScreen extends StatefulWidget {
   @override
   State<AddPaymentCardScreen> createState() => _AddPaymentCardScreenState();
 }
+
+enum CardType { visa, mastercard, unknown }
 
 class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
   final _cardNumberController = TextEditingController();
@@ -26,6 +29,106 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
     {'type': CardType.visa, 'name': 'Visa Platinum', 'last4': '8842'},
     {'type': CardType.mastercard, 'name': 'Mastercard World Elite', 'last4': '1109'},
   ];
+
+  void _deleteCard(int index) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text('Delete Card', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+        content: Text('Are you sure you want to remove this payment method?', style: AppTheme.dm(size: 14, color: AppColors.textSecondary)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text('Cancel', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _linkedCards.removeAt(index);
+              });
+              Navigator.pop(ctx);
+            },
+            child: Text('Delete', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.error)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showManageAllSheet() {
+    showModalBottomSheet(
+      useRootNavigator: true, context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            decoration: const BoxDecoration(
+              color: AppColors.cream,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40, height: 4,
+                    decoration: BoxDecoration(color: AppColors.borderDefault, borderRadius: BorderRadius.circular(2)),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Text('Manage Payment Methods', style: AppTheme.dm(size: 20, weight: FontWeight.w800, color: AppColors.navy)),
+                const SizedBox(height: 8),
+                Text('Add, edit, or remove your linked cards.', style: AppTheme.dm(size: 13, color: AppColors.textSecondary)),
+                const SizedBox(height: 24),
+                Expanded(
+                  child: _linkedCards.isEmpty
+                      ? Center(child: Text('No cards linked', style: AppTheme.dm(color: AppColors.textSecondary)))
+                      : ListView.builder(
+                    itemCount: _linkedCards.length,
+                    itemBuilder: (context, index) {
+                      final card = _linkedCards[index];
+                      return _buildLinkedCardItem(card, onDelete: () {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            backgroundColor: AppColors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            title: Text('Delete Card', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+                            content: Text('Are you sure you want to remove ${card['name']}?', style: AppTheme.dm(size: 14, color: AppColors.textSecondary)),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                child: Text('Cancel', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.textSecondary)),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _linkedCards.removeAt(index);
+                                  });
+                                  setModalState(() {}); // Update modal state
+                                  Navigator.pop(ctx);
+                                },
+                                child: Text('Delete', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.error)),
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -127,9 +230,9 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          const Text(
+          Text(
             'Account Verification',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.navy),
+            style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.navy),
           ),
         ],
       ),
@@ -157,8 +260,8 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
               const SizedBox(height: 6),
               Text(
                 isDone ? '$label ✓' : label,
-                style: TextStyle(
-                  fontSize: 10, fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 10, weight: FontWeight.w600,
                   color: isDone ? AppColors.success : AppColors.gold,
                 ),
               ),
@@ -170,11 +273,11 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
   }
 
   Widget _buildScreenTitles() {
-    return const Column(
+    return Column(
       children: [
-        Text('Add Payment Card', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.navy)),
-        SizedBox(height: 6),
-        Text('Required to book, refer, or manage properties.', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+        Text('Add Payment Card', style: AppTheme.dm(size: 22, weight: FontWeight.w700, color: AppColors.navy)),
+        const SizedBox(height: 6),
+        Text('Required to book, refer, or manage properties.', style: AppTheme.dm(size: 13, color: AppColors.textSecondary)),
       ],
     );
   }
@@ -189,7 +292,7 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
         const SizedBox(width: 6),
         _buildMastercardIcon(size: 20),
         const SizedBox(width: 8),
-        const Text('Secured by Sahely', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+        Text('Secured by Sahely', style: AppTheme.dm(size: 11, color: AppColors.textSecondary)),
       ],
     );
   }
@@ -215,7 +318,7 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(width: 36, height: 26, decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(4))),
+              Container(width: 36, height: 26, decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(4))),
               Row(
                 children: [
                   _buildVisaBadge(size: 14),
@@ -226,10 +329,9 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
             ],
           ),
 
-          // ✅ رقم البطاقة يتحدث فوراً
           Text(
             _getPreviewCardNumber(),
-            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600, letterSpacing: 2, fontFamily: 'monospace'),
+            style: AppTheme.dm(color: Colors.white, size: 20, weight: FontWeight.w600, letterSpacing: 2),
           ),
 
           // ✅ الاسم وتاريخ الانتهاء يتحدثان فوراً
@@ -249,9 +351,9 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(color: Colors.white.withOpacity(0.6), fontSize: 9, fontWeight: FontWeight.w600)),
+        Text(title, style: AppTheme.dm(color: Colors.white.withValues(alpha: 0.6), size: 9, weight: FontWeight.w600)),
         const SizedBox(height: 4),
-        Text(value, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600)),
+        Text(value, style: AppTheme.dm(color: Colors.white, size: 14, weight: FontWeight.w600)),
       ],
     );
   }
@@ -271,12 +373,11 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
           onChanged: _onCardNumberChanged,
           trailing: _cardType != CardType.unknown
               ? Padding(
-            padding: const EdgeInsets.only(right: 12), // ← ده اللي بيحركها لليسار
+            padding: const EdgeInsets.only(right: 12),
             child: _cardType == CardType.visa
                 ? _buildVisaBadge(size: 14)
                 : _buildMastercardIcon(size: 28),
-          )
-              : null,
+          ) : null,
         ),
         const SizedBox(height: 16),
         Row(
@@ -345,7 +446,7 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+        Text(label, style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.textPrimary)),
         const SizedBox(height: 8),
         Container(
           height: 52,
@@ -365,8 +466,8 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                         left: 14,
                         child: Text(
                           placeholder,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: AppTheme.dm(
+                            size: 14,
                             color: AppColors.textPlaceholder,
                           ),
                         ),
@@ -377,10 +478,13 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
                       inputFormatters: formatters,
                       obscureText: obscureText,
                       textCapitalization: textCapitalization,
-                      onChanged: onChanged, // ✅ يمرر الـ onChanged للـ TextField
+                      onChanged: (val) {
+                        if (onChanged != null) onChanged(val);
+                        setState(() {});
+                      },
                       maxLength: maxLength,
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: AppTheme.dm(
+                        size: 14,
                         color: AppColors.textPrimary,
                       ),
                       decoration: const InputDecoration(
@@ -402,10 +506,10 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
   }
 
   Widget _buildDisclaimerText() {
-    return const Text(
+    return Text(
       'Your card is used for identity verification only and will not be charged without your approval.',
       textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 11, color: AppColors.textSecondary, fontStyle: FontStyle.italic),
+      style: AppTheme.dm(size: 11, color: AppColors.textSecondary, italic: true),
     );
   }
 
@@ -419,8 +523,8 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: () { /* Handle Save */ },
-          child: const Center(
-            child: Text('Save Card & Complete Setup', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.navy)),
+          child: Center(
+            child: Text('Save Card & Complete Setup', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
           ),
         ),
       ),
@@ -431,30 +535,27 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Linked Cards', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.navy)),
-            Text('MANAGE ALL', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.gold)),
+            Text('Linked Cards', style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.navy)),
+            GestureDetector(
+              onTap: _showManageAllSheet,
+              child: Text('MANAGE ALL', style: AppTheme.dm(size: 11, weight: FontWeight.w700, color: AppColors.gold)),
+            ),
           ],
         ),
         const SizedBox(height: 12),
-        ..._linkedCards.map((card) => _buildLinkedCardItem(card)),
-        const SizedBox(height: 12),
-        Container(
-          width: double.infinity, height: 52,
-          decoration: BoxDecoration(border: Border.all(color: AppColors.borderDefault.withOpacity(0.5)), borderRadius: BorderRadius.circular(12)),
-          child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Icon(Icons.add, size: 18, color: AppColors.textSecondary),
-            SizedBox(width: 8),
-            Text('Add New Payment Method', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
-          ]),
-        ),
+        ..._linkedCards.asMap().entries.map((entry) {
+          final index = entry.key;
+          final card = entry.value;
+          return _buildLinkedCardItem(card, onDelete: () => _deleteCard(index));
+        }),
       ],
     );
   }
 
-  Widget _buildLinkedCardItem(Map<String, dynamic> card) {
+  Widget _buildLinkedCardItem(Map<String, dynamic> card, {VoidCallback? onDelete}) {
     final CardType type = card['type'];
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -462,37 +563,39 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
       decoration: BoxDecoration(color: AppColors.surface, borderRadius: BorderRadius.circular(12), boxShadow: AppColors.cardShadow),
       child: Row(
         children: [
-          // ✅ الكود الجديد - أيقونة Mastercard الحقيقية
-          Container(
+          SizedBox(
             width: 40,
             height: 26,
             child: type == CardType.mastercard
-                ? _buildMastercardIcon(size: 26) // أيقونة Mastercard الحقيقية
+                ? _buildMastercardIcon(size: 26)
                 : Container(
               decoration: BoxDecoration(
                 color: AppColors.navy,
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: const Center(
-                child: Text(
-                  'VISA',
-                  style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w700),
+                child: Center(
+                  child: Text(
+                    'VISA',
+                    style: AppTheme.dm(color: Colors.white, size: 9, weight: FontWeight.w700),
+                  ),
                 ),
               ),
             ),
-          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(card['name'], style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.navy)),
+                Text(card['name'], style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy)),
                 const SizedBox(height: 2),
-                Text('•••• ${card['last4']}', style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                Text('•••• ${card['last4']}', style: AppTheme.dm(size: 12, color: AppColors.textSecondary)),
               ],
             ),
           ),
-          GestureDetector(onTap: () { /* Handle Delete */ }, child: const Icon(Icons.delete_outline, size: 20, color: AppColors.error)),
+          GestureDetector(
+            onTap: onDelete,
+            child: const Icon(Icons.delete_outline, size: 20, color: AppColors.error),
+          ),
         ],
       ),
     );
@@ -502,7 +605,7 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: size * 0.6, vertical: size * 0.3),
       decoration: BoxDecoration(color: AppColors.navy, borderRadius: BorderRadius.circular(4)),
-      child: Text('VISA', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: size * 0.8)),
+      child: Text('VISA', style: AppTheme.dm(color: Colors.white, weight: FontWeight.w700, size: size * 0.8)),
     );
   }
 
@@ -512,7 +615,6 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
       height: size * 0.65,
       child: Stack(
         children: [
-          // الدائرة الحمراء (اليسار)
           Positioned(
             left: 0,
             top: 0,
@@ -525,9 +627,8 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
               ),
             ),
           ),
-          // الدائرة البرتقالية (اليمين) - متداخلة
           Positioned(
-            left: size * 0.4, // ← ده اللي بيخليهم يتداخلوا
+            left: size * 0.4,
             top: 0,
             child: Container(
               width: size * 0.6,
@@ -543,8 +644,6 @@ class _AddPaymentCardScreenState extends State<AddPaymentCardScreen> {
     );
   }
 }
-
-enum CardType { visa, mastercard, unknown }
 
 class _CardNumberFormatter extends TextInputFormatter {
   @override

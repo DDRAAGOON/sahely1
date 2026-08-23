@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class StarsProgressBar extends StatelessWidget {
   final int previousTotal;
@@ -34,37 +35,35 @@ class StarsProgressBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Season total',
-                style: TextStyle(
-                  fontSize: 13,
+                style: AppTheme.dm(
+                  size: 13,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               RichText(
                 text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'DM Sans',
+                  style: AppTheme.dm(
+                    size: 13,
+                    weight: FontWeight.w600,
                   ),
                   children: [
                     TextSpan(
                       text: '$previousTotal',
-                      style: const TextStyle(color: AppColors.secondary),
+                      style: AppTheme.dm(color: AppColors.secondary, size: 13, weight: FontWeight.w600),
                     ),
-                    const TextSpan(
+                    TextSpan(
                       text: ' → ',
-                      style: TextStyle(color: AppColors.secondary),
+                      style: AppTheme.dm(color: AppColors.secondary, size: 13, weight: FontWeight.w600),
                     ),
                     TextSpan(
                       text: '$currentTotal',
-                      style: const TextStyle(color: AppColors.navy),
+                      style: AppTheme.dm(color: AppColors.navy, size: 13, weight: FontWeight.w600),
                     ),
-                    const TextSpan(
+                    TextSpan(
                       text: ' ★',
-                      style: TextStyle(color: AppColors.gold),
+                      style: AppTheme.dm(color: AppColors.gold, size: 13, weight: FontWeight.w600),
                     ),
                   ],
                 ),
@@ -86,10 +85,9 @@ class StarsProgressBar extends StatelessWidget {
           // Next Level
           Text(
             '$starsToNextLevel ★ to $nextLevelName',
-            style: const TextStyle(
-              fontSize: 12,
+            style: AppTheme.dm(
+              size: 12,
               color: AppColors.secondary,
-              fontFamily: 'DM Sans',
             ),
           ),
         ],

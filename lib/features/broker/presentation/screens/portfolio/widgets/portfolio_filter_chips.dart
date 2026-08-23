@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PortfolioFilterChips extends StatelessWidget {
   final int totalCount;
@@ -50,21 +51,17 @@ class PortfolioFilterChips extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected ? AppColors.navy : AppColors.white,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: isSelected ? AppColors.navy : AppColors.border,
-                  width: 1,
-                ),
+                border : null,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     filter['label']?.toString() ?? '',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                    style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w600,
                       color: isSelected ? AppColors.white : AppColors.navy,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -78,11 +75,10 @@ class PortfolioFilterChips extends StatelessWidget {
                     ),
                     child: Text(
                       '${filter['count']}',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                      style: AppTheme.dm(
+                        size: 11,
+                        weight: FontWeight.w600,
                         color: isSelected ? Colors.white : AppColors.secondary,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ),

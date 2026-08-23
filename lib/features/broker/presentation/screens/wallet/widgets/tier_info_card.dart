@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class TierInfoCard extends StatelessWidget {
   final String tier;
@@ -49,20 +50,18 @@ class TierInfoCard extends StatelessWidget {
               children: [
                 Text(
                   '$tier · $commissionRate',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 14,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   'avg $avgPerBooking per booking',
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -71,11 +70,10 @@ class TierInfoCard extends StatelessWidget {
           // Progress
           Text(
             '$progressToElite to Elite',
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+            style: AppTheme.dm(
+              size: 12,
+              weight: FontWeight.w600,
               color: AppColors.gold,
-              fontFamily: 'DM Sans',
             ),
           ),
         ],

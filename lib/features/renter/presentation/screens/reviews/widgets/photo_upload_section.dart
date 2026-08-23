@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PhotoUploadSection extends StatelessWidget {
   final List<String> uploadedPhotos;
@@ -21,20 +22,19 @@ class PhotoUploadSection extends StatelessWidget {
       children: [
         // Header with bonus note
         RichText(
-          text: const TextSpan(
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'DM Sans',
+          text: TextSpan(
+            style: AppTheme.dm(
+              size: 14,
+              weight: FontWeight.w600,
             ),
             children: [
               TextSpan(
                 text: 'Add photos',
-                style: TextStyle(color: AppColors.navy),
+                style: AppTheme.dm(color: AppColors.navy, size: 14, weight: FontWeight.w600),
               ),
               TextSpan(
                 text: ' · +5 ★ for photo reviews',
-                style: TextStyle(color: AppColors.gold),
+                style: AppTheme.dm(color: AppColors.gold, size: 14, weight: FontWeight.w600),
               ),
             ],
           ),
@@ -122,22 +122,21 @@ class PhotoUploadSection extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.add,
                         color: AppColors.gold,
                         size: 24,
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         'Photo',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
+                        style: AppTheme.dm(
+                          size: 10,
+                          weight: FontWeight.w600,
                           color: AppColors.gold,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],

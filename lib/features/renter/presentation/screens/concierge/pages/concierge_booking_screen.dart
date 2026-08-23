@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import '../../../../../../core/utils/currency_formatter.dart';
 
 class ConciergeBookingScreen extends StatefulWidget {
   final String serviceName;
@@ -24,8 +26,8 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
   String _paymentMethod = 'Wallet';
 
   final List<String> _activeBookings = [
-    'Marassi - Chalet #12 (Jul 15 - Jul 22)',
-    'Hacienda - Villa #5 (Aug 01 - Aug 10)',
+    'Marassi – Chalet #12 (Jul 15 – Jul 22)',
+    'Hacienda – Villa #5 (Aug 01 – Aug 10)',
   ];
 
   @override
@@ -34,8 +36,8 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
       backgroundColor: AppColors.cream,
       appBar: AppBar(
         title: Text('Book ${widget.serviceName}',
-            style: const TextStyle(
-                color: AppColors.navy, fontWeight: FontWeight.bold)),
+            style: AppTheme.dm(
+                color: AppColors.navy, weight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
@@ -58,8 +60,8 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text('$_quantity',
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
+                      style: AppTheme.dm(
+                          size: 18, weight: FontWeight.bold)),
                 ),
                 _buildStepperButton(Icons.add, () {
                   setState(() => _quantity++);
@@ -102,7 +104,7 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.border),
+                border : null,
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -145,7 +147,7 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
             // Payment Method
             _buildSectionTitle('Payment Method'),
             _buildPaymentOption(
-                'Wallet', 'EGP 2,450 available', Icons.account_balance_wallet),
+                'Wallet', '${CurrencyFormatter.format(2450)} available', Icons.account_balance_wallet),
             const SizedBox(height: 12),
             _buildPaymentOption('Credit Card', '**** 4242', Icons.credit_card),
 
@@ -153,16 +155,16 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
 
             // Price Breakdown & Button
             if (widget.basePrice != null) ...[
-              Row(
+            Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Total Price',
+                  Text('Total Price',
                       style:
-                          TextStyle(fontSize: 16, color: AppColors.secondary)),
+                          AppTheme.dm(size: 16, color: AppColors.secondary)),
                   Text('EGP ${widget.basePrice! * _quantity}',
-                      style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      style: AppTheme.dm(
+                          size: 20,
+                          weight: FontWeight.bold,
                           color: AppColors.navy)),
                 ],
               ),
@@ -179,11 +181,11 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                 ),
-                child: const Text('Confirm & Pay',
-                    style: TextStyle(
+                child: Text('Confirm & Pay',
+                    style: AppTheme.dm(
                         color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold)),
+                        size: 16,
+                        weight: FontWeight.bold)),
               ),
             ),
             const SizedBox(height: 30),
@@ -197,9 +199,9 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Text(title,
-          style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+              size: 16,
+              weight: FontWeight.w700,
               color: AppColors.navy)),
     );
   }
@@ -212,7 +214,7 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: AppColors.border),
+          border : null,
         ),
         child: Icon(icon, size: 20, color: AppColors.navy),
       ),
@@ -230,7 +232,7 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.border),
+          border : null,
         ),
         child: Row(
           children: [
@@ -238,7 +240,7 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
             const SizedBox(width: 8),
             Expanded(
                 child: Text(label,
-                    style: const TextStyle(fontSize: 13),
+                    style: AppTheme.dm(size: 13),
                     overflow: TextOverflow.ellipsis)),
           ],
         ),
@@ -255,9 +257,7 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-              color: isSelected ? AppColors.navy : AppColors.border,
-              width: isSelected ? 2 : 1),
+          border : null,
         ),
         child: Row(
           children: [
@@ -267,10 +267,10 @@ class _ConciergeBookingScreenState extends State<ConciergeBookingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                    style: AppTheme.dm(weight: FontWeight.bold)),
                 Text(subtitle,
-                    style: const TextStyle(
-                        fontSize: 12, color: AppColors.secondary)),
+                    style: AppTheme.dm(
+                        size: 12, color: AppColors.secondary)),
               ],
             ),
             const Spacer(),

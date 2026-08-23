@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PropertyInfoSection extends StatelessWidget {
   final String propertyName;
@@ -26,7 +28,11 @@ class PropertyInfoSection extends StatelessWidget {
             // Title
             Text(
               propertyName,
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: GoogleFonts.dmSans(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: AppColors.navy,
+              ),
             ),
             const SizedBox(height: 8),
 
@@ -41,10 +47,9 @@ class PropertyInfoSection extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   location,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: AppTheme.dm(
+                    size: 14,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -62,20 +67,18 @@ class PropertyInfoSection extends StatelessWidget {
                 const SizedBox(width: 4),
                 Text(
                   '$rating',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                  style: AppTheme.dm(
+                    size: 14,
+                    weight: FontWeight.w600,
                     color: AppColors.dark,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(width: 4),
                 Text(
                   '($reviewCount reviews)',
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style: AppTheme.dm(
+                    size: 14,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -103,10 +106,9 @@ class PropertyInfoSection extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           text,
-          style: const TextStyle(
-            fontSize: 13,
+          style: AppTheme.dm(
+            size: 13,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

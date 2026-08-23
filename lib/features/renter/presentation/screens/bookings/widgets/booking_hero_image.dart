@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/gallery/photo_viewer_screen.dart';
 
 class BookingHeroImage extends StatelessWidget {
@@ -98,13 +99,12 @@ class BookingHeroImage extends StatelessWidget {
               color: AppColors.navy,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text(
+            child: Text(
               'Upcoming',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+              style: AppTheme.dm(
+                size: 12,
+                weight: FontWeight.w600,
                 color: Colors.white,
-                fontFamily: 'DM Sans',
               ),
             ),
           ),

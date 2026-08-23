@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 /// Selectable rounded chip (navy when active, white outline when not).
 /// Now customizable with width, padding, and font size.
@@ -33,26 +34,42 @@ class ChoiceChipPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
-      child: Container(
+      scale: 0.95,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut, // Avoid easeOutBack to prevent negative blurRadius overshoot
         height: height,
         width: width,
         padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
         decoration: BoxDecoration(
           color: selected ? AppColors.navy : AppColors.white,
-          border: Border.all(color: borderColor, width: borderWidth),
+          border: Border.all(
+              color: selected ? AppColors.navy : AppColors.border,
+              width: borderWidth),
           borderRadius: BorderRadius.circular(borderRadius),
+          boxShadow: selected
+              ? [
+                  BoxShadow(
+                    color: AppColors.navy.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  )
+                ]
+              : const [],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(label,
-                style: AppTheme.dm(
-                    size: fontSize,
-                    weight: selected ? FontWeight.w700 : FontWeight.w400,
-                    color: selected ? AppColors.white : AppColors.navy)),
+            Text(
+              label,
+              style: AppTheme.dm(
+                  size: fontSize,
+                  weight: selected ? FontWeight.w700 : FontWeight.w500,
+                  color: selected ? AppColors.white : AppColors.navy),
+            ),
           ],
         ),
       ),
@@ -69,6 +86,7 @@ class SearchHeaderRow extends StatelessWidget {
     this.onBack,
     this.onFilter,
     this.onSearchTap,
+    this.onChatTap,
     this.showBack = false,
     this.large = true,
   });
@@ -78,6 +96,7 @@ class SearchHeaderRow extends StatelessWidget {
   final VoidCallback? onBack;
   final VoidCallback? onFilter;
   final VoidCallback? onSearchTap;
+  final VoidCallback? onChatTap;
   final bool showBack;
   final bool large;
 
@@ -87,11 +106,11 @@ class SearchHeaderRow extends StatelessWidget {
     return Row(
       children: [
         if (showBack) ...[
-          GestureDetector(
+          BouncyButton(
             onTap: onBack ?? () => Navigator.maybePop(context),
             child: Container(
-              width: 34,
-              height: 34,
+              width: 38,
+              height: 38,
               decoration: BoxDecoration(
                 color: AppColors.white,
                 border: Border.all(color: AppColors.border),
@@ -104,7 +123,7 @@ class SearchHeaderRow extends StatelessWidget {
           const SizedBox(width: 10),
         ],
         Expanded(
-          child: GestureDetector(
+          child: BouncyButton(
             onTap: onSearchTap,
             child: Container(
               height: h,
@@ -112,7 +131,14 @@ class SearchHeaderRow extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 border: Border.all(color: AppColors.border),
-                borderRadius: BorderRadius.circular(999),
+                borderRadius: BorderRadius.circular(h / 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.navy.withValues(alpha: 0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  )
+                ],
               ),
               child: Row(
                 children: [
@@ -123,8 +149,9 @@ class SearchHeaderRow extends StatelessWidget {
                       value ?? placeholder,
                       style: AppTheme.dm(
                           size: 14,
-                          color:
-                              value == null ? AppColors.faint : AppColors.ink),
+                          color: value == null
+                              ? AppColors.textPlaceholder
+                              : AppColors.ink),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -135,44 +162,62 @@ class SearchHeaderRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        GestureDetector(
+        BouncyButton(
           onTap: onFilter,
           child: Container(
             width: h,
             height: h,
             decoration: BoxDecoration(
-                color: AppColors.navy, borderRadius: BorderRadius.circular(14)),
+                color: AppColors.navy,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.navy.withValues(alpha: 0.15),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  )
+                ]),
             child: const Icon(Icons.tune, size: 22, color: AppColors.gold),
           ),
         ),
         const SizedBox(width: 10),
-        Container(
-          width: h,
-          height: h,
-          decoration: BoxDecoration(
-              color: AppColors.gold, borderRadius: BorderRadius.circular(14)),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              const Icon(Icons.chat_bubble_outline,
-                  size: 22, color: AppColors.navy),
-              const Positioned(
-                  top: 14,
-                  child: Icon(Icons.star, size: 9, color: AppColors.navy)),
-              Positioned(
-                top: -2,
-                right: -2,
-                child: Container(
-                  width: 13,
-                  height: 13,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF2BB673),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.cream, width: 2),
+        BouncyButton(
+          onTap: onChatTap,
+          child: Container(
+            width: h,
+            height: h,
+            decoration: BoxDecoration(
+                color: AppColors.gold,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.gold.withValues(alpha: 0.25),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  )
+                ]),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                const Icon(Icons.chat_bubble_outline,
+                    size: 22, color: AppColors.navy),
+                const Positioned(
+                    top: 14,
+                    child: Icon(Icons.star, size: 9, color: AppColors.navy)),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF34C759),
+                      shape: BoxShape.circle,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

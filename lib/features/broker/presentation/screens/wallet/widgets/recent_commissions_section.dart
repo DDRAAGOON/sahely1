@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/broker/presentation/screens/wallet/widgets/recent_commission_card.dart';
 
 class RecentCommissionsSection extends StatelessWidget {
@@ -20,13 +21,12 @@ class RecentCommissionsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section Header
-          const Text(
+          Text(
             'Recent commissions',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 16,
+              weight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 12),
@@ -58,13 +58,12 @@ class RecentCommissionsSection extends StatelessWidget {
           Center(
             child: GestureDetector(
               onTap: onViewFullHistory,
-              child: const Text(
+              child: Text(
                 'View Full History →',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFFD2760A),
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 14,
+                  weight: FontWeight.w700,
+                  color: const Color(0xFFD2760A),
                 ),
               ),
             ),

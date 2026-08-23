@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PaymentInstructionsCard extends StatelessWidget {
   final String methodId;
@@ -95,7 +96,7 @@ class PaymentInstructionsCard extends StatelessWidget {
           'note': 'Admin confirms transfers twice daily (10am & 6pm)',
         };
       default:
-        return {'title': '', 'steps': [], 'note': ''};
+        return {'title': '', 'steps': null, 'note': ''};
     }
   }
 
@@ -134,11 +135,10 @@ class PaymentInstructionsCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   instructions['title'],
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 15,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),
@@ -160,12 +160,11 @@ class PaymentInstructionsCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Send to / Reference',
-                    style: TextStyle(
-                      fontSize: 11,
+                    style: AppTheme.dm(
+                      size: 11,
                       color: AppColors.secondary,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -175,11 +174,10 @@ class PaymentInstructionsCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           instructions['reference'],
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 14,
+                            weight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                             letterSpacing: 1,
                           ),
                         ),
@@ -211,13 +209,12 @@ class PaymentInstructionsCard extends StatelessWidget {
           ],
 
           // Steps
-          const Text(
+          Text(
             'How it works',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
+            style: AppTheme.dm(
+              size: 13,
+              weight: FontWeight.w600,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 8),
@@ -240,11 +237,10 @@ class PaymentInstructionsCard extends StatelessWidget {
                     child: Center(
                       child: Text(
                         '${index + 1}',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
+                        style: AppTheme.dm(
+                          size: 11,
+                          weight: FontWeight.w700,
                           color: Colors.white,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ),
@@ -255,10 +251,9 @@ class PaymentInstructionsCard extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 2),
                       child: Text(
                         step,
-                        style: const TextStyle(
-                          fontSize: 13,
+                        style: AppTheme.dm(
+                          size: 13,
                           color: AppColors.dark,
-                          fontFamily: 'DM Sans',
                           height: 1.4,
                         ),
                       ),
@@ -291,11 +286,10 @@ class PaymentInstructionsCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       instructions['note'],
-                      style: const TextStyle(
-                        fontSize: 11,
+                      style: AppTheme.dm(
+                        size: 11,
                         color: AppColors.dark,
-                        fontFamily: 'DM Sans',
-                        fontStyle: FontStyle.italic,
+                        italic: true,
                         height: 1.4,
                       ),
                     ),

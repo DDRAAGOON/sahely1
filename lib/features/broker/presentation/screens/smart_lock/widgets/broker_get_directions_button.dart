@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerGetDirectionsButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -25,12 +26,11 @@ class BrokerGetDirectionsButton extends StatelessWidget {
             ),
             elevation: 0,
           ),
-          child: const Text(
+          child: Text(
             'Get Directions',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'DM Sans',
+            style: AppTheme.dm(
+              size: 16,
+              weight: FontWeight.w700,
             ),
           ),
         ),

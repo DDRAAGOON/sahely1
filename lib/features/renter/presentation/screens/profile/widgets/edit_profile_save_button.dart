@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class EditProfileSaveButton extends StatelessWidget {
   final bool isLoading;
@@ -35,12 +36,11 @@ class EditProfileSaveButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
                 ),
               )
-            : const Text(
+            : Text(
                 'Save Changes',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 15,
+                  weight: FontWeight.w700,
                 ),
               ),
       ),

@@ -104,10 +104,10 @@ class OwnerSmartLockScreen extends StatelessWidget {
             Text('Access log',
                 style: AppTheme.dm(
                     size: 15, weight: FontWeight.w700, color: AppColors.navy)),
-            const Text('Export',
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+            Text('Export',
+                style: AppTheme.dm(
+                    size: 13,
+                    weight: FontWeight.w600,
                     color: AppColors.gold)),
           ]),
           const SizedBox(height: 8),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CheckInOutFooter extends StatelessWidget {
   final DateTime checkIn;
@@ -33,11 +34,10 @@ class CheckInOutFooter extends StatelessWidget {
     return Center(
       child: Text(
         'Check-in: ${_formatDate(checkIn)} · Check-out: ${_formatDate(checkOut)}',
-        style: const TextStyle(
-          fontSize: 13,
-          color: Color(0xFFC49F45),
-          fontWeight: FontWeight.w500,
-          fontFamily: 'DM Sans',
+        style: AppTheme.dm(
+          size: 13,
+          color: const Color(0xFFC49F45),
+          weight: FontWeight.w500,
         ),
       ),
     );

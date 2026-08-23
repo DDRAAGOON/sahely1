@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class BackButtonCircle extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -9,7 +10,7 @@ class BackButtonCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onPressed ?? () => Navigator.maybePop(context),
       child: Container(
         width: 40,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CheckInBanner extends StatelessWidget {
   final int daysUntilCheckIn;
@@ -28,11 +29,10 @@ class CheckInBanner extends StatelessWidget {
           Expanded(
             child: Text(
               'Check-in in $daysUntilCheckIn days · passcode unlocks within 2 km',
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF9A7A22),
-                fontFamily: 'DM Sans',
+              style: AppTheme.dm(
+                size: 13,
+                weight: FontWeight.w500,
+                color: const Color(0xFF9A7A22),
               ),
             ),
           ),

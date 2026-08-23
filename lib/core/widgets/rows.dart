@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class SettingsRow extends StatelessWidget {
   const SettingsRow(
@@ -24,9 +25,9 @@ class SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+      scale: 0.98,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: last
@@ -76,8 +77,7 @@ class KeyValueRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 11),
       decoration: topBorder
           ? const BoxDecoration(
-              border: Border(top: BorderSide(color: AppColors.border)))
-          : null,
+              border: Border(top: BorderSide(color: AppColors.border))) : null,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

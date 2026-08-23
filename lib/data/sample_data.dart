@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 import 'package:sahely/data/models.dart';
@@ -19,8 +20,10 @@ class Sample {
     type: 'Villa',
     beds: 4,
     guests: 8,
-    tags: ['Beachfront', 'Pool', 'WiFi', 'AC', 'Sea View'],
+    tags: ['Beachfront', 'Pool', 'Wi-Fi', 'AC', 'Sea View'],
     petsOk: true,
+    partyAllowed: true,
+    mixedGroupsOK: true,
     guestFavourite: true,
     saved: true,
   );
@@ -36,8 +39,10 @@ class Sample {
     beds: 3,
     guests: 6,
     type: 'Villa',
-    tags: ['Beachfront', 'Pool', 'WiFi', 'Smart Lock', 'Parking'],
+    tags: ['Beachfront', 'Pool', 'Wi-Fi', 'Smart Lock', 'Parking'],
     petsOk: true,
+    partyAllowed: true,
+    mixedGroupsOK: true,
     minutesToBeach: 3,
     guestFavourite: true,
   );
@@ -55,6 +60,8 @@ class Sample {
     type: 'Chalet',
     tags: ['Beach', 'Pool', 'BBQ', 'Garden'],
     petsOk: false,
+    partyAllowed: false,
+    mixedGroupsOK: true,
     minutesToBeach: 7,
   );
 
@@ -69,8 +76,10 @@ class Sample {
     guests: 5,
     reviews: 41,
     type: 'Chalet',
-    tags: ['WiFi', 'AC', 'Parking'],
+    tags: ['Wi-Fi', 'AC', 'Parking'],
     petsOk: true,
+    partyAllowed: true,
+    mixedGroupsOK: true,
   );
 
   static const trending = [azure, lagoon, dunes, telal];
@@ -107,13 +116,13 @@ class Sample {
 
   static const searchResults = [lagoon, dunes, azure, telal];
 
-  static const services = [
-    ServiceItem('Private Chef', 'From EGP 1,200',
+  static final services = [
+    const ServiceItem('Private Chef', 'From ${CurrencyFormatter.defaultSymbol} 1,200',
         [Color(0xFFB9543E), Color(0xFF7D2F23)]),
-    ServiceItem('Airport Transfer', 'From EGP 800',
+    const ServiceItem('Airport Transfer', 'From ${CurrencyFormatter.defaultSymbol} 800',
         [Color(0xFF3A6EA5), Color(0xFF1F3F63)]),
-    ServiceItem(
-        'Beach Setup', 'From EGP 400', [Color(0xFF3A9B8E), Color(0xFF1F5D4A)]),
+    const ServiceItem(
+        'Beach Setup', 'From ${CurrencyFormatter.defaultSymbol} 400', [Color(0xFF3A9B8E), Color(0xFF1F5D4A)]),
   ];
 
   static const destinations = [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class SmartLockCard extends StatelessWidget {
   final VoidCallback onTap;
@@ -19,22 +20,21 @@ class SmartLockCard extends StatelessWidget {
           color: AppColors.navy,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Row(
+        child: Row(
           children: [
-            Icon(
+            const Icon(
               Icons.lock_outline,
               color: AppColors.gold,
               size: 18,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
                 'Smart lock ready — tap to access your property',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
                   color: Colors.white,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

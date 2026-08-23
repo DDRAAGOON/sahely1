@@ -79,12 +79,10 @@ class _AppTextFieldState extends State<AppTextField> {
 
     // Logic: use gold if focused or has text, unless a specific borderColor was forced
     final bool hasText = widget.controller?.text.isNotEmpty ?? false;
-    Color borderCol = widget.borderColor ?? AppColors.border;
 
     // If user didn't force a color, we apply the logic
     if (widget.borderColor == null) {
       if (_isFocused || hasText) {
-        borderCol = AppColors.gold;
       }
     }
 
@@ -93,8 +91,7 @@ class _AppTextFieldState extends State<AppTextField> {
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.circular(widget.radius),
-        border: Border.all(
-            color: borderCol, width: _isFocused ? 1.5 : widget.borderWidth),
+        border : null,
       ),
       alignment: isMultiline ? Alignment.topLeft : Alignment.center,
       child: TextFormField(
@@ -118,7 +115,7 @@ class _AppTextFieldState extends State<AppTextField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: AppTheme.dm(
-              size: widget.fontSize, color: const Color(0xFFA0A2A0)),
+              size: widget.fontSize, color: AppColors.muted.withValues(alpha: 0.6)),
           contentPadding: EdgeInsets.fromLTRB(
               widget.leading != null ? 0 : (widget.radius >= 999 ? 18 : 14),
               isMultiline ? 12 : 0,
@@ -164,9 +161,7 @@ class FakeField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: radius >= 999 ? 18 : 14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border.all(
-            color: focused ? AppColors.gold : AppColors.border,
-            width: focused ? 2 : 1),
+        border : null,
         borderRadius: BorderRadius.circular(radius),
       ),
       child: Row(
@@ -176,7 +171,7 @@ class FakeField extends StatelessWidget {
               value,
               style: AppTheme.dm(
                 size: fontSize,
-                color: hint ? AppColors.faint : AppColors.ink,
+                color: hint ? AppColors.muted.withValues(alpha: 0.6) : AppColors.ink,
                 letterSpacing: letterSpacing,
               ),
             ),

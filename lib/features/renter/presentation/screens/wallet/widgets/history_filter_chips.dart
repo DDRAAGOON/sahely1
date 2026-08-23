@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class HistoryFilterChips extends StatelessWidget {
   final List<String> filters;
@@ -36,19 +37,15 @@ class HistoryFilterChips extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected ? AppColors.navy : AppColors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: AppColors.navy,
-                    width: 1,
-                  ),
+                  border : null,
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   filter,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                  style: AppTheme.dm(
+                    size: 12,
+                    weight: FontWeight.w600,
                     color: isSelected ? AppColors.white : AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),

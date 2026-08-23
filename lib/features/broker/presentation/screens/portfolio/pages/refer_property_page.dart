@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/refer_property_header.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/refer_property_input.dart';
 import 'package:sahely/features/broker/presentation/screens/portfolio/widgets/refer_property_dropdown.dart';

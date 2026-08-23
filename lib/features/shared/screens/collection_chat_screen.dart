@@ -5,6 +5,8 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/chat_message_bubble.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/compare_input_bar.dart';
 
+import '../../../core/utils/currency_formatter.dart';
+
 class _Message {
   final String userName;
   final Color avatarColor;
@@ -55,7 +57,7 @@ class _CollectionChatScreenState extends State<CollectionChatScreen> {
       _Message(
         userName: 'Sahely AI',
         avatarColor: AppColors.gold,
-        message: 'Quick compare: Lagoon — +0.1★, sleeps 8, 3 min to beach. Azure — private pool, −EGP 1,700/night. For a beach-first group, Lagoon wins.',
+        message: 'Quick compare: Lagoon — +0.1★, sleeps 8, 3 min to beach. Azure — private pool, −${CurrencyFormatter.format(1700)}/night. For a beach-first group, Lagoon wins.',
         isAI: true,
       ),
     ]);
@@ -193,7 +195,7 @@ class _CollectionChatScreenState extends State<CollectionChatScreen> {
 
   Widget _vsCard(String name, String meta) => Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(border: Border.all(color: AppColors.border), borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(border : null, borderRadius: BorderRadius.circular(10)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(name, style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy)),
           Text(meta, style: AppTheme.dm(size: 11, color: AppColors.muted)),

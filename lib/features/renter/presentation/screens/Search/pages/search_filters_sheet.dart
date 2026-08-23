@@ -1,17 +1,27 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'dart:ui';
+import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/sheet_handle.dart';
+
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
+import '../../../../../../core/utils/currency_formatter.dart';
+import '../../../../../../core/widgets/bouncy_button.dart';
 
 class SearchFiltersSheet extends StatefulWidget {
   final Map<String, dynamic> initialFilters;
-  final List<Map<String, dynamic>> allProperties;
+  final List<Property> allProperties;
   final Function(Map<String, dynamic>) onApplyFilters;
+  final ScrollController? scrollController;
 
   const SearchFiltersSheet({
     super.key,
     required this.initialFilters,
     required this.allProperties,
     required this.onApplyFilters,
+    this.scrollController,
   });
 
   @override
@@ -24,8 +34,8 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
   DateTime? _checkOutDate;
   late String _selectedPropertyType;
   late String _selectedBedrooms;
-  int _adults = 2;
-  int _children = 1;
+  int _adults = 0;
+  int _children = 0;
   late RangeValues _currentRangeValues;
   late bool _partyAllowed;
   late bool _petsAllowed;
@@ -35,7 +45,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
 
   final List<String> _propertyTypes = ['All', 'Villa', 'Chalet', 'Apartment'];
   final List<String> _bedrooms = ['Any', '1', '2', '3', '4+'];
-  final List<String> _amenitiesRow1 = ['Pool', 'WiFi', 'Beach', 'AC'];
+  final List<String> _amenitiesRow1 = ['Pool', 'Wi-Fi', 'Beach', 'AC'];
   final List<String> _amenitiesRow2 = [
     'Smart Lock',
     'Sea View',
@@ -47,7 +57,6 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
   @override
   void initState() {
     super.initState();
-    // ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ø­ÙÙˆØ¸Ø© Ø¨Ø¯Ù‚Ø©
     _selectedPropertyType = widget.initialFilters['propertyType'] ?? 'All';
     _selectedBedrooms = widget.initialFilters['bedrooms'] ?? 'Any';
     _currentRangeValues = RangeValues(
@@ -56,49 +65,53 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     );
     _selectedAmenities =
         Set<String>.from(widget.initialFilters['amenities'] ?? []);
-    _partyAllowed = widget.initialFilters['partyAllowed'] ?? true;
+    // Force them to false for the initial "Everything zero" state
+    _partyAllowed = widget.initialFilters['partyAllowed'] ?? false;
     _petsAllowed = widget.initialFilters['petsAllowed'] ?? false;
-    _mixedGroupsOK = widget.initialFilters['mixedGroupsOK'] ?? true;
+    _mixedGroupsOK = widget.initialFilters['mixedGroupsOK'] ?? false;
+    _adults = widget.initialFilters['adults'] ?? 0;
+    _children = widget.initialFilters['children'] ?? 0;
 
     _updateResultsCount();
   }
 
   void _updateResultsCount() {
     setState(() {
-      // ÙÙ„ØªØ±Ø© Ø­Ù‚ÙŠÙ‚ÙŠØ© Ù„Ø­Ø³Ø§Ø¨ Ø§Ù„Ø¹Ø¯Ø¯ Ø§Ù„Ø¯Ù‚ÙŠÙ‚
       var results = widget.allProperties;
 
       if (_selectedPropertyType != 'All') {
-        results =
-            results.where((p) => p['type'] == _selectedPropertyType).toList();
+        results = results.where((p) => p.type == _selectedPropertyType).toList();
       }
 
       results = results.where((p) {
-        double priceEgp = p['price'] / 100;
+        double priceEgp = p.price.toDouble();
         return priceEgp >= _currentRangeValues.start &&
             priceEgp <= _currentRangeValues.end;
       }).toList();
 
       if (_selectedBedrooms != 'Any') {
         int needed = int.parse(_selectedBedrooms.replaceAll('+', ''));
-        results = results.where((p) => p['beds'] >= needed).toList();
+        results = results.where((p) => p.beds >= needed).toList();
       }
 
       if (_selectedAmenities.isNotEmpty) {
         results = results.where((p) {
-          List features = p['features'] as List;
-          return _selectedAmenities.every((a) => features.contains(a));
+          return _selectedAmenities.every((a) => p.tags.contains(a));
         }).toList();
       }
 
       if (_partyAllowed) {
-        results = results.where((p) => p['partyAllowed'] == true).toList();
+        results = results.where((p) => p.tags.contains('Party Allowed')).toList();
       }
       if (_petsAllowed) {
-        results = results.where((p) => p['petsAllowed'] == true).toList();
+        results = results.where((p) => p.petsOk).toList();
       }
       if (_mixedGroupsOK) {
-        results = results.where((p) => p['mixedGroupsOK'] == true).toList();
+        results = results.where((p) => p.tags.contains('Mixed Groups OK')).toList();
+      }
+
+      if (_adults + _children > 0) {
+        results = results.where((p) => p.guests >= (_adults + _children)).toList();
       }
 
       _resultsCount = results.length;
@@ -107,71 +120,70 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 12),
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-                color: AppColors.border,
-                borderRadius: BorderRadius.circular(2)),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Filters',
-                    style: Theme.of(context).textTheme.headlineMedium),
-                GestureDetector(
-                  onTap: _clearAllFilters,
-                  child: const Text(
-                    'Clear All',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.gold,
-                        fontFamily: 'DM Sans'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: SingleChildScrollView(
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 12),
+            const SheetHandle(),
+            const SizedBox(height: 20),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildDatesSection(),
-                  const SizedBox(height: 24),
-                  _buildPropertyTypeSection(),
-                  const SizedBox(height: 24),
-                  _buildBedroomsSection(),
-                  const SizedBox(height: 24),
-                  _buildGuestsSection(),
-                  const SizedBox(height: 32),
-                  _buildPriceRangeSection(),
-                  const SizedBox(height: 32),
-                  _buildHouseRulesSection(),
-                  const SizedBox(height: 32),
-                  _buildAmenitiesSection(),
-                  const SizedBox(height: 20),
+                  Text('Filters',
+                      style: AppTheme.dm(
+                          size: 24,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy)),
+                  BouncyButton(
+                    onTap: _clearAllFilters,
+                    child: Text(
+                      'Clear All',
+                      style: AppTheme.dm(
+                          size: 14,
+                          weight: FontWeight.w600,
+                          color: AppColors.gold),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
-          _buildShowResultsButton(),
-        ],
+            const SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: widget.scrollController,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildDatesSection(),
+                    const SizedBox(height: 24),
+                    _buildPropertyTypeSection(),
+                    const SizedBox(height: 24),
+                    _buildBedroomsSection(),
+                    const SizedBox(height: 24),
+                    _buildGuestsSection(),
+                    const SizedBox(height: 32),
+                    _buildPriceRangeSection(),
+                    const SizedBox(height: 32),
+                    _buildHouseRulesSection(),
+                    const SizedBox(height: 32),
+                    _buildAmenitiesSection(),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+            _buildShowResultsButton(),
+          ],
+        ),
       ),
     );
   }
@@ -180,12 +192,11 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Dates',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans')),
+        Text('Dates',
+            style: AppTheme.dm(
+                size: 16,
+                weight: FontWeight.w700,
+                color: AppColors.navy)),
         const SizedBox(height: 12),
         Row(
           children: [
@@ -210,7 +221,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       {required String label,
       required DateTime? date,
       required VoidCallback onTap}) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
       child: Container(
         height: 46,
@@ -218,7 +229,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         decoration: BoxDecoration(
             color: AppColors.cream,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.border)),
+            border : null),
         child: Row(
           children: [
             const Icon(Icons.calendar_today_outlined,
@@ -226,11 +237,10 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
             const SizedBox(width: 8),
             Text(
                 date != null ? '${date.day}/${date.month}/${date.year}' : label,
-                style: TextStyle(
-                    fontSize: 13,
+                style: AppTheme.dm(
+                    size: 13,
                     color:
-                        date != null ? AppColors.dark : AppColors.placeholder,
-                    fontFamily: 'DM Sans')),
+                        date != null ? AppColors.dark : AppColors.placeholder)),
           ],
         ),
       ),
@@ -241,39 +251,45 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Property Type',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans')),
+        Text('Property Type',
+            style: AppTheme.dm(
+                size: 16, weight: FontWeight.w700, color: AppColors.navy)),
         const SizedBox(height: 12),
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: _propertyTypes.map((type) {
             final isSelected = _selectedPropertyType == type;
-            return GestureDetector(
+            return BouncyButton(
               onTap: () {
                 setState(() => _selectedPropertyType = type);
                 _updateResultsCount();
               },
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOutQuart,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   color: isSelected ? AppColors.navy : AppColors.white,
                   borderRadius: BorderRadius.circular(20),
-                  border: isSelected
-                      ? null
-                      : Border.all(color: AppColors.navy, width: 1),
+                  border : null,
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppColors.navy.withValues(alpha: 0.15),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          )
+                        ] : null,
                 ),
-                child: Text(type,
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: isSelected ? AppColors.white : AppColors.navy,
-                        fontFamily: 'DM Sans')),
+                child: Text(
+                  type,
+                  style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w600,
+                      color: isSelected ? AppColors.white : AppColors.navy),
+                ),
               ),
             );
           }).toList(),
@@ -286,12 +302,9 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Bedrooms',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans')),
+        Text('Bedrooms',
+            style: AppTheme.dm(
+                size: 16, weight: FontWeight.w700, color: AppColors.navy)),
         const SizedBox(height: 12),
         Row(
           children: _bedrooms.map((bedroom) {
@@ -299,29 +312,39 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
             return Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: GestureDetector(
+                child: BouncyButton(
                   onTap: () {
                     setState(() => _selectedBedrooms = bedroom);
                     _updateResultsCount();
                   },
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.easeOutQuart,
                     height: 38,
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.navy : AppColors.white,
                       borderRadius: BorderRadius.circular(10),
-                      border: isSelected
-                          ? null
-                          : Border.all(color: AppColors.navy, width: 1),
+                      border : null,
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: AppColors.navy.withValues(alpha: 0.15),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              )
+                            ] : null,
                     ),
                     child: Center(
-                        child: Text(bedroom,
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: isSelected
-                                    ? AppColors.white
-                                    : AppColors.navy,
-                                fontFamily: 'DM Sans'))),
+                      child: Text(
+                        bedroom,
+                        style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w600,
+                            color: isSelected
+                                ? AppColors.white
+                                : AppColors.navy),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -336,19 +359,18 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Guests',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans')),
+        Text('Guests',
+            style: AppTheme.dm(
+                size: 16,
+                weight: FontWeight.w700,
+                color: AppColors.navy)),
         const SizedBox(height: 12),
         _buildGuestRow(
             label: 'Adults',
             subtitle: 'Ages 18+',
             count: _adults,
             onRemove: () {
-              if (_adults > 1) setState(() => _adults--);
+              if (_adults > 0) setState(() => _adults--);
               _updateResultsCount();
             },
             onAdd: () {
@@ -385,27 +407,24 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(label,
-              style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.dark,
-                  fontFamily: 'DM Sans')),
+              style: AppTheme.dm(
+                  size: 14,
+                  weight: FontWeight.w600,
+                  color: AppColors.dark)),
           Text(subtitle,
-              style: const TextStyle(
-                  fontSize: 12,
-                  color: AppColors.secondary,
-                  fontFamily: 'DM Sans')),
+              style: AppTheme.dm(
+                  size: 12,
+                  color: AppColors.secondary)),
         ]),
         Row(children: [
           _buildStepperButton(
               icon: Icons.remove, onTap: onRemove, isOutline: true),
           const SizedBox(width: 16),
           Text('$count',
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.navy,
-                  fontFamily: 'DM Sans')),
+              style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
+                  color: AppColors.navy)),
           const SizedBox(width: 16),
           _buildStepperButton(icon: Icons.add, onTap: onAdd, isOutline: false),
         ]),
@@ -417,17 +436,23 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       {required IconData icon,
       required VoidCallback onTap,
       required bool isOutline}) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
       child: Container(
-        width: 32,
-        height: 32,
+        width: 34,
+        height: 34,
         decoration: BoxDecoration(
             color: isOutline ? AppColors.white : AppColors.navy,
             shape: BoxShape.circle,
             border: isOutline
-                ? Border.all(color: AppColors.navy, width: 1.5)
-                : null),
+                ? Border.all(color: AppColors.navy, width: 1.5) : null,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.navy.withValues(alpha: 0.1),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              )
+            ]),
         child: Icon(icon,
             size: 18, color: isOutline ? AppColors.navy : AppColors.white),
       ),
@@ -439,20 +464,18 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(children: [
-          const Text('Price Range',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.navy,
-                  fontFamily: 'DM Sans')),
+          Text('Price Range',
+              style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
+                  color: AppColors.navy)),
           const SizedBox(width: 8),
           Text(
-              'EGP ${_currentRangeValues.start.round()} - ${_currentRangeValues.end.round()}',
-              style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.secondary,
-                  fontFamily: 'DM Sans')),
+              '${CurrencyFormatter.format(_currentRangeValues.start.round())} – ${CurrencyFormatter.format(_currentRangeValues.end.round())}',
+              style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
+                  color: AppColors.secondary)),
         ]),
         const SizedBox(height: 16),
         SliderTheme(
@@ -486,24 +509,18 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
 
   Widget _buildPriceLabel(String label, int value) {
     return RichText(
-      text: TextSpan(style: const TextStyle(fontFamily: 'DM Sans'), children: [
+      text: TextSpan(style: AppTheme.dm(), children: [
         TextSpan(
             text: '$label ',
-            style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
+            style: AppTheme.dm(
+                size: 10,
+                weight: FontWeight.w500,
                 color: AppColors.secondary)),
-        const TextSpan(
-            text: 'EGP ',
-            style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy)),
         TextSpan(
-            text: '$value',
-            style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
+            text: CurrencyFormatter.format(value),
+            style: AppTheme.dm(
+                size: 12,
+                weight: FontWeight.w700,
                 color: AppColors.navy)),
       ]),
     );
@@ -513,21 +530,20 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('House Rules',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans')),
+        Text('House Rules',
+            style: AppTheme.dm(
+                size: 16,
+                weight: FontWeight.w700,
+                color: AppColors.navy)),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.border)),
+              border : null),
           child: Column(children: [
             _buildToggleRow(
-                icon: Icons.party_mode,
+                icon: Icons.camera_alt_outlined,
                 label: 'Party allowed',
                 value: _partyAllowed,
                 onChanged: (v) {
@@ -545,7 +561,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 }),
             const Divider(height: 1, color: AppColors.border),
             _buildToggleRow(
-                icon: Icons.groups,
+                icon: Icons.people_outline,
                 label: 'Mixed groups OK',
                 value: _mixedGroupsOK,
                 onChanged: (v) {
@@ -570,8 +586,8 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         const SizedBox(width: 12),
         Expanded(
             child: Text(label,
-                style: const TextStyle(
-                    fontSize: 14, color: AppColors.dark, fontFamily: 'DM Sans'))),
+                style: AppTheme.dm(
+                    size: 14, color: AppColors.dark))),
         Switch(
             value: value,
             onChanged: onChanged,
@@ -587,12 +603,11 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Amenities',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans')),
+        Text('Amenities',
+            style: AppTheme.dm(
+                size: 16,
+                weight: FontWeight.w700,
+                color: AppColors.navy)),
         const SizedBox(height: 12),
         Wrap(
             spacing: 8,
@@ -609,7 +624,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
 
   Widget _buildAmenityChip(String amenity) {
     final isSelected = _selectedAmenities.contains(amenity);
-    return GestureDetector(
+    return BouncyButton(
       onTap: () {
         setState(() {
           if (isSelected) {
@@ -620,18 +635,27 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         });
         _updateResultsCount();
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutQuart,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-            color: isSelected ? AppColors.navy : AppColors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.navy, width: 1)),
-        child: Text(amenity,
-            style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: isSelected ? AppColors.white : AppColors.navy,
-                fontFamily: 'DM Sans')),
+          color: isSelected ? AppColors.navy : AppColors.white,
+          borderRadius: BorderRadius.circular(20),
+          border : null,
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppColors.navy.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  )
+                ] : null,
+        ),
+        child: Text(amenity, style: AppTheme.dm(
+              size: 13,
+              weight: FontWeight.w600,
+              color: isSelected ? AppColors.white : AppColors.navy)),
       ),
     );
   }
@@ -639,23 +663,34 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
   Widget _buildShowResultsButton() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-          24, 8, 24, 100), // Added padding to clear custom bottom nav
+          24, 8, 24, 24), // Reduced bottom padding from 100 to 24
       child: SizedBox(
         width: double.infinity,
         height: 52,
-        child: ElevatedButton(
-          onPressed: _applyFilters,
-          style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.navy,
-              foregroundColor: AppColors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-              elevation: 0),
-          child: Text('Show Results ($_resultsCount)',
-              style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'DM Sans')),
+        child: BouncyButton(
+          onTap: _applyFilters,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.navy,
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.navy.withValues(alpha: 0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                )
+              ],
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              'Show Results ($_resultsCount)',
+              style: AppTheme.dm(
+                size: 15,
+                weight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -688,9 +723,11 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       _selectedBedrooms = 'Any';
       _currentRangeValues = const RangeValues(0.0, 100000.0);
       _selectedAmenities = {};
-      _partyAllowed = true;
+      _partyAllowed = false;
       _petsAllowed = false;
-      _mixedGroupsOK = true;
+      _mixedGroupsOK = false;
+      _adults = 0;
+      _children = 0;
     });
     _updateResultsCount();
   }
@@ -705,8 +742,10 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       'partyAllowed': _partyAllowed,
       'petsAllowed': _petsAllowed,
       'mixedGroupsOK': _mixedGroupsOK,
+      'adults': _adults,
+      'children': _children,
     };
-    Navigator.pop(context); // Pop the sheet FIRST
-    widget.onApplyFilters(filters); // Then trigger the navigation
+    Navigator.of(context).pop();
+    widget.onApplyFilters(filters);
   }
 }

@@ -112,8 +112,7 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
         decoration: BoxDecoration(
           color: AppColors.goldSoft,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.gold.withValues(alpha: 0.3)),
-        ),
+          border : null),
         child: Column(
           children: [
             Icon(icon, size: 28, color: AppColors.navy),
@@ -170,8 +169,7 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                                 image: _imageFile != null
                                     ? DecorationImage(
                                         image: FileImage(_imageFile!),
-                                        fit: BoxFit.cover)
-                                    : null,
+                                        fit: BoxFit.cover) : null,
                               ),
                               child: _imageFile == null
                                   ? const AvatarCircle(
@@ -180,8 +178,7 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                                         Color(0xFFD8B98A),
                                         Color(0xFF7D5A2C)
                                       ],
-                                    )
-                                  : null,
+                                    ) : null,
                             ),
                             Positioned(
                               bottom: 0,
@@ -189,11 +186,10 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                               child: Container(
                                 width: 32,
                                 height: 32,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: AppColors.gold,
                                   shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: AppColors.white, width: 2),
+                                  border : null,
                                 ),
                                 child: const Icon(Icons.camera_alt,
                                     size: 16, color: AppColors.navy),

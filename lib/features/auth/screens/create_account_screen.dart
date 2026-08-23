@@ -204,8 +204,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ),
                       child: _agreed
                           ? const Icon(Icons.check,
-                              size: 12, color: AppColors.white)
-                          : null,
+                              size: 12, color: AppColors.white) : null,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -280,7 +279,7 @@ class _DobBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border.all(color: AppColors.border),
+        border : null,
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonHideUnderline(

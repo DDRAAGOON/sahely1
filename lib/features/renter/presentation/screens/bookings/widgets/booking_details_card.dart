@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class BookingDetailsCard extends StatelessWidget {
   final DateTime checkIn;
@@ -42,9 +44,8 @@ class BookingDetailsCard extends StatelessWidget {
     return '${months[dateTime.month - 1]} ${dateTime.day}, $hour:$minute $period';
   }
 
-  String _formatPrice(int piastres) {
-    final amount = piastres / 100;
-    return 'EGP ${amount.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")}';
+  String _formatPrice(int amount) {
+    return CurrencyFormatter.format(amount);
   }
 
   @override
@@ -79,22 +80,20 @@ class BookingDetailsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Total paid',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 14,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               Text(
                 _formatPrice(totalPaid),
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 14,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ],
@@ -110,20 +109,18 @@ class BookingDetailsCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 13,
+          style: AppTheme.dm(
+            size: 13,
             color: AppColors.textSecondary,
-            fontWeight: FontWeight.w400,
-            fontFamily: 'DM Sans',
+            weight: FontWeight.w400,
           ),
         ),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 13,
+          style: AppTheme.dm(
+            size: 13,
             color: AppColors.navy,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'DM Sans',
+            weight: FontWeight.w700,
           ),
         ),
       ],

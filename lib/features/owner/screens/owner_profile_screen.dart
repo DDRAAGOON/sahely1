@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 
@@ -56,7 +57,7 @@ class OwnerProfileScreen extends StatelessWidget {
               SettingsRow(
                 icon: Icons.account_balance_wallet_outlined,
                 label: 'Wallet & Credit',
-                value: 'EGP 1,250',
+                value: CurrencyFormatter.format(1250),
                 valueColor: AppColors.gold,
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToOwnerEarnings(context),

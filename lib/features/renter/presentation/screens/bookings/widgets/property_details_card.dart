@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PropertyDetailsCard extends StatelessWidget {
   final Map<String, dynamic> details;
@@ -37,7 +38,7 @@ class PropertyDetailsCard extends StatelessWidget {
             children: [
               _DetailItem(icon: Icons.pool, label: 'Private pool'),
               SizedBox(width: 16),
-              _DetailItem(icon: Icons.wifi, label: 'Fast WiFi'),
+              _DetailItem(icon: Icons.wifi, label: 'Fast Wi-Fi'),
             ],
           ),
           const SizedBox(height: 12),
@@ -75,10 +76,9 @@ class _DetailItem extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                fontSize: 13,
+              style: AppTheme.dm(
+                size: 13,
                 color: AppColors.dark,
-                fontFamily: 'DM Sans',
               ),
             ),
           ),

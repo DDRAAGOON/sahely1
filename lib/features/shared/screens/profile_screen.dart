@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
-
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/screens/profile/widgets/account_verification_section.dart';
 import 'package:sahely/features/renter/presentation/screens/profile/widgets/bio_card.dart';
@@ -11,6 +10,7 @@ import 'package:sahely/features/renter/presentation/screens/profile/widgets/maws
 import 'package:sahely/features/renter/presentation/screens/profile/widgets/mawsem_season_pass_card.dart';
 import 'package:sahely/features/renter/presentation/screens/profile/widgets/profile_header.dart';
 import 'package:sahely/features/renter/presentation/screens/profile/widgets/profile_list_rows.dart';
+import 'package:sahely/core/widgets/entrance_faded.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -28,101 +28,103 @@ class ProfileScreen extends StatelessWidget {
           color: AppColors.cream,
           child: SafeArea(
             bottom: false,
-            child: CustomScrollView(
-              slivers: [
-                // Profile Header
-                SliverToBoxAdapter(
-                  child: ProfileHeader(
-                    name: profile.name,
-                    email: profile.email,
-                    localAvatarPath: profile.avatarPath,
-                    isVerified: verificationData.isComplete,
-                  ),
-                ),
-
-                const SliverToBoxAdapter(child: SizedBox(height: 16)),
-
-                // Bio Card
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: BioCard(
-                      bio: profile.bio,
-                      instagramHandle: profile.instagram,
-                      tiktokHandle: profile.tiktok,
-                      facebookHandle: profile.facebook,
+            child: EntranceFaded(
+              child: CustomScrollView(
+                slivers: [
+                  // Profile Header
+                  SliverToBoxAdapter(
+                    child: ProfileHeader(
+                      name: profile.name,
+                      email: profile.email,
+                      localAvatarPath: profile.avatarPath,
+                      isVerified: verificationData.isComplete,
                     ),
                   ),
-                ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-                // MAWSEM Level Badge
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: MawsemLevelBadge(
-                      levelName: profile.levelData['name'],
-                      levelNumber: profile.currentLevel,
+                  // Bio Card
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: BioCard(
+                        bio: profile.bio,
+                        instagramHandle: profile.instagram,
+                        tiktokHandle: profile.tiktok,
+                        facebookHandle: profile.facebook,
+                      ),
                     ),
                   ),
-                ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 12)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-                // AL MAWSEM Season Pass Card
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: MawsemSeasonPassCard(
-                      levelName: profile.levelData['name'],
-                      starsCount: profile.stars,
+                  // MAWSEM Level Badge
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: MawsemLevelBadge(
+                        levelName: profile.levelData['name'],
+                        levelNumber: profile.currentLevel,
+                      ),
                     ),
                   ),
-                ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
-                // Account Verification Section
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: AccountVerificationSection(
-                      emailConfirmed: verificationData.emailVerified,
-                      phoneVerified: verificationData.phoneVerified,
-                      identityVerified: verificationData.idVerified,
-                      paymentCardAdded: verificationData.cardAdded,
+                  // AL MAWSEM Season Pass Card
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: MawsemSeasonPassCard(
+                        levelName: profile.levelData['name'],
+                        starsCount: profile.stars,
+                      ),
                     ),
                   ),
-                ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
-                // Profile List Rows
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: ProfileListRows(
-                      walletBalance: 250,
-                      reviewsGiven: profile.reviewsGiven,
-                      reviewsReceived: profile.reviewsReceived,
+                  // Account Verification Section
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: AccountVerificationSection(
+                        emailConfirmed: verificationData.emailVerified,
+                        phoneVerified: verificationData.phoneVerified,
+                        identityVerified: verificationData.idVerified,
+                        paymentCardAdded: verificationData.cardAdded,
+                      ),
                     ),
                   ),
-                ),
 
-                const SliverToBoxAdapter(child: SizedBox(height: 16)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-                // Logout Button
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: LogoutButton(),
+                  // Profile List Rows
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ProfileListRows(
+                        walletBalance: 250,
+                        reviewsGiven: profile.reviewsGiven,
+                        reviewsReceived: profile.reviewsReceived,
+                      ),
+                    ),
                   ),
-                ),
 
-                // Bottom spacing for nav
-                const SliverToBoxAdapter(child: SizedBox(height: 120)),
-              ],
+                  const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+                  // Logout Button
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: LogoutButton(),
+                    ),
+                  ),
+
+                  // Bottom spacing for nav
+                  const SliverToBoxAdapter(child: SizedBox(height: 120)),
+                ],
+              ),
             ),
           ),
         );

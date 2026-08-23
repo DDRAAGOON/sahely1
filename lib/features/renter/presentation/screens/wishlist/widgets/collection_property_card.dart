@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class CollectionPropertyCard extends StatelessWidget {
   final String propertyName;
@@ -37,7 +39,7 @@ class CollectionPropertyCard extends StatelessWidget {
     // Assuming price is in cents or similar if dividing by 100,
     // but based on previous code it might just be the direct value.
     // Let's stick to a simple formatting or the one provided.
-    final egpPrice = pricePerNight.toString();
+    final egpPrice = CurrencyFormatter.formatNumber(pricePerNight);
 
     return GestureDetector(
       onTap: onTap,
@@ -100,11 +102,10 @@ class CollectionPropertyCard extends StatelessWidget {
                     left: 12,
                     child: Text(
                       propertyName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                      style: AppTheme.dm(
+                        size: 16,
+                        weight: FontWeight.w700,
                         color: AppColors.navy,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ),
@@ -130,10 +131,9 @@ class CollectionPropertyCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           location,
-                          style: const TextStyle(
-                            fontSize: 13,
+                          style: AppTheme.dm(
+                            size: 13,
                             color: AppColors.secondary,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ),
@@ -170,40 +170,37 @@ class CollectionPropertyCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             '$rating',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
+                            style: AppTheme.dm(
+                              size: 13,
+                              weight: FontWeight.w600,
                               color: AppColors.dark,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '($reviewCount)',
-                            style: const TextStyle(
-                              fontSize: 13,
+                            style: AppTheme.dm(
+                              size: 13,
                               color: AppColors.secondary,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ],
                       ),
                       RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 16,
+                            weight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                           children: [
                             const TextSpan(text: 'EGP '),
                             TextSpan(text: egpPrice),
-                            const TextSpan(
+                            TextSpan(
                               text: ' /night',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
+                              style: AppTheme.dm(
+                                size: 12,
+                                weight: FontWeight.w400,
                                 color: AppColors.secondary,
                               ),
                             ),
@@ -239,10 +236,9 @@ class CollectionPropertyCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             friendNote,
-                            style: const TextStyle(
-                              fontSize: 12,
+                            style: AppTheme.dm(
+                              size: 12,
                               color: AppColors.dark,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ),
@@ -285,11 +281,10 @@ class CollectionPropertyCard extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w500,
+        style: AppTheme.dm(
+          size: 11,
+          weight: FontWeight.w500,
           color: textColor,
-          fontFamily: 'DM Sans',
         ),
       ),
     );

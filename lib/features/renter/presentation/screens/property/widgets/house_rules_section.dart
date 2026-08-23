@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class HouseRulesSection extends StatelessWidget {
   const HouseRulesSection({super.key});
@@ -12,15 +13,15 @@ class HouseRulesSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'House Rules',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans',
-              ),
-            ),
+        const SizedBox(height: 12),
+        Text(
+          'House Rules',
+          style: AppTheme.dm(
+            size: 16,
+            weight: FontWeight.w700,
+            color: AppColors.navy,
+          ),
+        ),
             const SizedBox(height: 12),
             Container(
               decoration: BoxDecoration(
@@ -33,7 +34,7 @@ class HouseRulesSection extends StatelessWidget {
                   const _RuleRow(
                     icon: Icons.access_time,
                     label: 'Calm hours',
-                    value: '11 PM - 8 AM',
+                    value: '11 PM – 8 AM',
                   ),
                   _Divider(),
                   const _RuleRow(
@@ -87,10 +88,9 @@ class _RuleRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                fontSize: 12,
+              style: AppTheme.dm(
+                size: 12,
                 color: AppColors.dark,
-                fontFamily: 'DM Sans',
               ),
             ),
           ),
@@ -101,24 +101,22 @@ class _RuleRow extends StatelessWidget {
                 color: const Color(0xFFE8F5E9),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Text(
+              child: Text(
                 'Allowed',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF2E7D32),
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 12,
+                  weight: FontWeight.w600,
+                  color: const Color(0xFF2E7D32),
                 ),
               ),
             )
           else
             Text(
               value ?? '',
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+              style: AppTheme.dm(
+                size: 12,
+                weight: FontWeight.w600,
                 color: AppColors.dark,
-                fontFamily: 'DM Sans',
               ),
             ),
         ],

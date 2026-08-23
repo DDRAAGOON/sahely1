@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class WalletAddCreditButton extends StatelessWidget {
   final VoidCallback onAddCredit;
@@ -18,12 +19,11 @@ class WalletAddCreditButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: onAddCredit,
         icon: const Icon(Icons.add, size: 20),
-        label: const Text(
+        label: Text(
           'Add Credit',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'DM Sans',
+          style: AppTheme.dm(
+            size: 15,
+            weight: FontWeight.w700,
           ),
         ),
         style: ElevatedButton.styleFrom(

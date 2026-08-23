@@ -3,8 +3,8 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 
 class TeamReviewScreen extends StatelessWidget {
   const TeamReviewScreen({super.key});
@@ -76,11 +76,11 @@ class TeamReviewScreen extends StatelessWidget {
               ]),
               const SizedBox(height: 12),
               Row(children: [
-                Text('EGP 5,500',
+                Text(CurrencyFormatter.format(5500),
                     style: AppTheme.dm(size: 14, color: Colors.white54)
                         .copyWith(decoration: TextDecoration.lineThrough)),
                 const SizedBox(width: 10),
-                Text('EGP 6,800',
+                Text(CurrencyFormatter.format(6800),
                     style: AppTheme.dm(
                         size: 20,
                         weight: FontWeight.w700,
@@ -94,7 +94,7 @@ class TeamReviewScreen extends StatelessWidget {
               ]),
               const SizedBox(height: 8),
               Text(
-                  'Similar 3-bed villas in Marassi with a pool rent at EGP 6,500–7,200 this season. You can keep your price — this is a suggestion.',
+                  'Similar 3-bed villas in Marassi with a pool rent at ${CurrencyFormatter.defaultSymbol} 6,500–7,200 this season. You can keep your price — this is a suggestion.',
                   style: AppTheme.dm(
                       size: 11, color: Colors.white70, height: 1.5)),
               const SizedBox(height: 12),
@@ -126,8 +126,8 @@ class TeamReviewScreen extends StatelessWidget {
                           gradient: const LinearGradient(
                               colors: [Color(0xFF46B7A8), Color(0xFF226F66)]),
                           borderRadius: BorderRadius.circular(10)),
-                      child: const Text('🌊',
-                          style: TextStyle(fontSize: 18),
+                      child: Text('🌊',
+                          style: AppTheme.dm(size: 18),
                           textAlign: TextAlign.center)),
                   const SizedBox(width: 12),
                   Expanded(

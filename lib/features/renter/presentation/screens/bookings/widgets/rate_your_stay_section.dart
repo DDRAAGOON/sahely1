@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class RateYourStaySection extends StatelessWidget {
   final VoidCallback onAddReview;
@@ -21,13 +22,12 @@ class RateYourStaySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'How was your stay?',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 18,
+              weight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 12),
@@ -49,18 +49,17 @@ class RateYourStaySection extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
               ),
               alignment: Alignment.center,
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.star, color: AppColors.gold, size: 18),
-                  SizedBox(width: 10),
+                  const Icon(Icons.star, color: AppColors.gold, size: 18),
+                  const SizedBox(width: 10),
                   Text(
-                    'Write a review Ã‚Â· earn +5 Ã¢Ëœâ€¦',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                    'Write a review · earn +5 ★',
+                    style: AppTheme.dm(
+                      size: 15,
+                      weight: FontWeight.w700,
                       color: Colors.white,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

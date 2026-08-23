@@ -90,7 +90,7 @@ class _BrokerHistoryPageState extends State<BrokerHistoryPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: isActive ? AppColors.navy : AppColors.white,
-                      border: isActive ? null : Border.all(color: AppColors.navy),
+                      border: isActive ? null : null,
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Text(

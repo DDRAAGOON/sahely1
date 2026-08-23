@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapTeaser extends StatelessWidget {
@@ -13,13 +14,12 @@ class MapTeaser extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Location',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              style: AppTheme.dm(
+                size: 16,
+                weight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
               ),
             ),
             const SizedBox(height: 12),

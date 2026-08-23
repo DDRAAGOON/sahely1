@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CardNumberField extends StatelessWidget {
   final TextEditingController controller;
@@ -20,13 +21,12 @@ class CardNumberField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Card Number',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+          style: AppTheme.dm(
+            size: 13,
+            weight: FontWeight.w600,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 8),
@@ -40,10 +40,9 @@ class CardNumberField extends StatelessWidget {
           onChanged: onChanged,
           decoration: InputDecoration(
             hintText: '4242 4242 4242 4242',
-            hintStyle: const TextStyle(
-              fontSize: 14,
+            hintStyle: AppTheme.dm(
+              size: 14,
               color: AppColors.placeholder,
-              fontFamily: 'DM Sans',
             ),
             filled: true,
             fillColor: AppColors.white,
@@ -67,14 +66,12 @@ class CardNumberField extends StatelessWidget {
                 ? Padding(
                     padding: const EdgeInsets.all(12),
                     child: _buildCardLogo(cardType!),
-                  )
-                : null,
+                  ) : null,
             counterText: '',
           ),
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTheme.dm(
+            size: 14,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
           validator: (value) {
             if (value == null || value.isEmpty) return 'Required';

@@ -1,6 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class SearchEmptyState extends StatelessWidget {
   final String searchQuery;
@@ -39,52 +41,46 @@ class SearchEmptyState extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Title
-            const Text(
+            Text(
               'No properties match your search',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
+              style: AppTheme.dm(
+                size: 20,
+                weight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
               ),
             ),
 
             const SizedBox(height: 12),
 
             // Subtitle
-            const Text(
+            Text(
               'Try adjusting your filters or search terms.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
+              style: AppTheme.dm(
+                size: 14,
                 color: AppColors.secondary,
-                fontFamily: 'DM Sans',
               ),
             ),
 
             const SizedBox(height: 32),
 
-            // Clear Filters Button (Smaller Box with Normal Border Radius)
-            ElevatedButton(
-              onPressed: onClearFilters,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.navy,
-                foregroundColor: AppColors.white,
+            BouncyButton(
+              onTap: onClearFilters,
+              child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                shape: RoundedRectangleBorder(
+                decoration: BoxDecoration(
+                  color: AppColors.navy,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                elevation: 0,
-              ),
-              child: const Text(
-                'Clear Filters',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'DM Sans',
+                child: Text(
+                  'Clear Filters',
+                  style: AppTheme.dm(
+                    size: 14,
+                    weight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

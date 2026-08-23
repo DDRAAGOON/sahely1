@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class TopReferredPropertyCard extends StatelessWidget {
   final Map<String, dynamic> property;
@@ -58,20 +59,18 @@ class TopReferredPropertyCard extends StatelessWidget {
                     children: [
                       Text(
                         property['name']?.toString() ?? '',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                        style: AppTheme.dm(
+                          size: 15,
+                          weight: FontWeight.w700,
                           color: AppColors.navy,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Owner: ${property['owner']}',
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style: AppTheme.dm(
+                          size: 12,
                           color: AppColors.secondary,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ],
@@ -141,20 +140,18 @@ class _StatBox extends StatelessWidget {
         children: [
           Text(
             value,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 13,
+              weight: FontWeight.w700,
               color: valueColor ?? AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 2),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 10,
+            style: AppTheme.dm(
+              size: 10,
               color: AppColors.secondary,
-              fontFamily: 'DM Sans',
             ),
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/widgets/celebration_icon.dart';
 import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/widgets/level_stats_row.dart';
 import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/widgets/level_unlocked_text.dart';
@@ -176,21 +177,19 @@ class _LevelUpCelebrationScreenState extends State<LevelUpCelebrationScreen>
                       Text(
                         "You're a ${widget.levelName}!",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
+                        style: AppTheme.dm(
+                          size: 28,
+                          weight: FontWeight.w700,
                           color: AppColors.navy,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 12),
                       Text(
                         widget.unlockBenefit,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: AppTheme.dm(
+                          size: 14,
                           color: AppColors.secondary,
-                          fontFamily: 'DM Sans',
                           height: 1.4,
                         ),
                       ),
@@ -240,12 +239,11 @@ class _LevelUpCelebrationScreenState extends State<LevelUpCelebrationScreen>
               // Keep Exploring
               GestureDetector(
                 onTap: widget.onKeepExploring,
-                child: const Text(
+                child: Text(
                   'Keep exploring',
-                  style: TextStyle(
-                    fontSize: 14,
+                  style: AppTheme.dm(
+                    size: 14,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ),

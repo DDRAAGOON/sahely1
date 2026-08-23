@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ConfirmPayButton extends StatelessWidget {
   final bool isLoading;
@@ -39,12 +40,11 @@ class ConfirmPayButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
                 ),
               )
-            : const Text(
+            : Text(
                 'Confirm & Pay',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
                 ),
               ),
       ),

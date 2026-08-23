@@ -1,8 +1,10 @@
-﻿import 'dart:ui';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class BrokerBottomNav extends StatelessWidget {
   final int activeIndex;
@@ -61,32 +63,31 @@ class BrokerBottomNav extends StatelessWidget {
             children: List.generate(items.length, (index) {
               final isActive = index == activeIndex;
               return Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                child: BouncyButton(
                   onTap: () => onTap(index),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        isActive
-                            ? items[index].activeIcon
-                            : items[index].inactiveIcon,
-                        size: 23,
-                        color: isActive
-                            ? AppColors.navy
-                            : AppColors.navy.withValues(alpha: 0.4),
+                      AnimatedScale(
+                        duration: const Duration(milliseconds: 300),
+                        scale: isActive ? 1.15 : 1.0,
+                        curve: Curves.easeOutBack,
+                        child: Icon(
+                          isActive ? items[index].activeIcon : items[index].inactiveIcon,
+                          size: 24,
+                          color: isActive ? AppColors.navy : AppColors.navy.withValues(alpha: 0.4),
+                        ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        items[index].label,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: isActive
-                              ? AppColors.navy
-                              : AppColors.navy.withValues(alpha: 0.4),
-                          fontFamily: 'DM Sans',
+                      AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOutCubic,
+                        style: AppTheme.dm(
+                          size: 11,
+                          weight: isActive ? FontWeight.w700 : FontWeight.w500,
+                          color: isActive ? AppColors.navy : AppColors.navy.withValues(alpha: 0.4),
                         ),
+                        child: Text(items[index].label),
                       ),
                     ],
                   ),

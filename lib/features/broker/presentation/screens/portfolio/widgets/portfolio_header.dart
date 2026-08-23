@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PortfolioHeader extends StatelessWidget {
   final int totalCount;
@@ -43,22 +44,20 @@ class PortfolioHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'My Portfolio',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 20,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   '$totalCount referred · $liveCount live',
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: AppTheme.dm(
+                    size: 13,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -73,13 +72,12 @@ class PortfolioHeader extends StatelessWidget {
                 color: AppColors.gold,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Text(
+              child: Text(
                 'Refer',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

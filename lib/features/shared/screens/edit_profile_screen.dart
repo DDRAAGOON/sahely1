@@ -3,7 +3,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
-
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
+import 'package:sahely/core/widgets/entrance_faded.dart';
 import 'package:sahely/features/renter/presentation/screens/profile/widgets/edit_profile_avatar.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -94,7 +96,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.cream,
         elevation: 0,
-        leading: GestureDetector(
+        leading: BouncyButton(
           onTap: () => Navigator.pop(context),
           child: Container(
             margin: const EdgeInsets.all(8),
@@ -106,174 +108,176 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: const Icon(Icons.chevron_left, color: AppColors.navy),
           ),
         ),
-        title: const Text(
+        title: Text(
           'Edit Bio',
-          style: TextStyle(
+          style: AppTheme.dm(
             color: AppColors.navy,
-            fontWeight: FontWeight.w700,
-            fontFamily: 'DM Sans',
+            weight: FontWeight.w700,
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  // Avatar Section
-                  EditProfileAvatar(
-                    localPath: _localAvatarPath,
-                    onAvatarTap: _pickImage,
-                  ),
-                  const SizedBox(height: 16), // Reduced spacing
+      body: EntranceFaded(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    // Avatar Section
+                    EditProfileAvatar(
+                      localPath: _localAvatarPath,
+                      onAvatarTap: _pickImage,
+                    ),
+                    const SizedBox(height: 16),
 
-                  // About You Section
-                  const Text(
-                    'About you',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.navy,
-                      fontFamily: 'DM Sans',
+                    // About You Section
+                    Text(
+                      'About you',
+                      style: AppTheme.dm(
+                        size: 15,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.goldTint,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.gold, width: 1.5),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        TextField(
-                          controller: _bioController,
-                          maxLength: _bioMaxLength,
-                          maxLines: 3,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            counterText: '',
-                            hintText: 'Tell us about yourself...',
+                    const SizedBox(height: 12),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.goldTint,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.gold, width: 1.5),
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextField(
+                            controller: _bioController,
+                            maxLength: _bioMaxLength,
+                            maxLines: 3,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              counterText: '',
+                              hintText: 'Tell us about yourself...',
+                            ),
+                            style: AppTheme.dm(
+                              size: 14,
+                              color: AppColors.navy,
+                              height: 1.4,
+                            ),
                           ),
-                          style: const TextStyle(
-                            fontSize: 14,
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '${_bioController.text.length} / $_bioMaxLength',
+                        style: AppTheme.dm(
+                          size: 12,
+                          color: _getCounterColor(),
+                          weight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // Social Accounts Section
+                    Row(
+                      children: [
+                        Text(
+                          'Link social accounts',
+                          style: AppTheme.dm(
+                            size: 15,
+                            weight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
-                            height: 1.4,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          '· optional',
+                          style: AppTheme.dm(
+                            size: 14,
+                            color: AppColors.gold,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      '${_bioController.text.length} / $_bioMaxLength',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: _getCounterColor(),
-                        fontFamily: 'DM Sans',
-                        fontWeight: FontWeight.bold,
-                      ),
+                    const SizedBox(height: 16),
+
+                    _SocialLinkField(
+                      icon: Icons.camera_alt_outlined,
+                      label: 'Instagram',
+                      controller: _instagramController,
+                      hint: 'Add your Instagram',
                     ),
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Social Accounts Section
-                  const Row(
-                    children: [
-                      Text(
-                        'Link social accounts',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.navy,
-                          fontFamily: 'DM Sans',
-                        ),
-                      ),
-                      SizedBox(width: 6),
-                      Text(
-                        'Â· optional',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.gold,
-                          fontFamily: 'DM Sans',
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-
-                  _SocialLinkField(
-                    icon: Icons.camera_alt_outlined,
-                    label: 'Instagram',
-                    controller: _instagramController,
-                    hint: 'Add your Instagram',
-                  ),
-                  const SizedBox(height: 12),
-                  _SocialLinkField(
-                    icon: Icons.music_note_outlined,
-                    label: 'TikTok',
-                    controller: _tiktokController,
-                    hint: 'Add your TikTok',
-                  ),
-                  const SizedBox(height: 12),
-                  _SocialLinkField(
-                    icon: Icons.facebook_outlined,
-                    label: 'Facebook',
-                    controller: _facebookController,
-                    hint: 'Add your Facebook',
-                  ),
-                  const SizedBox(height: 100),
-                ],
+                    const SizedBox(height: 12),
+                    _SocialLinkField(
+                      icon: Icons.music_note_outlined,
+                      label: 'TikTok',
+                      controller: _tiktokController,
+                      hint: 'Add your TikTok',
+                    ),
+                    const SizedBox(height: 12),
+                    _SocialLinkField(
+                      icon: Icons.facebook_outlined,
+                      label: 'Facebook',
+                      controller: _facebookController,
+                      hint: 'Add your Facebook',
+                    ),
+                    const SizedBox(height: 100),
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // Bottom Button (No box behind)
-          Container(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-            color: Colors.transparent, // Explicitly transparent
-            child: SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _handleSave,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.navy,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+            // Bottom Button
+            Container(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+              color: Colors.transparent,
+              child: SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: BouncyButton(
+                  onTap: _isLoading ? null : _handleSave,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.navy,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.navy.withValues(alpha: 0.2),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: _isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                                color: Colors.white, strokeWidth: 2),
+                          )
+                        : Text(
+                            'Save Profile',
+                            style: AppTheme.dm(
+                              size: 16,
+                              weight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
-                child: _isLoading
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                            color: Colors.white, strokeWidth: 2),
-                      )
-                    : const Text(
-                        'Save Profile',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          fontFamily: 'DM Sans',
-                        ),
-                      ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -322,11 +326,10 @@ class _SocialLinkFieldState extends State<_SocialLinkField> {
               const SizedBox(width: 10),
               Text(
                 widget.label,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 14,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const Spacer(),
@@ -347,10 +350,12 @@ class _SocialLinkFieldState extends State<_SocialLinkField> {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: widget.hint,
-                hintStyle:
-                    const TextStyle(color: AppColors.placeholder, fontSize: 13),
+                hintStyle: AppTheme.dm(
+                  color: AppColors.textPlaceholder,
+                  size: 13,
+                ),
               ),
-              style: const TextStyle(fontSize: 14, color: AppColors.navy),
+              style: AppTheme.dm(size: 14, color: AppColors.navy),
             ),
           ),
         ],
@@ -369,9 +374,9 @@ class _SocialLinkFieldState extends State<_SocialLinkField> {
       ),
       child: Text(
         isLinked ? 'Linked' : 'Optional',
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.bold,
+        style: AppTheme.dm(
+          size: 11,
+          weight: FontWeight.bold,
           color: isLinked ? AppColors.green : AppColors.gold,
         ),
       ),

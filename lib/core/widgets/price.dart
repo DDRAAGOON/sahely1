@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class PriceTag extends StatelessWidget {
   const PriceTag(
@@ -13,15 +14,14 @@ class PriceTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatted = price
-        .toString()
-        .replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (m) => '${m[1]},');
+    final formatted = CurrencyFormatter.format(price);
+    
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
       children: [
-        Text('EGP $formatted',
+        Text(formatted,
             style: AppTheme.dm(
                 size: size, weight: FontWeight.w700, color: AppColors.navy)),
         if (perNight) ...[

@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class AccountVerificationSection extends StatelessWidget {
   final bool emailConfirmed;
@@ -24,13 +25,12 @@ class AccountVerificationSection extends StatelessWidget {
         // Section Header
         Row(
           children: [
-            const Text(
+            Text(
               'Account Verification',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              style: AppTheme.dm(
+                size: 16,
+                weight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
               ),
             ),
             const SizedBox(width: 8),
@@ -79,7 +79,7 @@ class AccountVerificationSection extends StatelessWidget {
                 iconColor: AppColors.warning,
                 label: 'Identity Verified',
                 status: VerificationStatus.pending,
-                actionLabel: 'Verify Now â†’',
+                actionLabel: 'Verify Now →',
                 onAction: () => AppNavigation.goToIdVerification(context),
               ),
               _Divider(),
@@ -93,7 +93,7 @@ class AccountVerificationSection extends StatelessWidget {
                 status: paymentCardAdded
                     ? VerificationStatus.done
                     : VerificationStatus.pending,
-                actionLabel: 'Add Card â†’',
+                actionLabel: 'Add Card →',
                 onAction: () => AppNavigation.goToAddCard(context),
               ),
             ],
@@ -134,10 +134,9 @@ class _VerificationRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                fontSize: 14,
+              style: AppTheme.dm(
+                size: 14,
                 color: AppColors.dark,
-                fontFamily: 'DM Sans',
               ),
             ),
           ),
@@ -146,11 +145,10 @@ class _VerificationRow extends StatelessWidget {
               onTap: onAction,
               child: Text(
                 actionLabel!,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
                   color: AppColors.gold,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             )

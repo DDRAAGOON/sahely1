@@ -6,6 +6,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
+import 'package:sahely/features/renter/domain/constants/wishlist_constants.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/add_to_collection_sheet.dart';
 
 class HeartButton extends StatefulWidget {
@@ -53,7 +54,29 @@ class _HeartButtonState extends State<HeartButton> {
             HapticFeedback.lightImpact();
 
             if (!isWishlisted) {
-              _showAddToCollectionSheet(context);
+              final hasCustomCollections = state.collections.any(
+                  (c) => c.id != WishlistConstants.allSavedCollectionId);
+
+              if (!hasCustomCollections) {
+                // No custom collections → save to default directly
+                context.read<WishlistCubit>().toggleWishlist(
+                      propertyId: widget.propertyId,
+                      propertyName: widget.propertyName,
+                      propertyImage: widget.propertyImage,
+                      role: _currentRole,
+                    );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Saved to All Saved'),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: AppColors.navy,
+                  ),
+                );
+              } else {
+                // Has custom collections → ask where to save
+                _showAddToCollectionSheet(context);
+              }
             } else {
               context.read<WishlistCubit>().toggleWishlist(
                     propertyId: widget.propertyId,

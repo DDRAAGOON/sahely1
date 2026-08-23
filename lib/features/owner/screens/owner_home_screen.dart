@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/core/di/service_locator.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
-import 'package:sahely/features/owner/data/datasources/mock_owner_data_source.dart';
-import 'package:sahely/features/owner/data/repositories/owner_repository_impl.dart';
 import 'package:sahely/features/owner/domain/entities/owner_dashboard.dart';
 import 'package:sahely/features/owner/presentation/bloc/owner_home_cubit.dart';
 import 'package:sahely/features/owner/presentation/bloc/owner_home_state.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/core/widgets/chips.dart';
 import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/property_card.dart';
+import 'package:sahely/core/widgets/smooth_transition.dart';
+import 'package:sahely/core/widgets/entrance_faded.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/promo_banner.dart';
 import 'package:sahely/features/shared/widgets/mawsem/mawsem_card.dart';
 import 'package:sahely/features/owner/widgets/pending_request_card.dart';
+
+import '../../../core/widgets/bouncy_button.dart';
 
 class OwnerHomeScreen extends StatefulWidget {
   const OwnerHomeScreen({super.key});
@@ -26,20 +28,29 @@ class OwnerHomeScreen extends StatefulWidget {
 }
 
 class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
-  String? _selectedCategory = 'All';
+  String? _selectedCategory;
+  List<Property> _filteredProperties = [];
+  OwnerDashboard? _dashboard;
 
   @override
   void initState() {
     super.initState();
-  }
+    // Pre-populate if state is already loaded
+    final state = context.read<OwnerHomeCubit>().state;
+    if (state is OwnerHomeLoaded) {
+      _dashboard = state.dashboard;
+    }
 
-  @override
-  void dispose() {
-    super.dispose();
+    // Set initial category with a tiny delay to trigger the transition animation
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _selectedCategory = 'All';
+          _filteredProperties = _getFilteredFromDashboard();
+        });
+      }
+    });
   }
-
-  List<Property> _filteredProperties = [];
-  OwnerDashboard? _dashboard;
 
   List<Property> _getFilteredFromDashboard() {
     if (_dashboard == null) return [];
@@ -60,11 +71,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OwnerHomeCubit(
-        repository: OwnerRepositoryImpl(
-          remoteDataSource: MockOwnerDataSource(),
-        ),
-      )..loadDashboard(),
+      create: (context) => sl<OwnerHomeCubit>()..loadDashboard(),
       child: BlocConsumer<OwnerHomeCubit, OwnerHomeState>(
         listener: (context, state) {
           if (state is OwnerHomeLoaded) {
@@ -85,306 +92,411 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
 
           final dashboard = _dashboard;
           return SafeArea(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-              children: [
-                // 1. Header
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Welcome back,',
-                                style: AppTheme.dm(
-                                    size: 13, color: AppColors.muted)),
-                            Text(dashboard?.ownerName ?? 'Layla Mansour',
-                                style: AppTheme.dm(
-                                    size: 24,
-                                    weight: FontWeight.w700,
-                                    color: AppColors.navy)),
-                          ]),
-                      const RoleBadge(role: Role.owner),
-                    ]),
-                const SizedBox(height: 16),
+            child: EntranceFaded(
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+                children: [
+                  // 1. Header
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Welcome back,',
+                                  style: AppTheme.dm(
+                                      size: 13, color: AppColors.muted)),
+                              Text(dashboard?.ownerName ?? 'Layla Mansour',
+                                  style: AppTheme.dm(
+                                      size: 24,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.navy)),
+                            ]),
+                        const RoleBadge(role: Role.owner),
+                      ]),
+                  const SizedBox(height: 16),
 
-                // 2. Search & Tools (Synced with Renter logic)
-                Row(children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => AppNavigation.goToBrowse(context),
-                      behavior: HitTestBehavior.opaque,
-                      child: Container(
-                        height: 46,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: AppColors.white,
-                          borderRadius: BorderRadius.circular(23),
-                          border: Border.all(color: AppColors.borderDefault),
-                        ),
-                        child: Row(children: [
-                          const Icon(Icons.search,
-                              color: AppColors.gold, size: 18),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'Find your perfect stay',
-                              style: AppTheme.dm(
-                                  size: 11,
-                                  color: AppColors.navy.withValues(alpha: 0.5)),
-                            ),
+                  // 2. Search & Tools
+                  Row(children: [
+                    Expanded(
+                      child: BouncyButton(
+                        onTap: () => AppNavigation.goToBrowse(context),
+                        child: Container(
+                          height: 46,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(23),
+                            border : null,
                           ),
-                        ]),
+                          child: Row(children: [
+                            const Icon(Icons.search,
+                                color: AppColors.gold, size: 18),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Find your perfect stay',
+                                style: AppTheme.dm(
+                                    size: 11,
+                                    color: AppColors.navy.withValues(alpha: 0.5)),
+                              ),
+                            ),
+                          ]),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () async {
-                      final result = await AppNavigation.goToFilters(context);
-                      if (result is Map<String, dynamic> && context.mounted) {
-                        AppNavigation.goToSearchResults(context, extra: result);
-                      }
-                    },
-                    behavior: HitTestBehavior.opaque,
-                    child: Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                          color: AppColors.navy,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: const Icon(Icons.tune,
-                          color: AppColors.gold, size: 20),
+                    const SizedBox(width: 10),
+                    BouncyButton(
+                      onTap: () {
+                        AppNavigation.goToFilters(
+                          context,
+                          allProperties: _dashboard?.trendingProperties ?? [],
+                          onApplyFilters: (result) {
+                            AppNavigation.goToSearchResults(context, extra: result);
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                            color: AppColors.navy,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: const Icon(Icons.tune,
+                            color: AppColors.gold, size: 20),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    BouncyButton(
+                      onTap: () => AppNavigation.goToOwnerAiChat(context),
+                      child: Container(
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                            color: AppColors.gold,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(Icons.chat_bubble_outline,
+                                color: AppColors.navy, size: 20),
+                            Positioned(
+                                top: 8,
+                                right: 8,
+                                child: Container(
+                                    width: 8,
+                                    height: 8,
+                                    decoration: const BoxDecoration(
+                                        color: Color(0xFF34C759),
+                                        shape: BoxShape.circle,
+                                        border : null))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ]),
+                  const SizedBox(height: 18),
+
+                  // 3. MAWSEM Card
+                  const MawsemCard(),
+                  const SizedBox(height: 16),
+
+                  // 4. Promo Banner
+                  const PromoBanner(),
+                  const SizedBox(height: 20),
+
+                  // 8. Categories & Trending
+                  SizedBox(
+                    height: 38,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.zero,
+                      children: [
+                        ChoiceChipPill('All',
+                            selected: _selectedCategory == 'All', onTap: () {
+                          setState(() {
+                            _selectedCategory = 'All';
+                            _filteredProperties = _getFilteredFromDashboard();
+                          });
+                        }),
+                        const SizedBox(width: 8),
+                        ChoiceChipPill('Villa',
+                            selected: _selectedCategory == 'Villa', onTap: () {
+                          setState(() {
+                            _selectedCategory =
+                                (_selectedCategory == 'Villa') ? 'All' : 'Villa';
+                            _filteredProperties = _getFilteredFromDashboard();
+                          });
+                        }),
+                        const SizedBox(width: 8),
+                        ChoiceChipPill('Chalet',
+                            selected: _selectedCategory == 'Chalet', onTap: () {
+                          setState(() {
+                            _selectedCategory =
+                                (_selectedCategory == 'Chalet') ? 'All' : 'Chalet';
+                            _filteredProperties = _getFilteredFromDashboard();
+                          });
+                        }),
+                        const SizedBox(width: 8),
+                        ChoiceChipPill('Penthouse',
+                            selected: _selectedCategory == 'Penthouse',
+                            onTap: () {
+                          setState(() {
+                            _selectedCategory = (_selectedCategory == 'Penthouse')
+                                ? 'All'
+                                : 'Penthouse';
+                            _filteredProperties = _getFilteredFromDashboard();
+                          });
+                        }),
+                        const SizedBox(width: 8),
+                        ChoiceChipPill('Beachfront',
+                            selected: _selectedCategory == 'Beachfront',
+                            onTap: () {
+                          setState(() {
+                            _selectedCategory = (_selectedCategory == 'Beachfront')
+                                ? 'All'
+                                : 'Beachfront';
+                            _filteredProperties = _getFilteredFromDashboard();
+                          });
+                        }),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () => AppNavigation.goToOwnerAiChat(context),
-                    behavior: HitTestBehavior.opaque,
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Trending Now',
+                            style: AppTheme.dm(
+                                size: 18,
+                                weight: FontWeight.w700,
+                                color: AppColors.navy)),
+                        BouncyButton(
+                          onTap: () =>
+                              AppNavigation.goToOwnerAllTrending(context),
+                          child: Text('See All',
+                              style: AppTheme.dm(
+                                  size: 14,
+                                  weight: FontWeight.w600,
+                                  color: AppColors.gold)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SmoothListTransition(
+                    transitionKey: _selectedCategory,
+                    child: Column(
+                      children: _filteredProperties.isEmpty
+                            ? [
+                                Center(
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(32),
+                                        child: Text('No properties in this category',
+                                            style: AppTheme.dm(
+                                                color: AppColors.muted))))
+                              ]
+                            : _filteredProperties
+                                .map((p) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 16),
+                                      child: PropertyCard(
+                                          property: p,
+                                          onTap: () =>
+                                              AppNavigation.goToPropertyDetail(
+                                                  context,
+                                                  extra: p)),
+                                    ))
+                                .toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // 5. Dashboard Stats
+                  Text('Your dashboard',
+                      style: AppTheme.dm(
+                          size: 18,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy)),
+                  const SizedBox(height: 12),
+                  StatRow(cards: [
+                    StatCard(
+                        value: '${dashboard?.propertiesCount ?? 3}',
+                        label: 'Properties',
+                        onTap: () => AppNavigation.goToOwnerProperties(context)),
+                    StatCard(
+                        value: '${dashboard?.bookingsCount ?? 7}',
+                        label: 'Active bookings',
+                        onTap: () => AppNavigation.goToOwnerBookings(context)),
+                    StatCard(
+                        value: dashboard?.monthlyEarnings ?? '68.4k',
+                        label: 'EGP / month',
+                        onTap: () => AppNavigation.goToOwnerEarnings(context)),
+                  ]),
+                  const SizedBox(height: 16),
+
+                  // 6. Action: List new property
+                  BouncyButton(
+                    onTap: () => AppNavigation.goToOwnerAddProperty(context),
                     child: Container(
-                      width: 46,
-                      height: 46,
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                          color: AppColors.gold,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Stack(
-                        alignment: Alignment.center,
+                        color: AppColors.gold,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: AppColors.goldButtonShadow,
+                      ),
+                      child: Row(children: [
+                        Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12)),
+                          child: const Icon(Icons.add_home_work,
+                              color: AppColors.navy, size: 22),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                              Text('List a new property',
+                                  style: AppTheme.dm(
+                                      size: 15,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.navy)),
+                              Text('Reach thousands of verified renters',
+                                  style: AppTheme.dm(
+                                      size: 13,
+                                      color:
+                                          AppColors.navy.withValues(alpha: 0.6))),
+                            ])),
+                        Container(
+                          width: 32,
+                          height: 32,
+                          decoration: const BoxDecoration(
+                              color: AppColors.navy, shape: BoxShape.circle),
+                          child: const Icon(Icons.add,
+                              color: AppColors.gold, size: 20),
+                        ),
+                      ]),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // 7. Pending Requests
+                  SectionHeader(
+                    title: 'Pending Requests',
+                    action: 'View all · 2',
+                    onAction: () => AppNavigation.goToOwnerRequests(context),
+                  ),
+                  const SizedBox(height: 12),
+                  PendingRequestCard(
+                    onTap: () => AppNavigation.goToOwnerRequestDetail(context, extra: {
+                      'guestName': 'Omar Khalil',
+                      'rating': '4.9',
+                      'verified': true,
+                      'propertyName': 'Azure Villa',
+                      'stays': '12 stays',
+                      'dates': 'Jun 21–25',
+                      'total': '18,000',
+                      'guests': '4 guests · 2A 2C',
+                      'status': 'Pending',
+                    }),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // 9. Portfolio Insights
+                  BouncyButton(
+                    onTap: () => AppNavigation.goToOwnerPortfolio(context),
+                    child: WhiteCard(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: AppColors.muted.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.bar_chart,
+                              color: AppColors.navy, size: 22),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                              Text('Portfolio Insights',
+                                  style: AppTheme.dm(
+                                      size: 16,
+                                      weight: FontWeight.w700,
+                                      color: AppColors.navy)),
+                              Text('Compare all properties',
+                                  style: AppTheme.dm(
+                                      size: 13, color: AppColors.muted)),
+                            ])),
+                        const Icon(Icons.chevron_right,
+                            color: AppColors.faint, size: 18),
+                      ]),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 10. Refer & Earn (Unified)
+                  BouncyButton(
+                    onTap: () => AppNavigation.goToShareEarn(context),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: AppColors.referralGradient,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.navy.withValues(alpha: 0.15),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          )
+                        ],
+                      ),
+                      child: Row(
                         children: [
-                          const Icon(Icons.chat_bubble_outline,
-                              color: AppColors.navy, size: 20),
-                          Positioned(
-                              top: 8,
-                              right: 8,
-                              child: Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFF34C759),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: AppColors.cream, width: 1.5)))),
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: AppColors.gold,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: const Icon(Icons.handshake_outlined,
+                                color: AppColors.navy, size: 24),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Invite Hosts, earn 100 ★',
+                                    style: AppTheme.dm(
+                                        color: Colors.white,
+                                        size: 15,
+                                        weight: FontWeight.w700)),
+                                Text('When they list their first property',
+                                    style: AppTheme.dm(
+                                        color: Colors.white70, size: 12)),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.chevron_right,
+                              color: AppColors.gold, size: 20),
                         ],
                       ),
                     ),
                   ),
-                ]),
-                const SizedBox(height: 18),
-
-                // 3. MAWSEM Card (Synced Design)
-                const MawsemCard(),
-                const SizedBox(height: 16),
-
-                // 4. Promo Banner (Copied from Renter)
-                const PromoBanner(),
-                const SizedBox(height: 20),
-
-                // 8. Categories & Trending (Moved up)
-                Row(children: [
-                  ChoiceChipPill('All', selected: _selectedCategory == 'All',
-                      onTap: () {
-                    setState(() {
-                      _selectedCategory = 'All';
-                      _filteredProperties = _getFilteredFromDashboard();
-                    });
-                  }),
-                  const SizedBox(width: 10),
-                  ChoiceChipPill('Beachfront',
-                      selected: _selectedCategory == 'Beachfront', onTap: () {
-                    setState(() {
-                      _selectedCategory = 'Beachfront';
-                      _filteredProperties = _getFilteredFromDashboard();
-                    });
-                  }),
-                  const SizedBox(width: 10),
-                  ChoiceChipPill('Pool', selected: _selectedCategory == 'Pool',
-                      onTap: () {
-                    setState(() {
-                      _selectedCategory = 'Pool';
-                      _filteredProperties = _getFilteredFromDashboard();
-                    });
-                  }),
-                ]),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Trending Now',
-                        style: AppTheme.dm(
-                            size: 18,
-                            weight: FontWeight.w700,
-                            color: AppColors.navy)),
-                    GestureDetector(
-                      onTap: () => AppNavigation.goToAllProperties(context),
-                      behavior: HitTestBehavior.opaque,
-                      child: Text('See All',
-                          style: AppTheme.dm(
-                              size: 13,
-                              weight: FontWeight.w600,
-                              color: AppColors.gold)),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                if (_filteredProperties.isEmpty)
-                  Center(
-                      child: Padding(
-                          padding: const EdgeInsets.all(32),
-                          child: Text('No properties in this category',
-                              style: AppTheme.dm(color: AppColors.muted))))
-                else
-                  for (var p in _filteredProperties) ...[
-                    PropertyCard(
-                        property: p,
-                        onTap: () => AppNavigation.goToPropertyDetail(context,
-                            extra: p)),
-                    const SizedBox(height: 14),
-                  ],
-                const SizedBox(height: 24),
-
-                // 5. Dashboard Stats
-                Text('Your dashboard',
-                    style: AppTheme.dm(
-                        size: 18,
-                        weight: FontWeight.w700,
-                        color: AppColors.navy)),
-                const SizedBox(height: 12),
-                StatRow(cards: [
-                  StatCard(
-                      value: '${dashboard?.propertiesCount ?? 3}',
-                      label: 'Properties',
-                      onTap: () => AppNavigation.goToOwnerProperties(context)),
-                  StatCard(
-                      value: '${dashboard?.bookingsCount ?? 7}',
-                      label: 'Active bookings',
-                      onTap: () => AppNavigation.goToOwnerBookings(context)),
-                  StatCard(
-                      value: dashboard?.monthlyEarnings ?? '68.4k',
-                      label: 'EGP / month',
-                      onTap: () => AppNavigation.goToOwnerEarnings(context)),
-                ]),
-                const SizedBox(height: 16),
-
-                // 6. Action: List new property
-                GestureDetector(
-                  onTap: () => AppNavigation.goToOwnerAddProperty(context),
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.gold,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: AppColors.goldButtonShadow,
-                    ),
-                    child: Row(children: [
-                      Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12)),
-                        child: const Icon(Icons.add_home_work,
-                            color: AppColors.navy, size: 22),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                            Text('List a new property',
-                                style: AppTheme.dm(
-                                    size: 15,
-                                    weight: FontWeight.w700,
-                                    color: AppColors.navy)),
-                            Text('Reach thousands of verified renters',
-                                style: AppTheme.dm(
-                                    size: 13,
-                                    color:
-                                        AppColors.navy.withValues(alpha: 0.6))),
-                          ])),
-                      Container(
-                        width: 32,
-                        height: 32,
-                        decoration: const BoxDecoration(
-                            color: AppColors.navy, shape: BoxShape.circle),
-                        child: const Icon(Icons.add,
-                            color: AppColors.gold, size: 20),
-                      ),
-                    ]),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // 7. Pending Requests
-                SectionHeader(
-                  title: 'Pending Requests',
-                  action: 'View all · 2',
-                  onAction: () => AppNavigation.goToOwnerRequests(context),
-                ),
-                const SizedBox(height: 12),
-                PendingRequestCard(
-                    onTap: () => AppNavigation.goToOwnerRequestDetail(context)),
-                const SizedBox(height: 24),
-
-                // 9. Portfolio Insights
-                GestureDetector(
-                  onTap: () => AppNavigation.goToOwnerPortfolio(context),
-                  behavior: HitTestBehavior.opaque,
-                  child: WhiteCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: AppColors.muted.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(Icons.bar_chart,
-                            color: AppColors.navy, size: 22),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                            Text('Portfolio Insights',
-                                style: AppTheme.dm(
-                                    size: 16,
-                                    weight: FontWeight.w700,
-                                    color: AppColors.navy)),
-                            Text('Compare all properties',
-                                style: AppTheme.dm(
-                                    size: 13, color: AppColors.muted)),
-                          ])),
-                      const Icon(Icons.chevron_right,
-                          color: AppColors.faint, size: 18),
-                    ]),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                _buildFooter(),
-                const SizedBox(height: 20),
-              ],
+                  const SizedBox(height: 32),
+                  _buildFooter(),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           );
         },
@@ -395,25 +507,25 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
   Widget _buildFooter() {
     return Column(
       children: [
-        const Text(
+        Text(
           'S A H E L Y',
-          style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
+          style: AppTheme.dm(
+              size: 22,
+              weight: FontWeight.w900,
               color: AppColors.navy,
               letterSpacing: 4),
         ),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'Verified Chalets. Zero Chaos.',
-          style: TextStyle(
-              fontSize: 14, color: AppColors.gold, fontWeight: FontWeight.w600),
+          style: AppTheme.dm(
+              size: 14, color: AppColors.gold, weight: FontWeight.w600),
         ),
         const SizedBox(height: 16),
         Text(
           'You\'ve reached the end · North Coast, Egypt',
-          style: TextStyle(
-              fontSize: 12, color: AppColors.muted.withValues(alpha: 0.6)),
+          style: AppTheme.dm(
+              size: 12, color: AppColors.muted.withValues(alpha: 0.6)),
         ),
       ],
     );

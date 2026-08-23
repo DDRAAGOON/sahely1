@@ -57,7 +57,7 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
 
   void _showPicker(BuildContext context, bool isFront) {
     showModalBottomSheet(
-      context: context,
+      useRootNavigator: true, context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
@@ -225,8 +225,7 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
                               ? 'Back side uploaded'
                               : 'Tap to upload back',
                           onTap: _frontImage != null
-                              ? () => _showPicker(context, false)
-                              : null,
+                              ? () => _showPicker(context, false) : null,
                         ),
                       ],
                       const SizedBox(height: 10),
@@ -344,7 +343,7 @@ class _DocTypeChip extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: selected ? AppColors.navy : AppColors.white,
-          border: selected ? null : Border.all(color: AppColors.navy),
+          border: selected ? null : null,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(label,
@@ -397,8 +396,7 @@ class _UploadBox extends StatelessWidget {
                       image: FileImage(image!),
                       fit: BoxFit.cover,
                       opacity: 0.3,
-                    )
-                  : null,
+                    ) : null,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -488,7 +486,7 @@ class _FacialScanScreenState extends State<FacialScanScreen>
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.elliptical(252, 372)),
-                        border: Border.all(color: AppColors.gold, width: 3),
+                        border : null,
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.gold
@@ -604,7 +602,7 @@ class _SelfieTip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border: Border.all(color: AppColors.border),
+        border : null,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(

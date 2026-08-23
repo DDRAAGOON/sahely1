@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CompareHeader extends StatelessWidget {
   final String collectionName;
@@ -48,22 +49,20 @@ class CompareHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Compare',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 18,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   collectionName,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -84,15 +83,15 @@ class CompareHeader extends StatelessWidget {
                 color: AppColors.gold,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.link, size: 14, color: AppColors.navy),
-                  SizedBox(width: 4),
+                  const Icon(Icons.link, size: 14, color: AppColors.navy),
+                  const SizedBox(width: 4),
                   Text(
                     'Share',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 12,
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
                     ),
                   ),
@@ -122,11 +121,10 @@ class CompareHeader extends StatelessWidget {
                       child: Center(
                         child: Text(
                           participantNames[i][0],
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
+                          style: AppTheme.dm(
+                            size: 10,
+                            weight: FontWeight.w600,
                             color: Colors.white,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ),

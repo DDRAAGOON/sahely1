@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class LevelUnlockedText extends StatelessWidget {
   final int levelNumber;
@@ -14,11 +15,10 @@ class LevelUnlockedText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       'LEVEL $levelNumber UNLOCKED',
-      style: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w700,
+      style: AppTheme.dm(
+        size: 12,
+        weight: FontWeight.w700,
         color: AppColors.gold,
-        fontFamily: 'DM Sans',
         letterSpacing: 2,
       ),
     );

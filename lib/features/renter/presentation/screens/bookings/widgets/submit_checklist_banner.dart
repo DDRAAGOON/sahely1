@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class SubmitChecklistBanner extends StatelessWidget {
   final int starsEarned;
@@ -38,18 +39,18 @@ class SubmitChecklistBanner extends StatelessWidget {
           Expanded(
             child: RichText(
               text: TextSpan(
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Color(0xFF1B2744),
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 13,
+                  color: const Color(0xFF1B2744),
                 ),
                 children: [
                   const TextSpan(text: 'Submit your checklist to earn '),
                   TextSpan(
                     text: '+$starsEarned Sahel Stars',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFFA08050),
+                    style: AppTheme.dm(
+                      weight: FontWeight.w700,
+                      color: const Color(0xFFA08050),
+                      size: 13,
                     ),
                   ),
                   TextSpan(text: ' on $collectionName.'),

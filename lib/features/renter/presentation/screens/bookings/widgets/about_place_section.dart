@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class AboutPlaceSection extends StatelessWidget {
   final String? description;
@@ -17,22 +18,20 @@ class AboutPlaceSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'About this place',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 16,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 8),
         Text(
           description ?? 'No description available.',
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTheme.dm(
+            size: 14,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
             height: 1.5,
           ),
         ),
@@ -48,14 +47,13 @@ class AboutPlaceSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.border),
+                  border : null,
                 ),
                 child: Text(
                   amenity.toString(),
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style: AppTheme.dm(
+                    size: 12,
                     color: AppColors.dark,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               );

@@ -5,7 +5,9 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/add_to_collection_sheet.dart';
+import 'package:sahely/features/renter/domain/constants/wishlist_constants.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class SaveHeart extends StatelessWidget {
   const SaveHeart(
@@ -25,7 +27,7 @@ class SaveHeart extends StatelessWidget {
         final isSaved =
             state.items.any((item) => item.propertyId == property.name);
 
-        return GestureDetector(
+        return BouncyButton(
           onTap: () {
             if (isSaved) {
               // Already saved → remove directly
@@ -36,22 +38,46 @@ class SaveHeart extends StatelessWidget {
                     role: role,
                   );
             } else {
-              // Not saved → always show sheet to choose collection
-              showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                backgroundColor: Colors.transparent,
-                isScrollControlled: true,
-                builder: (_) => BlocProvider.value(
-                  value: context.read<WishlistCubit>(),
-                  child: AddToCollectionSheet(
-                    propertyId: property.name,
-                    propertyName: property.name,
-                    propertyImage: property.image,
-                    role: role,
+              // Logic: If no custom collections, save to "All Saved" directly.
+              // Otherwise, show the collection picker sheet.
+              final hasCustomCollections = state.collections.any((c) =>
+                  c.id != WishlistConstants.allSavedCollectionId);
+
+              if (!hasCustomCollections) {
+                // No custom collections → save to default directly
+                context.read<WishlistCubit>().toggleWishlist(
+                      propertyId: property.name,
+                      propertyName: property.name,
+                      propertyImage: property.image,
+                      role: role,
+                    );
+                
+                // Show a quick snackbar to confirm
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Saved to All Saved'),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: AppColors.navy,
                   ),
-                ),
-              );
+                );
+              } else {
+                // Has custom collections → ask where to save
+                showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  backgroundColor: Colors.transparent,
+                  isScrollControlled: true,
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<WishlistCubit>(),
+                    child: AddToCollectionSheet(
+                      propertyId: property.name,
+                      propertyName: property.name,
+                      propertyImage: property.image,
+                      role: role,
+                    ),
+                  ),
+                );
+              }
             }
           },
           child: Container(

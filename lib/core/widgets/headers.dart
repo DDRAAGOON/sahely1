@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader(
@@ -32,7 +33,7 @@ class SectionHeader extends StatelessWidget {
         ),
         if (action != null) ...[
           const SizedBox(width: 12),
-          GestureDetector(
+          BouncyButton(
             onTap: onAction,
             child: Text(action!,
                 style: AppTheme.dm(

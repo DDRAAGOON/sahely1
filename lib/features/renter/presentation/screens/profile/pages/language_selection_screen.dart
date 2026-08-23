@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({super.key});
@@ -63,13 +64,12 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
             ),
           ),
         ),
-        title: const Text(
+        title: Text(
           'Language',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 20,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         centerTitle: false,
@@ -79,14 +79,13 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Subtitle
-            const Padding(
-              padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               child: Text(
                 'Choose your app language',
-                style: TextStyle(
-                  fontSize: 14,
+                style: AppTheme.dm(
+                  size: 14,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),
@@ -133,20 +132,18 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                                         children: [
                                           Text(
                                             language['nativeName']!,
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: AppColors.dark,
-                                              fontFamily: 'DM Sans',
+                                            style: AppTheme.dm(
+                                              size: 15,
+                                              weight: FontWeight.w600,
+                                              color: AppColors.navy,
                                             ),
                                           ),
                                           const SizedBox(height: 2),
                                           Text(
                                             language['name']!,
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              color: AppColors.secondary,
-                                              fontFamily: 'DM Sans',
+                                            style: AppTheme.dm(
+                                              size: 13,
+                                              color: AppColors.muted,
                                             ),
                                           ),
                                         ],
@@ -224,12 +221,11 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  child: Text(
                     'Done',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      size: 15,
+                      weight: FontWeight.w700,
                     ),
                   ),
                 ),

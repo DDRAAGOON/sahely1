@@ -2,6 +2,7 @@
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
 import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
@@ -137,11 +138,10 @@ class MawsemLevelBadge extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 levelName,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w600,
                   color: textColor,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ],

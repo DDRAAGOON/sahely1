@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReviewsSection extends StatelessWidget {
   final double rating;
@@ -26,13 +27,12 @@ class ReviewsSection extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       'Reviews',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                      style: AppTheme.dm(
+                        size: 16,
+                        weight: FontWeight.w700,
                         color: AppColors.navy,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -40,19 +40,17 @@ class ReviewsSection extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       '$rating',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                      style: AppTheme.dm(
+                        size: 14,
+                        weight: FontWeight.w600,
                         color: AppColors.dark,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                     Text(
                       '· $reviewCount',
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: AppTheme.dm(
+                        size: 14,
                         color: AppColors.secondary,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],
@@ -61,13 +59,12 @@ class ReviewsSection extends StatelessWidget {
                   onTap: () {
                     AppNavigation.goToPropertyReviews(context);
                   },
-                  child: const Text(
+                child: Text(
                     'See All',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                    style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w600,
                       color: AppColors.gold,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ),
@@ -147,11 +144,10 @@ class ReviewsSection extends StatelessWidget {
                       children: [
                         Text(
                           name,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                          style: AppTheme.dm(
+                            size: 14,
+                            weight: FontWeight.w600,
                             color: AppColors.dark,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -166,11 +162,10 @@ class ReviewsSection extends StatelessWidget {
                           ),
                           child: Text(
                             role,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
+                            style: AppTheme.dm(
+                              size: 11,
+                              weight: FontWeight.w600,
                               color: AppColors.navy,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ),
@@ -190,10 +185,9 @@ class ReviewsSection extends StatelessWidget {
                         const SizedBox(width: 6),
                         Text(
                           date,
-                          style: const TextStyle(
-                            fontSize: 12,
+                          style: AppTheme.dm(
+                            size: 12,
                             color: AppColors.secondary,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ],
@@ -206,10 +200,9 @@ class ReviewsSection extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             comment,
-            style: const TextStyle(
-              fontSize: 13,
+            style: AppTheme.dm(
+              size: 13,
               color: AppColors.dark,
-              fontFamily: 'DM Sans',
               height: 1.5,
             ),
           ),

@@ -5,10 +5,11 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/features/owner/widgets/payout_selection_sheet.dart';
+
+import '../../../core/utils/currency_formatter.dart';
 
 class WithdrawAmountScreen extends StatefulWidget {
   const WithdrawAmountScreen({super.key});
@@ -33,10 +34,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
     setState(() {
       _selectedP = p;
       final amount = (_available * factor).round();
-      final formatted = amount
-          .toString()
-          .replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (m) => '${m[1]},');
-      _amountController.text = formatted;
+      _amountController.text = CurrencyFormatter.formatNumber(amount);
     });
   }
 
@@ -103,14 +101,14 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                           style: AppTheme.dm(
                               size: 13, color: const Color(0xFFCDD4E0))),
                       const SizedBox(height: 6),
-                      Text('EGP 38,900',
+                      Text(CurrencyFormatter.format(38900),
                           style: AppTheme.dm(
                               size: 30,
                               weight: FontWeight.w700,
                               color: AppColors.gold)),
                       const SizedBox(height: 4),
                       Text(
-                          'EGP 5,000 still pending (clears 48h after check-in)',
+                          '${CurrencyFormatter.format(5000)} still pending (clears 48h after check-in)',
                           style: AppTheme.dm(
                               size: 11, color: const Color(0xFF9FB0CF))),
                     ]),
@@ -179,8 +177,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                               ? AppColors.navy
                               : AppColors.white,
                           border: _selectedP == p
-                              ? null
-                              : Border.all(color: AppColors.navy),
+                              ? null : null,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
@@ -236,9 +233,9 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                     ),
                   ])),
               const SizedBox(height: 14),
-              const InfoNote(
+              InfoNote(
                   text:
-                      'Funds arrive in 2 working days. No fee for transfers over EGP 5,000.'),
+                      'Funds arrive in 2 working days. No fee for transfers over ${CurrencyFormatter.format(5000)}.'),
             ],
           ),
         ),
@@ -265,8 +262,7 @@ class _ThousandsFormatter extends TextInputFormatter {
       TextEditingValue oldV, TextEditingValue newV) {
     if (newV.text.isEmpty) return newV;
     final num = int.tryParse(newV.text.replaceAll(',', '')) ?? 0;
-    final formatted = num.toString()
-        .replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (m) => '${m[1]},');
+    final formatted = CurrencyFormatter.formatNumber(num);
     return TextEditingValue(
       text: formatted,
       selection: TextSelection.collapsed(offset: formatted.length),

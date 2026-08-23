@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BookingPropertyCard extends StatelessWidget {
   final String propertyName;
@@ -16,7 +17,7 @@ class BookingPropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final egpPrice = (pricePerNight / 100).toStringAsFixed(0);
+    final egpPrice = CurrencyFormatter.formatNumber(pricePerNight ~/ 100);
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -58,20 +59,18 @@ class BookingPropertyCard extends StatelessWidget {
               children: [
                 Text(
                   propertyName,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 15,
+                    weight: FontWeight.w700,
                     color: AppColors.navy,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'EGP $egpPrice / night',
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: AppTheme.dm(
+                    size: 13,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

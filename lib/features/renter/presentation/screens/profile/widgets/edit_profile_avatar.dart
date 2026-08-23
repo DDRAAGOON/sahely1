@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class EditProfileAvatar extends StatelessWidget {
   final String? avatarUrl;
@@ -63,13 +64,12 @@ class EditProfileAvatar extends StatelessWidget {
           const SizedBox(height: 12),
           GestureDetector(
             onTap: onAvatarTap,
-            child: const Text(
+            child: Text(
               'Change photo',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+              style: AppTheme.dm(
+                size: 13,
+                weight: FontWeight.w600,
                 color: AppColors.gold,
-                fontFamily: 'DM Sans',
               ),
             ),
           ),

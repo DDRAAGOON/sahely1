@@ -4,8 +4,9 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/sample_data.dart';
+
+import '../../../../../../core/utils/currency_formatter.dart';
 
 class ReferredPropertyDetailPage extends StatelessWidget {
   const ReferredPropertyDetailPage({super.key});
@@ -113,16 +114,16 @@ class ReferredPropertyDetailPage extends StatelessWidget {
                             weight: FontWeight.w700,
                             color: AppColors.navy)),
                     const SizedBox(height: 8),
-                    const WhiteCard(
-                        padding: EdgeInsets.all(14),
+                    WhiteCard(
+                        padding: const EdgeInsets.all(14),
                         child: Column(children: [
-                          KeyValueRow('Your commission rate', '4%'),
-                          KeyValueRow('Bookings (season)', '24'),
-                          KeyValueRow('Nights rented', '96'),
-                          KeyValueRow('Commission earned', 'EGP 41,200',
+                          const KeyValueRow('Your commission rate', '4%'),
+                          const KeyValueRow('Bookings (season)', '24'),
+                          const KeyValueRow('Nights rented', '96'),
+                          KeyValueRow('Commission earned', CurrencyFormatter.format(41200),
                               valueColor: AppColors.success),
-                          KeyValueRow('Pending commission', 'EGP 2,400',
-                              valueColor: Color(0xFFD2760A)),
+                          KeyValueRow('Pending commission', CurrencyFormatter.format(2400),
+                              valueColor: const Color(0xFFD2760A)),
                         ])),
                     const SizedBox(height: 16),
                     Text('Listing performance',

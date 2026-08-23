@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/bloc/broker_bookings_cubit.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/widgets/broker_active_booking_card.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/widgets/broker_bookings_filter_tabs.dart';
@@ -26,6 +27,25 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
   void initState() {
     super.initState();
     context.read<BrokerBookingsCubit>().loadBookings();
+    _handleInitialTab();
+  }
+
+  void _handleInitialTab() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final state = GoRouterState.of(context);
+      final tab = state.uri.queryParameters['tab'];
+      if (tab != null && _tabs.contains(tab)) {
+        setState(() {
+          _selectedTab = tab;
+        });
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant BrokerBookingsPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _handleInitialTab();
   }
 
   @override
@@ -77,12 +97,11 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
             children: [
               if (_selectedTab == 'Active') ...[
                 if (filteredBookings.isEmpty)
-                  const Center(
+                  Center(
                       child: Padding(
-                    padding: EdgeInsets.only(top: 60),
+                    padding: const EdgeInsets.only(top: 60),
                     child: Text('No active bookings found',
-                        style: TextStyle(
-                            color: AppColors.secondary, fontFamily: 'DM Sans')),
+                        style: AppTheme.dm(color: AppColors.secondary)),
                   ))
                 else
                   ...filteredBookings.map((booking) => Padding(
@@ -112,6 +131,13 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
                           onSOSTap: () {
                             AppNavigation.goToBrokerSos(context);
                           },
+                          onPropertyTap: () {
+                            AppNavigation.goToPropertyDetail(context, extra: {
+                              'name': booking.propertyName,
+                              'location': booking.area,
+                              'imageUrl': booking.imageUrl,
+                            });
+                          },
                           onViewDetailsTap: () {
                             context.push('/broker/booking-details', extra: {
                               'propertyName': booking.propertyName,
@@ -128,12 +154,11 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
                       )),
               ] else if (_selectedTab == 'Upcoming') ...[
                 if (filteredBookings.isEmpty)
-                  const Center(
+                  Center(
                       child: Padding(
-                    padding: EdgeInsets.only(top: 60),
+                    padding: const EdgeInsets.only(top: 60),
                     child: Text('No upcoming bookings found',
-                        style: TextStyle(
-                            color: AppColors.secondary, fontFamily: 'DM Sans')),
+                        style: AppTheme.dm(color: AppColors.secondary)),
                   ))
                 else
                   ...filteredBookings.map((booking) => Padding(
@@ -146,24 +171,37 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
                           imageUrl: booking.imageUrl,
                           profit: booking.profit,
                           onTap: () {
-                            // Navigate to Broker Upcoming Booking Detail
+                            AppNavigation.goToPropertyDetail(context, extra: {
+                              'name': booking.propertyName,
+                              'location': booking.area,
+                              'imageUrl': booking.imageUrl,
+                              'rating': 4.8,
+                              'reviewCount': 124,
+                              'pricePerNight': 4500,
+                            });
                           },
                         ),
                       )),
               ] else ...[
                 if (filteredBookings.isEmpty)
-                  const Center(
+                  Center(
                       child: Padding(
-                    padding: EdgeInsets.only(top: 60),
+                    padding: const EdgeInsets.only(top: 60),
                     child: Text('No past stays found',
-                        style: TextStyle(
-                            color: AppColors.secondary, fontFamily: 'DM Sans')),
+                        style: AppTheme.dm(color: AppColors.secondary)),
                   ))
                 else
                   BrokerPastStaysSection(
                     pastBookings: filteredBookings,
                     onCardTap: (booking) {
-                      // Navigate to Broker Past Booking Detail
+                      AppNavigation.goToPropertyDetail(context, extra: {
+                        'name': booking.propertyName,
+                        'location': booking.area,
+                        'imageUrl': booking.imageUrl,
+                        'rating': 4.8,
+                        'reviewCount': 124,
+                        'pricePerNight': 4500,
+                      });
                     },
                   ),
               ],

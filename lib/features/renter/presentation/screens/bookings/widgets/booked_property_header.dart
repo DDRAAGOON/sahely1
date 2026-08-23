@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BookedPropertyHeader extends StatelessWidget {
   final String propertyName;
@@ -83,22 +84,21 @@ class BookedPropertyHeader extends StatelessWidget {
               color: AppColors.green,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.check_circle,
                   color: Colors.white,
                   size: 12,
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   'Checked In',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                  style: AppTheme.dm(
+                    size: 12,
+                    weight: FontWeight.w600,
                     color: Colors.white,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],
@@ -116,11 +116,10 @@ class BookedPropertyHeader extends StatelessWidget {
             children: [
               Text(
                 propertyName,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 22,
+                  weight: FontWeight.w700,
                   color: Colors.white,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 4),
@@ -134,10 +133,9 @@ class BookedPropertyHeader extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     location,
-                    style: const TextStyle(
-                      fontSize: 13,
+                    style: AppTheme.dm(
+                      size: 13,
                       color: Colors.white70,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hint;
@@ -39,22 +40,21 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       onChanged: onChanged,
-      style: const TextStyle(
-        fontSize: 14,
+      style: AppTheme.dm(
+        size: 14,
         color: AppColors.textDark,
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(
-          fontSize: 14,
+        hintStyle: AppTheme.dm(
+          size: 14,
           color: hintColor ?? AppColors.textLight,
         ),
         prefixIcon: prefixIcon != null
             ? Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: prefixIcon,
-              )
-            : null,
+              ) : null,
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         suffixIcon: suffixIcon,
         filled: false,

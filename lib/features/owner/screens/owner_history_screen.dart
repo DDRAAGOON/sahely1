@@ -3,7 +3,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/core/widgets/chips.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 
@@ -149,7 +149,7 @@ class ChoiceChipPillStub extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
             color: active ? AppColors.navy : AppColors.white,
-            border: active ? null : Border.all(color: AppColors.navy),
+            border: active ? null : null,
             borderRadius: BorderRadius.circular(18)),
         child: Text(label,
             style: AppTheme.dm(
@@ -248,13 +248,13 @@ class ViolationsScreen extends StatelessWidget {
                         width: 60,
                         height: 60,
                         alignment: Alignment.center,
-                        child: const Text('Receipt',
-                            style: TextStyle(
-                                fontSize: 10, color: AppColors.muted)))),
+                        child: Text('Receipt',
+                            style: AppTheme.dm(
+                                size: 10, color: AppColors.muted)))),
               ]),
               const SizedBox(height: 12),
-              const KeyValueRow('Deduction', '− EGP 1,500',
-                  valueColor: Color(0xFFB22222)),
+              KeyValueRow('Deduction', '− ${CurrencyFormatter.format(1500)}',
+                  valueColor: const Color(0xFFB22222)),
               const KeyValueRow('Reported on', 'Jun 18, 2026'),
               const SizedBox(height: 12),
               WideButton(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gal/gal.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -34,14 +35,14 @@ class BlendedImage extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(
-              url,
+            CachedNetworkImage(
+              imageUrl: url,
               fit: BoxFit.cover,
-              loadingBuilder: (c, child, p) => p == null
-                  ? child
-                  : const ColoredBox(color: AppColors.cardWarm),
-              errorBuilder: (_, __, ___) =>
+              placeholder: (c, url) =>
                   const ColoredBox(color: AppColors.cardWarm),
+              errorWidget: (_, __, ___) =>
+                  const ColoredBox(color: AppColors.cardWarm),
+              memCacheHeight: (height * 2).toInt(), // Optimization: limit cache size
             ),
             if (overlay)
               const DecoratedBox(
@@ -97,18 +98,27 @@ class SahelyImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final image = Image.network(
-      imageUrl,
+    final image = CachedNetworkImage(
+      imageUrl: imageUrl,
       height: height,
       width: width,
       fit: fit,
-      loadingBuilder: loadingBuilder,
-      errorBuilder: errorBuilder ??
-          (_, __, ___) => Container(
-                height: height ?? 150,
-                width: width ?? double.infinity,
-                color: AppColors.navy,
-              ),
+      placeholder: (context, url) => loadingBuilder != null
+          ? loadingBuilder!(context, const SizedBox(), null)
+          : Container(
+              height: height ?? 150,
+              width: width ?? double.infinity,
+              color: AppColors.border.withValues(alpha: 0.1),
+            ),
+      errorWidget: (context, url, error) => errorBuilder != null
+          ? errorBuilder!(context, error, null)
+          : Container(
+              height: height ?? 150,
+              width: width ?? double.infinity,
+              color: AppColors.navy,
+            ),
+      memCacheHeight: (height != null && height!.isFinite) ? (height! * 2).toInt() : null,
+      memCacheWidth: (width != null && width!.isFinite) ? (width! * 2).toInt() : null,
     );
 
     Widget result = image;
@@ -228,7 +238,7 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
 
   void _onDownloadTap() {
     showModalBottomSheet(
-      context: context,
+      useRootNavigator: true, context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
         decoration: const BoxDecoration(
@@ -365,8 +375,8 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
                     }
                   },
                   child: SizedBox.expand(
-                    child: Image.network(
-                      widget.images[i],
+                    child: CachedNetworkImage(
+                      imageUrl: widget.images[i],
                       fit: BoxFit.contain,
                     ),
                   ),

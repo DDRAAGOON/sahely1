@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class SahelyAiSuggestion extends StatelessWidget {
   final String suggestion;
@@ -39,22 +40,21 @@ class SahelyAiSuggestion extends StatelessWidget {
           // Text
           Expanded(
             child: RichText(
-              text: const TextSpan(
-                style: TextStyle(
-                  fontSize: 13,
+              text: TextSpan(
+                style: AppTheme.dm(
+                  size: 13,
                   color: AppColors.dark,
-                  fontFamily: 'DM Sans',
                   height: 1.4,
                 ),
                 children: [
                   TextSpan(
                     text: 'Sahely AI: ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
                     ),
                   ),
-                  TextSpan(text: 'Reach out to Tarek — a quick morning re-shoot usually clears this within a day.'),
+                  const TextSpan(text: 'Reach out to Tarek — a quick morning re-shoot usually clears this within a day.'),
                 ],
               ),
             ),

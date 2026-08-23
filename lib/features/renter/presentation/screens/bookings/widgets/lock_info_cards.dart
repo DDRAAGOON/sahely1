@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class LockInfoCards extends StatelessWidget {
   final bool isInRange;
@@ -14,7 +15,7 @@ class LockInfoCards extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     const months = [
-      'Jun',
+      'Jan',
       'Feb',
       'Mar',
       'Apr',
@@ -61,10 +62,7 @@ class LockInfoCards extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFF1E293B).withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.08),
-            width: 1,
-          ),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,10 +70,9 @@ class LockInfoCards extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 11,
-                color: Color(0xFF94A3B8),
-                fontFamily: 'DM Sans',
+              style: AppTheme.dm(
+                size: 11,
+                color: const Color(0xFF94A3B8),
               ),
             ),
             const SizedBox(height: 6),
@@ -85,11 +82,10 @@ class LockInfoCards extends StatelessWidget {
               child: Text(
                 value,
                 maxLines: 1,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 14,
+                  weight: FontWeight.w700,
                   color: Colors.white,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

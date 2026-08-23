@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class VerificationProgressIndicator extends StatelessWidget {
   final int currentStep; // 1-4
@@ -55,11 +56,10 @@ class VerificationProgressIndicator extends StatelessWidget {
                 // Label
                 Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
+                  style: AppTheme.dm(
+                    size: 11,
+                    weight: FontWeight.w600,
                     color: textColor,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_add_credit_button.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_balance_card.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_recent_activity.dart';
@@ -13,18 +14,10 @@ class WalletScreen extends StatelessWidget {
 
   void _showAddCreditSheet(BuildContext context) {
     showModalBottomSheet(
-      context: context,
+      useRootNavigator: true, context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => const AddCreditSheet(
-        registeredMethods: [
-          RegisteredPaymentMethod(
-            methodId: 'card',
-            displayLabel: '•••• 4242',
-            isDefault: true,
-          ),
-        ],
-      ),
+      builder: (context) => const AddCreditSheet(),
     );
   }
 
@@ -58,13 +51,12 @@ class WalletScreen extends StatelessWidget {
             ),
           ),
         ),
-        title: const Text(
+        title: Text(
           'Wallet',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 18,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         centerTitle: false,
@@ -129,13 +121,12 @@ class WalletScreen extends StatelessWidget {
               Center(
                 child: GestureDetector(
                   onTap: () => AppNavigation.goToTransactionHistory(context),
-                  child: const Text(
-                    'View Full History â†’',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                  child: Text(
+                    'View Full History →',
+                    style: AppTheme.dm(
+                      size: 14,
+                      weight: FontWeight.w600,
                       color: AppColors.gold,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ),

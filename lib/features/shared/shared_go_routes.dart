@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:sahely/core/navigation/route_transitions.dart';
 
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
@@ -7,11 +9,8 @@ import 'package:sahely/core/navigation/app_router.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/features/shared/screens/add_payment_card_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/profile/pages/change_password_screen.dart';
-import 'package:sahely/features/shared/screens/blocked_gate_screen.dart';
 import 'package:sahely/features/shared/screens/sos_screen.dart' as sos;
 import 'package:sahely/features/shared/screens/ai_chat_screen.dart';
-import 'package:sahely/features/shared/screens/currency_screen.dart';
-import 'package:sahely/features/shared/screens/language_screen.dart';
 import 'package:sahely/features/shared/screens/upcoming_booking_detail_screen.dart';
 import 'package:sahely/features/shared/screens/past_booking_detail_screen.dart';
 import 'package:sahely/features/shared/screens/active_booking_detail_screen.dart';
@@ -37,7 +36,6 @@ import 'package:sahely/features/renter/presentation/screens/mawsem/celebration/p
 import 'package:sahely/features/shared/screens/collection_inside_screen.dart';
 import 'package:sahely/features/shared/screens/collection_chat_screen.dart';
 import 'package:sahely/features/shared/screens/compare_screen.dart';
-import 'package:sahely/features/shared/screens/share_earn_screen.dart';
 import 'package:sahely/features/shared/screens/transaction_history_screen.dart';
 import 'package:sahely/features/shared/screens/booking_screen.dart';
 import 'package:sahely/features/shared/screens/booking_confirmed_screen.dart';
@@ -48,22 +46,29 @@ final List<GoRoute> sharedGoRoutes = [
   GoRoute(
     path: '/browse',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const BrowseScreen(),
+    pageBuilder: (context, state) => fadeSlideTransition(
+      key: state.pageKey,
+      child: const BrowseScreen(),
+    ),
   ),
   // Filters is now a ModalBottomSheet called via AppNavigation, 
   // so we remove the separate route to avoid conflicts.
   GoRoute(
     path: '/all-properties',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const AllPropertiesScreen(),
+    pageBuilder: (context, state) => fadeSlideTransition(
+      key: state.pageKey,
+      child: const AllPropertiesScreen(),
+    ),
   ),
   GoRoute(
     path: '/property',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) {
+    pageBuilder: (context, state) {
       final args = state.extra;
+      Widget child;
       if (args is Property) {
-        return shared_property.PropertyDetailScreen(
+        child = shared_property.PropertyDetailScreen(
           propertyId: args.name,
           propertyName: args.name,
           propertyImage: args.image,
@@ -72,9 +77,8 @@ final List<GoRoute> sharedGoRoutes = [
           reviewCount: args.reviews,
           pricePerNight: args.price,
         );
-      }
-      if (args is Map<String, dynamic>) {
-        return shared_property.PropertyDetailScreen(
+      } else if (args is Map<String, dynamic>) {
+        child = shared_property.PropertyDetailScreen(
           propertyId: args['name'] ?? 'Property',
           propertyName: args['name'] ?? '',
           propertyImage: args['imageUrl'] ?? args['image'] ?? '',
@@ -87,16 +91,19 @@ final List<GoRoute> sharedGoRoutes = [
               (args['price'] as num?)?.toInt() ??
               5000,
         );
+      } else {
+        child = const shared_property.PropertyDetailScreen(
+          propertyId: 'Property',
+          propertyName: 'Property',
+          location: 'North Coast',
+          propertyImage: '',
+          rating: 4.8,
+          reviewCount: 120,
+          pricePerNight: 5000,
+        );
       }
-      return const shared_property.PropertyDetailScreen(
-        propertyId: 'Property',
-        propertyName: 'Property',
-        location: 'North Coast',
-        propertyImage: '',
-        rating: 4.8,
-        reviewCount: 120,
-        pricePerNight: 5000,
-      );
+
+      return fadeSlideTransition(key: state.pageKey, child: child);
     },
   ),
   GoRoute(
@@ -114,13 +121,18 @@ final List<GoRoute> sharedGoRoutes = [
   GoRoute(
     path: '/booking',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) {
+    pageBuilder: (context, state) {
       final args = state.extra;
-      if (args is Property) return BookingScreen(property: args);
-      if (args is Map<String, dynamic>) {
-        return BookingScreen(property: Property.fromMap(args));
+      Widget child;
+      if (args is Property) {
+        child = BookingScreen(property: args);
+      } else if (args is Map<String, dynamic>) {
+        child = BookingScreen(property: Property.fromMap(args));
+      } else {
+        child = const BookingScreen();
       }
-      return const BookingScreen();
+
+      return fadeSlideTransition(key: state.pageKey, child: child);
     },
   ),
   GoRoute(
@@ -137,8 +149,11 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Map<String, dynamic>) {
+        final role = args['role'] is UpcomingBookingRole
+            ? args['role'] as UpcomingBookingRole
+            : UpcomingBookingRole.renter;
         return UpcomingBookingDetailScreen(
-            bookingData: args, role: UpcomingBookingRole.renter);
+            bookingData: args, role: role);
       }
       return const UpcomingBookingDetailScreen(
           role: UpcomingBookingRole.renter);
@@ -150,8 +165,11 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) {
       final args = state.extra;
       if (args is Map<String, dynamic>) {
+        final role = args['role'] is PastBookingRole
+            ? args['role'] as PastBookingRole
+            : PastBookingRole.renter;
         return PastBookingDetailScreen(
-            bookingData: args, role: PastBookingRole.renter);
+            bookingData: args, role: role);
       }
       return const PastBookingDetailScreen(role: PastBookingRole.renter);
     },
@@ -280,12 +298,12 @@ final List<GoRoute> sharedGoRoutes = [
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) => const CompareScreen(),
   ),
-  // Share collection is now a ModalBottomSheet called via AppNavigation.
-  GoRoute(
-    path: '/share-earn',
-    parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const ShareEarnScreen(),
-  ),
+  // Share collection and Share Earn are now ModalBottomSheets called via AppNavigation.
+  // GoRoute(
+  //   path: '/share-earn',
+  //   parentNavigatorKey: rootNavigatorKey,
+  //   builder: (context, state) => const ShareEarnScreen(),
+  // ),
   // Services + AL MAWSEM
   GoRoute(
     path: '/services',
@@ -349,19 +367,10 @@ final List<GoRoute> sharedGoRoutes = [
     builder: (context, state) => const ChangePasswordScreen(),
   ),
   GoRoute(
-    path: '/verify-gate',
-    parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const BlockedGateScreen(),
-  ),
-  GoRoute(
-    path: '/blocked-gate',
-    parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const BlockedGateScreen(),
-  ),
-  GoRoute(
     path: '/sos',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) {
+    pageBuilder: (context, state) {
+      Widget child;
       try {
         final role = context.read<RoleState>().currentRole;
         final sosRole = switch (role) {
@@ -369,10 +378,24 @@ final List<GoRoute> sharedGoRoutes = [
           Role.broker => sos.UserRole.broker,
           _ => sos.UserRole.renter,
         };
-        return sos.SosScreen(role: sosRole);
+        child = sos.SosScreen(role: sosRole);
       } catch (_) {
-        return const sos.SosScreen(role: sos.UserRole.renter);
+        child = const sos.SosScreen(role: sos.UserRole.renter);
       }
+
+      return CustomTransitionPage(
+        key: state.pageKey,
+        child: child,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.95, end: 1.0).animate(animation),
+              child: child,
+            ),
+          );
+        },
+      );
     },
   ),
   GoRoute(
@@ -383,23 +406,19 @@ final List<GoRoute> sharedGoRoutes = [
   GoRoute(
     path: '/ai-chat',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) =>
-        AiChatScreen(initialMessage: state.extra as String?),
-  ),
-  GoRoute(
-    path: '/currency',
-    parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const CurrencyScreen(),
-  ),
-  GoRoute(
-    path: '/language',
-    parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const LanguageScreen(),
+    pageBuilder: (context, state) => fadeSlideTransition(
+      key: state.pageKey,
+      child: AiChatScreen(initialMessage: state.extra as String?),
+      begin: const Offset(0, 0.05),
+    ),
   ),
   GoRoute(
     path: '/wallet',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const WalletScreen(),
+    pageBuilder: (context, state) => fadeSlideTransition(
+      key: state.pageKey,
+      child: const WalletScreen(),
+    ),
   ),
   GoRoute(
     path: '/my-reviews',
@@ -409,12 +428,16 @@ final List<GoRoute> sharedGoRoutes = [
   GoRoute(
     path: '/transaction-history',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const TransactionHistoryScreen(),
+    pageBuilder: (context, state) => fadeSlideTransition(
+      key: state.pageKey,
+      child: const TransactionHistoryScreen(),
+    ),
   ),
   GoRoute(
     path: '/notifications',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) {
+    pageBuilder: (context, state) {
+      Widget child;
       try {
         final role = context.read<RoleState>().currentRole;
         final notificationRole = switch (role) {
@@ -422,15 +445,20 @@ final List<GoRoute> sharedGoRoutes = [
           Role.broker => NotificationRole.broker,
           _ => NotificationRole.renter,
         };
-        return NotificationSettingsScreen(role: notificationRole);
+        child = NotificationSettingsScreen(role: notificationRole);
       } catch (_) {
-        return const NotificationSettingsScreen(role: NotificationRole.renter);
+        child = const NotificationSettingsScreen(role: NotificationRole.renter);
       }
+
+      return fadeSlideTransition(key: state.pageKey, child: child);
     },
   ),
   GoRoute(
     path: '/edit-profile',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const EditProfileScreen(),
+    pageBuilder: (context, state) => fadeSlideTransition(
+      key: state.pageKey,
+      child: const EditProfileScreen(),
+    ),
   ),
 ];

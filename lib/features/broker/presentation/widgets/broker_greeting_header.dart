@@ -17,13 +17,12 @@ class BrokerGreetingHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Good morning,',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
+                style: AppTheme.dm(
+                  size: 13,
+                  weight: FontWeight.w400,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 2),

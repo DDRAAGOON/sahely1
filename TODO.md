@@ -1,48 +1,11 @@
-# Sahely Unification Project - ✅ COMPLETED
+# TODO: Convert account/verification fonts to AppTheme.dm
 
-## 📋 Completed Tasks
-
-### 1. SOS Screen - Unified ✅
-- ✅ Created shared `lib/features/shared/screens/sos_screen.dart` with `UserRole` enum
-- ✅ Updated `shared_go_routes.dart` to use shared SOS for all roles
-- ✅ Updated `broker_go_routes.dart` to point to shared SOS
-- ✅ Deleted old `broker_sos_chat_screen.dart`
-
-### 2. Active Booking Detail Screen - Unified ✅
-- ✅ Created shared `lib/features/shared/screens/active_booking_detail_screen.dart` with `UserRole`
-- ✅ Updated `shared_go_routes.dart` for all roles
-- ✅ Updated `owner_go_routes.dart` to point to shared screen
-- ✅ Updated `broker_go_routes.dart` to point to shared screen
-- ✅ Deleted old `owner_active_detail_screen.dart`
-- ✅ Deleted old `broker_booking_details_page.dart`
-- ✅ Deleted old `booked_property_screen.dart`
-
-### 3. Upcoming/Past Booking Detail Screens - Unified ✅
-- ✅ Created shared `upcoming_booking_detail_screen.dart` with `UserRole`
-- ✅ Created shared `past_booking_detail_screen.dart` with `UserRole`
-- ✅ Updated `shared_go_routes.dart` for renter routes
-- ✅ Updated `owner_go_routes.dart` to point to shared screens
-- ✅ Deleted old `owner_upcoming_detail_screen.dart`
-- ✅ Deleted old `owner_past_detail_screen.dart`
-
-### 4. Wishlist Screen - Refactored ✅
-- ✅ Added `WishlistRole` enum to shared WishlistScreen
-- ✅ Updated `app_router.dart` to use shared screen for Owner/Renter
-- ✅ Broker still uses its own specialized Wishlist
-
-### 5. Notification Settings - Unified ✅
-- ✅ Created shared `notification_settings_screen.dart` with `NotificationRole` enum
-- ✅ Updated `shared_go_routes.dart` to use shared screen
-- ✅ Updated `owner_go_routes.dart` to use shared screen
-- ✅ Updated `app_router.dart` to use shared screen
-- ✅ Deleted old `notifications_screen.dart`
-- ✅ Deleted old `owner_notification_settings_screen.dart`
-
-### 6. Property Cards - Unified ✅
-- ✅ Created shared `PropertyCardBase` widget
-- ✅ Updated `PropertyCard` to use `PropertyCardBase`
-- ✅ Updated `HeroPropertyCard`, `SmallPropCard`, `OwnerPropertyCard`, `BrokerPropertyCard`
-
-### 7. Cleanup ✅
-- ✅ Removed `owner_notification_settings_screen.dart` export from `owner_screens.dart`
-- ✅ All old files verified as deleted and unreferenced
+## Steps
+- [x] 1. Edit `card_number_field.dart` - replace TextStyle with AppTheme.dm + add import
+- [x] 2. Edit `cardholder_name_field.dart` - replace TextStyle with AppTheme.dm + add import
+- [x] 3. Edit `expiry_cvv_fields.dart` - replace TextStyle with AppTheme.dm + add import
+- [x] 4. Edit `save_card_button.dart` - replace TextStyle with AppTheme.dm + add import
+- [x] 5. Edit `verification_progress_indicator.dart` - replace TextStyle with AppTheme.dm + add import
+- [x] 6. Edit `blocked_action_gate.dart` - replace TextStyle with AppTheme.dm + add import
+- [x] 7. Edit `logout_button.dart` - replace TextStyle with AppTheme.dm (import already present)
+- [x] 8. Run `flutter analyze` to verify (no errors; only pre-existing infos/warnings in unrelated files)

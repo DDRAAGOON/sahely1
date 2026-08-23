@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class SaveCardButton extends StatelessWidget {
   final bool isLoading;
@@ -41,12 +42,12 @@ class SaveCardButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.navy),
                 ),
               )
-            : const Text(
+            : Text(
                 'Save Card & Complete Setup',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
+                  color: AppColors.navy,
                 ),
               ),
       ),

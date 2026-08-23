@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class AskSahelyAiBanner extends StatelessWidget {
   final VoidCallback onTap;
@@ -38,26 +39,24 @@ class AskSahelyAiBanner extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             // Text
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Ask Sahely AI',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 14,
+                      weight: FontWeight.w700,
                       color: Colors.white,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text(
                     'Questions about this stay — directions, parking, check-in',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Color(0xFFB8C4E0),
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      size: 11,
+                      color: const Color(0xFFB8C4E0),
                     ),
                   ),
                 ],

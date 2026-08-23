@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
 import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
@@ -156,24 +157,22 @@ class BrokerMawsemLevelsList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section Header
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'The 7 Levels',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
+              style: AppTheme.dm(
+                size: 18,
+                weight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
               ),
             ),
             Text(
               'climb for higher commission',
-              style: TextStyle(
-                fontSize: 12,
+              style: AppTheme.dm(
+                size: 12,
                 color: AppColors.secondary,
-                fontFamily: 'DM Sans',
               ),
             ),
           ],

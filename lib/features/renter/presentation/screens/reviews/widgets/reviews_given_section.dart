@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_given_card.dart';
 
 class ReviewsGivenSection extends StatelessWidget {
@@ -21,11 +22,10 @@ class ReviewsGivenSection extends StatelessWidget {
         // Section Header
         Text(
           'REVIEWS I GAVE · $reviewCount',
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 11,
+            weight: FontWeight.w700,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
             letterSpacing: 1.2,
           ),
         ),

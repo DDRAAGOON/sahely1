@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class NotLivePropertyCard extends StatelessWidget {
   final Map<String, dynamic> property;
@@ -70,30 +71,27 @@ class NotLivePropertyCard extends StatelessWidget {
                 children: [
                   Text(
                     property['name']?.toString() ?? '',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 14,
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     property['owner']?.toString() ?? '',
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: AppTheme.dm(
+                      size: 12,
                       color: AppColors.secondary,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   if (statusDetail != null) ...[
                     const SizedBox(height: 4),
                     Text(
                       statusDetail,
-                      style: const TextStyle(
-                        fontSize: 11,
+                      style: AppTheme.dm(
+                        size: 11,
                         color: AppColors.red,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],
@@ -109,11 +107,10 @@ class NotLivePropertyCard extends StatelessWidget {
               ),
               child: Text(
                 status,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
+                style: AppTheme.dm(
+                  size: 11,
+                  weight: FontWeight.w600,
                   color: Colors.white,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ),

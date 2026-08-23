@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/check_in_out_footer.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/get_directions_button.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/lock_icon_widget.dart';
@@ -181,11 +182,10 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
                             : (canUnlock
                                 ? 'Your Door Passcode'
                                 : 'Passcode Locked'),
-                        style: const TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w700,
+                        style: AppTheme.dm(
+                          size: 26,
+                          weight: FontWeight.w700,
                           color: Colors.white,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -193,12 +193,11 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
                         isExpired
                             ? 'Your stay has ended'
                             : '${widget.propertyName} · Keypad',
-                        style: TextStyle(
-                          fontSize: 15,
+                        style: AppTheme.dm(
+                          size: 15,
                           color: isExpired
                               ? Colors.redAccent
                               : const Color(0xFFC49F45),
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                       const SizedBox(height: 40),
@@ -209,13 +208,12 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
                       ),
                       const SizedBox(height: 32),
                       if (isExpired)
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 40),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
                           child: Text(
                             'Smart Lock access is only available during your active booking period.',
                             textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.white70, fontSize: 13),
+                            style: AppTheme.dm(color: Colors.white70, size: 13),
                           ),
                         )
                       else

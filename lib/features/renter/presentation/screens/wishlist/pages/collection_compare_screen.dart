@@ -45,13 +45,13 @@ class CollectionCompareScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Compare',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.gold, fontFamily: 'DM Sans'),
+                          style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.gold),
                         ),
                         Text(
                           collectionName,
-                          style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.6), fontFamily: 'DM Sans'),
+                          style: AppTheme.dm(size: 12, color: Colors.white.withValues(alpha: 0.6)),
                         ),
                       ],
                     ),
@@ -69,11 +69,11 @@ class CollectionCompareScreen extends StatelessWidget {
                         color: AppColors.gold,
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
-                          Icon(Icons.link, size: 14, color: AppColors.navy),
-                          SizedBox(width: 4),
-                          Text('Share', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.navy)),
+                          const Icon(Icons.link, size: 14, color: AppColors.navy),
+                          const SizedBox(width: 4),
+                          Text('Share', style: AppTheme.dm(size: 12, weight: FontWeight.w700, color: AppColors.navy)),
                         ],
                       ),
                     ),

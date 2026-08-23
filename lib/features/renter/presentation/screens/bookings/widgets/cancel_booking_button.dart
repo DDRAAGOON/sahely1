@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CancelBookingButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -23,13 +24,12 @@ class CancelBookingButton extends StatelessWidget {
           backgroundColor: const Color(0xFFFFF5F5),
           elevation: 0,
         ),
-        child: const Text(
+        child: Text(
           'Cancel booking',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFFB22222),
-            fontFamily: 'DM Sans',
+          style: AppTheme.dm(
+            size: 16,
+            weight: FontWeight.w700,
+            color: const Color(0xFFB22222),
           ),
         ),
       ),

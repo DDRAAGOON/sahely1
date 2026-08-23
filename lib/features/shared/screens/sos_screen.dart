@@ -99,33 +99,33 @@ class _SosScreenState extends State<SosScreen> {
   String _responseMessage() {
     switch (widget.role) {
       case UserRole.owner:
-        return "Understood - we're dispatching a technician now and notifying the guest. ETA under 90 min. Can you confirm the unit/floor?";
+        return "Understood — we're dispatching a technician now and notifying the guest. ETA under 90 min. Can you confirm the unit/floor?";
       case UserRole.broker:
         return "Understood. We are dispatching a technician to the unit. We will notify you once they arrive.";
       case UserRole.renter:
-        return "Thanks for flagging - I'm dispatching a technician now. They'll arrive within 60 minutes. I'll stay on this chat until it's resolved. Check mark";
+        return "Thanks for flagging — I'm dispatching a technician now. They'll arrive within 60 minutes. I'll stay on this chat until it's resolved. Check mark";
     }
   }
 
   String _getTitle() {
     switch (widget.role) {
       case UserRole.owner:
-        return 'SOS - Live Support';
+        return 'SOS — Live Support';
       case UserRole.broker:
-        return 'Broker Support - SOS';
+        return 'Broker Support — SOS';
       case UserRole.renter:
-        return 'Sahely Support - SOS';
+        return 'Sahely Support — SOS';
     }
   }
 
   String _getStatusText() {
     switch (widget.role) {
       case UserRole.owner:
-        return 'Agent connected - priority';
+        return 'Agent connected — priority';
       case UserRole.broker:
-        return 'Agent connected - Priority';
+        return 'Agent connected — Priority';
       case UserRole.renter:
-        return 'Agent connected - live now';
+        return 'Agent connected — live now';
     }
   }
 
@@ -205,7 +205,7 @@ class _SosScreenState extends State<SosScreen> {
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Text(
-                            'Today - Emergency chat started',
+                            'Today — Emergency chat started',
                             style: AppTheme.dm(
                                 size: 12,
                                 weight: FontWeight.w600,
@@ -310,8 +310,7 @@ class _SosScreenState extends State<SosScreen> {
                         : AppColors.navy,
                     borderRadius: BorderRadius.circular(14),
                     border: msg['imagePath'] != null
-                        ? Border.all(color: AppColors.border)
-                        : null,
+                        ? Border.all(color: AppColors.border) : null,
                   ),
                   child: msg['imagePath'] != null
                       ? ClipRRect(

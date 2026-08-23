@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
+
+import '../../../core/utils/currency_formatter.dart';
 
 class OwnerEarningsScreen extends StatefulWidget {
   const OwnerEarningsScreen({super.key});
@@ -16,7 +23,7 @@ class OwnerEarningsScreen extends StatefulWidget {
 class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
   int _activeTab = 0; // 0: Month, 1: Quarter, 2: Year
 
-  void _exportPDF(BuildContext context) {
+  Future<void> _exportPDF(BuildContext context) async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -31,28 +38,184 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
                 style: AppTheme.dm(color: Colors.white)),
           ],
         ),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
         backgroundColor: AppColors.navy,
       ),
     );
 
-    Future.delayed(const Duration(seconds: 2), () {
+    try {
+      final pdf = pw.Document();
+
+      // Gather current data
+      String periodLabel = '';
+      String periodAmount = '';
+      List<Map<String, String>> stats = [];
+      List<Map<String, String>> transactions = [];
+
+      if (_activeTab == 0) {
+        periodLabel = 'This Month';
+        periodAmount = CurrencyFormatter.format(68400);
+        stats = [
+          {'label': 'Upcoming', 'value': '24.5k'},
+          {'label': 'Paid', 'value': '38.9k'},
+          {'label': 'Pending', 'value': '5.0k'},
+        ];
+        transactions = [
+          {'name': 'Azure Villa', 'date': 'Jun 14', 'amount': '+18,000', 'status': 'Paid'},
+        ];
+      } else if (_activeTab == 1) {
+        periodLabel = 'This Quarter';
+        periodAmount = CurrencyFormatter.format(215800);
+        stats = [
+          {'label': 'Upcoming', 'value': '42.0k'},
+          {'label': 'Paid', 'value': '173.8k'},
+          {'label': 'Pending', 'value': '15.0k'},
+        ];
+        transactions = [
+          {'name': 'Azure Villa', 'date': 'Jun 14', 'amount': '+18,000', 'status': 'Paid'},
+          {'name': 'Sunset Suite', 'date': 'May 28', 'amount': '+45,000', 'status': 'Paid'},
+          {'name': 'Beach Cabin', 'date': 'Apr 12', 'amount': '+12,000', 'status': 'Paid'},
+        ];
+      } else {
+        periodLabel = 'This Year';
+        periodAmount = CurrencyFormatter.format(840000);
+        stats = [
+          {'label': 'Upcoming', 'value': '120.0k'},
+          {'label': 'Paid', 'value': '720.0k'},
+          {'label': 'Pending', 'value': '40.0k'},
+        ];
+        transactions = [
+          {'name': 'Azure Villa', 'date': 'Jun 14', 'amount': '+18,000', 'status': 'Paid'},
+          {'name': 'Sunset Suite', 'date': 'May 28', 'amount': '+45,000', 'status': 'Paid'},
+          {'name': 'Beach Cabin', 'date': 'Apr 12', 'amount': '+12,000', 'status': 'Paid'},
+          {'name': 'Royal Palace', 'date': 'Jan 15', 'amount': '+150,000', 'status': 'Paid'},
+        ];
+      }
+
+      pdf.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          build: (pw.Context context) {
+            return pw.Padding(
+              padding: const pw.EdgeInsets.all(32),
+              child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text('SAHELY EARNINGS REPORT',
+                      style: pw.TextStyle(
+                          fontSize: 24, fontWeight: pw.FontWeight.bold)),
+                  pw.SizedBox(height: 10),
+                  pw.Text('Period: $periodLabel',
+                      style: const pw.TextStyle(fontSize: 16)),
+                  pw.Divider(),
+                  pw.SizedBox(height: 20),
+                  pw.Text('Total Earnings: $periodAmount',
+                      style: pw.TextStyle(
+                          fontSize: 20, fontWeight: pw.FontWeight.bold)),
+                  pw.SizedBox(height: 20),
+                  pw.Text('Summary:',
+                      style: pw.TextStyle(
+                          fontSize: 18, fontWeight: pw.FontWeight.bold)),
+                  pw.SizedBox(height: 10),
+                  pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: stats
+                        .map((s) => pw.Column(children: [
+                              pw.Text(s['label']!),
+                              pw.Text(s['value']!,
+                                  style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold)),
+                            ]))
+                        .toList(),
+                  ),
+                  pw.SizedBox(height: 30),
+                  pw.Text('Recent Transactions:',
+                      style: pw.TextStyle(
+                          fontSize: 18, fontWeight: pw.FontWeight.bold)),
+                  pw.SizedBox(height: 10),
+                  pw.Table(
+                    border: pw.TableBorder.all(),
+                    children: [
+                      pw.TableRow(children: [
+                        pw.Padding(
+                            padding: const pw.EdgeInsets.all(5),
+                            child: pw.Text('Name',
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold))),
+                        pw.Padding(
+                            padding: const pw.EdgeInsets.all(5),
+                            child: pw.Text('Date',
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold))),
+                        pw.Padding(
+                            padding: const pw.EdgeInsets.all(5),
+                            child: pw.Text('Amount',
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold))),
+                        pw.Padding(
+                            padding: const pw.EdgeInsets.all(5),
+                            child: pw.Text('Status',
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold))),
+                      ]),
+                      ...transactions.map((t) => pw.TableRow(children: [
+                            pw.Padding(
+                                padding: const pw.EdgeInsets.all(5),
+                                child: pw.Text(t['name']!)),
+                            pw.Padding(
+                                padding: const pw.EdgeInsets.all(5),
+                                child: pw.Text(t['date']!)),
+                            pw.Padding(
+                                padding: const pw.EdgeInsets.all(5),
+                                child: pw.Text(t['amount']!)),
+                            pw.Padding(
+                                padding: const pw.EdgeInsets.all(5),
+                                child: pw.Text(t['status']!)),
+                          ])),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+
+      // Save the PDF file
+      final output = await getTemporaryDirectory();
+      final file = File("${output.path}/sahely_report_${periodLabel.replaceAll(' ', '_')}.pdf");
+      await file.writeAsBytes(await pdf.save());
+
+      // Show print/share dialog
+      await Printing.layoutPdf(
+          onLayout: (PdfPageFormat format) async => pdf.save());
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Report downloaded successfully!',
+            content: Text('Report generated and saved!',
                 style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.success,
           ),
         );
       }
-    });
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to generate PDF: $e',
+                style: AppTheme.dm(color: Colors.white)),
+            backgroundColor: AppColors.danger,
+          ),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     String periodLabel = 'This Month';
-    String periodAmount = 'EGP 68,400';
+    String periodAmount = CurrencyFormatter.format(68400);
     String periodChange = '▲ 12%';
     List<StatCard> statCards = const [
       StatCard(value: '24.5k', label: 'Upcoming'),
@@ -63,7 +226,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
 
     if (_activeTab == 0) {
       periodLabel = 'This Month';
-      periodAmount = 'EGP 68,400';
+      periodAmount = CurrencyFormatter.format(68400);
       periodChange = '▲ 12%';
       statCards = const [
         StatCard(value: '24.5k', label: 'Upcoming'),
@@ -76,7 +239,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       ];
     } else if (_activeTab == 1) {
       periodLabel = 'This Quarter';
-      periodAmount = 'EGP 215,800';
+      periodAmount = CurrencyFormatter.format(215800);
       periodChange = '▲ 8%';
       statCards = const [
         StatCard(value: '42.0k', label: 'Upcoming'),
@@ -92,7 +255,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       ];
     } else {
       periodLabel = 'This Year';
-      periodAmount = 'EGP 840,000';
+      periodAmount = CurrencyFormatter.format(840000);
       periodChange = '▲ 15%';
       statCards = const [
         StatCard(value: '120.0k', label: 'Upcoming'),

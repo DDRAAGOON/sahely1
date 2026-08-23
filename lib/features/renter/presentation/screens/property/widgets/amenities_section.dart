@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class AmenitiesSection extends StatelessWidget {
   const AmenitiesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const SliverToBoxAdapter(
+    return SliverToBoxAdapter(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Amenities',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+              style: AppTheme.dm(
+                size: 16,
+                weight: FontWeight.w700,
                 color: AppColors.navy,
-                fontFamily: 'DM Sans',
               ),
             ),
-            SizedBox(height: 12),
-            Row(
+            const SizedBox(height: 12),
+            const Wrap(
+              spacing: 24,
+              runSpacing: 12,
               children: [
                 _AmenityItem(icon: Icons.pool, label: 'Private Pool'),
-                SizedBox(width: 24),
-                _AmenityItem(icon: Icons.wifi, label: 'Fast WiFi'),
-                SizedBox(width: 24),
+                _AmenityItem(icon: Icons.wifi, label: 'Fast Wi-Fi'),
                 _AmenityItem(icon: Icons.local_parking, label: 'Free Parking'),
               ],
             ),
@@ -52,10 +52,9 @@ class _AmenityItem extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 13,
+          style: AppTheme.dm(
+            size: 13,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

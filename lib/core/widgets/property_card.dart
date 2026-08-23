@@ -5,13 +5,15 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/property_card_base.dart' as base;
 
+import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/heart_button.dart';
+
 /// Large hero property card (Trending Now / Browse results).
 class PropertyCard extends StatelessWidget {
   const PropertyCard(
       {super.key,
       required this.property,
       this.onTap,
-      this.imageHeight = 150,
+      this.imageHeight = 180,
       this.showGuestFav = false});
 
   final Property property;
@@ -27,8 +29,16 @@ class PropertyCard extends StatelessWidget {
       imageHeight: imageHeight,
       showGuestFav: showGuestFav,
       onTap: onTap ?? () => AppNavigation.goToPropertyDetail(context, extra: p),
-      imageOverlay:
-          Positioned(top: 12, right: 12, child: SaveHeart(property: p)),
+      imageOverlay: Positioned(
+        top: 12,
+        right: 12,
+        child: HeartButton(
+          propertyId: p.name,
+          propertyName: p.name,
+          propertyImage: p.image,
+          size: 34,
+        ),
+      ),
     );
   }
 }
@@ -47,8 +57,16 @@ class PropertyMiniCard extends StatelessWidget {
       property: p,
       imageHeight: 140,
       onTap: onTap ?? () => AppNavigation.goToPropertyDetail(context, extra: p),
-      imageOverlay:
-          Positioned(top: 10, right: 10, child: SaveHeart(property: p)),
+      imageOverlay: Positioned(
+        top: 10,
+        right: 10,
+        child: HeartButton(
+          propertyId: p.name,
+          propertyName: p.name,
+          propertyImage: p.image,
+          size: 30,
+        ),
+      ),
     );
   }
 }

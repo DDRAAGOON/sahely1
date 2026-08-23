@@ -10,6 +10,8 @@ import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/shared/widgets/collab_card.dart';
 
+import '../properties/domain/entities/property.dart';
+
 class CollectionInsideScreen extends StatefulWidget {
   final String collectionId;
   final String collectionName;
@@ -59,56 +61,63 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
                     '${collectionItems.length} places${widget.sharedWithCount > 0 ? ' · shared with ${widget.sharedWithCount}' : ''}',
               ),
               const SizedBox(height: 12),
-              Row(children: [
-                SizedBox(
-                  width: 92,
-                  height: 28,
-                  child: Stack(children: [
-                    for (var i = 0; i < 3; i++)
-                      Positioned(
-                        left: i * 18.0,
-                        child: Container(
-                          width: 26,
-                          height: 26,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 2),
-                            gradient: LinearGradient(colors: [
-                              const [
-                                Color(0xFF7FA8BF),
-                                Color(0xFFD8B98A),
-                                Color(0xFFC9A84C)
-                              ][i],
-                              const Color(0xFF2C5066),
-                            ]),
+              if (widget.memberNames.isNotEmpty) ...[
+                Row(children: [
+                  SizedBox(
+                    width: (widget.memberNames.length > 3 ? 4 : widget.memberNames.length) * 18.0 + 20,
+                    height: 28,
+                    child: Stack(children: [
+                      for (var i = 0; i < (widget.memberNames.length > 3 ? 3 : widget.memberNames.length); i++)
+                        Positioned(
+                          left: i * 18.0,
+                          child: Container(
+                            width: 26,
+                            height: 26,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border : null,
+                              gradient: LinearGradient(colors: [
+                                [
+                                  const Color(0xFF7FA8BF),
+                                  const Color(0xFFD8B98A),
+                                  const Color(0xFFC9A84C)
+                                ][i % 3],
+                                const Color(0xFF2C5066),
+                              ]),
+                            ),
                           ),
                         ),
-                      ),
-                    Positioned(
-                      left: 54,
-                      child: Container(
-                        width: 26,
-                        height: 26,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.navy,
-                          border: Border.all(color: Colors.white, width: 2),
+                      if (widget.memberNames.length > 3)
+                        Positioned(
+                          left: 54,
+                          child: Container(
+                            width: 26,
+                            height: 26,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.navy,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: Text('+${widget.memberNames.length - 3}',
+                                style: AppTheme.dm(
+                                    size: 9,
+                                    weight: FontWeight.w700,
+                                    color: Colors.white)),
+                          ),
                         ),
-                        child: Text('+1',
-                            style: AppTheme.dm(
-                                size: 9,
-                                weight: FontWeight.w700,
-                                color: Colors.white)),
-                      ),
-                    ),
-                  ]),
-                ),
-                const SizedBox(width: 8),
-                Text('You, Omar, Nour & 1 more',
-                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
-              ]),
-              const SizedBox(height: 14),
+                    ]),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.memberNames.length > 2 
+                      ? 'You, ${widget.memberNames[0]}, ${widget.memberNames[1]} & ${widget.memberNames.length - 2} more'
+                      : 'Shared with ${widget.memberNames.join(", ")}',
+                    style: AppTheme.dm(size: 12, color: AppColors.muted),
+                  ),
+                ]),
+                const SizedBox(height: 14),
+              ],
               Row(children: [
                 Expanded(
                     child: WideButton(
@@ -147,11 +156,32 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
                         color: AppColors.navy,
                         outline: true,
                         height: 42,
-                        onTap: () => AppNavigation.goToCompare(
-                          context,
-                          collectionName: widget.collectionName,
-                          memberNames: widget.memberNames.isNotEmpty ? widget.memberNames : const ['Omar', 'Nour', 'Youssef'],
-                        ))),
+                        onTap: () {
+                          // Try to pass the first two properties as defaults
+                          Property? pA;
+                          Property? pB;
+
+                          if (collectionItems.isNotEmpty) {
+                            pA = Sample.allTrending.firstWhere(
+                              (p) => p.name == collectionItems[0].propertyId || p.image == collectionItems[0].propertyImage,
+                              orElse: () => Sample.azure,
+                            );
+                          }
+                          if (collectionItems.length > 1) {
+                            pB = Sample.allTrending.firstWhere(
+                              (p) => p.name == collectionItems[1].propertyId || p.image == collectionItems[1].propertyImage,
+                              orElse: () => Sample.dunes,
+                            );
+                          }
+
+                          AppNavigation.goToCompare(
+                            context,
+                            collectionName: widget.collectionName,
+                            memberNames: widget.memberNames.isNotEmpty ? widget.memberNames : const ['Omar', 'Nour', 'Youssef'],
+                            propertyA: pA,
+                            propertyB: pB,
+                          );
+                        })),
               ]),
               const SizedBox(height: 16),
               if (collectionItems.isEmpty)
@@ -207,6 +237,14 @@ class _CollectionInsideScreenState extends State<CollectionInsideScreen> {
                           reviews: '124',
                           price: 'EGP ${prop.price}',
                           comment: 'Added to your wishlist',
+                          onCompareTap: () {
+                            AppNavigation.goToCompare(
+                              context,
+                              collectionName: widget.collectionName,
+                              memberNames: widget.memberNames,
+                              propertyA: prop,
+                            );
+                          },
                         ),
                       ),
                     );

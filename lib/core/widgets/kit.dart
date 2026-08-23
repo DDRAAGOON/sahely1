@@ -1,8 +1,10 @@
 export 'avatars.dart';
 export 'badges.dart';
+export 'buttons.dart';
 export 'calendar.dart';
 export 'cards.dart';
 export 'checklist.dart';
+export 'chips.dart';
 export 'cream_background.dart';
 export 'notes.dart';
 export 'rows.dart';

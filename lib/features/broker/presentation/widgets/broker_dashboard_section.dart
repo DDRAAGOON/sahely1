@@ -1,7 +1,11 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/broker/presentation/widgets/broker_stats_row.dart';
+
+import '../../../../core/navigation/app_navigation.dart';
+import '../../../../core/widgets/bouncy_button.dart';
 
 class BrokerDashboardSection extends StatelessWidget {
   final String thisMonthEarnings;
@@ -24,24 +28,30 @@ class BrokerDashboardSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Your dashboard',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 18,
+              weight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 12),
-          GestureDetector(
-            onTap: onReferOwnerTap,
+          BouncyButton(
+            onTap: () => AppNavigation.goToShareEarn(context),
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: AppColors.border),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.navy.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  )
+                ],
               ),
               child: Row(
                 children: [
@@ -59,26 +69,24 @@ class BrokerDashboardSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Refer an owner, earn 50 ★',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                          style: AppTheme.dm(
+                            size: 14,
+                            weight: FontWeight.w600,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Text(
                           'When their property gets listed & approved',
-                          style: TextStyle(
-                            fontSize: 12,
+                          style: AppTheme.dm(
+                            size: 12,
                             color: AppColors.secondary,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ],

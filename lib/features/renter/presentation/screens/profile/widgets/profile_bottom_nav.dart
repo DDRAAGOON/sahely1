@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ProfileBottomNav extends StatelessWidget {
   final int activeIndex;
@@ -57,13 +58,12 @@ class ProfileBottomNav extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       items[index].label,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
+                      style: AppTheme.dm(
+                        size: 11,
+                        weight: FontWeight.w500,
                         color: isActive
                             ? AppColors.gold
                             : Colors.white.withValues(alpha: 0.5),
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],

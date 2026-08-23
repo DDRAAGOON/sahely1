@@ -17,7 +17,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
     {
       'role': 'ai',
       'text':
-          'Hi! I can help with WiFi, the pool heater, nearby restaurants or checkout steps. What do you need?'
+          'Hi! I can help with Wi-Fi, the pool heater, nearby restaurants or checkout steps. What do you need?'
     },
   ];
   final TextEditingController _controller = TextEditingController();
@@ -50,9 +50,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
     await Future.delayed(const Duration(seconds: 1));
 
     String response = "I'm looking into that for you...";
-    if (text.toLowerCase().contains('wifi')) {
+    if (text.toLowerCase().contains('wi-fi')) {
       response =
-          "The WiFi password is 'sahely2026'. You can also find a QR code on the kitchen counter.";
+          "The Wi-Fi password is 'sahely2026'. You can also find a QR code on the kitchen counter.";
     } else if (text.toLowerCase().contains('pool')) {
       response =
           "Tap the round dial by the pool pump to ON, set 28°C, and give it ~40 min.";
@@ -236,7 +236,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-              border: Border.all(color: AppColors.gold),
+              border : null,
               borderRadius: BorderRadius.circular(18)),
           child: Text(text,
               style: AppTheme.dm(size: 12, color: const Color(0xFF9A7A22)))));

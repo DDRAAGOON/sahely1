@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CreateCollectionSheet extends StatefulWidget {
   const CreateCollectionSheet({super.key});
@@ -67,22 +68,20 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
           ),
           const SizedBox(height: 24),
           // Title
-          const Text(
+          Text(
             'Create New Collection',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
+            style: AppTheme.dm(
+              size: 20,
+              weight: FontWeight.w700,
               color: AppColors.navy,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Give your collection a name to organize your saved properties',
-            style: TextStyle(
-              fontSize: 13,
+            style: AppTheme.dm(
+              size: 13,
               color: AppColors.secondary,
-              fontFamily: 'DM Sans',
             ),
           ),
           const SizedBox(height: 20),
@@ -92,10 +91,9 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
             autofocus: true,
             decoration: InputDecoration(
               hintText: 'e.g., Summer 2026, Family Trip',
-              hintStyle: const TextStyle(
-                fontSize: 14,
+              hintStyle: AppTheme.dm(
+                size: 14,
                 color: AppColors.placeholder,
-                fontFamily: 'DM Sans',
               ),
               filled: true,
               fillColor: AppColors.white,
@@ -116,10 +114,9 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
                 vertical: 14,
               ),
             ),
-            style: const TextStyle(
-              fontSize: 14,
+            style: AppTheme.dm(
+              size: 14,
               color: AppColors.dark,
-              fontFamily: 'DM Sans',
             ),
             onSubmitted: (_) => _createCollection(),
           ),
@@ -149,12 +146,12 @@ class _CreateCollectionSheetState extends State<CreateCollectionSheet> {
                         ),
                       ),
                     )
-                  : const Text(
+                  : Text(
                       'Create Collection',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'DM Sans',
+                      style: AppTheme.dm(
+                        size: 15,
+                        weight: FontWeight.w700,
+                        color: AppColors.white,
                       ),
                     ),
             ),

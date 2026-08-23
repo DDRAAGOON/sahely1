@@ -3,16 +3,13 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/image.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 /// Base layout for any property card in the app.
 /// All 3 roles (Renter, Owner, Broker) use this same base.
-///
-/// Slots for customisation:
-/// - [imageOverlay]: Widgets positioned on top of the image (e.g. SaveHeart, badge, status)
-/// - [footerActions]: Row of buttons below the card (e.g. Insights | Edit | SOS)
-/// - [extraInfo]: Additional widgets between pricing and tags (e.g. Owner stats, Broker commission)
-class PropertyCardBase extends StatelessWidget {
+class PropertyCardBase extends StatefulWidget {
   const PropertyCardBase({
     super.key,
     required this.property,
@@ -39,37 +36,42 @@ class PropertyCardBase extends StatelessWidget {
   final bool showRating;
 
   @override
+  State<PropertyCardBase> createState() => _PropertyCardBaseState();
+}
+
+class _PropertyCardBaseState extends State<PropertyCardBase> {
+  @override
   Widget build(BuildContext context) {
-    final p = property;
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+    final p = widget.property;
+    return BouncyButton(
+      onTap: widget.onTap,
+      scale: 0.98,
       child: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
-          boxShadow: const [
-            BoxShadow(
-                color: Color(0x141B2744), blurRadius: 12, offset: Offset(0, 2)),
-          ],
+          boxShadow: AppColors.cardShadow,
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ─── Image Section ───
             SizedBox(
-              height: imageHeight,
+              height: widget.imageHeight,
+              width: double.infinity,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
                   SahelyImage(
                     imageUrl: p.image,
                     enableViewer: false,
-                    fadeHeight: imageHeight * 0.4,
+                    fadeHeight: widget.imageHeight * 0.4,
                   ),
                   // Guest favourite badge
-                  if (showGuestFav && p.guestFavourite)
+                  if (widget.showGuestFav && p.guestFavourite)
                     Positioned(
                       top: 12,
                       left: 12,
@@ -88,7 +90,7 @@ class PropertyCardBase extends StatelessWidget {
                       ),
                     ),
                   // Custom overlay (e.g. SaveHeart, badge, status)
-                  if (imageOverlay != null) imageOverlay!,
+                  if (widget.imageOverlay != null) widget.imageOverlay!,
                 ],
               ),
             ),
@@ -97,6 +99,7 @@ class PropertyCardBase extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(14),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Name + Location + Price Row
@@ -109,14 +112,14 @@ class PropertyCardBase extends StatelessWidget {
                           children: [
                             Text(
                               p.name,
-                              style: AppTheme.dm(
-                                  size: 16,
-                                  weight: FontWeight.w700,
+                              style: GoogleFonts.dmSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
                                   color: AppColors.navy),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            if (showLocation) ...[
+                            if (widget.showLocation) ...[
                               const SizedBox(height: 4),
                               Row(
                                 children: [
@@ -135,7 +138,7 @@ class PropertyCardBase extends StatelessWidget {
                                 ],
                               ),
                             ],
-                            if (showRating) ...[
+                            if (widget.showRating) ...[
                               const SizedBox(height: 4),
                               RatingRow(rating: p.rating, reviews: p.reviews),
                             ],
@@ -148,9 +151,9 @@ class PropertyCardBase extends StatelessWidget {
                   ),
 
                   // Extra info slot (Owner stats, Broker commission, etc.)
-                  if (extraInfo != null) ...[
+                  if (widget.extraInfo != null) ...[
                     const SizedBox(height: 10),
-                    extraInfo!,
+                    widget.extraInfo!,
                   ],
 
                   // Tags
@@ -177,9 +180,9 @@ class PropertyCardBase extends StatelessWidget {
             ),
 
             // ─── Footer Actions ───
-            if (footerActions != null) ...[
+            if (widget.footerActions != null) ...[
               const Divider(height: 1, color: Color(0x33000000)),
-              footerActions!,
+              widget.footerActions!,
             ],
           ],
         ),

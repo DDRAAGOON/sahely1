@@ -1,64 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/kit.dart';
 
 class ArrivalChecklistSection extends StatefulWidget {
-  final List<dynamic> checklist;
-  final VoidCallback onReportIssue;
-  final Function(List<Map<String, dynamic>>)? onChecklistChanged;
+  final List<Map<String, dynamic>>? checklist;
+  final ValueChanged<List<Map<String, dynamic>>>? onChecklistChanged;
+  final VoidCallback? onReportIssue;
 
   const ArrivalChecklistSection({
     super.key,
-    required this.checklist,
-    required this.onReportIssue,
+    this.checklist,
     this.onChecklistChanged,
+    this.onReportIssue,
   });
 
   @override
-  State<ArrivalChecklistSection> createState() =>
-      _ArrivalChecklistSectionState();
+  State<ArrivalChecklistSection> createState() => _ArrivalChecklistSectionState();
 }
 
 class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
-  late List<Map<String, dynamic>> _checklist;
+  late List<Map<String, dynamic>> _items;
 
   @override
   void initState() {
     super.initState();
-    _checklist = widget.checklist.map((item) {
-      if (item is Map) {
-        return Map<String, dynamic>.from(item);
-      }
-      return {'label': item.toString(), 'completed': false};
-    }).toList();
-  }
-
-  @override
-  void didUpdateWidget(ArrivalChecklistSection oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Important: Update internal state when external checklist changes
-    if (widget.checklist != oldWidget.checklist) {
-      setState(() {
-        _checklist = widget.checklist.map((item) {
-          if (item is Map) {
-            return Map<String, dynamic>.from(item);
-          }
-          return {'label': item.toString(), 'completed': false};
-        }).toList();
-      });
-    }
-  }
-
-  int get _completedCount =>
-      _checklist.where((item) => item['completed'] == true).length;
-
-  int get _totalCount => _checklist.length;
-
-  void _toggleItem(int index) {
-    setState(() {
-      _checklist[index]['completed'] =
-          !(_checklist[index]['completed'] ?? false);
-    });
-    widget.onChecklistChanged?.call(_checklist);
+    _items = widget.checklist != null 
+      ? List<Map<String, dynamic>>.from(widget.checklist!)
+      : [
+          {'label': 'Check gate clearance', 'completed': true},
+          {'label': 'Key collection from lockbox', 'completed': false},
+          {'label': 'Electricity & AC inspection', 'completed': false},
+          {'label': 'Welcome hamper confirmation', 'completed': false},
+        ];
   }
 
   @override
@@ -66,166 +41,63 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Arrival Checklist',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans',
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.gold.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.gold, width: 1),
-              ),
-              child: Text(
-                '$_completedCount / $_totalCount done',
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.gold,
-                  fontFamily: 'DM Sans',
-                ),
-              ),
+            Text('Arrival Checklist', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+            GestureDetector(
+              onTap: widget.onReportIssue ?? () => AppNavigation.goToArrivalChecklist(context),
+              child: Text('View Details', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
             ),
           ],
         ),
-        const SizedBox(height: 4),
-        const Text(
-          'Confirm everything the host listed is here.',
-          style: TextStyle(
-            fontSize: 12,
-            color: AppColors.secondary,
-            fontFamily: 'DM Sans',
-          ),
-        ),
-        const SizedBox(height: 12),
-
-        // Checklist Items
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.border),
-          ),
+        const SizedBox(height: 16),
+        WhiteCard(
+          padding: const EdgeInsets.all(16),
           child: Column(
-            children: _checklist.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              final isCompleted = item['completed'] == true;
-              final isLast = index == _checklist.length - 1;
-
-              return Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => _toggleItem(index),
-                    child: Container(
-                      color: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
-                      child: Row(
-                        children: [
-                          // Checkbox
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: isCompleted
-                                  ? AppColors.green
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(
-                                color: isCompleted
-                                    ? AppColors.green
-                                    : AppColors.border,
-                                width: 2,
-                              ),
-                            ),
-                            child: isCompleted
-                                ? const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
-                                    size: 16,
-                                  )
-                                : null,
-                          ),
-                          const SizedBox(width: 12),
-                          // Label
-                          Expanded(
-                            child: Text(
-                              item['label'] ?? '',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: isCompleted
-                                    ? AppColors.secondary
-                                    : AppColors.dark,
-                                fontFamily: 'DM Sans',
-                              ),
-                            ),
-                          ),
-                          // Status
-                          Text(
-                            isCompleted ? 'OK' : 'Check',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: isCompleted
-                                  ? AppColors.green
-                                  : AppColors.gold,
-                              fontFamily: 'DM Sans',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  if (!isLast)
-                    const Divider(
-                      height: 1,
-                      color: AppColors.border,
-                      indent: 16,
-                      endIndent: 16,
-                    ),
-                ],
-              );
-            }).toList(),
-          ),
-        ),
-
-        const SizedBox(height: 12),
-
-        // Report Issue Button
-        SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: OutlinedButton(
-            onPressed: widget.onReportIssue,
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: AppColors.navy, width: 1.5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text(
-              'Report an issue to host',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.navy,
-                fontFamily: 'DM Sans',
-              ),
-            ),
+            children: _items.map((item) => _buildItem(item)).toList(),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildItem(Map<String, dynamic> item) {
+    final bool isDone = item['completed'] ?? item['done'] ?? false;
+    final String label = item['label'] ?? item['title'] ?? '';
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                if (item.containsKey('completed')) {
+                  item['completed'] = !isDone;
+                } else {
+                  item['done'] = !isDone;
+                }
+              });
+              widget.onChecklistChanged?.call(_items);
+            },
+            child: Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                color: isDone ? AppColors.success : Colors.transparent,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: isDone ? AppColors.success : AppColors.borderDefault),
+              ),
+              child: isDone ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(label, style: AppTheme.dm(size: 14, color: isDone ? AppColors.muted : AppColors.navy)),
+          ),
+        ],
+      ),
     );
   }
 }

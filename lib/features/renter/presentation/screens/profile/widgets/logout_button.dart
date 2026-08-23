@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/ui.dart';
 
 class LogoutButton extends StatelessWidget {
@@ -16,22 +17,21 @@ class LogoutButton extends StatelessWidget {
           border: Border.all(color: AppColors.error, width: 1.5),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.logout,
               size: 18,
               color: AppColors.error,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               'Log Out',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
+              style: AppTheme.dm(
+                size: 15,
+                weight: FontWeight.w700,
                 color: AppColors.error,
-                fontFamily: 'DM Sans',
               ),
             ),
           ],

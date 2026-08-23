@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class AccountVerificationBanner extends StatelessWidget {
   final VoidCallback onAddCardTap;
@@ -34,29 +35,26 @@ class AccountVerificationBanner extends StatelessWidget {
               size: 24,
             ),
             const SizedBox(width: 12),
-            // Text
-            const Expanded(
+            Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Account not verified',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
+                      style: AppTheme.dm(
+                        size: 14,
+                        weight: FontWeight.w700,
                         color: AppColors.navy,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       'Add your card to withdraw earnings',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF8A6A1E),
-                        fontFamily: 'DM Sans',
+                      style: AppTheme.dm(
+                        size: 12,
+                        color: const Color(0xFF8A6A1E),
                       ),
                     ),
                   ],
@@ -68,13 +66,12 @@ class AccountVerificationBanner extends StatelessWidget {
               padding: const EdgeInsets.only(right: 14),
               child: GestureDetector(
                 onTap: onAddCardTap,
-                child: const Text(
+                child: Text(
                   'Add Card →',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFFD2760A),
-                    fontFamily: 'DM Sans',
+                  style: AppTheme.dm(
+                    size: 13,
+                    weight: FontWeight.w700,
+                    color: const Color(0xFFD2760A),
                   ),
                 ),
               ),

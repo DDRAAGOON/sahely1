@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/gallery/photo_viewer_screen.dart';
 
@@ -81,12 +82,10 @@ class PastBookingHeroImage extends StatelessWidget {
             children: [
               Text(
                 propertyName,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  // Extra bold like in image
+                style: AppTheme.dm(
+                  size: 24,
+                  weight: FontWeight.w800,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                   letterSpacing: -0.5,
                 ),
               ),
@@ -101,11 +100,10 @@ class PastBookingHeroImage extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     location,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF717171),
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w500,
+                    style: AppTheme.dm(
+                      size: 13,
+                      color: const Color(0xFF717171),
+                      weight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -150,13 +148,12 @@ class PastBookingHeroImage extends StatelessWidget {
               color: const Color(0xFF1B2744).withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text(
+            child: Text(
               'Past',
-              style: TextStyle(
+              style: AppTheme.dm(
                 color: Colors.white,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'DM Sans',
+                size: 12,
+                weight: FontWeight.w700,
               ),
             ),
           ),

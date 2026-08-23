@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sahely/app.dart';
+import 'package:sahely/core/di/service_locator.dart' as di;
+import 'package:sahely/core/di/service_locator.dart';
 // --- Providers ---
 import 'package:sahely/core/providers/auth_provider.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
@@ -10,27 +12,33 @@ import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/data/role_state.dart';
-import 'package:sahely/features/broker/data/repositories/broker_bookings_repository.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/bloc/broker_bookings_cubit.dart';
-import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
-import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
-import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
-import 'package:sahely/features/renter/presentation/screens/wishlist/data/repositories/wishlist_repository.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 // --- Repositories & Cubits ---
-import 'package:sahely/features/renter/presentation/verification/data/repositories/verification_repository.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
+import 'package:sahely/features/shared/profile/presentation/bloc/profile_cubit.dart';
+import 'package:sahely/features/shared/reviews/presentation/bloc/review_cubit.dart';
+import 'package:sahely/features/shared/bookings/presentation/bloc/bookings_cubit.dart';
+import 'package:sahely/features/renter/presentation/screens/search/bloc/search_cubit.dart';
+import 'package:sahely/features/auth/presentation/bloc/auth_cubit.dart';
+import 'package:sahely/features/broker/presentation/bloc/broker_home_cubit.dart';
+import 'package:sahely/features/owner/presentation/bloc/owner_home_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 1. Initialize AuthProvider and restore login state
-  final authProvider = AuthProvider();
+  // 1. Initialize Service Locator
+  await di.init();
+
+  // 2. Initialize AuthProvider and restore login state
+  final authProvider = sl<AuthProvider>();
   await authProvider.checkAuthStatus();
 
-  // 2. Initialize RoleState
+  // 3. RoleState is already initialized inside checkAuthStatus, 
+  // but we ensure it's loaded here as well.
   final roleState = RoleState();
+  await roleState.init();
 
   runApp(
     MultiProvider(
@@ -42,51 +50,26 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
-      child: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider(create: (context) => VerificationRepository()),
-          RepositoryProvider(create: (context) => WishlistRepository()),
-          RepositoryProvider(create: (context) => BrokerBookingsRepository()),
-          RepositoryProvider<RenterRepository>(
-            create: (context) => RenterRepositoryImpl(
-              remoteDataSource: MockRenterDataSource(),
-            ),
-          ),
-        ],
-        child: Consumer<RoleState>(
-          builder: (context, roleState, child) {
-            return MultiBlocProvider(
-              // The Key ensures that whenever the Role changes, the entire Bloc tree 
-              // (including WishlistCubit) is DISPOSED and RECREATED.
-              // This is the architectural solution to prevent state leakage between roles.
-              key: ValueKey('bloc_tree_${roleState.currentRole.name}'),
-              providers: [
-                BlocProvider(
-                  create: (context) => VerificationCubit(
-                    context.read<VerificationRepository>(),
-                    authProvider: authProvider,
-                  )..loadVerificationStatus(),
-                ),
-                BlocProvider(
-                  create: (context) => WishlistCubit(
-                    context.read<WishlistRepository>(),
-                  )..loadCollections(roleState.currentRole),
-                ),
-                BlocProvider(
-                  create: (context) => BrokerBookingsCubit(
-                    context.read<BrokerBookingsRepository>(),
-                  ),
-                ),
-                BlocProvider(
-                  create: (context) => RenterHomeCubit(
-                    repository: context.read<RenterRepository>(),
-                  )..loadProperties(),
-                ),
-              ],
-              child: const SahelyApp(),
-            );
-          },
-        ),
+      child: Consumer<RoleState>(
+        builder: (context, roleState, child) {
+          return MultiBlocProvider(
+            key: ValueKey('bloc_tree_${roleState.currentRole.name}'),
+            providers: [
+              BlocProvider(create: (_) => sl<AuthCubit>()),
+              BlocProvider(create: (_) => sl<VerificationCubit>()..loadVerificationStatus()),
+              BlocProvider(create: (_) => sl<WishlistCubit>()..loadCollections(roleState.currentRole)),
+              BlocProvider(create: (_) => sl<BrokerHomeCubit>()..loadDashboard()),
+              BlocProvider(create: (_) => sl<BrokerBookingsCubit>()..loadBookings()),
+              BlocProvider(create: (_) => sl<OwnerHomeCubit>()..loadDashboard()),
+              BlocProvider(create: (_) => sl<RenterHomeCubit>()..loadProperties()),
+              BlocProvider(create: (_) => sl<SearchCubit>()..init()),
+              BlocProvider(create: (_) => sl<BookingsCubit>()..loadBookings()),
+              BlocProvider(create: (_) => sl<ReviewCubit>()),
+              BlocProvider(create: (_) => sl<ProfileCubit>()),
+            ],
+            child: const SahelyApp(),
+          );
+        },
       ),
     ),
   );

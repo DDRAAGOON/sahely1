@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/utils/currency_formatter.dart';
 
 class HistoryTransactionRow extends StatelessWidget {
   final String type;
@@ -65,8 +67,8 @@ class HistoryTransactionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final egpAmount = amount / 100;
     final isNegative = amount < 0;
+    final formattedAmount = CurrencyFormatter.formatNumber(amount.abs());
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -99,22 +101,20 @@ class HistoryTransactionRow extends StatelessWidget {
                     Expanded(
                       child: Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                        style: AppTheme.dm(
+                          size: 14,
+                          weight: FontWeight.w600,
                           color: AppColors.dark,
-                          fontFamily: 'DM Sans',
                         ),
                       ),
                     ),
                     // Amount
                     Text(
-                      '${isNegative ? '-' : '+'}${egpAmount.abs().toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
+                      '${isNegative ? '-' : '+'}$formattedAmount',
+                      style: AppTheme.dm(
+                        size: 15,
+                        weight: FontWeight.w700,
                         color: isNegative ? AppColors.red : AppColors.green,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                   ],
@@ -124,10 +124,9 @@ class HistoryTransactionRow extends StatelessWidget {
                   children: [
                     Text(
                       subtitle,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: AppTheme.dm(
+                        size: 12,
                         color: AppColors.secondary,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                     if (isViolation) ...[
@@ -139,11 +138,11 @@ class HistoryTransactionRow extends StatelessWidget {
                           color: const Color(0xFFFBF3DE),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Violation',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 10,
+                            weight: FontWeight.w700,
                             color: AppColors.warning,
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ChecklistHeaderBanner extends StatelessWidget {
   final Duration timeRemaining;
@@ -40,38 +41,37 @@ class ChecklistHeaderBanner extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Open for 1h 24m',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    fontFamily: 'DM Sans',
-                  ),
+              Text(
+                'Open for 1h 24m',
+                style: AppTheme.dm(
+                  size: 16,
+                  weight: FontWeight.w700,
+                  color: Colors.white,
                 ),
-                const SizedBox(height: 4),
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFFB8C4E0),
-                      fontFamily: 'DM Sans',
-                      height: 1.3,
-                    ),
-                    children: [
-                      TextSpan(text: 'Complete within '),
-                      TextSpan(
-                        text: '2h of check-in',
-                        style: TextStyle(
-                          color: Color(0xFFC9A84C),
-                          fontWeight: FontWeight.w600,
-                        ),
+              ),
+              const SizedBox(height: 4),
+              RichText(
+                text: TextSpan(
+                  style: AppTheme.dm(
+                    size: 12,
+                    color: const Color(0xFFB8C4E0),
+                    height: 1.3,
+                  ),
+                  children: [
+                    const TextSpan(text: 'Complete within '),
+                    TextSpan(
+                      text: '2h of check-in',
+                      style: AppTheme.dm(
+                        size: 12,
+                        color: const Color(0xFFC9A84C),
+                        weight: FontWeight.w600,
                       ),
-                      TextSpan(
-                          text: ' — confirms the home matched the listing.'),
-                    ],
-                  ),
+                    ),
+                    const TextSpan(
+                        text: ' — confirms the home matched the listing.'),
+                  ],
                 ),
+              ),
               ],
             ),
           ),
@@ -81,19 +81,17 @@ class ChecklistHeaderBanner extends StatelessWidget {
             children: [
               Text(
                 '+$starsEarned',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFFC9A84C),
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 20,
+                  weight: FontWeight.w700,
+                  color: const Color(0xFFC9A84C),
                 ),
               ),
-              const Text(
+              Text(
                 'stars',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Color(0xFFC9A84C),
-                  fontFamily: 'DM Sans',
+                style: AppTheme.dm(
+                  size: 10,
+                  color: const Color(0xFFC9A84C),
                 ),
               ),
             ],

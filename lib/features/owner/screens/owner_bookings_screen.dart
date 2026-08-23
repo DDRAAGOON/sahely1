@@ -10,6 +10,8 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/sample_data.dart';
 
+import '../../../core/utils/currency_formatter.dart';
+
 class OwnerBookingsScreen extends StatefulWidget {
   final int initialMainTab;
 
@@ -38,7 +40,9 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
         children: [
           const TopBar(
-              title: 'Bookings', subtitle: 'Manage your guests and stays'),
+              title: 'Bookings',
+              subtitle: 'Manage your guests and stays',
+              showBack: false),
           const SizedBox(height: 16),
           // Main Role Toggle
           SegmentTabs(
@@ -75,7 +79,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
             Sample.azure,
             'Omar Khalil',
             '★ 4.9 · ID ✓ · 12 stays',
-            ['Jun 21–25', '4 guests · 2A 2C', 'EGP 18,000'],
+            ['Jun 21–25', '4 guests · 2A 2C', CurrencyFormatter.format(18000)],
             'Upcoming',
             BadgeKind.navy),
         const SizedBox(height: 14),
@@ -84,7 +88,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
             Sample.dunes,
             'Sara Mansour',
             '★ 4.6 · ID ✓ · 3 stays',
-            ['Jul 2–6', '2 guests', 'EGP 15,200'],
+            ['Jul 2–6', '2 guests', CurrencyFormatter.format(15200)],
             'Upcoming',
             BadgeKind.navy,
             grayscale: true),
@@ -95,7 +99,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
           Sample.lagoon,
           'Nour Adel',
           '★ 5.0 · checked in today',
-          ['Jun 14–18', '4 guests', 'EGP 22,400'],
+          ['Jun 14–18', '4 guests', CurrencyFormatter.format(22400)],
           'Checked in',
           BadgeKind.green,
           active: true);
@@ -105,7 +109,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
           Sample.dunes,
           'Hana Tarek',
           '★ checked out Jun 11',
-          ['Jun 8–11', '2 guests', 'EGP 11,400'],
+          ['Jun 8–11', '2 guests', CurrencyFormatter.format(11400)],
           'Done',
           BadgeKind.gray,
           rated: true);
@@ -222,7 +226,15 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
             ),
             if (isPast) ...[
               const SizedBox(height: 10),
-              const ReviewButton(),
+              ReviewButton(
+                onTap: () => AppNavigation.goToOwnerRateGuest(
+                  context,
+                  extra: Sample.allTrending.firstWhere(
+                    (p) => p.name == booking.propertyName,
+                    orElse: () => Sample.azure,
+                  ),
+                ),
+              ),
             ],
           ],
         ),
@@ -391,7 +403,12 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                   ],
                   if (rated) ...[
                     const SizedBox(height: 12),
-                    const ReviewButton(),
+                    ReviewButton(
+                      onTap: () => AppNavigation.goToOwnerRateGuest(
+                        context,
+                        extra: property,
+                      ),
+                    ),
                   ],
                 ],
               ),

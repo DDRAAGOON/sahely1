@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class CardholderNameField extends StatelessWidget {
   final TextEditingController controller;
@@ -17,13 +18,12 @@ class CardholderNameField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Name on Card',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+          style: AppTheme.dm(
+            size: 13,
+            weight: FontWeight.w600,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 8),
@@ -32,10 +32,9 @@ class CardholderNameField extends StatelessWidget {
           textCapitalization: TextCapitalization.words,
           decoration: InputDecoration(
             hintText: legalName ?? 'Enter name as it appears on card',
-            hintStyle: const TextStyle(
-              fontSize: 14,
+            hintStyle: AppTheme.dm(
+              size: 14,
               color: AppColors.placeholder,
-              fontFamily: 'DM Sans',
             ),
             filled: true,
             fillColor: AppColors.white,
@@ -56,10 +55,9 @@ class CardholderNameField extends StatelessWidget {
               vertical: 14,
             ),
           ),
-          style: const TextStyle(
-            fontSize: 14,
+          style: AppTheme.dm(
+            size: 14,
             color: AppColors.dark,
-            fontFamily: 'DM Sans',
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BookingCalendar extends StatelessWidget {
   final DateTime selectedDay;
@@ -59,15 +60,14 @@ class BookingCalendar extends StatelessWidget {
           color: isCheckIn || isCheckOut
               ? AppColors.navy
               : isInRange
-                  ? AppColors.gold.withValues(alpha: 0.3)
-                  : null,
+                  ? AppColors.gold.withValues(alpha: 0.3) : null,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
           child: Text(
             '${day.day}',
-            style: TextStyle(
-              fontSize: 13,
+            style: AppTheme.dm(
+              size: 13,
               color: isOutside
                   ? AppColors.secondary.withValues(alpha: 0.4)
                   : isCheckIn || isCheckOut
@@ -75,7 +75,7 @@ class BookingCalendar extends StatelessWidget {
                       : isInRange
                           ? AppColors.navy
                           : AppColors.dark,
-              fontWeight: isCheckIn || isCheckOut ? FontWeight.w700 : null,
+              weight: isCheckIn || isCheckOut ? FontWeight.w700 : FontWeight.w400,
             ),
           ),
         ),
@@ -87,7 +87,7 @@ class BookingCalendar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
+        border : null,
       ),
       child: TableCalendar(
         firstDay: todayStart,
@@ -95,30 +95,27 @@ class BookingCalendar extends StatelessWidget {
         focusedDay: focusedDay,
         selectedDayPredicate: (day) => _localIsSameDay(selectedDay, day),
         calendarFormat: CalendarFormat.month,
-        headerStyle: const HeaderStyle(
+        headerStyle: HeaderStyle(
           formatButtonVisible: false,
           titleCentered: true,
-          titleTextStyle: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
+          titleTextStyle: AppTheme.dm(
+            size: 15,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
           leftChevronIcon:
-              Icon(Icons.chevron_left, color: AppColors.navy, size: 20),
+              const Icon(Icons.chevron_left, color: AppColors.navy, size: 20),
           rightChevronIcon:
-              Icon(Icons.chevron_right, color: AppColors.navy, size: 20),
+              const Icon(Icons.chevron_right, color: AppColors.navy, size: 20),
         ),
-        daysOfWeekStyle: const DaysOfWeekStyle(
-          weekdayStyle: TextStyle(
-            fontSize: 11,
+        daysOfWeekStyle: DaysOfWeekStyle(
+          weekdayStyle: AppTheme.dm(
+            size: 11,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
-          weekendStyle: TextStyle(
-            fontSize: 11,
+          weekendStyle: AppTheme.dm(
+            size: 11,
             color: AppColors.secondary,
-            fontFamily: 'DM Sans',
           ),
         ),
         calendarBuilders: CalendarBuilders(

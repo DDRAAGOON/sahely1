@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/gallery/photo_viewer_screen.dart';
 
@@ -106,11 +107,10 @@ class PropertyPhotoGallery extends StatelessWidget {
                           child: Center(
                             child: Text(
                               '+${photoList.length - 2}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                              style: AppTheme.dm(
+                                size: 14,
+                                weight: FontWeight.w700,
                                 color: Colors.white,
-                                fontFamily: 'DM Sans',
                               ),
                             ),
                           ),

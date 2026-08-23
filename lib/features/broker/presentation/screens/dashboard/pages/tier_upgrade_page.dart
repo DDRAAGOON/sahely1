@@ -4,7 +4,6 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
-import 'package:sahely/core/widgets/ui.dart';
 
 class BrokerTierUpgradePage extends StatelessWidget {
   const BrokerTierUpgradePage({super.key});
@@ -62,14 +61,15 @@ class BrokerTierUpgradePage extends StatelessWidget {
               text: TextSpan(
                   style: AppTheme.dm(
                       size: 14, color: AppColors.muted, height: 1.5),
-                  children: const [
-                    TextSpan(text: 'Your commission rate is now '),
+                  children: [
+                    const TextSpan(text: 'Your commission rate is now '),
                     TextSpan(
                         text: '4%',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF9A7A22))),
-                    TextSpan(text: ' on all new referrals this season.'),
+                        style: AppTheme.dm(
+                            size: 14,
+                            weight: FontWeight.w700,
+                            color: const Color(0xFF9A7A22))),
+                    const TextSpan(text: ' on all new referrals this season.'),
                   ])),
           const SizedBox(height: 18),
           WhiteCard(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class WalletPeriodTabs extends StatelessWidget {
   final String selectedPeriod;
@@ -54,18 +55,14 @@ class _PeriodTab extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.navy : AppColors.white,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? AppColors.navy : AppColors.border,
-            width: 1,
-          ),
+          border : null,
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+          style: AppTheme.dm(
+            size: 13,
+            weight: FontWeight.w600,
             color: isSelected ? AppColors.white : AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
       ),

@@ -1,18 +1,23 @@
-﻿import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/features/shared/widgets/mawsem/mawsem_card.dart';
-import 'package:sahely/features/renter/presentation/screens/Search/pages/search_filters_sheet.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/category_chips.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/greeting_header.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/promo_banner.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/search_row.dart';
 import 'package:sahely/core/widgets/property_card.dart';
+import 'package:sahely/core/widgets/smooth_transition.dart';
+import 'package:sahely/core/widgets/entrance_faded.dart';
+
+import '../../../core/widgets/bouncy_button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,7 +27,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _selectedCategory = 'All';
+  String? _selectedCategory;
 
   final Map<String, dynamic> _appliedFilters = {
     'propertyType': 'All',
@@ -30,13 +35,15 @@ class _HomeScreenState extends State<HomeScreen> {
     'minPrice': 0.0,
     'maxPrice': 100000.0,
     'amenities': <String>[],
-    'partyAllowed': true,
+    'partyAllowed': false,
     'petsAllowed': false,
-    'mixedGroupsOK': true,
+    'mixedGroupsOK': false,
+    'adults': 0,
+    'children': 0,
   };
 
-  List<Map<String, dynamic>> _allProperties = [];
-  List<Map<String, dynamic>> _filteredProperties = [];
+  List<Property> _allProperties = [];
+  List<Property> _filteredProperties = [];
 
   @override
   void initState() {
@@ -44,8 +51,17 @@ class _HomeScreenState extends State<HomeScreen> {
     final cubitState = context.read<RenterHomeCubit>().state;
     if (cubitState is RenterHomeLoaded) {
       _allProperties = cubitState.properties;
-      _applyFilters();
     }
+
+    // Set initial category with a tiny delay to trigger the transition animation
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _selectedCategory = 'All';
+          _applyFilters();
+        });
+      }
+    });
   }
 
   void _onCategoryChanged(String category) {
@@ -56,16 +72,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _applyFilters() {
-    List<Map<String, dynamic>> results = _allProperties;
+    List<Property> results = _allProperties;
 
     // Filter by Category Chip
     if (_selectedCategory != 'All') {
       results = results.where((p) {
         if (_selectedCategory == 'Pool') {
-          return (p['features'] as List).contains('Pool');
+          return p.tags.contains('Pool');
         }
         if (_selectedCategory == 'Beachfront') {
-          return (p['features'] as List).contains('Beachfront');
+          return p.tags.contains('Beachfront');
         }
         return true;
       }).toList();
@@ -74,12 +90,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // Filter by Bottom Sheet Filters
     if (_appliedFilters['propertyType'] != 'All') {
       results = results
-          .where((p) => p['type'] == _appliedFilters['propertyType'])
+          .where((p) => p.type == _appliedFilters['propertyType'])
           .toList();
     }
 
     results = results.where((p) {
-      double priceEgp = (p['price'] as num).toDouble() / 100;
+      double priceEgp = p.price.toDouble();
       return priceEgp >= _appliedFilters['minPrice'] &&
           priceEgp <= _appliedFilters['maxPrice'];
     }).toList();
@@ -90,27 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showFiltersSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      useRootNavigator: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.8,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          builder: (context, scrollController) {
-            return SearchFiltersSheet(
-              initialFilters: _appliedFilters,
-              allProperties: _allProperties,
-              onApplyFilters: (newFilters) {
-                AppNavigation.goToAllProperties(this.context,
-                    filters: newFilters);
-              },
-            );
-          },
-        );
+    AppNavigation.goToFilters(
+      context,
+      initialFilters: _appliedFilters,
+      allProperties: _allProperties,
+      onApplyFilters: (newFilters) {
+        AppNavigation.goToAllProperties(context, filters: newFilters);
       },
     );
   }
@@ -138,11 +139,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return Container(
           color: AppColors.cream,
           child: SafeArea(
-            bottom: false,
-            child: Column(
-              children: [
-                Expanded(
-                  child: CustomScrollView(
+            child: EntranceFaded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: CustomScrollView(
                     slivers: [
                       // Greeting Header
                       const SliverToBoxAdapter(
@@ -183,19 +184,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
 
-                      const SliverToBoxAdapter(child: SizedBox(height: 18)),
+                      const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
                       // Category Chips
                       SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: CategoryChips(
-                            onCategorySelected: _onCategoryChanged,
-                          ),
+                        child: CategoryChips(
+                          onCategorySelected: _onCategoryChanged,
                         ),
                       ),
 
-                      const SliverToBoxAdapter(child: SizedBox(height: 18)),
+                      const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
                       // Section Header - Trending Now
                       SliverToBoxAdapter(
@@ -205,18 +203,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Trending Now: $_selectedCategory',
-                                style: Theme.of(context).textTheme.titleLarge,
+                                'Trending Now',
+                                style: AppTheme.dm(
+                                    size: 18,
+                                    weight: FontWeight.w700,
+                                    color: AppColors.navy),
                               ),
-                              TextButton(
-                                onPressed: () =>
+                              BouncyButton(
+                                onTap: () =>
                                     AppNavigation.goToAllProperties(context),
-                                child: const Text(
+                                child: Text(
                                   'See All',
-                                  style: TextStyle(
+                                  style: AppTheme.dm(
+                                    size: 14,
+                                    weight: FontWeight.w600,
                                     color: AppColors.gold,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'DM Sans',
                                   ),
                                 ),
                               ),
@@ -225,29 +226,40 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
 
-                      const SliverToBoxAdapter(child: SizedBox(height: 4)),
+                      const SliverToBoxAdapter(child: SizedBox(height: 12)),
 
                       // Property Cards
-                      SliverList(
-                        key: ValueKey(_selectedCategory),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final propertyMap = _filteredProperties[index];
-                            final property = Property.fromMap(propertyMap);
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 4),
-                              child: PropertyCard(
-                                property: property,
-                                onTap: () => AppNavigation.goToPropertyDetail(
-                                    context,
-                                    extra: property),
-                              ),
-                            );
-                          },
-                          childCount: _filteredProperties.length > 4
-                              ? 4
-                              : _filteredProperties.length,
+                      SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverToBoxAdapter(
+                          child: SmoothListTransition(
+                            transitionKey: _selectedCategory,
+                            child: Column(
+                              children: _filteredProperties.isEmpty
+                                  ? [
+                                      const SizedBox(
+                                        height: 100,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                              color: AppColors.gold),
+                                        ),
+                                      )
+                                    ]
+                                  : _filteredProperties
+                                      .take(4)
+                                      .map((property) => Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 16),
+                                            child: PropertyCard(
+                                              property: property,
+                                              onTap: () => AppNavigation
+                                                  .goToPropertyDetail(context,
+                                                      extra: property),
+                                            ),
+                                          ))
+                                      .toList(),
+                            ),
+                          ),
                         ),
                       ),
 
@@ -282,6 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+          ),
         );
       },
     );
@@ -309,14 +322,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text('Explore North Coast',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.navy,
-                  fontFamily: 'DM Sans')),
+              style: AppTheme.dm(
+                  size: 18,
+                  weight: FontWeight.w700,
+                  color: AppColors.navy)),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -327,38 +339,46 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: locations.length,
             separatorBuilder: (context, index) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () => AppNavigation.goToAllProperties(context,
-                    filters: {'location': locations[index]['name']}),
-                child: Container(
-                  width: 160,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: NetworkImage(locations[index]['image']!),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+              return RepaintBoundary(
+                child: GestureDetector(
+                  onTap: () => AppNavigation.goToAllProperties(context,
+                      filters: {'location': locations[index]['name']}),
                   child: Container(
+                    width: 160,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.6),
-                          Colors.transparent
-                        ],
-                      ),
                     ),
-                    padding: const EdgeInsets.all(12),
-                    alignment: Alignment.bottomLeft,
-                    child: Text(
-                      locations[index]['name']!,
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14),
+                    clipBehavior: Clip.antiAlias,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: locations[index]['image']!,
+                          fit: BoxFit.cover,
+                          memCacheWidth: 320,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                Colors.black.withValues(alpha: 0.6),
+                                Colors.transparent
+                              ],
+                            ),
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            locations[index]['name']!,
+                            style: AppTheme.dm(
+                                color: Colors.white,
+                                weight: FontWeight.w700,
+                                size: 14),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -371,13 +391,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildReferralBanner() {
-    return GestureDetector(
+    return BouncyButton(
       onTap: () => AppNavigation.goToShareEarn(context),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: AppColors.referralGradient,
           borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.navy.withValues(alpha: 0.15),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            )
+          ],
         ),
         child: Row(
           children: [
@@ -390,17 +417,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: AppColors.navy, size: 24),
             ),
             const SizedBox(width: 16),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Invite friends, earn 15 ★',
-                      style: TextStyle(
+                      style: AppTheme.dm(
                           color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700)),
+                          size: 15,
+                          weight: FontWeight.w700)),
                   Text('When they book & complete a stay',
-                      style: TextStyle(color: Colors.white70, fontSize: 12)),
+                      style: AppTheme.dm(color: Colors.white70, size: 12)),
                 ],
               ),
             ),
@@ -414,25 +441,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildFooter() {
     return Column(
       children: [
-        const Text(
+        Text(
           'S A H E L Y',
-          style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
+          style: AppTheme.dm(
+              size: 22,
+              weight: FontWeight.w900,
               color: AppColors.navy,
               letterSpacing: 4),
         ),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'Verified Chalets. Zero Chaos.',
-          style: TextStyle(
-              fontSize: 14, color: AppColors.gold, fontWeight: FontWeight.w600),
+          style: AppTheme.dm(
+              size: 14, color: AppColors.gold, weight: FontWeight.w600),
         ),
         const SizedBox(height: 16),
         Text(
           "You've reached the end · North Coast, Egypt",
-          style: TextStyle(
-              fontSize: 12, color: AppColors.secondary.withValues(alpha: 0.6)),
+          style: AppTheme.dm(
+              size: 12, color: AppColors.secondary.withValues(alpha: 0.6)),
         ),
       ],
     );

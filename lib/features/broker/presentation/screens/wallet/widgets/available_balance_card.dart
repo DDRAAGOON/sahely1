@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class AvailableBalanceCard extends StatelessWidget {
   final String balance;
@@ -22,23 +23,21 @@ class AvailableBalanceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Available Balance',
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFFCDD4E0),
-              fontFamily: 'DM Sans',
-              fontWeight: FontWeight.w400,
+            style: AppTheme.dm(
+              size: 14,
+              color: const Color(0xFFCDD4E0),
+              weight: FontWeight.w400,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             'EGP $balance',
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFFC9A84C),
-              fontFamily: 'DM Sans',
+            style: AppTheme.dm(
+              size: 32,
+              weight: FontWeight.w700,
+              color: const Color(0xFFC9A84C),
               letterSpacing: -0.5,
             ),
           ),

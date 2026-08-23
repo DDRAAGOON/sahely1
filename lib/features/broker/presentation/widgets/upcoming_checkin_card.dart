@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/bouncy_button.dart';
 
 class UpcomingCheckinCard extends StatelessWidget {
   final Map<String, dynamic> checkin;
@@ -13,7 +15,7 @@ class UpcomingCheckinCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return BouncyButton(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -54,20 +56,18 @@ class UpcomingCheckinCard extends StatelessWidget {
                 children: [
                   Text(
                     checkin['name']?.toString() ?? '',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 15,
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '${checkin['client'] ?? ''} · ${checkin['date'] ?? ''} · ${checkin['nights'] ?? ''} nights',
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: AppTheme.dm(
+                      size: 12,
                       color: AppColors.secondary,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],
@@ -79,20 +79,18 @@ class UpcomingCheckinCard extends StatelessWidget {
               children: [
                 Text(
                   checkin['margin']?.toString() ?? checkin['profit']?.toString() ?? '',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
+                  style: AppTheme.dm(
+                    size: 15,
+                    weight: FontWeight.w700,
                     color: AppColors.green,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
                 const SizedBox(height: 2),
-                const Text(
+                Text(
                   'your margin',
-                  style: TextStyle(
-                    fontSize: 10,
+                  style: AppTheme.dm(
+                    size: 10,
                     color: AppColors.secondary,
-                    fontFamily: 'DM Sans',
                   ),
                 ),
               ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ContactOwnerCard extends StatelessWidget {
   final String ownerName;
@@ -44,10 +45,9 @@ class ContactOwnerCard extends StatelessWidget {
             Expanded(
               child: RichText(
                 text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: AppTheme.dm(
+                    size: 13,
                     color: AppColors.dark,
-                    fontFamily: 'DM Sans',
                     height: 1.4,
                   ),
                   children: [
@@ -56,8 +56,8 @@ class ContactOwnerCard extends StatelessWidget {
                     ),
                     TextSpan(
                       text: ownerName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
+                      style: AppTheme.dm(
+                        weight: FontWeight.w700,
                         color: AppColors.navy,
                       ),
                     ),

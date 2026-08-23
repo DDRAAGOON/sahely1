@@ -28,7 +28,7 @@ class SearchHeaderWithInput extends StatelessWidget {
             height: 30,
             decoration: BoxDecoration(
               color: AppColors.white,
-              border: Border.all(color: AppColors.border),
+              border : null,
               borderRadius: BorderRadius.circular(6),
             ),
             child:

@@ -19,7 +19,6 @@ class AppRoutes {
   static const String idVerification = '/id-verification';
   static const String facialScan = '/facial-scan';
   static const String verificationComplete = '/verification-complete';
-  static const String verifyGate = '/verify-gate';
 
   // --------------------------------------------------------------------------
   // Renter Routes
@@ -84,6 +83,7 @@ class AppRoutes {
   static const String ownerViolations = '/owner/violations';
   static const String ownerViolationReport = '/owner/violation-report';
   static const String ownerListingSubmitted = '/owner/listing-submitted';
+  static const String ownerTeamReview = '/owner/team-review';
   static const String ownerRateGuest = '/owner/rate-guest';
   static const String ownerRequests = '/owner/requests';
   static const String ownerAllTrending = '/owner/all-trending';
@@ -97,7 +97,6 @@ class AppRoutes {
   // Shared Routes
   // --------------------------------------------------------------------------
   static const String browse = '/browse';
-  static const String search = '/browse';
   static const String filters = '/filters';
   static const String allProperties = '/all-properties';
   static const String propertyDetail = '/property';
@@ -108,7 +107,6 @@ class AppRoutes {
   static const String bookingDetail = '/booked-property';
   static const String bookingUpcoming = '/booking-upcoming';
   static const String bookingPast = '/booking-past';
-  static const String bookedProperty = '/booked-property';
   static const String smartLock = '/smart-lock';
   static const String doorOut = '/door-out';
   static const String arrivalChecklist = '/arrival-checklist';
@@ -128,7 +126,6 @@ class AppRoutes {
   static const String levelUpCelebration = '/level-up-celebration';
   static const String addCard = '/add-card';
   static const String changePassword = '/change-password';
-  static const String blockedGate = '/blocked-gate';
   static const String sos = '/sos';
   static const String aiChat = '/ai-chat';
   static const String currency = '/currency';

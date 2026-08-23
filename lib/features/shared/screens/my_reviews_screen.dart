@@ -111,7 +111,7 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
                           {
                             'hostName': 'Layla M.',
                             'hostRole': 'Owner',
-                            'hostAvatar': null,
+                            'hostAvatar' : null,
                             'rating': 5,
                             'reviewText':
                                 'Wonderful guest — left the villa spotless and communicated clearly. Welcome any time!',

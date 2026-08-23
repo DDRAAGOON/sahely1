@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ReviewGivenCard extends StatelessWidget {
   final String propertyName;
@@ -65,11 +66,10 @@ class ReviewGivenCard extends StatelessWidget {
                   children: [
                     Text(
                       propertyName,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
+                      style: AppTheme.dm(
+                        size: 14,
+                        weight: FontWeight.w600,
                         color: AppColors.dark,
-                        fontFamily: 'DM Sans',
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -90,10 +90,9 @@ class ReviewGivenCard extends StatelessWidget {
               // Date
               Text(
                 date,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: AppTheme.dm(
+                  size: 12,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                 ),
               ),
             ],
@@ -104,10 +103,9 @@ class ReviewGivenCard extends StatelessWidget {
           // Review Text
           Text(
             reviewText,
-            style: const TextStyle(
-              fontSize: 13,
+            style: AppTheme.dm(
+              size: 13,
               color: AppColors.dark,
-              fontFamily: 'DM Sans',
               height: 1.5,
             ),
           ),

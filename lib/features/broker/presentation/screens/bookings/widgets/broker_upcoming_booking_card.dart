@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class BrokerUpcomingBookingCard extends StatelessWidget {
   final String propertyName;
@@ -63,11 +64,10 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
                     children: [
                       Text(
                         propertyName,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1B2744),
-                          fontFamily: 'DM Sans',
+                        style: AppTheme.dm(
+                          size: 15,
+                          weight: FontWeight.w700,
+                          color: const Color(0xFF1B2744),
                         ),
                       ),
                       Container(
@@ -77,13 +77,12 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
                           color: const Color(0xFF1B2744),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Upcoming',
-                          style: TextStyle(
+                          style: AppTheme.dm(
                             color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'DM Sans',
+                            size: 10,
+                            weight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -97,10 +96,9 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         location,
-                        style: const TextStyle(
-                          color: Color(0xFF9A9A9A),
-                          fontSize: 11,
-                          fontFamily: 'DM Sans',
+                        style: AppTheme.dm(
+                          color: const Color(0xFF9A9A9A),
+                          size: 11,
                         ),
                       ),
                     ],
@@ -108,30 +106,27 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     dates,
-                    style: const TextStyle(
-                      color: Color(0xFF717171),
-                      fontSize: 11,
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      color: const Color(0xFF717171),
+                      size: 11,
                     ),
                   ),
                   const SizedBox(height: 4),
                   RichText(
                     text: TextSpan(
                       children: [
-                        const TextSpan(
+                        TextSpan(
                           text: 'Order no. ',
-                          style: TextStyle(
-                              color: Color(0xFF717171),
-                              fontSize: 11,
-                              fontFamily: 'DM Sans'),
+                          style: AppTheme.dm(
+                              color: const Color(0xFF717171),
+                              size: 11),
                         ),
                         TextSpan(
                           text: orderNumber,
-                          style: const TextStyle(
-                            color: Color(0xFF1B2744),
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'DM Sans',
+                          style: AppTheme.dm(
+                            color: const Color(0xFF1B2744),
+                            size: 11,
+                            weight: FontWeight.w700,
                           ),
                         ),
                       ],

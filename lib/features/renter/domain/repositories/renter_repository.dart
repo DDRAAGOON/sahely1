@@ -1,3 +1,5 @@
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
 abstract class RenterRepository {
-  Future<List<Map<String, dynamic>>> getAllProperties();
+  Future<List<Property>> getAllProperties();
 }

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-
-import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/property_card_base.dart' as base;
+import 'package:sahely/core/widgets/wishlist.dart';
 
 class HeroPropertyCard extends StatelessWidget {
   const HeroPropertyCard({
@@ -47,14 +46,7 @@ class HeroPropertyCard extends StatelessWidget {
           Positioned(
             top: 12,
             right: 12,
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(
-                  color: Colors.white, shape: BoxShape.circle),
-              child: const Icon(Icons.favorite_border,
-                  size: 18, color: AppColors.navy),
-            ),
+            child: SaveHeart(property: p),
           ),
         ],
       ),

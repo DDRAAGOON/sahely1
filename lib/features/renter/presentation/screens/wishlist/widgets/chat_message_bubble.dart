@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class ChatMessageBubble extends StatelessWidget {
   final String userName;
@@ -37,12 +38,11 @@ class ChatMessageBubble extends StatelessWidget {
                     color: Colors.white,
                   )
                 : Text(
-                    userName[0],
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                    userName.isNotEmpty ? userName[0] : '?',
+                    style: AppTheme.dm(
+                      size: 12,
+                      weight: FontWeight.w600,
                       color: Colors.white,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
           ),
@@ -68,13 +68,12 @@ class ChatMessageBubble extends StatelessWidget {
                           color: AppColors.gold.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Sahely AI',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
+                          style: AppTheme.dm(
+                            size: 10,
+                            weight: FontWeight.w600,
                             color: AppColors.gold,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ),
@@ -92,18 +91,13 @@ class ChatMessageBubble extends StatelessWidget {
                       ? AppColors.gold.withValues(alpha: 0.15)
                       : AppColors.white,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: isAI
-                        ? AppColors.gold.withValues(alpha: 0.3)
-                        : AppColors.border,
-                  ),
+                  border: isAI ? null : Border.all(color: AppColors.borderDefault),
                 ),
                 child: Text(
                   message,
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: AppTheme.dm(
+                    size: 13,
                     color: isAI ? AppColors.navy : AppColors.dark,
-                    fontFamily: 'DM Sans',
                     height: 1.4,
                   ),
                 ),

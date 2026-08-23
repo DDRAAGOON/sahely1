@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PasswordStrengthMeter extends StatelessWidget {
   final String password;
@@ -98,11 +99,10 @@ class PasswordStrengthMeter extends StatelessWidget {
         // Strength Text
         Text(
           strengthText,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
+          style: AppTheme.dm(
+            size: 11,
+            weight: FontWeight.w500,
             color: strengthColor,
-            fontFamily: 'DM Sans',
           ),
         ),
       ],

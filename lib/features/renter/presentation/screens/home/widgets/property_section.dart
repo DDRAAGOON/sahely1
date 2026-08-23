@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/property_card.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
@@ -39,11 +40,10 @@ class PropertySection extends StatelessWidget {
               const SizedBox(width: 6),
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 11,
+                  weight: FontWeight.w700,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                   letterSpacing: 1.2,
                 ),
               ),

@@ -228,8 +228,7 @@ class ShareCollectionScreen extends StatelessWidget {
                       ? LinearGradient(
                           colors: gradient,
                           begin: Alignment.topLeft,
-                          end: Alignment.bottomRight)
-                      : null,
+                          end: Alignment.bottomRight) : null,
                   shape: BoxShape.circle,
                   border: border ? Border.all(color: AppColors.border) : null),
               child: Icon(icon,

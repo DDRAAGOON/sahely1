@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class PortfolioPropertyCard extends StatelessWidget {
   final Map<String, dynamic> property;
@@ -62,11 +63,10 @@ class PortfolioPropertyCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           property['name']?.toString() ?? '',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
+                          style: AppTheme.dm(
+                            size: 15,
+                            weight: FontWeight.w700,
                             color: AppColors.navy,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ),
@@ -86,11 +86,10 @@ class PortfolioPropertyCard extends StatelessWidget {
                         ),
                         child: Text(
                           status,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
+                          style: AppTheme.dm(
+                            size: 11,
+                            weight: FontWeight.w600,
                             color: Colors.white,
-                            fontFamily: 'DM Sans',
                           ),
                         ),
                       ),
@@ -100,10 +99,9 @@ class PortfolioPropertyCard extends StatelessWidget {
                   // Owner
                   Text(
                     'Owner: ${property['owner']}',
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: AppTheme.dm(
+                      size: 12,
                       color: AppColors.secondary,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -113,22 +111,20 @@ class PortfolioPropertyCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Bookings',
-                            style: TextStyle(
-                              fontSize: 10,
+                            style: AppTheme.dm(
+                              size: 10,
                               color: AppColors.secondary,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             '${property['bookings']}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                            style: AppTheme.dm(
+                              size: 14,
+                              weight: FontWeight.w700,
                               color: AppColors.navy,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ],
@@ -137,12 +133,11 @@ class PortfolioPropertyCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Your commission',
-                            style: TextStyle(
-                              fontSize: 10,
+                            style: AppTheme.dm(
+                              size: 10,
                               color: AppColors.secondary,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -150,13 +145,12 @@ class PortfolioPropertyCard extends StatelessWidget {
                             property['commission'] != null
                                 ? 'EGP ${property['commission']}'
                                 : '—',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                            style: AppTheme.dm(
+                              size: 14,
+                              weight: FontWeight.w700,
                               color: property['commission'] != null
                                   ? AppColors.green
                                   : AppColors.secondary,
-                              fontFamily: 'DM Sans',
                             ),
                           ),
                         ],

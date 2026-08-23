@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class SmartLockBadge extends StatelessWidget {
   const SmartLockBadge({super.key});
@@ -26,18 +27,17 @@ class SmartLockBadge extends StatelessWidget {
                 color: AppColors.gold,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.lock_outline, color: AppColors.navy, size: 15),
-                  SizedBox(width: 8),
+                  const Icon(Icons.lock_outline, color: AppColors.navy, size: 15),
+                  const SizedBox(width: 8),
                   Text(
                     'Smart Lock Enabled',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                    style: AppTheme.dm(
+                      size: 12,
+                      weight: FontWeight.w700,
                       color: AppColors.navy,
-                      fontFamily: 'DM Sans',
                     ),
                   ),
                 ],

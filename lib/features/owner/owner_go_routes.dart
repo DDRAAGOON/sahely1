@@ -11,7 +11,6 @@ import 'package:sahely/features/shared/screens/notification_settings_screen.dart
 import 'package:sahely/features/owner/screens/add_property_screen.dart';
 import 'package:sahely/features/owner/screens/listing_submitted_screen.dart';
 import 'package:sahely/features/owner/screens/owner_ai_chat_screen.dart';
-import 'package:sahely/features/owner/screens/owner_all_trending_screen.dart';
 import 'package:sahely/features/owner/screens/owner_earnings_screen.dart';
 import 'package:sahely/features/owner/screens/owner_edit_bio_screen.dart';
 import 'package:sahely/features/owner/screens/owner_history_screen.dart';
@@ -19,12 +18,16 @@ import 'package:sahely/features/owner/screens/violation_report_screen.dart';
 import 'package:sahely/features/owner/screens/owner_manage_screen.dart';
 import 'package:sahely/features/owner/screens/owner_properties_screen.dart';
 import 'package:sahely/features/owner/screens/owner_property_detail_screens.dart';
+import 'package:sahely/features/owner/screens/owner_rate_guest_screen.dart';
 import 'package:sahely/features/owner/screens/owner_requests_screen.dart';
 import 'package:sahely/features/owner/screens/owner_smart_lock_screen.dart';
 import 'package:sahely/features/owner/screens/payout_bank_screen.dart';
 import 'package:sahely/features/owner/screens/team_review_screen.dart';
 import 'package:sahely/features/owner/screens/withdraw_amount_screen.dart';
 import 'package:sahely/features/owner/screens/withdraw_receipt_screen.dart';
+
+import '../../core/navigation/route_transitions.dart';
+import '../shared/screens/all_properties_screen.dart';
 
 final List<GoRoute> ownerGoRoutes = [
   GoRoute(
@@ -36,7 +39,7 @@ final List<GoRoute> ownerGoRoutes = [
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerPropertiesScreen()),
   GoRoute(
-    path: '/owner/insights',
+    path: AppRoutes.ownerInsights,
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) {
       final args = state.extra;
@@ -48,35 +51,35 @@ final List<GoRoute> ownerGoRoutes = [
     },
   ),
   GoRoute(
-      path: '/owner/edit',
+      path: AppRoutes.ownerEdit,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerEditPropertyScreen()),
   GoRoute(
-      path: '/owner/preview',
+      path: AppRoutes.ownerPreview,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerPreviewListingScreen()),
   GoRoute(
-      path: '/owner/smart-lock',
+      path: AppRoutes.ownerSmartLock,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerSmartLockScreen()),
   GoRoute(
-      path: '/owner/listings/new',
+      path: AppRoutes.ownerListingNew,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const AddPropertyScreen()),
   GoRoute(
-      path: '/owner/listing-submitted',
+      path: AppRoutes.ownerListingSubmitted,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const ListingSubmittedScreen()),
   GoRoute(
-      path: '/owner/team-review',
+      path: AppRoutes.ownerTeamReview,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const TeamReviewScreen()),
   GoRoute(
       path: AppRoutes.ownerAllTrending,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (context, state) => const OwnerAllTrendingScreen()),
+      builder: (context, state) => const AllPropertiesScreen()),
   GoRoute(
-    path: '/owner/booking-upcoming',
+    path: AppRoutes.ownerBookingUpcoming,
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) {
       final args = state.extra;
@@ -101,7 +104,7 @@ final List<GoRoute> ownerGoRoutes = [
     },
   ),
   GoRoute(
-    path: '/owner/booking-active',
+    path: AppRoutes.ownerBookingActive,
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) {
       final args = state.extra;
@@ -124,7 +127,7 @@ final List<GoRoute> ownerGoRoutes = [
     },
   ),
   GoRoute(
-    path: '/owner/booking-past',
+    path: AppRoutes.ownerBookingPast,
     parentNavigatorKey: rootNavigatorKey,
     builder: (context, state) {
       final args = state.extra;
@@ -147,36 +150,41 @@ final List<GoRoute> ownerGoRoutes = [
     },
   ),
   GoRoute(
-      path: '/owner/requests',
+      path: AppRoutes.ownerRequests,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerRequestsScreen()),
   GoRoute(
-      path: '/owner/request-detail',
+      path: AppRoutes.ownerRequestDetail,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (context, state) => const OwnerRequestDetailScreen()),
+      pageBuilder: (context, state) => fadeSlideTransition(
+            key: state.pageKey,
+            child: OwnerRequestDetailScreen(
+              data: state.extra as Map<String, dynamic>?,
+            ),
+          )),
   GoRoute(
       path: AppRoutes.ownerEarnings,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerEarningsScreen()),
   GoRoute(
-      path: '/owner/violations',
+      path: AppRoutes.ownerViolations,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const ViolationsScreen()),
   GoRoute(
-      path: '/owner/violation-report',
+      path: AppRoutes.ownerViolationReport,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const ViolationReportScreen()),
   GoRoute(
-      path: '/owner/history',
+      path: AppRoutes.ownerHistory,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) =>
           OwnerHistoryScreen(period: state.extra as String?)),
   GoRoute(
-      path: '/owner/portfolio',
+      path: AppRoutes.ownerPortfolio,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const PortfolioInsightsScreen()),
   GoRoute(
-      path: '/owner/ai-chat',
+      path: AppRoutes.ownerAiChat,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerAiChatScreen()),
   GoRoute(
@@ -192,12 +200,20 @@ final List<GoRoute> ownerGoRoutes = [
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const PayoutBankScreen()),
   GoRoute(
-      path: '/owner/notifications',
+      path: AppRoutes.ownerNotifications,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) =>
           const NotificationSettingsScreen(role: NotificationRole.owner)),
   GoRoute(
-      path: '/owner/edit-bio',
+      path: AppRoutes.ownerRateGuest,
+      parentNavigatorKey: rootNavigatorKey,
+      builder: (context, state) {
+        final args = state.extra;
+        if (args is Property) return OwnerRateGuestScreen(property: args);
+        return const OwnerRateGuestScreen();
+      }),
+  GoRoute(
+      path: AppRoutes.ownerEditBio,
       parentNavigatorKey: rootNavigatorKey,
       builder: (context, state) => const OwnerEditBioScreen()),
 ];

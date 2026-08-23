@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/theme/app_theme.dart';
 
 class HomeMaintenanceGrid extends StatelessWidget {
   final Function(String) onRequest;
@@ -25,13 +26,12 @@ class HomeMaintenanceGrid extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Home & Maintenance',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
+          style: AppTheme.dm(
+            size: 18,
+            weight: FontWeight.w700,
             color: AppColors.navy,
-            fontFamily: 'DM Sans',
           ),
         ),
         const SizedBox(height: 16),
@@ -64,7 +64,7 @@ class HomeMaintenanceGrid extends StatelessWidget {
 
   void _showServiceSheet(BuildContext context, String serviceName) {
     showModalBottomSheet(
-      context: context,
+      useRootNavigator: true, context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) {
@@ -89,21 +89,19 @@ class HomeMaintenanceGrid extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 serviceName,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+                style: AppTheme.dm(
+                  size: 20,
+                  weight: FontWeight.w700,
                   color: AppColors.navy,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Service details and booking options will appear here.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
+                style: AppTheme.dm(
+                  size: 14,
                   color: AppColors.secondary,
-                  fontFamily: 'DM Sans',
                 ),
               ),
               const SizedBox(height: 24),
@@ -122,12 +120,11 @@ class HomeMaintenanceGrid extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Request Service',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'DM Sans',
+                    style: AppTheme.dm(
+                      size: 15,
+                      weight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -178,10 +175,9 @@ class _ServiceTile extends StatelessWidget {
           Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 11,
+            style: AppTheme.dm(
+              size: 11,
               color: AppColors.dark,
-              fontFamily: 'DM Sans',
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

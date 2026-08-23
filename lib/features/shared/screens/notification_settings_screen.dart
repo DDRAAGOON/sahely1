@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/core/widgets/buttons.dart';
 import 'package:sahely/core/widgets/kit.dart';
 
 /// Enum for user role to customize notification settings screen.
