@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/gallery/photo_viewer_screen.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class BookingHeroImage extends StatelessWidget {
   final String imageUrl;
@@ -37,10 +38,9 @@ class BookingHeroImage extends StatelessWidget {
           onTap: () => _openGallery(context),
           child: AspectRatio(
             aspectRatio: 4 / 3,
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
+            child: AppNetworkImage(
+              url: imageUrl,
+              errorWidget: (context, error, stackTrace) {
                 return Container(color: AppColors.border);
               },
             ),

@@ -5,6 +5,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class RoleSelectionScreen extends StatefulWidget {
   const RoleSelectionScreen({super.key});
@@ -16,25 +17,29 @@ class RoleSelectionScreen extends StatefulWidget {
 class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
   int selected = 0;
 
+  /// Canonical role values (passed to navigation) with localized display.
+  static const List<(String, String, IconData)> _roles = [
+    ('Renter', 'roleRenterDesc', Icons.person_outline),
+    ('Property Owner', 'roleOwnerDesc', Icons.apartment_outlined),
+    ('Broker', 'roleBrokerDesc', Icons.handshake_outlined),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final roles = [
-      (
-        'Renter',
-        'Discover & book luxury properties',
-        Icons.person_outline,
-      ),
-      (
-        'Property Owner',
-        'List your properties',
-        Icons.apartment_outlined,
-      ),
-      (
-        'Broker',
-        'Earn commissions on referrals',
-        Icons.handshake_outlined,
-      ),
-    ];
+    final l = AppLocalizations.of(context);
+    String roleTitle(String canonical) {
+      switch (canonical) {
+        case 'Renter':
+          return l.renter;
+        case 'Property Owner':
+          return l.roleOwnerTitle;
+        case 'Broker':
+          return l.broker;
+        default:
+          return canonical;
+      }
+    }
+
     return PhoneScaffold(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 18, 24, 40),
@@ -42,31 +47,31 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
           children: [
             const Align(alignment: Alignment.centerLeft, child: BackChip()),
             const SizedBox(height: 14),
-            Text('How will you use Sahely?',
+            Text(l.howUseSahely,
                 textAlign: TextAlign.center,
                 style: AppTheme.dm(
                     size: 22, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 8),
-            Text('You can always access everything from your account',
+            Text(l.roleSubtitle,
                 textAlign: TextAlign.center,
                 style: AppTheme.dm(size: 14, color: AppColors.muted)),
             const SizedBox(height: 28),
-            for (var i = 0; i < roles.length; i++) ...[
+            for (var i = 0; i < _roles.length; i++) ...[
               _RoleCard(
-                title: roles[i].$1,
-                subtitle: roles[i].$2,
-                iconData: roles[i].$3,
+                title: roleTitle(_roles[i].$1),
+                subtitle: l.t(_roles[i].$2),
+                iconData: _roles[i].$3,
                 selected: i == selected,
                 onTap: () => setState(() => selected = i),
               ),
-              if (i < roles.length - 1) const SizedBox(height: 14),
+              if (i < _roles.length - 1) const SizedBox(height: 14),
             ],
             const Spacer(),
             NavyButton(
-              label: 'Continue',
+              label: l.continueBtn,
               onTap: () => context.push(
                 '/create',
-                extra: roles[selected].$1,
+                extra: _roles[selected].$1,
               ),
             ),
           ],

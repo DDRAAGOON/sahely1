@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class ArrivalChecklistScreen extends StatefulWidget {
   final String? bookingId;
@@ -28,12 +29,12 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
     super.initState();
     _items = widget.checklistItems ??
         [
-          {'label': 'Pool clean & usable', 'done': true, 'issue': false},
-          {'label': 'Wi-Fi works (password on fridge)', 'done': true, 'issue': false},
-          {'label': 'AC in all rooms', 'done': true, 'issue': false},
-          {'label': '5 beds made & linens fresh', 'done': true, 'issue': false},
-          {'label': 'Beach access tags (4)', 'done': false, 'issue': false},
-          {'label': 'Kitchen fully equipped', 'done': false, 'issue': false},
+          {'label': 'chkPool', 'done': true, 'issue': false},
+          {'label': 'chkWifi', 'done': true, 'issue': false},
+          {'label': 'chkAc', 'done': true, 'issue': false},
+          {'label': 'chkBeds', 'done': true, 'issue': false},
+          {'label': 'chkBeachTags', 'done': false, 'issue': false},
+          {'label': 'chkKitchen', 'done': false, 'issue': false},
         ];
   }
 
@@ -45,20 +46,20 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
             children: [
-              const TopBar(
-                  title: 'Arrival Checklist',
-                  subtitle: 'Confirm everything is perfect'),
+              TopBar(
+                  title: AppLocalizations.of(context).arrivalChecklist,
+                  subtitle: AppLocalizations.of(context).confirmEverything),
               const SizedBox(height: 16),
-              const InfoNote(
+              InfoNote(
                   text:
-                      'Reporting issues within 2 hours of check-in helps us resolve them faster.',
+                      AppLocalizations.of(context).checklistNote,
                   icon: Icons.info_outline),
               const SizedBox(height: 16),
               WhiteCard(
                 child: Column(children: [
                   for (var i = 0; i < _items.length; i++) ...[
                     _CheckItem(
-                      label: _items[i]['label'],
+                      label: AppLocalizations.of(context).t(_items[i]['label']!),
                       done: _items[i]['done'],
                       issue: _items[i]['issue'],
                       onToggle: () => setState(
@@ -77,7 +78,7 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
         Padding(
           padding: const EdgeInsets.all(16),
           child: NavyButton(
-              label: 'Submit Checklist',
+              label: AppLocalizations.of(context).submitChecklist,
               onTap: () => Navigator.pop(context, _items)),
         ),
       ]),
@@ -132,7 +133,7 @@ class _CheckItem extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: issue ? const Color(0xFFFDECEC) : Colors.transparent,
                     borderRadius: BorderRadius.circular(6)),
-                child: Text('Issue?',
+                child: Text(AppLocalizations.of(context).issueQ,
                     style: AppTheme.dm(
                         size: 12,
                         weight: FontWeight.w600,

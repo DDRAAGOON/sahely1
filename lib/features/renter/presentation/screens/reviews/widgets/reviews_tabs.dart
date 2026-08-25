@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class ReviewsTabs extends StatelessWidget {
   final int selectedTab;
@@ -32,7 +33,7 @@ class ReviewsTabs extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Reviews I gave',
+                    AppLocalizations.of(context).reviewsIGaveTab,
                     style: AppTheme.dm(
                       size: 13,
                       weight: FontWeight.w700,
@@ -60,7 +61,7 @@ class ReviewsTabs extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'About me',
+                    AppLocalizations.of(context).aboutMe,
                     style: AppTheme.dm(
                       size: 13,
                       weight: FontWeight.w700,

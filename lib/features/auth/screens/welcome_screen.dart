@@ -5,12 +5,14 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/brand.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.navy,
       body: Stack(
@@ -38,7 +40,7 @@ class WelcomeScreen extends StatelessWidget {
                   const Spacer(),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Verified Chalets.\nZero Chaos.',
+                    child: Text(l.welcomeTagline,
                         style: AppTheme.dm(
                             size: 30,
                             weight: FontWeight.w700,
@@ -48,13 +50,13 @@ class WelcomeScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Discover and book premium properties',
+                    child: Text(l.welcomeSubtitle,
                         style:
                             AppTheme.dm(size: 15, color: AppColors.goldLight)),
                   ),
                   const SizedBox(height: 26),
                   GoldButton(
-                    label: 'Get Started',
+                    label: l.getStarted,
                     onTap: () => AppNavigation.goToOnboarding(context),
                   ),
                   const SizedBox(height: 18),
@@ -62,12 +64,12 @@ class WelcomeScreen extends StatelessWidget {
                     onTap: () => AppNavigation.goToSignIn(context),
                     child: RichText(
                       text: TextSpan(
-                        text: 'Already have an account? ',
+                        text: l.alreadyHaveAccount,
                         style:
                             AppTheme.dm(size: 13, color: AppColors.goldLight),
                         children: [
                           TextSpan(
-                              text: 'Sign In',
+                              text: l.signIn,
                               style: AppTheme.dm(
                                   size: 13,
                                   weight: FontWeight.w700,

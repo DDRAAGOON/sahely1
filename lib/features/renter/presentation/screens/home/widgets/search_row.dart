@@ -4,6 +4,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/bouncy_button.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class SearchRow extends StatelessWidget {
   final VoidCallback? onFilterTap;
@@ -13,6 +14,7 @@ class SearchRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Row(
       children: [
         // Search bar
@@ -37,7 +39,7 @@ class SearchRow extends StatelessWidget {
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      'Find your perfect stay',
+                      l.findYourPerfectStay,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTheme.dm(

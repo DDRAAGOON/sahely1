@@ -94,7 +94,7 @@ class AppNavigation {
   static void goToOwnerWithdraw(BuildContext context) => context.push(AppRoutes.ownerWithdraw); 
   static void goToOwnerWithdrawReceipt(BuildContext context) => context.push(AppRoutes.ownerWithdrawReceipt);
   static void goToOwnerAllTrending(BuildContext context) => context.push(AppRoutes.ownerAllTrending);
-  static void goToOwnerProperties(BuildContext context) => context.push(AppRoutes.ownerProperties);
+  static void goToOwnerProperties(BuildContext context, {String? filter}) => context.push(AppRoutes.ownerProperties, extra: filter);
   static void goToOwnerPayout(BuildContext context) => context.push(AppRoutes.ownerPayout);
   static void goToOwnerAddProperty(BuildContext context) => context.push(AppRoutes.ownerListingNew);
   static void goToSosOwner(BuildContext context) => context.push(AppRoutes.sosOwner);

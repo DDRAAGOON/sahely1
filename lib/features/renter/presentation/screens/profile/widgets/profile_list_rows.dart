@@ -1,10 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 
 class ProfileListRows extends StatelessWidget {
@@ -32,7 +33,7 @@ class ProfileListRows extends StatelessWidget {
           // Wallet & Credit
           _ListRow(
             icon: Icons.account_balance_wallet_outlined,
-            label: 'Wallet & Credit',
+            label: AppLocalizations.of(context).walletCredit,
             trailing: Text(
               'EGP $walletBalance',
               style: AppTheme.dm(
@@ -61,32 +62,31 @@ class ProfileListRows extends StatelessWidget {
           // Payment Methods
           _ListRow(
             icon: Icons.credit_card_outlined,
-            label: 'Payment Methods',
+            label: AppLocalizations.of(context).paymentMethods,
             onTap: () => AppNavigation.goToAddCard(context),
           ),
           _Divider(),
           // Notifications
           _ListRow(
             icon: Icons.notifications_outlined,
-            label: 'Notifications',
+            label: AppLocalizations.of(context).notificationsLabel,
             onTap: () => AppNavigation.goToNotifications(context),
           ),
           _Divider(),
           // Change Password
           _ListRow(
             icon: Icons.lock_outline,
-            label: 'Change Password',
+            label: AppLocalizations.of(context).changePassword,
             onTap: () => AppNavigation.goToChangePassword(context),
           ),
           _Divider(),
           // Language
           _ListRow(
             icon: Icons.language,
-            label: 'Language',
+            label: AppLocalizations.of(context).languageLabel,
             trailing: Text(
-              context.watch<LocaleProvider>().locale.languageCode == 'ar'
-                  ? 'العربية'
-                  : 'English',
+              AppLocalizations.nativeLanguageName(
+                  context.watch<LocaleProvider>().locale.languageCode),
               style: AppTheme.dm(
                 size: 13,
                 color: AppColors.secondary,
@@ -100,7 +100,7 @@ class ProfileListRows extends StatelessWidget {
             icon: Icons.help_outline,
             // Matching the gold icon in the image
             iconColor: AppColors.gold,
-            label: 'Currency',
+            label: AppLocalizations.of(context).currencyLabel,
             trailing: Text(
               context.watch<CurrencyProvider>().selectedCurrency,
               style: AppTheme.dm(

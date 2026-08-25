@@ -1,9 +1,10 @@
-﻿import 'dart:io';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class ProfileHeader extends StatelessWidget {
   final String name;
@@ -130,7 +131,7 @@ class ProfileHeader extends StatelessWidget {
           child: Image.file(File(localAvatarPath!), fit: BoxFit.cover));
     }
     if (avatarUrl != null) {
-      return ClipOval(child: Image.network(avatarUrl!, fit: BoxFit.cover));
+      return ClipOval(child: AppNetworkImage(url: avatarUrl!));
     }
     return const Icon(Icons.person, size: 32, color: AppColors.navy);
   }

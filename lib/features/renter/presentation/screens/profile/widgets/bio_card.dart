@@ -1,7 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 
 class BioCard extends StatelessWidget {
@@ -65,7 +66,7 @@ class BioCard extends StatelessWidget {
                 ),
               _SocialChip(
                 icon: Icons.add,
-                label: 'Add social',
+                label: AppLocalizations.of(context).addSocial,
                 onTap: () => AppNavigation.goToEditProfile(context),
               ),
             ],

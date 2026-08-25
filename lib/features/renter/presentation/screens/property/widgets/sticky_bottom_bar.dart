@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class StickyBottomBar extends StatelessWidget {
   final int pricePerNight;
@@ -74,7 +75,7 @@ class StickyBottomBar extends StatelessWidget {
                   elevation: 0,
                 ),
                 child: Text(
-                  'Book Now',
+                  AppLocalizations.of(context).bookNow,
                   style: AppTheme.dm(
                     size: 15,
                     weight: FontWeight.w700,

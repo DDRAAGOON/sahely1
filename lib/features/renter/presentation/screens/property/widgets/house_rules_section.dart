@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class HouseRulesSection extends StatelessWidget {
   const HouseRulesSection({super.key});
@@ -15,7 +16,7 @@ class HouseRulesSection extends StatelessWidget {
           children: [
         const SizedBox(height: 12),
         Text(
-          'House Rules',
+          AppLocalizations.of(context).houseRules,
           style: AppTheme.dm(
             size: 16,
             weight: FontWeight.w700,
@@ -31,27 +32,27 @@ class HouseRulesSection extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  const _RuleRow(
+                  _RuleRow(
                     icon: Icons.access_time,
-                    label: 'Calm hours',
+                    label: AppLocalizations.of(context).calmHours,
                     value: '11 PM – 8 AM',
                   ),
                   _Divider(),
-                  const _RuleRow(
+                  _RuleRow(
                     icon: Icons.party_mode,
-                    label: 'Parties',
+                    label: AppLocalizations.of(context).partiesLabel,
                     isAllowed: true,
                   ),
                   _Divider(),
-                  const _RuleRow(
+                  _RuleRow(
                     icon: Icons.pets,
-                    label: 'Pets',
+                    label: AppLocalizations.of(context).petsLabel,
                     isAllowed: true,
                   ),
                   _Divider(),
-                  const _RuleRow(
+                  _RuleRow(
                     icon: Icons.groups,
-                    label: 'Mixed groups',
+                    label: AppLocalizations.of(context).mixedGroupsLabel,
                     isAllowed: true,
                   ),
                 ],
@@ -102,7 +103,7 @@ class _RuleRow extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                'Allowed',
+                AppLocalizations.of(context).allowed,
                 style: AppTheme.dm(
                   size: 12,
                   weight: FontWeight.w600,

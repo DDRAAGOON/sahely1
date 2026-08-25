@@ -5,6 +5,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class WithdrawReceiptScreen extends StatelessWidget {
   const WithdrawReceiptScreen({super.key});
@@ -20,7 +21,7 @@ class WithdrawReceiptScreen extends StatelessWidget {
               const Center(child: SuccessCheck(size: 96)),
               const SizedBox(height: 20),
               Center(
-                  child: Text('Withdrawal requested',
+                  child: Text(AppLocalizations.of(context).withdrawalRequested,
                       style: AppTheme.dm(
                           size: 24,
                           weight: FontWeight.w700,
@@ -47,19 +48,19 @@ class WithdrawReceiptScreen extends StatelessWidget {
               WhiteCard(
                   padding: const EdgeInsets.all(16),
                   child: Column(children: [
-                    KeyValueRow('Amount', CurrencyFormatter.format(20000)),
-                    const KeyValueRow('To', 'CIB ••4821'),
-                    const KeyValueRow('Reference', 'PO-4471-2026'),
-                    const KeyValueRow('Requested', 'Jun 18, 9:41 AM'),
-                    const KeyValueRow('Est. arrival', 'Jun 20',
+                    KeyValueRow(AppLocalizations.of(context).amountLabel, CurrencyFormatter.format(20000)),
+                    KeyValueRow(AppLocalizations.of(context).toLabel, 'CIB ••4821'),
+                    KeyValueRow(AppLocalizations.of(context).referenceLabel, 'PO-4471-2026'),
+                    KeyValueRow(AppLocalizations.of(context).requestedLabel, 'Jun 18, 9:41 AM'),
+                    KeyValueRow(AppLocalizations.of(context).estArrival, 'Jun 20',
                         valueColor: AppColors.success,
                         bold: true,
                         topBorder: true),
                   ])),
               const SizedBox(height: 14),
-              const InfoNote(
+              InfoNote(
                   text:
-                      "We'll notify you when the transfer is sent to your bank.",
+                      AppLocalizations.of(context).notifyWhenSent,
                   icon: Icons.schedule),
             ],
           ),
@@ -67,14 +68,14 @@ class WithdrawReceiptScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16),
           child: Column(children: [
-            const WideButton(
-                label: 'Download receipt',
+            WideButton(
+                label: AppLocalizations.of(context).downloadReceipt,
                 color: AppColors.navy,
                 outline: true,
                 height: 44),
             const SizedBox(height: 10),
             NavyButton(
-                label: 'Done',
+                label: AppLocalizations.of(context).doneLabel,
                 onTap: () => Navigator.popUntil(
                     context,
                     (r) =>

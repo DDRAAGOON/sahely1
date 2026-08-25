@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class SubmitReviewButton extends StatelessWidget {
   final bool isLoading;
@@ -44,7 +45,7 @@ class SubmitReviewButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Submit Review & earn +5',
+                    AppLocalizations.of(context).submitReviewBtn,
                     style: AppTheme.dm(
                       size: 15,
                       weight: FontWeight.w700,

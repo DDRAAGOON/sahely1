@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 /// Enum for user role to customize notification settings screen.
 enum NotificationRole { renter, owner, broker }
@@ -50,7 +51,7 @@ class _NotificationSettingsScreenState
               children: [
                 const BackChip(),
                 const SizedBox(width: 12),
-                Text('Notifications',
+                Text(AppLocalizations.of(context).notificationsTitle,
                     style: AppTheme.dm(
                         size: 20,
                         weight: FontWeight.w700,
@@ -65,29 +66,29 @@ class _NotificationSettingsScreenState
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
               children: [
                 // BOOKINGS Section
-                _sectionLabel('BOOKINGS'),
+                _sectionLabel(AppLocalizations.of(context).sectionBookings),
                 const SizedBox(height: 8),
                 WhiteCard(
                   padding: EdgeInsets.zero,
                   child: Column(
                     children: [
                       _toggleRow(
-                        title: 'Booking updates',
-                        subtitle: 'Confirmations, reminders, changes',
+                        title: AppLocalizations.of(context).bookingUpdates,
+                        subtitle: AppLocalizations.of(context).bookingUpdatesSub,
                         value: _bookingUpdates,
                         onChanged: (v) => setState(() => _bookingUpdates = v),
                       ),
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       _toggleRow(
-                        title: 'Check-in & door access',
-                        subtitle: 'Passcode & arrival alerts',
+                        title: AppLocalizations.of(context).checkinAccess,
+                        subtitle: AppLocalizations.of(context).checkinAccessSub,
                         value: _checkInAccess,
                         onChanged: (v) => setState(() => _checkInAccess = v),
                       ),
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       _toggleRow(
-                        title: 'Messages & support',
-                        subtitle: 'Replies from Sahely & hosts',
+                        title: AppLocalizations.of(context).messagesSupport,
+                        subtitle: AppLocalizations.of(context).messagesSupportSub,
                         value: _messagesSupport,
                         onChanged: (v) => setState(() => _messagesSupport = v),
                         last: true,
@@ -105,15 +106,15 @@ class _NotificationSettingsScreenState
                   child: Column(
                     children: [
                       _toggleRow(
-                        title: 'Stars & level-ups',
-                        subtitle: 'When you earn stars or level up',
+                        title: AppLocalizations.of(context).starsLevelUps,
+                        subtitle: AppLocalizations.of(context).starsLevelUpsSub,
                         value: _starsLevelUps,
                         onChanged: (v) => setState(() => _starsLevelUps = v),
                       ),
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       _toggleRow(
-                        title: 'Promotions',
-                        subtitle: 'Seasonal deals & discounts',
+                        title: AppLocalizations.of(context).promotions,
+                        subtitle: AppLocalizations.of(context).promotionsSub,
                         value: _promotions,
                         onChanged: (v) => setState(() => _promotions = v),
                         last: true,
@@ -124,14 +125,14 @@ class _NotificationSettingsScreenState
                 const SizedBox(height: 24),
 
                 // CHANNELS Section
-                _sectionLabel('CHANNELS'),
+                _sectionLabel(AppLocalizations.of(context).sectionChannels),
                 const SizedBox(height: 8),
                 WhiteCard(
                   padding: EdgeInsets.zero,
                   child: Column(
                     children: [
                       _toggleRow(
-                        title: 'Push notifications',
+                        title: AppLocalizations.of(context).pushNotifications,
                         subtitle: 'On this device',
                         value: _pushNotifications,
                         onChanged: (v) =>
@@ -139,7 +140,7 @@ class _NotificationSettingsScreenState
                       ),
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       _toggleRow(
-                        title: 'Email',
+                        title: AppLocalizations.of(context).emailChannel,
                         subtitle: 'mariam@example.com',
                         value: _emailNotifications,
                         onChanged: (v) =>

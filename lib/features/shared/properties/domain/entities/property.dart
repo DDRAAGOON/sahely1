@@ -1,3 +1,5 @@
+enum PropertyStatus { active, underReview, draft, paused }
+
 class Property {
   const Property({
     this.id = '1',
@@ -17,6 +19,7 @@ class Property {
     this.minutesToBeach,
     this.guestFavourite = false,
     this.saved = false,
+    this.status = PropertyStatus.active,
   });
 
   final String id;
@@ -36,6 +39,7 @@ class Property {
   final int? minutesToBeach;
   final bool guestFavourite;
   final bool saved;
+  final PropertyStatus status;
 
   factory Property.fromMap(Map<String, dynamic> map) {
     int parseInt(dynamic value, [int fallback = 0]) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class ReviewsSection extends StatelessWidget {
   final double rating;
@@ -28,7 +29,7 @@ class ReviewsSection extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Reviews',
+                      AppLocalizations.of(context).reviewsSection,
                       style: AppTheme.dm(
                         size: 16,
                         weight: FontWeight.w700,
@@ -60,7 +61,7 @@ class ReviewsSection extends StatelessWidget {
                     AppNavigation.goToPropertyReviews(context);
                   },
                 child: Text(
-                    'See All',
+                    AppLocalizations.of(context).seeAll,
                     style: AppTheme.dm(
                       size: 13,
                       weight: FontWeight.w600,

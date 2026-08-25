@@ -10,6 +10,7 @@ import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/features/auth/mock_auth_service.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class SignInScreen extends StatefulWidget {
   final String? from;
@@ -34,21 +35,22 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return PhoneScaffold(
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(28, 36, 28, 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Welcome Back',
+            Text(l.welcomeBack,
                 style: AppTheme.dm(
                     size: 26, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 6),
-            Text('Sign in to your Sahely account',
+            Text(l.signInSubtitle,
                 style: AppTheme.dm(size: 14, color: AppColors.muted)),
             const SizedBox(height: 26),
             FieldGroup(
-              label: 'Email Address',
+              label: l.emailAddress,
               child: AppTextField(
                 controller: _emailController,
                 hintText: 'you@example.com',
@@ -57,10 +59,10 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             const SizedBox(height: 14),
             FieldGroup(
-              label: 'Password',
+              label: l.password,
               trailingLabel: GestureDetector(
                 onTap: () => AppNavigation.goToForgotPassword(context),
-                child: Text('Forgot Password?',
+                child: Text(l.forgotPassword,
                     style: AppTheme.dm(
                         size: 13,
                         weight: FontWeight.w600,
@@ -87,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             const SizedBox(height: 22),
             NavyButton(
-                label: 'Sign In',
+                label: l.signIn,
                 onTap: () async {
                   // TODO: replace with real auth logic
                   // Mark user authenticated and set default role for demo
@@ -109,6 +111,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               ? '/owner/home'
                               : '/renter/home'));
 
+                  if (!context.mounted) return;
                   context.go(target);
                 }),
             const SizedBox(height: 24),
@@ -117,7 +120,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 const Expanded(child: Divider(color: AppColors.border)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text('or continue with',
+                  child: Text(l.orContinueWith,
                       style: AppTheme.dm(size: 12, color: AppColors.muted)),
                 ),
                 const Expanded(child: Divider(color: AppColors.border)),
@@ -125,19 +128,15 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             const SizedBox(height: 12),
             _SocialButton(
-              label: 'Continue with Google',
+              label: l.continueGoogle,
               dark: false,
-              leading: Image.network(
-                'https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png',
-                width: 22,
-                height: 22,
-              ),
+              leading: const AppNetworkImage(url: 'https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png', width: 22, height: 22),
             ),
             const SizedBox(height: 12),
-            const _SocialButton(
-              label: 'Continue with Apple',
+            _SocialButton(
+              label: l.continueApple,
               dark: true,
-              leading: Icon(Icons.apple, color: AppColors.white, size: 20),
+              leading: const Icon(Icons.apple, color: AppColors.white, size: 20),
             ),
             const SizedBox(height: 22),
             GestureDetector(
@@ -145,11 +144,11 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Center(
                 child: RichText(
                   text: TextSpan(
-                    text: 'New to Sahely? ',
+                    text: l.newToSahely,
                     style: AppTheme.dm(size: 13, color: AppColors.muted),
                     children: [
                       TextSpan(
-                          text: 'Create Account',
+                          text: l.createAccount,
                           style: AppTheme.dm(
                               size: 13,
                               weight: FontWeight.w700,
@@ -198,3 +197,4 @@ class _SocialButton extends StatelessWidget {
     );
   }
 }
+

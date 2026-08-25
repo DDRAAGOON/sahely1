@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class BookedPropertyHeader extends StatelessWidget {
   final String propertyName;
@@ -23,21 +24,20 @@ class BookedPropertyHeader extends StatelessWidget {
         // Hero Image
         AspectRatio(
           aspectRatio: 4 / 3,
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
+          child: AppNetworkImage(
+            url: imageUrl,
+            errorWidget: (context, error, stackTrace) {
               return Container(color: AppColors.border);
             },
           ),
         ),
 
-        // Bottom Gradient
+        // Dark Bottom Gradient
         Positioned(
           bottom: 0,
           left: 0,
           right: 0,
-          height: 120,
+          height: 140,
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -45,7 +45,7 @@ class BookedPropertyHeader extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  AppColors.navy.withValues(alpha: 0.8),
+                  Colors.black.withValues(alpha: 0.8),
                 ],
               ),
             ),
@@ -81,7 +81,7 @@ class BookedPropertyHeader extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.green,
+              color: const Color(0xFF1B6B3A),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -106,7 +106,7 @@ class BookedPropertyHeader extends StatelessWidget {
           ),
         ),
 
-        // Property Name & Location
+        // Property Name & Location (Restored to White)
         Positioned(
           bottom: 16,
           left: 16,
@@ -117,8 +117,8 @@ class BookedPropertyHeader extends StatelessWidget {
               Text(
                 propertyName,
                 style: AppTheme.dm(
-                  size: 22,
-                  weight: FontWeight.w700,
+                  size: 24,
+                  weight: FontWeight.w800,
                   color: Colors.white,
                 ),
               ),
@@ -134,7 +134,7 @@ class BookedPropertyHeader extends StatelessWidget {
                   Text(
                     location,
                     style: AppTheme.dm(
-                      size: 13,
+                      size: 14,
                       color: Colors.white70,
                     ),
                   ),

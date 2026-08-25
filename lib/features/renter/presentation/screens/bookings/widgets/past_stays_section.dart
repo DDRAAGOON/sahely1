@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class PastStaysSection extends StatelessWidget {
   final List<Booking> pastBookings;
@@ -59,12 +60,7 @@ class PastStaysSection extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                booking.imageUrl,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-              ),
+              child: AppNetworkImage(url: booking.imageUrl, width: 80, height: 80),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -132,3 +128,4 @@ class PastStaysSection extends StatelessWidget {
     );
   }
 }
+

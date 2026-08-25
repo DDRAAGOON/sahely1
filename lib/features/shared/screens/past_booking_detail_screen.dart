@@ -6,6 +6,8 @@ import 'package:sahely/features/renter/presentation/screens/bookings/widgets/pas
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 import '../../../core/navigation/app_navigation.dart';
+import 'package:sahely/core/widgets/image.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 enum PastBookingRole { renter, owner, broker }
 
@@ -56,8 +58,7 @@ class PastBookingDetailScreen extends StatelessWidget {
                     child: Row(children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.network(img, width: 64, height: 64, fit: BoxFit.cover,
-                          errorBuilder: (_,__,___) => Container(width: 64, height: 64, color: AppColors.cardWarm)),
+                        child: AppNetworkImage(url: img, width: 64, height: 64, errorWidget: (_,__,___) => Container(width: 64, height: 64, color: AppColors.cardWarm)),
                       ),
                       const SizedBox(width: 14),
                       Expanded(child: Column(
@@ -72,7 +73,7 @@ class PastBookingDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Text('Guest Summary', style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+                Text(AppLocalizations.of(context).guestSummary, style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
                 const SizedBox(height: 12),
                 WhiteCard(
                   padding: const EdgeInsets.all(16),
@@ -143,7 +144,7 @@ class PastBookingDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Included in your stay', style: AppTheme.dm(size: 18, weight: FontWeight.w700)),
+                  Text(AppLocalizations.of(context).includedInStay, style: AppTheme.dm(size: 18, weight: FontWeight.w700)),
                   const SizedBox(height: 16),
                   Wrap(
                     spacing: 8,
@@ -152,11 +153,11 @@ class PastBookingDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 32),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text('Total Paid', style: AppTheme.dm(size: 16, weight: FontWeight.w600)),
+                    Text(AppLocalizations.of(context).totalPaid, style: AppTheme.dm(size: 16, weight: FontWeight.w600)),
                     Text('EGP $total', style: AppTheme.dm(size: 18, weight: FontWeight.w800, color: AppColors.navy)),
                   ]),
                   const SizedBox(height: 32),
-                  NavyButton(label: 'Rebook Property', onTap: () {}),
+                  NavyButton(label: AppLocalizations.of(context).rebookProperty, onTap: () {}),
                   const SizedBox(height: 120),
                 ],
               ),
@@ -177,3 +178,4 @@ class PastBookingDetailScreen extends StatelessWidget {
     child: Text(label, style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.navy)),
   );
 }
+

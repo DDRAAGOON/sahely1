@@ -5,6 +5,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class TeamReviewScreen extends StatelessWidget {
   const TeamReviewScreen({super.key});
@@ -15,8 +16,8 @@ class TeamReviewScreen extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
         children: [
-          const TopBar(
-              title: 'Review result', subtitle: 'Palm Shores · reviewed in 3h'),
+          TopBar(
+              title: AppLocalizations.of(context).reviewResult, subtitle: 'Palm Shores · reviewed in 3h'),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(14),
@@ -47,7 +48,7 @@ class TeamReviewScreen extends StatelessWidget {
             ]),
           ),
           const SizedBox(height: 16),
-          Text('What the team needs',
+          Text(AppLocalizations.of(context).whatTeamNeeds,
               style: AppTheme.dm(
                   size: 14, weight: FontWeight.w700, color: AppColors.navy)),
           const SizedBox(height: 8),
@@ -70,7 +71,7 @@ class TeamReviewScreen extends StatelessWidget {
               Row(children: [
                 const Icon(Icons.bar_chart, color: AppColors.gold, size: 18),
                 const SizedBox(width: 8),
-                Text('Price recommendation',
+                Text(AppLocalizations.of(context).priceRecommendation,
                     style: AppTheme.dm(
                         size: 14, weight: FontWeight.w700, color: Colors.white))
               ]),
@@ -98,17 +99,17 @@ class TeamReviewScreen extends StatelessWidget {
                   style: AppTheme.dm(
                       size: 11, color: Colors.white70, height: 1.5)),
               const SizedBox(height: 12),
-              const Row(children: [
+              Row(children: [
                 Expanded(
                     child: WideButton(
-                        label: 'Use 6,800',
+                        label: '${AppLocalizations.of(context).useLabel} 6,800',
                         color: AppColors.gold,
                         textColor: AppColors.navy,
                         height: 42)),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                     child: WideButton(
-                        label: 'Keep mine', color: Colors.white24, height: 42)),
+                        label: AppLocalizations.of(context).keepMine, color: Colors.white24, height: 42)),
               ]),
             ]),
           ),
@@ -134,7 +135,7 @@ class TeamReviewScreen extends StatelessWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Text('Chat with your reviewer',
+                        Text(AppLocalizations.of(context).chatWithReviewer,
                             style: AppTheme.dm(
                                 size: 13,
                                 weight: FontWeight.w700,
@@ -148,7 +149,7 @@ class TeamReviewScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           NavyButton(
-              label: 'Make changes & resubmit',
+              label: AppLocalizations.of(context).makeChangesResubmit,
               radius: 999,
               onTap: () => Navigator.pop(context)),
         ],

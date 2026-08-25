@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/navigation/shells/broker_shell.dart';
 import 'package:sahely/core/navigation/route_transitions.dart';
 import 'package:sahely/core/navigation/shells/owner_shell.dart';
@@ -141,12 +142,13 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         path: AppRoutes.verifyEmail,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
+          final l = AppLocalizations.of(context);
           return OtpScreen(
-            title: 'Verify Your Email',
+            title: l.verifyEmailTitle,
             email: extra?['email'],
             icon: Icons.mail_outline,
-            hint: 'Check your inbox — and your spam folder',
-            cta: 'Verify Email',
+            hint: l.verifyEmailHint,
+            cta: l.verifyEmailCta,
             onVerify: () => context.push(AppRoutes.verifyPhone, extra: extra),
           );
         },
@@ -155,13 +157,14 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         path: AppRoutes.verifyPhone,
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>?;
+          final l = AppLocalizations.of(context);
           return OtpScreen(
-            title: 'Verify Your Number',
+            title: l.verifyNumberTitle,
             phone: extra?['phone'],
             icon: Icons.phone_iphone,
-            hint: 'Check your messages for the SMS code',
-            cta: 'Verify Number',
-            bottomText: 'Wrong number? Change it',
+            hint: l.verifyNumberHint,
+            cta: l.verifyNumberCta,
+            bottomText: l.verifyNumberBottom,
             isPhone: true,
             onVerify: () =>
                 context.push(AppRoutes.idVerification, extra: extra),
@@ -173,20 +176,23 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
           builder: (context, state) => const ForgotPasswordScreen()),
       GoRoute(
         path: AppRoutes.resetOtp,
-        builder: (context, state) => OtpScreen(
-          title: 'Enter the code',
-          subtitleSpans: [
-            const TextSpan(text: 'Sent to '),
-            TextSpan(
-                text: (state.extra as Map<String, dynamic>?)?['email'] ?? '',
-                style: AppTheme.dm(
-                    weight: FontWeight.w700, color: const Color(0xFF2D2D2D))),
-          ],
-          icon: Icons.mail_outline,
-          hint: 'Check your inbox — and your spam folder',
-          cta: 'Verify OTP',
-          onVerify: () => context.push(AppRoutes.newPassword),
-        ),
+        builder: (context, state) {
+          final l = AppLocalizations.of(context);
+          return OtpScreen(
+            title: l.enterCodeTitle,
+            subtitleSpans: [
+              TextSpan(text: l.sentTo),
+              TextSpan(
+                  text: (state.extra as Map<String, dynamic>?)?['email'] ?? '',
+                  style: AppTheme.dm(
+                      weight: FontWeight.w700, color: const Color(0xFF2D2D2D))),
+            ],
+            icon: Icons.mail_outline,
+            hint: l.verifyEmailHint,
+            cta: l.verifyOtpCta,
+            onVerify: () => context.push(AppRoutes.newPassword),
+          );
+        },
       ),
       GoRoute(
           path: AppRoutes.newPassword,

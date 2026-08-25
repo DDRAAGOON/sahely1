@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class MapTeaser extends StatelessWidget {
   const MapTeaser({super.key});
@@ -15,7 +16,7 @@ class MapTeaser extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Location',
+              AppLocalizations.of(context).locationTitle,
               style: AppTheme.dm(
                 size: 16,
                 weight: FontWeight.w700,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/review_received_card.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class ReviewsReceivedSection extends StatelessWidget {
   final int reviewCount;
@@ -21,7 +22,7 @@ class ReviewsReceivedSection extends StatelessWidget {
       children: [
         // Section Header
         Text(
-          'WHAT HOSTS SAY ABOUT ME · $reviewCount',
+          '${AppLocalizations.of(context).hostsSayAboutMe}  · $reviewCount',
           style: AppTheme.dm(
             size: 11,
             weight: FontWeight.w700,

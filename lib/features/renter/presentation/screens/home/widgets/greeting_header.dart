@@ -2,12 +2,14 @@
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class GreetingHeader extends StatelessWidget {
   const GreetingHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -16,7 +18,7 @@ class GreetingHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Good morning,',
+                l.goodMorning,
                 style: AppTheme.dm(
                   size: 13,
                   weight: FontWeight.w400,
@@ -49,7 +51,7 @@ class GreetingHeader extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                'Renter',
+                l.renter,
                 style: AppTheme.dm(
                   size: 12,
                   weight: FontWeight.w600,

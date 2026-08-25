@@ -1,7 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});
@@ -27,7 +28,7 @@ class LogoutButton extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Log Out',
+              AppLocalizations.of(context).logOut,
               style: AppTheme.dm(
                 size: 15,
                 weight: FontWeight.w700,

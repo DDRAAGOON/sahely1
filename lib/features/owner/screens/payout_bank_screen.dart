@@ -4,6 +4,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class PayoutBankScreen extends StatefulWidget {
   const PayoutBankScreen({super.key});
@@ -37,7 +38,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
             children: [
-              const TopBar(title: 'Payout Account'),
+              TopBar(title: AppLocalizations.of(context).payoutAccount),
               const SizedBox(height: 20),
               Center(
                 child: Container(
@@ -55,7 +56,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    'Where your earnings are paid out. Make sure the name matches your verified ID.',
+                    AppLocalizations.of(context).payoutNote,
                     textAlign: TextAlign.center,
                     style: AppTheme.dm(size: 13, color: AppColors.muted),
                   ),
@@ -63,7 +64,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
               ),
               const SizedBox(height: 24),
               FieldGroup(
-                label: 'Bank Name',
+                label: AppLocalizations.of(context).bankName,
                 child: AppTextField(
                   controller: _bankController,
                   hintText: 'CIB — Commercial International Bank',
@@ -72,7 +73,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
               ),
               const SizedBox(height: 16),
               FieldGroup(
-                label: 'Account holder name',
+                label: AppLocalizations.of(context).accountHolder,
                 child: AppTextField(
                   controller: _nameController,
                   hintText: 'Layla Mansour',
@@ -81,7 +82,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
               ),
               const SizedBox(height: 16),
               FieldGroup(
-                label: 'Bank account number',
+                label: AppLocalizations.of(context).bankAccountNumber,
                 child: AppTextField(
                   controller: _accountController,
                   hintText: '100 0214 8821 0045',
@@ -91,7 +92,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
               ),
               const SizedBox(height: 16),
               FieldGroup(
-                label: 'IBAN',
+                label: AppLocalizations.of(context).ibanLabel,
                 child: AppTextField(
                   controller: _ibanController,
                   hintText: 'EG38 0019 0005 0000 0010 0214 8821',
@@ -100,7 +101,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
               ),
               const SizedBox(height: 16),
               FieldGroup(
-                label: 'SWIFT / BIC (optional)',
+                label: AppLocalizations.of(context).swiftBic,
                 child: AppTextField(
                   controller: _swiftController,
                   hintText: 'e.g. CIBEEGCX',
@@ -108,9 +109,9 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const InfoNote(
+              InfoNote(
                   text:
-                      'Your bank details are encrypted and used only for payouts.',
+                      AppLocalizations.of(context).bankEncryptedNote,
                   icon: Icons.lock_outline),
             ],
           ),
@@ -118,7 +119,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
         Padding(
           padding: const EdgeInsets.all(16),
           child: NavyButton(
-              label: 'Save Account', onTap: () => Navigator.maybePop(context)),
+              label: AppLocalizations.of(context).saveAccount, onTap: () => Navigator.maybePop(context)),
         ),
       ]),
     );

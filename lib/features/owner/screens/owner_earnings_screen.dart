@@ -9,6 +9,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 
 import '../../../core/utils/currency_formatter.dart';
@@ -34,7 +35,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
                 child: CircularProgressIndicator(
                     strokeWidth: 2, color: Colors.white)),
             const SizedBox(width: 12),
-            Text('Generating PDF report...',
+            Text(AppLocalizations.of(context).generatingPdf,
                 style: AppTheme.dm(color: Colors.white)),
           ],
         ),
@@ -193,7 +194,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Report generated and saved!',
+            content: Text(AppLocalizations.of(context).reportSaved,
                 style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.success,
           ),
@@ -203,7 +204,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to generate PDF: $e',
+            content: Text('${AppLocalizations.of(context).pdfFailed}: $e',
                 style: AppTheme.dm(color: Colors.white)),
             backgroundColor: AppColors.danger,
           ),
@@ -217,10 +218,10 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
     String periodLabel = 'This Month';
     String periodAmount = CurrencyFormatter.format(68400);
     String periodChange = '▲ 12%';
-    List<StatCard> statCards = const [
-      StatCard(value: '24.5k', label: 'Upcoming'),
-      StatCard(value: '38.9k', label: 'Paid', valueColor: AppColors.success),
-      StatCard(value: '5.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
+    List<StatCard> statCards = [
+      StatCard(value: '24.5k', label: AppLocalizations.of(context).statUpcoming),
+      StatCard(value: '38.9k', label: AppLocalizations.of(context).statPaid, valueColor: AppColors.success),
+      StatCard(value: '5.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A))
     ];
     List<Widget> txns = [];
 
@@ -228,10 +229,10 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       periodLabel = 'This Month';
       periodAmount = CurrencyFormatter.format(68400);
       periodChange = '▲ 12%';
-      statCards = const [
-        StatCard(value: '24.5k', label: 'Upcoming'),
-        StatCard(value: '38.9k', label: 'Paid', valueColor: AppColors.success),
-        StatCard(value: '5.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
+      statCards = [
+        StatCard(value: '24.5k', label: AppLocalizations.of(context).statUpcoming),
+        StatCard(value: '38.9k', label: AppLocalizations.of(context).statPaid, valueColor: AppColors.success),
+        StatCard(value: '5.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A))
       ];
       txns = [
         _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft,
@@ -241,11 +242,11 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       periodLabel = 'This Quarter';
       periodAmount = CurrencyFormatter.format(215800);
       periodChange = '▲ 8%';
-      statCards = const [
-        StatCard(value: '42.0k', label: 'Upcoming'),
-        StatCard(value: '173.8k', label: 'Paid', valueColor: AppColors.success),
+      statCards = [
+        StatCard(value: '42.0k', label: AppLocalizations.of(context).statUpcoming),
+        StatCard(value: '173.8k', label: AppLocalizations.of(context).statPaid, valueColor: AppColors.success),
         StatCard(
-            value: '15.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
+            value: '15.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A))
       ];
       txns = [
         _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft),
@@ -257,11 +258,11 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       periodLabel = 'This Year';
       periodAmount = CurrencyFormatter.format(840000);
       periodChange = '▲ 15%';
-      statCards = const [
-        StatCard(value: '120.0k', label: 'Upcoming'),
-        StatCard(value: '720.0k', label: 'Paid', valueColor: AppColors.success),
+      statCards = [
+        StatCard(value: '120.0k', label: AppLocalizations.of(context).statUpcoming),
+        StatCard(value: '720.0k', label: AppLocalizations.of(context).statPaid, valueColor: AppColors.success),
         StatCard(
-            value: '40.0k', label: 'Pending', valueColor: Color(0xFFD2760A))
+            value: '40.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A))
       ];
       txns = [
         _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft),

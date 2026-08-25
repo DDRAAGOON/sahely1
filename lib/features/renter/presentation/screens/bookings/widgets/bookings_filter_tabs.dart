@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/widgets/chips.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class BookingsFilterTabs extends StatelessWidget {
   final List<String> tabs;
@@ -16,6 +17,7 @@ class BookingsFilterTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -26,7 +28,7 @@ class BookingsFilterTabs extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(right: 12),
             child: ChoiceChipPill(
-              tab,
+              AppLocalizations.tabLabel(l, tab),
               selected: isSelected,
               onTap: () => onTabSelected(tab),
               height: 44,

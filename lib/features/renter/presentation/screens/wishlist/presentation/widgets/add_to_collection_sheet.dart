@@ -199,7 +199,7 @@ class _AddToCollectionSheetState extends State<AddToCollectionSheet> {
       builder: (context) => const CreateCollectionSheet(),
     );
 
-    if (result != null && result.isNotEmpty && mounted) {
+    if (result != null && result.isNotEmpty && context.mounted) {
       context.read<WishlistCubit>().createCollection(result, widget.role);
     }
   }

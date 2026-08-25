@@ -22,7 +22,7 @@ class PasscodeDisplay extends StatelessWidget {
         color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: const Color(0xFFC49F45).withValues(alpha: 0.2),
+          color: Colors.white.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -33,14 +33,14 @@ class PasscodeDisplay extends StatelessWidget {
             style: AppTheme.dm(
               size: 11,
               weight: FontWeight.w700,
-              color: const Color(0xFFC49F45),
+              color: const Color(0xFF94A3B8),
               letterSpacing: 2,
             ),
           ),
           const SizedBox(height: 28),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(passcode.length, (index) {
+            children: List.generate(6, (index) {
               String digit = (isInRange && index < passcode.length)
                   ? passcode[index]
                   : '•';
@@ -51,7 +51,10 @@ class PasscodeDisplay extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E293B).withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    width: 1,
+                  ),
                 ),
                 child: Center(
                   child: Text(
@@ -80,10 +83,10 @@ class PasscodeDisplay extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.copy_rounded,
+                  Icon(
+                    isInRange ? Icons.copy_rounded : Icons.lock_outline,
                     size: 14,
-                    color: Color(0xFFC49F45),
+                    color: isInRange ? const Color(0xFFC49F45) : const Color(0xFFF87171),
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -91,7 +94,7 @@ class PasscodeDisplay extends StatelessWidget {
                     style: AppTheme.dm(
                       size: 13,
                       weight: FontWeight.w600,
-                      color: isInRange ? Colors.white : const Color(0xFFE57373),
+                      color: isInRange ? Colors.white : const Color(0xFFFCA5A5),
                     ),
                   ),
                 ],

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/bouncy_button.dart';
 
@@ -44,7 +45,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            Text('Decline Request',
+            Text(AppLocalizations.of(context).declineRequest,
                 style: AppTheme.dm(
                     size: 20, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 8),
@@ -70,7 +71,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
             ),
             const SizedBox(height: 24),
             NavyButton(
-              label: 'Confirm Decline',
+              label: AppLocalizations.of(context).confirmDecline,
               onTap: () {
                 Navigator.pop(ctx);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -90,7 +91,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text('Block Renter',
+        title: Text(AppLocalizations.of(context).blockRenter,
             style: AppTheme.dm(
                 size: 18, weight: FontWeight.w700, color: AppColors.navy)),
         content: Text(
@@ -99,7 +100,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('Cancel',
+            child: Text(AppLocalizations.of(context).cancel,
                 style: AppTheme.dm(
                     size: 14, weight: FontWeight.w600, color: AppColors.muted)),
           ),
@@ -110,7 +111,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
                 SnackBar(content: Text('$name has been blocked')),
               );
             },
-            child: Text('Block',
+            child: Text(AppLocalizations.of(context).blockLabel,
                 style: AppTheme.dm(
                     size: 14, weight: FontWeight.w700, color: AppColors.error)),
           ),
@@ -127,7 +128,7 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
             child: TopBar(
-              title: 'Requests',
+              title: AppLocalizations.of(context).requestsTitle,
               onBack: () => Navigator.pop(context),
             ),
           ),
@@ -432,7 +433,7 @@ class OwnerRequestDetailScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
             child: TopBar(
-              title: 'Request Details',
+              title: AppLocalizations.of(context).requestDetails,
               onBack: () => Navigator.pop(context),
             ),
           ),
@@ -477,7 +478,7 @@ class OwnerRequestDetailScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(6)),
                               child: Row(
                                 children: [
-                                  Text('VERIFIED',
+                                  Text(AppLocalizations.of(context).verifiedBadge,
                                       style: AppTheme.dm(
                                           size: 10,
                                           weight: FontWeight.w900,
@@ -497,7 +498,7 @@ class OwnerRequestDetailScreen extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Booking Info
-                Text('Booking Information',
+                Text(AppLocalizations.of(context).bookingInfo,
                     style: AppTheme.dm(
                         size: 15,
                         weight: FontWeight.w700,
@@ -542,7 +543,7 @@ class OwnerRequestDetailScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Sahely AI Insight',
+                              Text(AppLocalizations.of(context).aiInsight,
                                   style: AppTheme.dm(
                                       size: 13,
                                       weight: FontWeight.w700,
@@ -565,11 +566,11 @@ class OwnerRequestDetailScreen extends StatelessWidget {
                 // Actions if Pending
                 if (status == 'Pending') ...[
                   NavyButton(
-                      label: 'Approve Request',
+                      label: AppLocalizations.of(context).approveRequest,
                       onTap: () => Navigator.pop(context)),
                   const SizedBox(height: 12),
                   NavyButton(
-                    label: 'Decline Request',
+                    label: AppLocalizations.of(context).declineRequest,
                     outline: true,
                     onTap: () => Navigator.pop(context),
                   ),
@@ -582,7 +583,7 @@ class OwnerRequestDetailScreen extends StatelessWidget {
                         const Icon(Icons.block,
                             size: 16, color: AppColors.error),
                         const SizedBox(width: 8),
-                        Text('Block this renter',
+                        Text(AppLocalizations.of(context).blockThisRenter,
                             style: AppTheme.dm(
                                 size: 14,
                                 weight: FontWeight.w600,

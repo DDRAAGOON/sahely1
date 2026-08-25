@@ -37,7 +37,9 @@ final List<GoRoute> ownerGoRoutes = [
   GoRoute(
       path: AppRoutes.ownerProperties,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (context, state) => const OwnerPropertiesScreen()),
+      builder: (context, state) => OwnerPropertiesScreen(
+            initialFilter: state.extra as String?,
+          )),
   GoRoute(
     path: AppRoutes.ownerInsights,
     parentNavigatorKey: rootNavigatorKey,

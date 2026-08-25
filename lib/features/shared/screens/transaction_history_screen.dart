@@ -4,6 +4,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_filter_chips.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_section_header.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_transaction_row.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class TransactionHistoryScreen extends StatefulWidget {
   const TransactionHistoryScreen({super.key});
@@ -139,7 +140,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                 children: [
                   // THIS MONTH Section
                   if (_hasTransactionsForMonth('THIS MONTH')) ...[
-                    const HistorySectionHeader(title: 'THIS MONTH'),
+                    HistorySectionHeader(title: AppLocalizations.of(context).thisMonth),
                     const SizedBox(height: 12),
                     ..._buildTransactionList('THIS MONTH'),
                     const SizedBox(height: 24),
@@ -147,7 +148,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
                   // LAST MONTH Section
                   if (_hasTransactionsForMonth('LAST MONTH')) ...[
-                    const HistorySectionHeader(title: 'LAST MONTH'),
+                    HistorySectionHeader(title: AppLocalizations.of(context).lastMonth),
                     const SizedBox(height: 12),
                     ..._buildTransactionList('LAST MONTH'),
                     const SizedBox(height: 24),

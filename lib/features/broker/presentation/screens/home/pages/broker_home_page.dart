@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/di/service_locator.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_cubit.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_state.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -130,7 +131,7 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Trending Now',
+                                  AppLocalizations.of(context).trendingNow,
                                   style: AppTheme.dm(
                                     size: 18,
                                     weight: FontWeight.w700,
@@ -141,7 +142,7 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                                   onTap: () =>
                                       AppNavigation.goToAllProperties(context),
                                   child: Text(
-                                    'See All',
+                                    AppLocalizations.of(context).seeAll,
                                     style: AppTheme.dm(
                                       size: 14,
                                       weight: FontWeight.w600,

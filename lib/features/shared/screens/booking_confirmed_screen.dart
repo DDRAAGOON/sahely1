@@ -6,6 +6,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class BookingConfirmedScreen extends StatelessWidget {
   final Map<String, dynamic>? arguments;
@@ -48,7 +49,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                 children: [
                   const KeyValueRow('Check-in', 'Jun 21, 3:00 PM'),
                   const KeyValueRow('Check-out', 'Jun 25, 11:00 AM'),
-                  KeyValueRow('Guests', '$guests adults'),
+                  KeyValueRow(AppLocalizations.of(context).guestsLabel, '$guests adults'),
                   const KeyValueRow('Unit · Floor', 'B-214 · Floor 2'),
                   const KeyValueRow('Booking ref', 'SHLY-8842'),
                   KeyValueRow('Total paid', CurrencyFormatter.format(total.toInt()),
@@ -127,7 +128,7 @@ class BookingConfirmedScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             NavyButton(
-              label: 'View My Bookings',
+              label: AppLocalizations.of(context).viewMyBookings,
               onTap: () => AppNavigation.goToMyBookings(context),
             ),
             const SizedBox(height: 40),

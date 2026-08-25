@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class ReviewPropertyCard extends StatelessWidget {
   final String propertyName;
@@ -29,12 +31,7 @@ class ReviewPropertyCard extends StatelessWidget {
           // Property Thumbnail
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              propertyImage,
-              width: 72,
-              height: 72,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
+            child: AppNetworkImage(url: propertyImage, width: 72, height: 72, errorWidget: (context, error, stackTrace) {
                 return Container(
                   width: 72,
                   height: 72,
@@ -45,8 +42,7 @@ class ReviewPropertyCard extends StatelessWidget {
                     size: 32,
                   ),
                 );
-              },
-            ),
+              }),
           ),
           const SizedBox(width: 12),
           // Property Info
@@ -64,7 +60,7 @@ class ReviewPropertyCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Stayed $stayDates',
+                  '${AppLocalizations.of(context).stayed} $stayDates',
                   style: AppTheme.dm(
                     size: 12,
                     color: AppColors.secondary,
@@ -78,3 +74,4 @@ class ReviewPropertyCard extends StatelessWidget {
     );
   }
 }
+

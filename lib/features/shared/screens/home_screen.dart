@@ -48,9 +48,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    final cubitState = context.read<RenterHomeCubit>().state;
+    final cubit = context.read<RenterHomeCubit>();
+    final cubitState = cubit.state;
     if (cubitState is RenterHomeLoaded) {
       _allProperties = cubitState.properties;
+    } else if (cubitState is! RenterHomeLoading) {
+      cubit.loadProperties();
     }
 
     // Set initial category with a tiny delay to trigger the transition animation

@@ -6,6 +6,7 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/sample_data.dart';
@@ -39,9 +40,9 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
         children: [
-          const TopBar(
-              title: 'Bookings',
-              subtitle: 'Manage your guests and stays',
+          TopBar(
+              title: AppLocalizations.of(context).bookings,
+              subtitle: AppLocalizations.of(context).manageGuests,
               showBack: false),
           const SizedBox(height: 16),
           // Main Role Toggle
@@ -216,7 +217,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                               color: AppColors.navy,
                               weight: FontWeight.w600)),
                       const SizedBox(height: 2),
-                      Text('Order no. ${booking.orderNumber}',
+                      Text('${AppLocalizations.of(context).orderNo} ${booking.orderNumber}',
                           style: AppTheme.dm(
                               size: 12, color: const Color(0xFF5B5B5B))),
                     ],
@@ -347,7 +348,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                   ]),
                   const SizedBox(height: 16),
                   if (active) ...[
-                    _kv('Order no.', 'SHLY-7741'),
+                    _kv(AppLocalizations.of(context).orderNo, 'SHLY-7741'),
                     _kv('Dates', chips.first),
                     _kv('Guests', chips[1]),
                     const SizedBox(height: 16),

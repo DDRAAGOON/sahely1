@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
@@ -12,6 +12,7 @@ import 'package:sahely/features/renter/presentation/screens/reviews/widgets/star
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/submit_review_button.dart';
 
 import 'package:sahely/core/widgets/buttons.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class WriteReviewScreen extends StatefulWidget {
   final String propertyName;
@@ -141,7 +142,7 @@ class _WriteReviewScreenState extends State<WriteReviewScreen> {
                   const BackChip(),
                   const SizedBox(width: 16),
                   Text(
-                    'Write a Review',
+                    AppLocalizations.of(context).writeReview,
                     style: AppTheme.dm(
                       size: 22,
                       weight: FontWeight.w700,

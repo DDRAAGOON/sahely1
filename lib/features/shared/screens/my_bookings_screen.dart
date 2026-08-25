@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
@@ -12,6 +12,7 @@ import 'package:sahely/features/renter/presentation/screens/bookings/widgets/upc
 import 'package:sahely/core/widgets/entrance_faded.dart';
 import 'package:sahely/core/widgets/smooth_transition.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({super.key});
@@ -73,7 +74,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
               Center(
                   child: Padding(
                 padding: const EdgeInsets.only(top: 60),
-                child: Text('No active bookings found',
+                child: Text(AppLocalizations.of(context).noActiveBookings,
                     style: AppTheme.dm(color: AppColors.secondary)),
               ))
             else
@@ -125,7 +126,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
               Center(
                   child: Padding(
                 padding: const EdgeInsets.only(top: 60),
-                child: Text('No upcoming bookings found',
+                child: Text(AppLocalizations.of(context).noUpcomingBookings,
                     style: AppTheme.dm(color: AppColors.secondary)),
               ))
             else
@@ -187,7 +188,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
               Center(
                   child: Padding(
                 padding: const EdgeInsets.only(top: 60),
-                child: Text('No past stays found',
+                child: Text(AppLocalizations.of(context).noPastStays,
                     style: AppTheme.dm(color: AppColors.secondary)),
               ))
             else

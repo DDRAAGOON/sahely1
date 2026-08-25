@@ -7,6 +7,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/core/widgets/sheet_handle.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -67,7 +68,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     const SheetHandle(),
                     const SizedBox(height: 8),
                     Text(
-                      'Language',
+                      AppLocalizations.of(context).language,
                       style: AppTheme.dm(
                         size: 16,
                         weight: FontWeight.w700,
@@ -123,7 +124,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       ),
                     const SizedBox(height: 14),
                     NavyButton(
-                      label: 'Save',
+                      label: AppLocalizations.of(context).save,
                       onTap: () {
                         context
                             .read<LocaleProvider>()

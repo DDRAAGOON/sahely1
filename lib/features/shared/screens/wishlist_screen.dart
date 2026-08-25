@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -9,6 +9,7 @@ import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/new
 import 'package:sahely/features/renter/presentation/screens/wishlist/widgets/wishlist_collection_card.dart';
 import 'package:sahely/core/widgets/entrance_faded.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 /// Unified Wishlist Screen shared across Renter, Owner, and Broker roles.
 class WishlistScreen extends StatefulWidget {
@@ -45,7 +46,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.role == Role.broker ? 'Broker Wishlist' : 'Wishlist';
+    final l = AppLocalizations.of(context);
+    final title = widget.role == Role.broker ? l.brokerWishlist : l.wishlist;
 
     return Container(
       color: AppColors.cream,
@@ -103,7 +105,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               children: [
                                 const Icon(Icons.add, color: AppColors.gold, size: 18),
                                 const SizedBox(width: 6),
-                                Text('New',
+                                Text(AppLocalizations.of(context).newLabel,
                                     style: AppTheme.dm(
                                         size: 13,
                                         weight: FontWeight.w600,

@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class FeatureChipsSection extends StatelessWidget {
   const FeatureChipsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const SliverToBoxAdapter(
+    return SliverToBoxAdapter(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-            _FeatureChip(label: 'Villa'),
-            _FeatureChip(label: '320 m²'),
-            _FeatureChip(label: '2 Floors'),
-            _FeatureChip(label: 'Beachfront'),
-            _FeatureChip(label: '6 Guests'),
-            _FeatureChip(label: '4 Beds'),
-            _FeatureChip(label: 'Pool'),
-            _FeatureChip(label: 'Mixed groups OK', isSpecial: true),
+            _FeatureChip(label: AppLocalizations.of(context).catVilla),
+            const _FeatureChip(label: '320 m²'),
+            _FeatureChip(label: AppLocalizations.of(context).floorsCount(2)),
+            _FeatureChip(label: AppLocalizations.of(context).catBeachfront),
+            _FeatureChip(label: AppLocalizations.of(context).guestsCount(6)),
+            _FeatureChip(label: AppLocalizations.of(context).bedsCount(4)),
+            _FeatureChip(label: AppLocalizations.of(context).catPool),
+            _FeatureChip(label: AppLocalizations.of(context).mixedGroupsOk, isSpecial: true),
           ],
         ),
       ),

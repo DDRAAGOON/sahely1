@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class StarNudgesScreen extends StatelessWidget {
   const StarNudgesScreen({super.key});
@@ -10,10 +11,7 @@ class StarNudgesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(fit: StackFit.expand, children: [
-        Image.network(
-            'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=1200&q=72&auto=format&fit=crop',
-            fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) =>
+        AppNetworkImage(url: 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=1200&q=72&auto=format&fit=crop', errorWidget: (_, __, ___) =>
                 const ColoredBox(color: AppColors.navy)),
         const DecoratedBox(
             decoration: BoxDecoration(
@@ -135,3 +133,4 @@ class StarNudgesScreen extends StatelessWidget {
     );
   }
 }
+

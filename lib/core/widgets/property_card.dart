@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/property_card_base.dart' as base;
 
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/heart_button.dart';

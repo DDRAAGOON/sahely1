@@ -967,12 +967,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                     ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        Sample.azure.image,
-                        width: 52,
-                        height: 52,
-                        fit: BoxFit.cover,
-                      ),
+                      child: AppNetworkImage(url: Sample.azure.image, width: 52, height: 52),
                     ),
                   ],
                 ),
@@ -1348,7 +1343,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
             fit: StackFit.expand,
             children: [
               img.startsWith('http')
-                  ? Image.network(img, fit: BoxFit.cover)
+                  ? AppNetworkImage(url: img)
                   : Image.file(File(img), fit: BoxFit.cover),
               if (cover)
                 Positioned(
@@ -1433,9 +1428,7 @@ class OwnerPreviewListingScreen extends StatelessWidget {
                             height: 170,
                             width: double.infinity,
                             child: Stack(fit: StackFit.expand, children: [
-                              Image.network(Sample.azure.image,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) =>
+                              AppNetworkImage(url: Sample.azure.image, errorWidget: (_, __, ___) =>
                                       const ColoredBox(
                                           color: AppColors.cardWarm)),
                               const Positioned(

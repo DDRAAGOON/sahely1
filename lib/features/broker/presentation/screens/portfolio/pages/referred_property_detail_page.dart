@@ -7,6 +7,7 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/data/sample_data.dart';
 
 import '../../../../../../core/utils/currency_formatter.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class ReferredPropertyDetailPage extends StatelessWidget {
   const ReferredPropertyDetailPage({super.key});
@@ -21,9 +22,7 @@ class ReferredPropertyDetailPage extends StatelessWidget {
             SizedBox(
                 height: 200,
                 width: double.infinity,
-                child: Image.network(Sample.azure.image,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) =>
+                child: AppNetworkImage(url: Sample.azure.image, errorWidget: (_, __, ___) =>
                         const ColoredBox(color: AppColors.cardWarm))),
             Positioned(
                 top: 44,
@@ -149,3 +148,4 @@ class ReferredPropertyDetailPage extends StatelessWidget {
     );
   }
 }
+

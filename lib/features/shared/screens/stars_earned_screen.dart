@@ -4,6 +4,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/success_check.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class StarsEarnedScreen extends StatelessWidget {
   const StarsEarnedScreen({super.key});
@@ -33,7 +34,7 @@ class StarsEarnedScreen extends StatelessWidget {
                       weight: FontWeight.w700,
                       color: AppColors.gold)),
               const SizedBox(height: 4),
-              Text('Stars earned!',
+              Text(AppLocalizations.of(context).starsEarned,
                   style: AppTheme.dm(
                       size: 20,
                       weight: FontWeight.w700,
@@ -43,9 +44,9 @@ class StarsEarnedScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                       style: AppTheme.dm(size: 13, color: AppColors.muted),
-                      children: const [
-                        TextSpan(text: 'For leaving a review with a photo at '),
-                        TextSpan(
+                      children: [
+                        TextSpan(text: AppLocalizations.of(context).forLeavingReview),
+                        const TextSpan(
                             text: 'Lagoon Retreat',
                             style: TextStyle(
                                 fontWeight: FontWeight.w700,
@@ -61,7 +62,7 @@ class StarsEarnedScreen extends StatelessWidget {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Season total',
+                        Text(AppLocalizations.of(context).seasonTotal,
                             style:
                                 AppTheme.dm(size: 13, color: AppColors.muted)),
                         Text('47 → 52 ★',
@@ -90,7 +91,7 @@ class StarsEarnedScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               NavyButton(
-                  label: 'Keep earning',
+                  label: AppLocalizations.of(context).keepEarning,
                   onTap: () => Navigator.maybePop(context)),
             ]),
           ),

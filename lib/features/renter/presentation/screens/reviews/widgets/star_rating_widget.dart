@@ -1,7 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class StarRatingWidget extends StatelessWidget {
   final int selectedRating;
@@ -19,7 +20,7 @@ class StarRatingWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'How was your stay?',
+          AppLocalizations.of(context).howWasStay,
           style: AppTheme.dm(
             size: 20,
             weight: FontWeight.w700,

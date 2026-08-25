@@ -3,6 +3,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class BrokerDashboardPage extends StatelessWidget {
   const BrokerDashboardPage({super.key});
@@ -278,7 +279,7 @@ class BrokerDashboardPage extends StatelessWidget {
           child: Row(children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(img, width: 44, height: 44, fit: BoxFit.cover)),
+                child: AppNetworkImage(url: img, width: 44, height: 44)),
             const SizedBox(width: 12),
             Expanded(
                 child: Column(

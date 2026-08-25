@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class ReviewReceivedCard extends StatelessWidget {
   final String hostName;
@@ -63,13 +64,9 @@ class ReviewReceivedCard extends StatelessWidget {
                 ),
                 child: hostAvatar != null
                     ? ClipOval(
-                        child: Image.network(
-                          hostAvatar!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
+                        child: AppNetworkImage(url: hostAvatar!, errorWidget: (context, error, stackTrace) =>
                               const Icon(Icons.person,
-                                  color: Colors.white, size: 24),
-                        ),
+                                  color: Colors.white, size: 24)),
                       )
                     : const Icon(Icons.person, color: Colors.white, size: 24),
               ),
@@ -147,3 +144,4 @@ class ReviewReceivedCard extends StatelessWidget {
     );
   }
 }
+

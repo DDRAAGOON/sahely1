@@ -9,6 +9,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/sheet_handle.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class ShareCollectionScreen extends StatelessWidget {
   final String collectionName;
@@ -75,7 +76,7 @@ class ShareCollectionScreen extends StatelessWidget {
   }
 
   void _openMoreSharing() {
-    Share.share('Check out this collection "$collectionName": $shareableLink');
+    SharePlus.instance.share(ShareParams(text: 'Check out this collection "$collectionName": $shareableLink'));
   }
 
   @override
@@ -94,11 +95,7 @@ class ShareCollectionScreen extends StatelessWidget {
           Row(children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.network(collectionImage,
-                    width: 52,
-                    height: 52,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
+                child: AppNetworkImage(url: collectionImage, width: 52, height: 52, errorWidget: (_, __, ___) => Container(
                         width: 52, height: 52, color: AppColors.cardWarm))),
             const SizedBox(width: 12),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -183,7 +180,7 @@ class ShareCollectionScreen extends StatelessWidget {
                   ]))),
               GestureDetector(
                 onTap: () =>
-                    Share.share('Help me add & vote on places: $shareableLink'),
+                    SharePlus.instance.share(ShareParams(text: 'Help me add & vote on places: $shareableLink')),
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -240,3 +237,4 @@ class ShareCollectionScreen extends StatelessWidget {
         ),
       );
 }
+

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PhotoViewerScreen extends StatefulWidget {
   final List<String> photos;
@@ -52,8 +53,8 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
       final double dx = -(scale - 1) * size.width / 2;
       final double dy = -(scale - 1) * size.height / 2;
       _transformationController.value = Matrix4.identity()
-        ..translate(dx, dy)
-        ..scale(scale);
+        ..translateByDouble(dx, dy, 0, 1)
+        ..scaleByDouble(scale, scale, scale, 1);
       setState(() => _isZoomed = true);
     }
   }
@@ -238,17 +239,14 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
                     }
                   },
                   child: SizedBox.expand(
-                    child: Image.network(
-                      widget.photos[index],
+                    child: CachedNetworkImage(
+                      imageUrl: widget.photos[index],
                       fit: BoxFit.contain,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const Center(
-                          child:
-                              CircularProgressIndicator(color: AppColors.navy),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) => const Icon(
+                      placeholder: (context, url) => const Center(
+                        child:
+                            CircularProgressIndicator(color: AppColors.navy),
+                      ),
+                      errorWidget: (context, url, error) => const Icon(
                         Icons.broken_image,
                         color: AppColors.navy,
                         size: 50,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 
 import '../../../../../../core/utils/currency_formatter.dart';
@@ -18,19 +19,19 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<StatCard> statCards = const [
-      StatCard(value: '18.2k', label: 'Earned (mo)'),
-      StatCard(value: '5.4k', label: 'Pending', valueColor: Color(0xFFD2760A)),
-      StatCard(value: '14', label: 'Bookings')
+    List<StatCard> statCards = [
+      StatCard(value: '18.2k', label: AppLocalizations.of(context).statEarnedMo),
+      StatCard(value: '5.4k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A)),
+      StatCard(value: '14', label: AppLocalizations.of(context).bookings)
     ];
     List<Widget> commissions = [];
 
     if (_activeTab == 0) {
-      statCards = const [
-        StatCard(value: '18.2k', label: 'Earned (mo)'),
+      statCards = [
+        StatCard(value: '18.2k', label: AppLocalizations.of(context).statEarnedMo),
         StatCard(
-            value: '5.4k', label: 'Pending', valueColor: Color(0xFFD2760A)),
-        StatCard(value: '14', label: 'Bookings')
+            value: '5.4k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A)),
+        StatCard(value: '14', label: AppLocalizations.of(context).bookings)
       ];
       commissions = [
         _commission(
@@ -39,11 +40,11 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
             last: true),
       ];
     } else {
-      statCards = const [
-        StatCard(value: '15.6k', label: 'Earned (mo)'),
+      statCards = [
+        StatCard(value: '15.6k', label: AppLocalizations.of(context).statEarnedMo),
         StatCard(
-            value: '0.0k', label: 'Pending', valueColor: Color(0xFFD2760A)),
-        StatCard(value: '12', label: 'Bookings')
+            value: '0.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A)),
+        StatCard(value: '12', label: AppLocalizations.of(context).bookings)
       ];
       commissions = [
         _commission(
@@ -93,12 +94,12 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                      Text('Account not verified',
+                      Text(AppLocalizations.of(context).accountNotVerified,
                           style: AppTheme.dm(
                               size: 12,
                               weight: FontWeight.w600,
                               color: AppColors.navy)),
-                      Text('Add your card to withdraw earnings',
+                      Text(AppLocalizations.of(context).addCardToWithdraw,
                           style: AppTheme.dm(
                               size: 11, color: const Color(0xFF8A6A1E))),
                     ])),

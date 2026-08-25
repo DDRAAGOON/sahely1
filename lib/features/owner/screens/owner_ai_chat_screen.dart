@@ -7,6 +7,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class OwnerAiChatScreen extends StatefulWidget {
   const OwnerAiChatScreen({super.key});
@@ -317,8 +318,7 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(14),
-              child: Image.network(m['image'],
-                  width: 150, height: 150, fit: BoxFit.cover),
+              child: AppNetworkImage(url: m['image'], width: 150, height: 150),
             ),
           ],
         ),

@@ -6,6 +6,7 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class CompareScreen extends StatefulWidget {
   final String collectionName;
@@ -138,7 +139,7 @@ class _CompareScreenState extends State<CompareScreen> {
                               contentPadding: const EdgeInsets.symmetric(vertical: 8),
                               leading: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.network(p.image, width: 60, height: 60, fit: BoxFit.cover),
+                                child: AppNetworkImage(url: p.image, width: 60, height: 60),
                               ),
                               title: Row(
                                 children: [
@@ -367,7 +368,7 @@ class _CompareScreenState extends State<CompareScreen> {
         child: SizedBox(
           height: 106,
           child: Stack(fit: StackFit.expand, children: [
-            Image.network(img, fit: BoxFit.cover),
+            AppNetworkImage(url: img),
             const DecoratedBox(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(

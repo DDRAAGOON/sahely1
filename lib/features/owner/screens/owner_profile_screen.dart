@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
@@ -8,6 +9,8 @@ import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/features/owner/widgets/owner_bio_card.dart';
 import 'package:sahely/features/owner/widgets/owner_gradient_cta.dart';
 import 'package:sahely/features/owner/widgets/owner_profile_header.dart';
+import 'package:sahely/core/providers/locale_provider.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class OwnerProfileScreen extends StatelessWidget {
   const OwnerProfileScreen({super.key});
@@ -24,9 +27,9 @@ class OwnerProfileScreen extends StatelessWidget {
             onEditProfile: () => AppNavigation.goToOwnerEditBio(context),
           ),
           const SizedBox(height: 12),
-          const Row(
+          Row(
             children: [
-              OwnerTypeTag(label: 'Property Owner'),
+              OwnerTypeTag(label: AppLocalizations.of(context).roleOwnerTitle),
             ],
           ),
           const SizedBox(height: 12),
@@ -36,12 +39,12 @@ class OwnerProfileScreen extends StatelessWidget {
             handle: '@layla.stays',
           ),
           const SizedBox(height: 12),
-          const OwnerGradientCta(
-            title: 'Manage Dashboard',
-            subtitle: 'Properties · Requests · Wallet',
+          OwnerGradientCta(
+            title: AppLocalizations.of(context).manageDashboard,
+            subtitle: AppLocalizations.of(context).manageSubtitle,
             icon: Icons.dashboard_outlined,
             route: '/owner/manage',
-            colors: [Color(0xFF22335A), AppColors.navy],
+            colors: const [Color(0xFF22335A), AppColors.navy],
           ),
           const SizedBox(height: 12),
           const OwnerGradientCta(
@@ -56,7 +59,7 @@ class OwnerProfileScreen extends StatelessWidget {
             child: Column(children: [
               SettingsRow(
                 icon: Icons.account_balance_wallet_outlined,
-                label: 'Wallet & Credit',
+                label: AppLocalizations.of(context).walletCredit,
                 value: CurrencyFormatter.format(1250),
                 valueColor: AppColors.gold,
                 iconColor: AppColors.gold,
@@ -64,14 +67,14 @@ class OwnerProfileScreen extends StatelessWidget {
               ),
               SettingsRow(
                 icon: Icons.credit_card_outlined,
-                label: 'Payment Card',
+                label: AppLocalizations.of(context).paymentCard,
                 value: 'Visa ••42',
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToAddCard(context),
               ),
               SettingsRow(
                 icon: Icons.star_outline,
-                label: 'My Reviews',
+                label: AppLocalizations.of(context).myReviews,
                 value: '★ 4.9',
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToMyReviews(context),
@@ -86,7 +89,7 @@ class OwnerProfileScreen extends StatelessWidget {
               ),
               SettingsRow(
                 icon: Icons.notifications_none,
-                label: 'Notifications',
+                label: AppLocalizations.of(context).notificationsLabel,
                 iconColor: AppColors.gold,
                 onTap: () {
                   AppNavigation.goToOwnerNotifications(context);
@@ -94,20 +97,20 @@ class OwnerProfileScreen extends StatelessWidget {
               ),
               SettingsRow(
                 icon: Icons.lock_outline,
-                label: 'Change Password',
+                label: AppLocalizations.of(context).changePassword,
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToChangePassword(context),
               ),
               SettingsRow(
                 icon: Icons.language,
-                label: 'Language',
-                value: 'English',
+                label: AppLocalizations.of(context).languageLabel,
+                value: AppLocalizations.nativeLanguageName(context.watch<LocaleProvider>().locale.languageCode),
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToLanguage(context),
               ),
               SettingsRow(
                 icon: Icons.attach_money,
-                label: 'Currency',
+                label: AppLocalizations.of(context).currencyLabel,
                 value: 'EGP',
                 valueColor: AppColors.navy,
                 iconColor: AppColors.gold,
@@ -118,7 +121,7 @@ class OwnerProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           WideButton(
-            label: 'Log Out',
+            label: AppLocalizations.of(context).logOut,
             icon: Icons.logout,
             color: const Color(0xFFB22222),
             outline: true,

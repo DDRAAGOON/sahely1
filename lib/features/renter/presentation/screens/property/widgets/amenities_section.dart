@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class AmenitiesSection extends StatelessWidget {
   const AmenitiesSection({super.key});
@@ -14,7 +15,7 @@ class AmenitiesSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Amenities',
+              AppLocalizations.of(context).amenitiesTitle,
               style: AppTheme.dm(
                 size: 16,
                 weight: FontWeight.w700,
@@ -22,13 +23,13 @@ class AmenitiesSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const Wrap(
+            Wrap(
               spacing: 24,
               runSpacing: 12,
               children: [
-                _AmenityItem(icon: Icons.pool, label: 'Private Pool'),
-                _AmenityItem(icon: Icons.wifi, label: 'Fast Wi-Fi'),
-                _AmenityItem(icon: Icons.local_parking, label: 'Free Parking'),
+                _AmenityItem(icon: Icons.pool, label: AppLocalizations.of(context).amenityPool),
+                _AmenityItem(icon: Icons.wifi, label: AppLocalizations.of(context).amenityWifi),
+                _AmenityItem(icon: Icons.local_parking, label: AppLocalizations.of(context).amenityParking),
               ],
             ),
           ],

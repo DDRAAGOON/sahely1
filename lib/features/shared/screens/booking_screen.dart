@@ -10,6 +10,7 @@ import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/core/widgets/entrance_faded.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/features/shared/widgets/booking_screen_widgets.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class BookingScreen extends StatefulWidget {
   final Property? property;
@@ -42,7 +43,7 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return 'Select';
+    if (date == null) return AppLocalizations.of(context).selectDate;
     final months = [
       'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
@@ -70,7 +71,7 @@ class _BookingScreenState extends State<BookingScreen> {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
                 children: [
-                  const TopBar(title: 'Plan Your Stay'),
+                  TopBar(title: AppLocalizations.of(context).planYourStay),
                   const SizedBox(height: 14),
                   WhiteCard(
                     padding: const EdgeInsets.all(12),
@@ -108,17 +109,17 @@ class _BookingScreenState extends State<BookingScreen> {
                   Row(children: [
                     Expanded(
                         child:
-                            BookingCheckCol('Check-in', _formatDate(_checkIn))),
+                            BookingCheckCol(AppLocalizations.of(context).checkInLabel, _formatDate(_checkIn))),
                     Expanded(
                         child:
-                            BookingCheckCol('Check-out', _formatDate(_checkOut))),
+                            BookingCheckCol(AppLocalizations.of(context).checkOutLabel, _formatDate(_checkOut))),
                   ]),
                   const SizedBox(height: 16),
                   WhiteCard(
                     child: Column(children: [
                       BookingGuestRow(
-                        'Adults',
-                        'Ages 18+',
+                        AppLocalizations.of(context).adults,
+                        AppLocalizations.of(context).adultsAges,
                         _adults,
                         onMinus:
                             _adults > 1 ? () => setState(() => _adults--) : null,
@@ -126,7 +127,7 @@ class _BookingScreenState extends State<BookingScreen> {
                       ),
                       const Divider(height: 1, color: Color(0xFFF4EFE7)),
                       BookingGuestRow(
-                        'Children',
+                        AppLocalizations.of(context).childrenLabel,
                         'Ages 2–17',
                         _children,
                         onMinus: _children > 0
@@ -135,8 +136,8 @@ class _BookingScreenState extends State<BookingScreen> {
                       ),
                       const Divider(height: 1, color: Color(0xFFF4EFE7)),
                       BookingGuestRow(
-                        'Infants',
-                        'Under 2',
+                        AppLocalizations.of(context).infants,
+                        AppLocalizations.of(context).infantsAges,
                         _infants,
                         onMinus: _infants > 0
                             ? () => setState(() => _infants--) : null,
@@ -162,9 +163,9 @@ class _BookingScreenState extends State<BookingScreen> {
                       const SizedBox(height: 8),
                       KeyValueRow(
                           '${CurrencyFormatter.format(pPrice)} × $_nights', CurrencyFormatter.formatNumber(subtotal)),
-                      KeyValueRow('Cleaning fee', CurrencyFormatter.formatNumber(_cleaningFee)),
-                      KeyValueRow('VAT 14%', CurrencyFormatter.formatNumber(vat)),
-                      KeyValueRow('Total', CurrencyFormatter.format(total.toInt()),
+                      KeyValueRow(AppLocalizations.of(context).cleaningFee, CurrencyFormatter.formatNumber(_cleaningFee)),
+                      KeyValueRow(AppLocalizations.of(context).vatLabel, CurrencyFormatter.formatNumber(vat)),
+                      KeyValueRow(AppLocalizations.of(context).totalLabel, CurrencyFormatter.format(total.toInt()),
                           bold: true, topBorder: true),
                     ]),
                   ),
@@ -176,7 +177,7 @@ class _BookingScreenState extends State<BookingScreen> {
               child: SafeArea(
                 top: false,
                 child: NavyButton(
-                  label: 'Confirm & Pay',
+                  label: AppLocalizations.of(context).confirmPay,
                   onTap: () {
                     if (_checkIn == null || _checkOut == null) return;
 

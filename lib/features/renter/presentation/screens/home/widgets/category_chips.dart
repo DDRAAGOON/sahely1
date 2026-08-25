@@ -3,6 +3,7 @@
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/bouncy_button.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class CategoryChips extends StatefulWidget {
   final Function(String)? onCategorySelected;
@@ -15,10 +16,21 @@ class CategoryChips extends StatefulWidget {
 
 class _CategoryChipsState extends State<CategoryChips> {
   int _selectedIndex = 0;
-  final List<String> _categories = ['All', 'Villa', 'Chalet', 'Penthouse', 'Beachfront', 'Pool'];
+
+  /// Canonical (English) values passed to callbacks so filtering logic
+  /// stays stable regardless of the display language.
+  static const List<String> _categories = [
+    'All', 'Villa', 'Chalet', 'Penthouse', 'Beachfront', 'Pool'
+  ];
+
+  List<String> _displayLabels(AppLocalizations l) => [
+        l.catAll, l.catVilla, l.catChalet, l.catPenthouse, l.catBeachfront, l.catPool
+      ];
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final labels = _displayLabels(l);
     return SizedBox(
       height: 38,
       child: ListView.separated(
@@ -56,7 +68,7 @@ class _CategoryChipsState extends State<CategoryChips> {
               ),
               alignment: Alignment.center,
               child: Text(
-                _categories[index],
+                labels[index],
                 style: AppTheme.dm(
                   size: 13,
                   weight: isSelected ? FontWeight.w700 : FontWeight.w500,

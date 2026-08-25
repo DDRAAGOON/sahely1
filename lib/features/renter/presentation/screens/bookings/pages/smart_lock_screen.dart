@@ -13,6 +13,7 @@ import 'package:sahely/features/renter/presentation/screens/bookings/widgets/loc
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/lock_info_text.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/lock_status_badge.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/passcode_display.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class SmartLockScreen extends StatefulWidget {
   final String propertyName;
@@ -120,11 +121,11 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
     await Clipboard.setData(ClipboardData(text: widget.passcode));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Passcode copied to clipboard'),
-          backgroundColor: Color(0xFFC49F45),
-          duration: Duration(seconds: 2),
-        ),
+            SnackBar(
+              content: Text(AppLocalizations.of(context).passcodeCopied),
+              backgroundColor: const Color(0xFFC49F45),
+              duration: const Duration(seconds: 2),
+            ),
       );
     }
   }
@@ -178,10 +179,10 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
                       const SizedBox(height: 24),
                       Text(
                         isExpired
-                            ? 'Access Expired'
+                            ? AppLocalizations.of(context).accessExpired
                             : (canUnlock
                                 ? 'Your Door Passcode'
-                                : 'Passcode Locked'),
+                                : AppLocalizations.of(context).passcodeLocked),
                         style: AppTheme.dm(
                           size: 26,
                           weight: FontWeight.w700,
@@ -191,7 +192,7 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
                       const SizedBox(height: 8),
                       Text(
                         isExpired
-                            ? 'Your stay has ended'
+                            ? AppLocalizations.of(context).stayEnded
                             : '${widget.propertyName} · Keypad',
                         style: AppTheme.dm(
                           size: 15,
@@ -211,7 +212,7 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 40),
                           child: Text(
-                            'Smart Lock access is only available during your active booking period.',
+                            AppLocalizations.of(context).smartLockOnlyActive,
                             textAlign: TextAlign.center,
                             style: AppTheme.dm(color: Colors.white70, size: 13),
                           ),

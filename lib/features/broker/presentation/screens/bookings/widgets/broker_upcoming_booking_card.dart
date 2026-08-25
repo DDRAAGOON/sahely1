@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class BrokerUpcomingBookingCard extends StatelessWidget {
   final String propertyName;
@@ -46,12 +47,7 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
             // Thumbnail
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                imageUrl,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-              ),
+              child: AppNetworkImage(url: imageUrl, width: 80, height: 80),
             ),
             const SizedBox(width: 12),
             // Info
@@ -141,3 +137,4 @@ class BrokerUpcomingBookingCard extends StatelessWidget {
     );
   }
 }
+

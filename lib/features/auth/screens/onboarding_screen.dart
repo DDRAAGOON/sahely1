@@ -6,6 +6,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -19,26 +20,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Timer? _timer;
   int _currentPage = 0;
 
-  final List<Map<String, String>> _slides = [
+  static const List<Map<String, String>> _slides = [
     {
       'image':
           'https://images.unsplash.com/photo-1765288116127-3c5a76fa2ba6?w=1200&q=75&auto=format&fit=crop',
-      'title': 'Find Your Perfect Stay',
-      'subtitle': 'Discover luxury villas, chalets, and beachfront properties.',
+      'title': 'obTitle1',
+      'subtitle': 'obSub1',
     },
     {
       'image':
           'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=75&auto=format&fit=crop',
-      'title': 'Book with Confidence',
-      'subtitle':
-          'Verified listings and secure payments for a chaos-free experience.',
+      'title': 'obTitle2',
+      'subtitle': 'obSub2',
     },
     {
       'image':
           'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200&q=75&auto=format&fit=crop',
-      'title': 'Enjoy Your Vacation',
-      'subtitle':
-          'Experience luxury like never before with our premium services.',
+      'title': 'obTitle3',
+      'subtitle': 'obSub3',
     },
   ];
 
@@ -100,6 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               },
               itemCount: _slides.length,
               itemBuilder: (context, index) {
+                final l = AppLocalizations.of(context);
                 return Column(
                   children: [
                     SizedBox(
@@ -132,7 +132,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                           .withValues(alpha: 0.35),
                                       borderRadius: BorderRadius.circular(16),
                                     ),
-                                    child: Text('Skip',
+                                    child: Text(l.skip,
                                         style: AppTheme.dm(
                                             size: 13,
                                             weight: FontWeight.w600,
@@ -146,7 +146,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    Text(_slides[index]['title']!,
+                    Text(l.t(_slides[index]['title']!),
                         style: AppTheme.dm(
                             size: 22,
                             weight: FontWeight.w700,
@@ -154,7 +154,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Text(_slides[index]['subtitle']!,
+                      child: Text(l.t(_slides[index]['subtitle']!),
                           textAlign: TextAlign.center,
                           style: AppTheme.dm(
                               size: 15, color: AppColors.muted, height: 1.5)),
@@ -171,11 +171,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             top: false,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(28, 0, 28, 40),
-              child: GoldButton(
-                label:
-                    _currentPage == _slides.length - 1 ? 'Get Started' : 'Next',
-                onTap: _onNext,
-              ),
+              child: Builder(builder: (context) {
+                final l = AppLocalizations.of(context);
+                return GoldButton(
+                  label:
+                      _currentPage == _slides.length - 1 ? l.getStarted : l.next,
+                  onTap: _onNext,
+                );
+              }),
             ),
           ),
         ],

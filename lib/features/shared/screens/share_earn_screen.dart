@@ -6,6 +6,7 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/sheet_handle.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class ShareEarnScreen extends StatelessWidget {
   const ShareEarnScreen({super.key});
@@ -144,7 +145,7 @@ class ShareEarnScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     GestureDetector(
                         onTap: () => Navigator.maybePop(context),
-                        child: Text('Maybe later',
+                        child: Text(AppLocalizations.of(context).maybeLater,
                             style: AppTheme.dm(size: 13, color: AppColors.muted))),
                   ],
                 ),

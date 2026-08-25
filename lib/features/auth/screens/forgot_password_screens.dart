@@ -5,6 +5,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/features/auth/widgets/auth_success_badge.dart';
 
 // ========================================================= 08 · Forgot Password
@@ -76,18 +77,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           color: AppColors.gold, size: 30),
                     ),
                     const SizedBox(height: 22),
-                    Text('Reset Your Access',
+                    Text(AppLocalizations.of(context).resetAccess,
                         style: AppTheme.dm(
                             size: 22,
                             weight: FontWeight.w700,
                             color: AppColors.navy)),
                     const SizedBox(height: 8),
-                    Text("Enter your email and we'll send a 6-digit OTP",
+                    Text(AppLocalizations.of(context).sendOtpSubtitle,
                         style: AppTheme.dm(
                             size: 14, color: AppColors.muted, height: 1.5)),
                     const SizedBox(height: 24),
                     FieldGroup(
-                        label: 'Email Address',
+                        label: AppLocalizations.of(context).emailAddress,
                         child: AppTextField(
                           controller: _emailController,
                           hintText: 'mariam.hassan@gmail.com',
@@ -96,7 +97,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         )),
                     const SizedBox(height: 24),
                     NavyButton(
-                        label: 'Send OTP',
+                        label: AppLocalizations.of(context).sendOtp,
                         radius: 999,
                         onTap: () => AppNavigation.goToResetOtp(context)),
                     const SizedBox(height: 16),
@@ -130,7 +131,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         onTap: () =>
                             AppNavigation.safeGo(context, '/signin'),
                         behavior: HitTestBehavior.opaque,
-                        child: Text('Back to Sign In',
+                        child: Text(AppLocalizations.of(context).backToSignIn,
                             style: AppTheme.dm(
                                 size: 13,
                                 weight: FontWeight.w600,
@@ -191,18 +192,18 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Text('Set a new password',
+            Text(AppLocalizations.of(context).setNewPassword,
                 textAlign: TextAlign.center,
                 style: AppTheme.dm(
                     size: 22, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 8),
-            Text('At least 8 characters with letters, numbers & a symbol',
+            Text(AppLocalizations.of(context).passwordRule,
                 textAlign: TextAlign.center,
                 style:
                     AppTheme.dm(size: 13, color: AppColors.muted, height: 1.5)),
             const SizedBox(height: 14),
             FieldGroup(
-              label: 'New Password',
+              label: AppLocalizations.of(context).newPassword,
               child: AppTextField(
                 controller: _passController,
                 hintText: '••••••••',
@@ -224,7 +225,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
             ),
             const SizedBox(height: 14),
             FieldGroup(
-              label: 'Confirm Password',
+              label: AppLocalizations.of(context).confirmPassword,
               child: AppTextField(
                 controller: _confirmController,
                 hintText: '••••••••',
@@ -257,14 +258,14 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               ],
             ),
             const SizedBox(height: 6),
-            Text('Strong password',
+            Text(AppLocalizations.of(context).strongPassword,
                 style: AppTheme.dm(
                     size: 11,
                     weight: FontWeight.w600,
                     color: AppColors.success)),
             const SizedBox(height: 30),
             NavyButton(
-                label: 'Update Password',
+                label: AppLocalizations.of(context).updatePassword,
                 radius: 999,
                 onTap: () => AppNavigation.goToPasswordUpdated(context)),
           ],
@@ -303,17 +304,17 @@ class PasswordUpdatedScreen extends StatelessWidget {
           children: [
             const AuthSuccessBadge(navy: false),
             const SizedBox(height: 30),
-            Text('Password Updated',
+            Text(AppLocalizations.of(context).passwordUpdated,
                 style: AppTheme.dm(
                     size: 26, weight: FontWeight.w700, color: AppColors.navy)),
             const SizedBox(height: 10),
-            Text('Your password has been reset.\nSign in to continue.',
+            Text(AppLocalizations.of(context).passwordResetMsg,
                 textAlign: TextAlign.center,
                 style:
                     AppTheme.dm(size: 15, color: AppColors.muted, height: 1.5)),
             const SizedBox(height: 34),
             NavyButton(
-                label: 'Sign In Now',
+                label: AppLocalizations.of(context).signInNow,
                 onTap: () => AppNavigation.safeGo(context, '/signin')),
           ],
         ),

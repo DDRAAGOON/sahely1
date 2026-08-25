@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class SmartLockBadge extends StatelessWidget {
   const SmartLockBadge({super.key});
@@ -15,9 +16,9 @@ class SmartLockBadge extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
+                SnackBar(
                   content: Text(
-                      'Smart Lock: Code will be sent 24h before check-in.'),
+                      AppLocalizations.of(context).smartLockCode),
                 ),
               );
             },
@@ -33,7 +34,7 @@ class SmartLockBadge extends StatelessWidget {
                   const Icon(Icons.lock_outline, color: AppColors.navy, size: 15),
                   const SizedBox(width: 8),
                   Text(
-                    'Smart Lock Enabled',
+                    AppLocalizations.of(context).smartLockEnabled,
                     style: AppTheme.dm(
                       size: 12,
                       weight: FontWeight.w700,

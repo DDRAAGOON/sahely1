@@ -5,6 +5,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   final String? role;
@@ -21,6 +22,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   bool _agreed = false;
+
+  /// Maps canonical role values (from navigation) to localized display.
+  static String _roleDisplay(AppLocalizations l, String canonical) {
+    switch (canonical) {
+      case 'Renter':
+        return l.renter;
+      case 'Property Owner':
+        return l.roleOwnerTitle;
+      case 'Broker':
+        return l.broker;
+      default:
+        return canonical;
+    }
+  }
 
   String? _selectedDay;
   String? _selectedMonth;
@@ -54,6 +69,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final role = widget.role ?? 'Renter';
 
     return PhoneScaffold(
@@ -68,7 +84,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 children: [
                   const BackChip(),
                   const SizedBox(width: 12),
-                  Text('Create Account',
+                  Text(l.createAccount,
                       style: AppTheme.dm(
                           size: 22,
                           weight: FontWeight.w700,
@@ -84,7 +100,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   decoration: BoxDecoration(
                       color: AppColors.gold,
                       borderRadius: BorderRadius.circular(8)),
-                  child: Text('Registering as: $role',
+                  child: Text('${l.registeringAs} ${_roleDisplay(l, role)}',
                       style: AppTheme.dm(
                           size: 12,
                           weight: FontWeight.w600,
@@ -93,15 +109,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
               const SizedBox(height: 16),
               FieldGroup(
-                label: 'Full Name',
+                label: l.fullName,
                 child: AppTextField(
                   controller: _nameController,
-                  hintText: 'Your full name',
+                  hintText: l.fullNameHint,
                 ),
               ),
               const SizedBox(height: 11),
               FieldGroup(
-                label: 'Email Address',
+                label: l.emailAddress,
                 child: AppTextField(
                   controller: _emailController,
                   hintText: 'you@example.com',
@@ -110,7 +126,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
               const SizedBox(height: 11),
               FieldGroup(
-                label: 'Phone Number',
+                label: l.phoneNumber,
                 child: Row(
                   children: [
                     Container(
@@ -142,24 +158,24 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 ),
               ),
               const SizedBox(height: 11),
-              const FieldGroup(
-                label: 'Password',
-                child: AppTextField(hintText: '••••••••', obscureText: true),
-              ),
-              const SizedBox(height: 11),
-              const FieldGroup(
-                label: 'Confirm Password',
-                child: AppTextField(hintText: '••••••••', obscureText: true),
+              FieldGroup(
+                label: l.password,
+                child: const AppTextField(hintText: '••••••••', obscureText: true),
               ),
               const SizedBox(height: 11),
               FieldGroup(
-                label: 'Date of Birth',
+                label: l.confirmPassword,
+                child: const AppTextField(hintText: '••••••••', obscureText: true),
+              ),
+              const SizedBox(height: 11),
+              FieldGroup(
+                label: l.dateOfBirth,
                 child: Row(
                   children: [
                     Expanded(
                       flex: 10,
                       child: _DobBox(
-                        label: 'Day',
+                        label: l.day,
                         value: _selectedDay,
                         items: _days,
                         onChanged: (v) => setState(() => _selectedDay = v),
@@ -169,7 +185,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     Expanded(
                       flex: 13,
                       child: _DobBox(
-                        label: 'Month',
+                        label: l.month,
                         value: _selectedMonth,
                         items: _months,
                         onChanged: (v) => setState(() => _selectedMonth = v),
@@ -179,7 +195,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     Expanded(
                       flex: 10,
                       child: _DobBox(
-                        label: 'Year',
+                        label: l.year,
                         value: _selectedYear,
                         items: _years,
                         onChanged: (v) => setState(() => _selectedYear = v),
@@ -236,7 +252,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
               const SizedBox(height: 22),
               NavyButton(
-                label: 'Create Account',
+                label: l.createAccount,
                 onTap: () {
                   if (_formKey.currentState!.validate() && _agreed) {
                     context.push(

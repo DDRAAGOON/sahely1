@@ -43,10 +43,11 @@ class OwnerPropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isNotLive = status == 'Draft' || status == 'Under review';
     final displayName = nameOverride ?? property?.name ?? 'Untitled';
     final img = property?.image ?? '';
 
-    // Fake property for PropertyCardBase using the actual property data
+    // If it's not live and some fields are empty/zero, handle them
     final displayProperty = Property(
       name: displayName,
       area: property?.area ?? '',
@@ -54,7 +55,7 @@ class OwnerPropertyCard extends StatelessWidget {
       price: property?.price ?? 0,
       rating: property?.rating ?? 0.0,
       reviews: property?.reviews ?? 0,
-      type: property?.type ?? 'Chalet',
+      type: property?.type ?? (isNotLive ? '' : 'Chalet'),
     );
 
     return base.PropertyCardBase(
@@ -63,21 +64,40 @@ class OwnerPropertyCard extends StatelessWidget {
       showGuestFav: false,
       showLocation: false,
       showRating: false,
-      // Status badge overlay on image
-      imageOverlay: Positioned(
-        top: 12,
-        right: 12,
-        child: StatusBadge(status,
-            kind: badgeKind, dot: badgeKind == BadgeKind.green),
+      // If no image, show a placeholder
+      imageOverlay: Stack(
+        children: [
+          if (img.isEmpty)
+            Container(
+              color: const Color(0xFFF1F5F9),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.add_a_photo_outlined, color: Color(0xFF94A3B8), size: 32),
+                    const SizedBox(height: 8),
+                    Text('No photos added', style: AppTheme.dm(size: 12, color: const Color(0xFF94A3B8))),
+                  ],
+                ),
+              ),
+            ),
+          Positioned(
+            top: 12,
+            right: 12,
+            child: StatusBadge(status,
+                kind: badgeKind, dot: badgeKind == BadgeKind.green),
+          ),
+        ],
       ),
       // Extra info: meta + stats pills + note
       extraInfo: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            meta,
-            style: AppTheme.dm(size: 13, color: const Color(0xFF5B5B5B)),
-          ),
+          if (meta.isNotEmpty && !meta.contains('0 beds') && !meta.endsWith(' ·  · '))
+            Text(
+              meta,
+              style: AppTheme.dm(size: 13, color: const Color(0xFF5B5B5B)),
+            ),
           if (stats.isNotEmpty) ...[
             const SizedBox(height: 10),
             Wrap(

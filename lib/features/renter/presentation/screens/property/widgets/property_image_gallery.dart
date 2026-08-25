@@ -5,6 +5,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/gallery/photo_viewer_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/heart_button.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class PropertyImageGallery extends StatefulWidget {
   final String propertyId;
@@ -86,11 +87,7 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () => _openGallery(index),
-                  child: Image.network(
-                    _images[index],
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+                  child: AppNetworkImage(url: _images[index], width: double.infinity),
                 );
               },
             ),
@@ -179,3 +176,4 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
     );
   }
 }
+

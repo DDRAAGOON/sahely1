@@ -10,6 +10,7 @@ import 'package:sahely/data/models.dart';
 import 'package:sahely/features/owner/widgets/payout_selection_sheet.dart';
 
 import '../../../core/utils/currency_formatter.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class WithdrawAmountScreen extends StatefulWidget {
   const WithdrawAmountScreen({super.key});
@@ -86,7 +87,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
             children: [
-              const TopBar(title: 'Withdraw to Bank'),
+              TopBar(title: AppLocalizations.of(context).withdrawToBank),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(18),
@@ -97,7 +98,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Available to withdraw',
+                      Text(AppLocalizations.of(context).availableToWithdraw,
                           style: AppTheme.dm(
                               size: 13, color: const Color(0xFFCDD4E0))),
                       const SizedBox(height: 6),
@@ -114,7 +115,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                     ]),
               ),
               const SizedBox(height: 16),
-              Text('Amount to withdraw',
+              Text(AppLocalizations.of(context).amountToWithdraw,
                   style: AppTheme.dm(size: 13, weight: FontWeight.w700)),
               const SizedBox(height: 8),
               Container(
@@ -196,7 +197,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                 ],
               ]),
               const SizedBox(height: 16),
-              Text('To account',
+              Text(AppLocalizations.of(context).toAccount,
                   style: AppTheme.dm(size: 13, weight: FontWeight.w700)),
               const SizedBox(height: 8),
               WhiteCard(
@@ -225,7 +226,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                     GestureDetector(
                       onTap: _onChangeAccount,
                       behavior: HitTestBehavior.opaque,
-                      child: Text('Change',
+                      child: Text(AppLocalizations.of(context).changeLabel,
                           style: AppTheme.dm(
                               size: 12,
                               weight: FontWeight.w600,
@@ -235,7 +236,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
               const SizedBox(height: 14),
               InfoNote(
                   text:
-                      'Funds arrive in 2 working days. No fee for transfers over ${CurrencyFormatter.format(5000)}.'),
+                      '${AppLocalizations.of(context).fundsArriveNote}  ${CurrencyFormatter.format(5000)}.'),
             ],
           ),
         ),
@@ -244,7 +245,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
           child: ListenableBuilder(
             listenable: _amountController,
             builder: (context, _) => NavyButton(
-              label: 'Withdraw EGP ${_amountController.text}',
+              label: '${AppLocalizations.of(context).withdrawBtn} EGP  ${_amountController.text}',
               onTap: _onWithdraw,
             ),
           ),

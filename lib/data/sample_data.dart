@@ -150,4 +150,54 @@ class Sample {
     ('Coastal Royalty', 220, '👑'),
     ('Sahely Ambassador', 500, '⭐'),
   ];
+
+  static final List<Property> ownerProperties = [
+    azure,
+    dunes,
+    lagoon.copyWith(status: PropertyStatus.underReview),
+  ];
+}
+
+extension PropertyExtension on Property {
+  Property copyWith({
+    String? id,
+    String? name,
+    String? area,
+    String? image,
+    int? price,
+    double? rating,
+    int? reviews,
+    String? type,
+    int? beds,
+    int? guests,
+    List<String>? tags,
+    bool? petsOk,
+    bool? partyAllowed,
+    bool? mixedGroupsOK,
+    int? minutesToBeach,
+    bool? guestFavourite,
+    bool? saved,
+    PropertyStatus? status,
+  }) {
+    return Property(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      area: area ?? this.area,
+      image: image ?? this.image,
+      price: price ?? this.price,
+      rating: rating ?? this.rating,
+      reviews: reviews ?? this.reviews,
+      type: type ?? this.type,
+      beds: beds ?? this.beds,
+      guests: guests ?? this.guests,
+      tags: tags ?? this.tags,
+      petsOk: petsOk ?? this.petsOk,
+      partyAllowed: partyAllowed ?? this.partyAllowed,
+      mixedGroupsOK: mixedGroupsOK ?? this.mixedGroupsOK,
+      minutesToBeach: minutesToBeach ?? this.minutesToBeach,
+      guestFavourite: guestFavourite ?? this.guestFavourite,
+      saved: saved ?? this.saved,
+      status: status ?? this.status,
+    );
+  }
 }

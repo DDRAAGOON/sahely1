@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class BrokerActiveBookingCard extends StatelessWidget {
   final String propertyName;
@@ -57,10 +58,7 @@ class BrokerActiveBookingCard extends StatelessWidget {
                       const BorderRadius.vertical(top: Radius.circular(15)),
                   child: AspectRatio(
                     aspectRatio: 1.8,
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                    ),
+                    child: AppNetworkImage(url: imageUrl),
                   ),
                 ),
                 // Status Badge
@@ -262,3 +260,4 @@ class BrokerActiveBookingCard extends StatelessWidget {
     );
   }
 }
+

@@ -8,6 +8,7 @@ import 'package:sahely/features/owner/presentation/bloc/owner_home_state.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/property_card.dart';
@@ -103,7 +104,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                         Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Welcome back,',
+                              Text(AppLocalizations.of(context).ownerWelcomeBack,
                                   style: AppTheme.dm(
                                       size: 13, color: AppColors.muted)),
                               Text(dashboard?.ownerName ?? 'Layla Mansour',
@@ -135,7 +136,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
-                                'Find your perfect stay',
+                                AppLocalizations.of(context).findYourPerfectStay,
                                 style: AppTheme.dm(
                                     size: 11,
                                     color: AppColors.navy.withValues(alpha: 0.5)),
@@ -212,7 +213,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                       scrollDirection: Axis.horizontal,
                       padding: EdgeInsets.zero,
                       children: [
-                        ChoiceChipPill('All',
+                        ChoiceChipPill(AppLocalizations.of(context).catAll,
                             selected: _selectedCategory == 'All', onTap: () {
                           setState(() {
                             _selectedCategory = 'All';
@@ -220,7 +221,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                           });
                         }),
                         const SizedBox(width: 8),
-                        ChoiceChipPill('Villa',
+                        ChoiceChipPill(AppLocalizations.of(context).catVilla,
                             selected: _selectedCategory == 'Villa', onTap: () {
                           setState(() {
                             _selectedCategory =
@@ -229,7 +230,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                           });
                         }),
                         const SizedBox(width: 8),
-                        ChoiceChipPill('Chalet',
+                        ChoiceChipPill(AppLocalizations.of(context).catChalet,
                             selected: _selectedCategory == 'Chalet', onTap: () {
                           setState(() {
                             _selectedCategory =
@@ -238,7 +239,7 @@ class _OwnerHomeScreenState extends State<OwnerHomeScreen> {
                           });
                         }),
                         const SizedBox(width: 8),
-                        ChoiceChipPill('Penthouse',
+                        ChoiceChipPill(AppLocalizations.of(context).catPenthouse,
                             selected: _selectedCategory == 'Penthouse',
                             onTap: () {
                           setState(() {

@@ -4,6 +4,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class TierDashboardPage extends StatelessWidget {
   const TierDashboardPage({super.key});
@@ -56,7 +57,7 @@ class TierDashboardPage extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('BROKER PASS',
+                Text(AppLocalizations.of(context).brokerPass,
                     style: AppTheme.dm(
                         size: 16,
                         weight: FontWeight.w700,
@@ -135,15 +136,15 @@ class TierDashboardPage extends StatelessWidget {
               text:
                   'When you reach the next tier, the higher rate applies to bookings going forward — not past ones. Climb early to earn more, longer.'),
           const SizedBox(height: 16),
-          Text('The 4 Broker Tiers',
+          Text(AppLocalizations.of(context).the4Tiers,
               style: AppTheme.dm(
                   size: 16, weight: FontWeight.w700, color: AppColors.navy)),
-          Text('By verified properties you refer. Resets each season.',
+          Text(AppLocalizations.of(context).tiersSubtitle,
               style: AppTheme.dm(size: 12, color: AppColors.muted)),
           const SizedBox(height: 12),
           for (final t in _tiers) ...[_tierRow(t), const SizedBox(height: 8)],
           const SizedBox(height: 8),
-          Text('What each tier unlocks',
+          Text(AppLocalizations.of(context).whatTiersUnlock,
               style: AppTheme.dm(
                   size: 16, weight: FontWeight.w700, color: AppColors.navy)),
           const SizedBox(height: 10),
@@ -173,7 +174,7 @@ class TierDashboardPage extends StatelessWidget {
                   'Tiers & perks reset every season — re-earn your tier to keep the benefits. New rate applies to bookings after you upgrade.'),
           const SizedBox(height: 14),
           GoldButton(
-              label: 'Refer more · 45 to Elite (5%)',
+              label: AppLocalizations.of(context).referMore,
               onTap: () => AppNavigation.goToBrokerRefer(context)),
         ],
       ),

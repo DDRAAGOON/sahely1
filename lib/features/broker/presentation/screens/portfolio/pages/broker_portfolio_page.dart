@@ -6,6 +6,7 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/price.dart';
 import 'package:sahely/core/widgets/ratings.dart';
 import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class BrokerPortfolioPage extends StatefulWidget {
   const BrokerPortfolioPage({super.key});
@@ -119,9 +120,7 @@ class _BrokerPortfolioPageState extends State<BrokerPortfolioPage> {
                   height: 150,
                   width: double.infinity,
                   child: Stack(fit: StackFit.expand, children: [
-                    Image.network(img,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
+                    AppNetworkImage(url: img, errorWidget: (_, __, ___) =>
                             const ColoredBox(color: AppColors.cardWarm)),
                     DecoratedBox(
                         decoration: BoxDecoration(
@@ -182,3 +181,4 @@ class _BrokerPortfolioPageState extends State<BrokerPortfolioPage> {
         ),
       );
 }
+

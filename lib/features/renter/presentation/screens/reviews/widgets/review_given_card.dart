@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class ReviewGivenCard extends StatelessWidget {
   final String propertyName;
@@ -37,12 +38,7 @@ class ReviewGivenCard extends StatelessWidget {
               // Property Thumbnail
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  propertyImage,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
+                child: AppNetworkImage(url: propertyImage, width: 40, height: 40, errorWidget: (context, error, stackTrace) {
                     return Container(
                       width: 40,
                       height: 40,
@@ -53,8 +49,7 @@ class ReviewGivenCard extends StatelessWidget {
                         size: 20,
                       ),
                     );
-                  },
-                ),
+                  }),
               ),
 
               const SizedBox(width: 12),
@@ -114,3 +109,4 @@ class ReviewGivenCard extends StatelessWidget {
     );
   }
 }
+

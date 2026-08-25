@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class DescriptionSection extends StatefulWidget {
   const DescriptionSection({super.key});
@@ -40,7 +41,7 @@ class _DescriptionSectionState extends State<DescriptionSection> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  _isExpanded ? 'Show Less' : 'Show More',
+                  _isExpanded ? AppLocalizations.of(context).showLess : AppLocalizations.of(context).showMore,
                   style: AppTheme.dm(
                     size: 14,
                     weight: FontWeight.w600,

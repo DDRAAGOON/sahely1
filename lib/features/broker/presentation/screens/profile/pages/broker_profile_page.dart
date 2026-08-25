@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:provider/provider.dart';
+import 'package:sahely/core/providers/locale_provider.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 
@@ -51,7 +54,7 @@ class BrokerProfilePage extends StatelessWidget {
                           style: AppTheme.dm(size: 13, color: AppColors.muted)),
                       GestureDetector(
                         onTap: () => AppNavigation.goToEditProfile(context),
-                        child: Text('Edit Profile',
+                        child: Text(AppLocalizations.of(context).editProfile,
                             style: AppTheme.dm(
                                 size: 13,
                                 weight: FontWeight.w600,
@@ -60,9 +63,9 @@ class BrokerProfilePage extends StatelessWidget {
                     ])),
               ]),
               const SizedBox(height: 12),
-              const Align(
+              Align(
                   alignment: Alignment.centerLeft,
-                  child: StatusBadge('Gold Broker', kind: BadgeKind.gold)),
+                  child: StatusBadge(AppLocalizations.of(context).goldBroker, kind: BadgeKind.gold)),
               const SizedBox(height: 12),
               _brokerCta(
                 context,
@@ -146,10 +149,10 @@ class BrokerProfilePage extends StatelessWidget {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            Text('Add a payment card',
+                            Text(AppLocalizations.of(context).addPaymentCard,
                                 style:
                                     AppTheme.dm(size: 13, weight: FontWeight.w700)),
-                            Text('For your account',
+                            Text(AppLocalizations.of(context).forYourAccount,
                                 style:
                                     AppTheme.dm(size: 11, color: AppColors.muted)),
                           ])),
@@ -171,7 +174,7 @@ class BrokerProfilePage extends StatelessWidget {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            Text('Your referral code',
+                            Text(AppLocalizations.of(context).yourReferralCode,
                                 style: AppTheme.dm(
                                     size: 11, color: AppColors.muted)),
                             Text('KARIM-4821',
@@ -191,7 +194,7 @@ class BrokerProfilePage extends StatelessWidget {
                             const Icon(Icons.copy,
                                 size: 14, color: AppColors.gold),
                             const SizedBox(width: 5),
-                            Text('Copy',
+                            Text(AppLocalizations.of(context).copyLabel,
                                 style: AppTheme.dm(
                                     size: 12,
                                     weight: FontWeight.w700,
@@ -204,7 +207,7 @@ class BrokerProfilePage extends StatelessWidget {
                   child: Column(children: [
                 SettingsRow(
                     icon: Icons.star_outline,
-                    label: 'Reviews I Gave',
+                    label: AppLocalizations.of(context).reviewsIGave,
                     value: '14 reviews',
                     onTap: () => AppNavigation.goToMyReviews(context)),
                 SettingsRow(
@@ -215,7 +218,7 @@ class BrokerProfilePage extends StatelessWidget {
                     onTap: () => AppNavigation.goToBrokerPayout(context)),
                 SettingsRow(
                     icon: Icons.notifications_none,
-                    label: 'Notifications',
+                    label: AppLocalizations.of(context).notificationsLabel,
                     onTap: () => AppNavigation.goToNotifications(context)),
                 SettingsRow(
                     icon: Icons.lock_outline,
@@ -223,8 +226,8 @@ class BrokerProfilePage extends StatelessWidget {
                     onTap: () => AppNavigation.goToChangePassword(context)),
                 SettingsRow(
                     icon: Icons.language,
-                    label: 'Language',
-                    value: 'English',
+                    label: AppLocalizations.of(context).languageLabel,
+                    value: AppLocalizations.nativeLanguageName(context.watch<LocaleProvider>().locale.languageCode),
                     onTap: () => AppNavigation.goToLanguage(context)),
                 SettingsRow(
                     icon: Icons.attach_money,

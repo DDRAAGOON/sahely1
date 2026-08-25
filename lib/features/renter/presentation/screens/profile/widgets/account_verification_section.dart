@@ -1,7 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class AccountVerificationSection extends StatelessWidget {
   final bool emailConfirmed;
@@ -26,7 +27,7 @@ class AccountVerificationSection extends StatelessWidget {
         Row(
           children: [
             Text(
-              'Account Verification',
+              AppLocalizations.of(context).accountVerification,
               style: AppTheme.dm(
                 size: 16,
                 weight: FontWeight.w700,
@@ -58,18 +59,18 @@ class AccountVerificationSection extends StatelessWidget {
           child: Column(
             children: [
               // Email
-              const _VerificationRow(
+              _VerificationRow(
                 icon: Icons.check_circle,
                 iconColor: AppColors.green,
-                label: 'Email Confirmed',
+                label: AppLocalizations.of(context).emailConfirmed,
                 status: VerificationStatus.done,
               ),
               _Divider(),
               // Phone
-              const _VerificationRow(
+              _VerificationRow(
                 icon: Icons.check_circle,
                 iconColor: AppColors.green,
-                label: 'Phone Verified',
+                label: AppLocalizations.of(context).phoneVerified,
                 status: VerificationStatus.done,
               ),
               _Divider(),
@@ -77,7 +78,7 @@ class AccountVerificationSection extends StatelessWidget {
               _VerificationRow(
                 icon: Icons.error_outline,
                 iconColor: AppColors.warning,
-                label: 'Identity Verified',
+                label: AppLocalizations.of(context).identityVerified,
                 status: VerificationStatus.pending,
                 actionLabel: 'Verify Now →',
                 onAction: () => AppNavigation.goToIdVerification(context),
@@ -89,7 +90,7 @@ class AccountVerificationSection extends StatelessWidget {
                     paymentCardAdded ? Icons.check_circle : Icons.error_outline,
                 iconColor:
                     paymentCardAdded ? AppColors.green : AppColors.warning,
-                label: 'Payment Card',
+                label: AppLocalizations.of(context).paymentCard,
                 status: paymentCardAdded
                     ? VerificationStatus.done
                     : VerificationStatus.pending,

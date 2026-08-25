@@ -1,4 +1,4 @@
-﻿import 'dart:ui';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +8,7 @@ import 'package:sahely/data/role_state.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/bouncy_button.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class NavItem {
   const NavItem(this.icon, this.activeIcon, this.label, [this.route]);
@@ -27,39 +28,41 @@ class FloatingNav extends StatelessWidget {
   final List<NavItem>? items;
   final void Function(int index, NavItem item)? onTap;
 
-  static const renterTabs = [
-    NavItem(Icons.home_outlined, Icons.home, 'Home', '/renter/home'),
-    NavItem(
-        Icons.favorite_border, Icons.favorite, 'Wishlist', '/renter/wishlist'),
-    NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings',
-        '/renter/bookings'),
-    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services',
-        '/renter/services'),
-    NavItem(Icons.person_outline, Icons.person, 'Profile', '/renter/profile'),
-  ];
+  static List<NavItem> renterTabs(AppLocalizations l) => [
+        NavItem(Icons.home_outlined, Icons.home, l.navHome, '/renter/home'),
+        NavItem(Icons.favorite_border, Icons.favorite, l.navWishlist,
+            '/renter/wishlist'),
+        NavItem(Icons.calendar_today_outlined, Icons.calendar_today,
+            l.navBookings, '/renter/bookings'),
+        NavItem(Icons.room_service_outlined, Icons.room_service, l.navServices,
+            '/renter/services'),
+        NavItem(Icons.person_outline, Icons.person, l.navProfile,
+            '/renter/profile'),
+      ];
 
-  static const ownerTabs = [
-    NavItem(Icons.home_outlined, Icons.home, 'Home', '/owner/home'),
-    NavItem(Icons.favorite_border, Icons.favorite, 'Wishlist',
-        '/owner/wishlist'),
-    NavItem(Icons.calendar_today_outlined, Icons.calendar_today, 'Bookings',
-        '/owner/bookings'),
-    NavItem(Icons.room_service_outlined, Icons.room_service, 'Services',
-        '/owner/services'),
-    NavItem(
-        Icons.person_outline, Icons.person, 'Manage', '/owner/profile'),
-  ];
+  static List<NavItem> ownerTabs(AppLocalizations l) => [
+        NavItem(Icons.home_outlined, Icons.home, l.navHome, '/owner/home'),
+        NavItem(Icons.favorite_border, Icons.favorite, l.navWishlist,
+            '/owner/wishlist'),
+        NavItem(Icons.calendar_today_outlined, Icons.calendar_today,
+            l.navBookings, '/owner/bookings'),
+        NavItem(Icons.room_service_outlined, Icons.room_service, l.navServices,
+            '/owner/services'),
+        NavItem(
+            Icons.person_outline, Icons.person, l.navManage, '/owner/profile'),
+      ];
 
-  static const brokerTabs = [
-    NavItem(Icons.home_outlined, Icons.home, 'Home', '/broker/home'),
-    NavItem(Icons.workspace_premium_outlined, Icons.workspace_premium,
-        'My Role', '/broker/dashboard'),
-    NavItem(Icons.apartment_outlined, Icons.apartment, 'Referrals',
-        '/broker/referred'),
-    NavItem(Icons.account_balance_wallet_outlined, Icons.account_balance_wallet,
-        'Wallet', '/broker/wallet'),
-    NavItem(Icons.person_outline, Icons.person, 'Profile', '/broker/profile'),
-  ];
+  static List<NavItem> brokerTabs(AppLocalizations l) => [
+        NavItem(Icons.home_outlined, Icons.home, l.navHome, '/broker/home'),
+        NavItem(Icons.workspace_premium_outlined, Icons.workspace_premium,
+            l.navMyRole, '/broker/dashboard'),
+        NavItem(Icons.apartment_outlined, Icons.apartment, l.navReferrals,
+            '/broker/referred'),
+        NavItem(Icons.account_balance_wallet_outlined,
+            Icons.account_balance_wallet, l.navWallet, '/broker/wallet'),
+        NavItem(Icons.person_outline, Icons.person, l.navProfile,
+            '/broker/profile'),
+      ];
 
   void _defaultOnTap(BuildContext context, int index, NavItem item) {
     if (item.route != null) {
@@ -70,10 +73,11 @@ class FloatingNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final role = RoleState().currentRole;
+    final l = AppLocalizations.of(context);
     final displayItems = items ??
         (role == Role.owner
-            ? ownerTabs
-            : (role == Role.broker ? brokerTabs : renterTabs));
+            ? ownerTabs(l)
+            : (role == Role.broker ? brokerTabs(l) : renterTabs(l)));
 
     return Positioned(
       left: 14,
@@ -82,7 +86,7 @@ class FloatingNav extends StatelessWidget {
       child: Container(
         height: 62,
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.15),
+          color: Colors.white.withValues(alpha: 0.62),
           borderRadius: BorderRadius.circular(28),
           border:
               Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
@@ -97,7 +101,7 @@ class FloatingNav extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(28),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+            filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

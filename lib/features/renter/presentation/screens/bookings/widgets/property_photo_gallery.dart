@@ -3,6 +3,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/gallery/photo_viewer_screen.dart';
+import 'package:sahely/core/widgets/image.dart';
 
 class PropertyPhotoGallery extends StatelessWidget {
   final List<dynamic>? photos;
@@ -39,18 +40,12 @@ class PropertyPhotoGallery extends StatelessWidget {
             onTap: () => _openGallery(context, 0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                photoList[0].toString(),
-                height: 120,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
+              child: AppNetworkImage(url: photoList[0].toString(), width: double.infinity, height: 120, errorWidget: (context, error, stackTrace) {
                   return Container(
                     height: 120,
                     color: AppColors.border,
                   );
-                },
-              ),
+                }),
             ),
           ),
         ),
@@ -65,18 +60,12 @@ class PropertyPhotoGallery extends StatelessWidget {
                     _openGallery(context, photoList.length > 1 ? 1 : 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    photoList.length > 1 ? photoList[1].toString() : '',
-                    height: 56,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
+                  child: AppNetworkImage(url: photoList.length > 1 ? photoList[1].toString() : '', width: double.infinity, height: 56, errorWidget: (context, error, stackTrace) {
                       return Container(
                         height: 56,
                         color: AppColors.border,
                       );
-                    },
-                  ),
+                    }),
                 ),
               ),
               const SizedBox(height: 8),
@@ -87,18 +76,12 @@ class PropertyPhotoGallery extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: Stack(
                     children: [
-                      Image.network(
-                        photoList.length > 2 ? photoList[2].toString() : '',
-                        height: 56,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
+                      AppNetworkImage(url: photoList.length > 2 ? photoList[2].toString() : '', width: double.infinity, height: 56, errorWidget: (context, error, stackTrace) {
                           return Container(
                             height: 56,
                             color: AppColors.border,
                           );
-                        },
-                      ),
+                        }),
                       if (photoList.length > 3)
                         Container(
                           height: 56,
@@ -126,3 +109,4 @@ class PropertyPhotoGallery extends StatelessWidget {
     );
   }
 }
+

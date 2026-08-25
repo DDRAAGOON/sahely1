@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class ReviewTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -17,7 +18,7 @@ class ReviewTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Your review',
+          AppLocalizations.of(context).yourReview,
           style: AppTheme.dm(
             size: 14,
             weight: FontWeight.w600,
@@ -37,7 +38,7 @@ class ReviewTextField extends StatelessWidget {
             maxLength: 500,
             decoration: InputDecoration(
               hintText:
-                  'Tell others about the property, cleanliness, check-in...',
+                  AppLocalizations.of(context).reviewHint,
               hintStyle: AppTheme.dm(
                 size: 13,
                 color: AppColors.placeholder,

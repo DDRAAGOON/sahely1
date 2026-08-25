@@ -8,10 +8,13 @@ import 'package:sahely/features/shared/properties/domain/entities/property.dart'
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/features/owner/screens/listing_submitted_screen.dart';
+
+import '../../../core/navigation/app_navigation.dart';
 
 class AddPropertyScreen extends StatefulWidget {
   const AddPropertyScreen({super.key});
@@ -23,13 +26,22 @@ class AddPropertyScreen extends StatefulWidget {
 class _AddPropertyScreenState extends State<AddPropertyScreen> {
   int step = 0;
 
-  // 4 steps total: Basics, Location, Amenities, Photos
-  static const _titles = [
-    'Basics',
-    'Location & Specs',
-    'Features & Amenities',
-    'Photos'
-  ];
+  /// Localized step titles for display only.
+  String _localizedTitle(BuildContext context, int index) {
+    final l = AppLocalizations.of(context);
+    switch (index) {
+      case 0:
+        return l.stepBasics;
+      case 1:
+        return l.stepLocation;
+      case 2:
+        return l.stepFeatures;
+      case 3:
+        return l.stepPhotos;
+      default:
+        return '';
+    }
+  }
 
   bool _submitted = false;
 
@@ -95,28 +107,47 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
     super.dispose();
   }
 
-  void _submit() {
-    final newProp = Property(
+  Property _createPropertyObject(PropertyStatus status) {
+    return Property(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
       name: _nameController.text.isEmpty
-          ? 'Untitled Property'
+          ? (status == PropertyStatus.draft ? 'New Draft Listing' : 'Untitled Property')
           : _nameController.text,
-      area: _areaController.text.split(',').first.isEmpty
-          ? 'North Coast'
-          : _areaController.text.split(',').first,
-      image: _pickedImages.isNotEmpty
-          ? _pickedImages.first.path
-          : 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=1200&q=72&auto=format&fit=crop',
-      price: 2500,
-      rating: 5.0,
+      area: _areaController.text.split(',').first,
+      image: _pickedImages.isNotEmpty ? _pickedImages.first.path : '',
+      price: int.tryParse(_referralController.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
+      rating: 0.0,
       reviews: 0,
-      type: _propertyType ?? 'Villa',
+      type: _propertyType ?? '',
       beds: int.tryParse(_numBedsController.text) ?? 0,
       guests: int.tryParse(_guestsController.text) ?? 0,
       petsOk: _petsOk ?? true,
       tags: _selectedAmenities.toList(),
+      status: status,
     );
-    Sample.allTrending.insert(0, newProp);
+  }
+
+  void _submit() {
+    final newProp = _createPropertyObject(PropertyStatus.underReview);
+    Sample.ownerProperties.insert(0, newProp);
     setState(() => _submitted = true);
+    
+    // Auto navigate to properties after a short delay from success screen if needed, 
+    // but the requirement says "وديني ليها"
+    Future.delayed(const Duration(seconds: 3), () {
+       if (mounted) AppNavigation.goToOwnerProperties(context, filter: 'Under Review');
+    });
+  }
+
+  void _saveAsDraft() {
+    final newProp = _createPropertyObject(PropertyStatus.draft);
+    Sample.ownerProperties.insert(0, newProp);
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context).draftSaved)),
+    );
+    
+    AppNavigation.goToOwnerProperties(context, filter: 'Draft');
   }
 
   Future<void> _pickImages() async {
@@ -177,7 +208,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Step ${step + 1} of 4 · ${_titles[step]}',
+                child: Text('${AppLocalizations.of(context).stepOf(step + 1, 4)} · ${_localizedTitle(context, step)}',
                     style: AppTheme.dm(size: 12, color: AppColors.muted)))),
         Expanded(child: _stepBody()),
         Container(
@@ -186,8 +217,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             GestureDetector(
-                onTap: () => Navigator.maybePop(context),
-                child: Text('Save Draft',
+                onTap: _saveAsDraft,
+                child: Text(AppLocalizations.of(context).saveDraft,
                     style: AppTheme.dm(
                         size: 14,
                         weight: FontWeight.w700,
@@ -195,7 +226,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             SizedBox(
               width: 170,
               child: NavyButton(
-                  label: step == 3 ? 'Submit Listing' : 'Continue',
+                  label: step == 3 ? AppLocalizations.of(context).submitListing : AppLocalizations.of(context).continueBtn,
                   height: 45,
                   onTap: () => step == 3 ? _submit() : setState(() => step++)),
             ),
@@ -210,7 +241,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
       0 =>
         ListView(padding: const EdgeInsets.fromLTRB(16, 14, 16, 16), children: [
           FieldGroup(
-            label: 'Property Type',
+            label: AppLocalizations.of(context).propertyType,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
@@ -220,7 +251,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: _propertyType,
-                  hint: Text('Select type',
+                  hint: Text(AppLocalizations.of(context).selectType,
                       style: AppTheme.dm(size: 14, color: AppColors.navy)),
                   isExpanded: true,
                   icon: const Icon(Icons.keyboard_arrow_down,
@@ -237,51 +268,51 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           ),
           const SizedBox(height: 12),
           FieldGroup(
-              label: 'Property Name',
+              label: AppLocalizations.of(context).propertyNameLabel,
               child:
-                  AppTextField(controller: _nameController, hintText: 'name')),
+                  AppTextField(controller: _nameController, hintText: AppLocalizations.of(context).nameHint)),
           const SizedBox(height: 12),
           FieldGroup(
-              label: 'Description',
+              label: AppLocalizations.of(context).descriptionLabel,
               child: AppTextField(
                   controller: _descController,
                   height: 100,
-                  hintText: 'Describe your property...')),
+                  hintText: AppLocalizations.of(context).describeHint)),
           const SizedBox(height: 12),
           Row(children: [
             Expanded(
                 child: FieldGroup(
-                    label: 'Bedrooms',
+                    label: AppLocalizations.of(context).bedrooms,
                     child: _NumericInput(controller: _bedroomsController))),
             const SizedBox(
               width: 12,
             ),
             Expanded(
                 child: FieldGroup(
-                    label: 'Bathrooms',
+                    label: AppLocalizations.of(context).bathrooms,
                     child: _NumericInput(controller: _bathroomsController))),
             const SizedBox(width: 12),
             Expanded(
                 child: FieldGroup(
-                    label: 'Guests',
+                    label: AppLocalizations.of(context).guestsLabel,
                     child: _NumericInput(controller: _guestsController))),
           ]),
           const SizedBox(height: 12),
           Row(children: [
             Expanded(
                 child: FieldGroup(
-                    label: 'Number of beds',
+                    label: AppLocalizations.of(context).numberOfBeds,
                     child: _NumericInput(controller: _numBedsController))),
             const SizedBox(width: 12),
             Expanded(
                 child: FieldGroup(
-                    label: 'Pets allowed?',
+                    label: AppLocalizations.of(context).petsAllowedQ,
                     child: _SegmentToggle(
                         _petsOk, (v) => setState(() => _petsOk = v)))),
           ]),
           const SizedBox(height: 12),
           FieldGroup(
-              label: 'Party allowed?',
+              label: AppLocalizations.of(context).partyAllowedQ,
               child: _SegmentToggle(
                   _partyOk, (v) => setState(() => _partyOk = v))),
           const SizedBox(height: 12),
@@ -291,7 +322,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   style: AppTheme.dm(
                       size: 13, weight: FontWeight.w600, color: AppColors.navy),
                   children: [
-                    const TextSpan(text: 'Mixed groups allowed? '),
+                    TextSpan(text: AppLocalizations.of(context).mixedGroupsAllowedQ),
                     TextSpan(
                         text: '(unrelated men & women)',
                         style: AppTheme.dm(
@@ -309,7 +340,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   style: AppTheme.dm(
                       size: 13, weight: FontWeight.w600, color: AppColors.navy),
                   children: [
-                    const TextSpan(text: 'Referral code '),
+                    TextSpan(text: AppLocalizations.of(context).referralCodeLabel),
                     TextSpan(
                         text: '(optional)',
                         style: AppTheme.dm(
@@ -382,8 +413,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           borderRadius: BorderRadius.circular(8)),
                       child: Text(
                           _selectedLatLng == null
-                              ? 'Drag pin to exact spot'
-                              : 'Location selected',
+                              ? AppLocalizations.of(context).dragPin
+                              : AppLocalizations.of(context).locationSelected,
                           style: AppTheme.dm(
                               size: 11,
                               weight: FontWeight.w600,
@@ -396,28 +427,28 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           ),
           const SizedBox(height: 16),
           FieldGroup(
-              label: 'Compound / Area',
+              label: AppLocalizations.of(context).compoundArea,
               child: AppTextField(
                   controller: _areaController,
-                  hintText: 'Marassi, North Coast')),
+                  hintText: AppLocalizations.of(context).marassiHint)),
           const SizedBox(height: 12),
           FieldGroup(
-              label: 'Exact address (typed)',
+              label: AppLocalizations.of(context).exactAddress,
               child: AppTextField(
                   controller: _addressController,
-                  hintText: 'Unit, street, landmark')),
+                  hintText: AppLocalizations.of(context).unitStreetHint)),
           const SizedBox(height: 12),
           Row(children: [
             Expanded(
                 child: FieldGroup(
-                    label: 'Property no.',
+                    label: AppLocalizations.of(context).propertyNo,
                     child: AppTextField(
                         controller: _propNoController,
                         hintText: 'e.g. B-214'))),
             const SizedBox(width: 12),
             Expanded(
                 child: FieldGroup(
-                    label: 'Floor (if apartment)',
+                    label: AppLocalizations.of(context).floorIfApartment,
                     child: AppTextField(
                         controller: _floorController, hintText: 'e.g. 4')))
           ]),
@@ -431,7 +462,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             const SizedBox(width: 12),
             Expanded(
                 child: FieldGroup(
-                    label: 'Floors in unit',
+                    label: AppLocalizations.of(context).floorsInUnit,
                     child: AppTextField(
                         controller: _floorsInUnitController, hintText: '2')))
           ]),
@@ -439,14 +470,14 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           Row(children: [
             Expanded(
                 child: FieldGroup(
-                    label: 'Meters from sea',
+                    label: AppLocalizations.of(context).metersFromSea,
                     child: AppTextField(
                         controller: _metersFromSeaController,
                         hintText: '150 m'))),
             const SizedBox(width: 12),
             Expanded(
                 child: FieldGroup(
-                    label: 'View',
+                    label: AppLocalizations.of(context).viewLabel,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
@@ -456,7 +487,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: _propertyView,
-                          hint: Text('Select view',
+                          hint: Text(AppLocalizations.of(context).selectView,
                               style: AppTheme.dm(
                                   size: 14, color: AppColors.muted.withValues(alpha: 0.6))),
                           isExpanded: true,
@@ -485,7 +516,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   'What is this? List everything in your home. Guests use this exact list as their arrival checklist — only add what\'s really there, or you may get a violation.',
               icon: Icons.help_outline),
           const SizedBox(height: 14),
-          SectionLabel('ADDED · ${_selectedAmenities.length}'),
+          SectionLabel('${AppLocalizations.of(context).addedLabel} · ${_selectedAmenities.length}'),
           const SizedBox(height: 8),
           WhiteCard(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
@@ -493,7 +524,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                 if (_selectedAmenities.isEmpty)
                   Padding(
                       padding: const EdgeInsets.all(16),
-                      child: Text('No amenities added yet',
+                      child: Text(AppLocalizations.of(context).noAmenitiesYet,
                           style:
                               AppTheme.dm(size: 13, color: AppColors.muted))),
                 for (var i = 0; i < _selectedAmenities.length; i++) ...[
@@ -528,7 +559,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   ]
               ])),
           const SizedBox(height: 18),
-          const SectionLabel('CUSTOM FEATURES'),
+          SectionLabel(AppLocalizations.of(context).customFeatures),
           const SizedBox(height: 8),
           WhiteCard(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -578,7 +609,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                 const Icon(Icons.info_outline, color: AppColors.gold, size: 20),
                 const SizedBox(width: 10),
                 Expanded(
-                    child: Text('Photo guidelines',
+                    child: Text(AppLocalizations.of(context).photoGuidelines,
                         style: AppTheme.dm(
                             size: 14,
                             weight: FontWeight.w700,
@@ -590,58 +621,58 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                         color: AppColors.gold)),
               ])),
           const SizedBox(height: 10),
-          const Row(children: [
-            Pill('☀ Daylight / morning',
+          Row(children: [
+            const Pill('☀ Daylight / morning',
                 bg: AppColors.white,
                 border: AppColors.gold,
                 fg: Color(0xFF9A7A22),
                 radius: 20),
-            SizedBox(width: 8),
-            Pill('📷 Vertical',
+            const SizedBox(width: 8),
+            const Pill('📷 Vertical',
                 bg: AppColors.white,
                 border: AppColors.gold,
                 fg: Color(0xFF9A7A22),
                 radius: 20),
-            SizedBox(width: 8),
-            Pill('Min 5 photos',
+            const SizedBox(width: 8),
+            Pill(AppLocalizations.of(context).min5Photos,
                 bg: AppColors.white,
                 border: AppColors.gold,
-                fg: Color(0xFF9A7A22),
+                fg: const Color(0xFF9A7A22),
                 radius: 20)
           ]),
           const SizedBox(height: 18),
-          Text('Required shots',
+          Text(AppLocalizations.of(context).requiredShots,
               style: AppTheme.dm(
                   size: 14, weight: FontWeight.w700, color: AppColors.navy)),
           const SizedBox(height: 8),
-          const WhiteCard(
-              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+          WhiteCard(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
               child: Column(children: [
                 ChecklistTile(
-                    label: 'Compound layout (your unit marked)',
+                    label: AppLocalizations.of(context).compoundLayoutShot,
                     done: true,
-                    padding: EdgeInsets.symmetric(vertical: 12)),
-                Divider(height: 1, color: Color(0xFFF4EFE7)),
-                ChecklistTile(
+                    padding: const EdgeInsets.symmetric(vertical: 12)),
+                const Divider(height: 1, color: Color(0xFFF4EFE7)),
+                const ChecklistTile(
                     label: "Each room + each room's view",
                     done: true,
                     padding: EdgeInsets.symmetric(vertical: 12)),
-                Divider(height: 1, color: Color(0xFFF4EFE7)),
+                const Divider(height: 1, color: Color(0xFFF4EFE7)),
                 ChecklistTile(
-                    label: 'Main balcony view',
+                    label: AppLocalizations.of(context).balconyViewShot,
                     done: true,
-                    padding: EdgeInsets.symmetric(vertical: 12)),
-                Divider(height: 1, color: Color(0xFFF4EFE7)),
+                    padding: const EdgeInsets.symmetric(vertical: 12)),
+                const Divider(height: 1, color: Color(0xFFF4EFE7)),
                 ChecklistTile(
-                    label: 'Every toilet · kitchen · reception',
+                    label: AppLocalizations.of(context).everyToiletShot,
                     done: true,
-                    padding: EdgeInsets.symmetric(vertical: 12)),
-                Divider(height: 1, color: Color(0xFFF4EFE7)),
+                    padding: const EdgeInsets.symmetric(vertical: 12)),
+                const Divider(height: 1, color: Color(0xFFF4EFE7)),
                 ChecklistTile(
-                    label: 'Outside of property + door photo',
+                    label: AppLocalizations.of(context).outsideDoorShot,
                     done: false,
                     warn: true,
-                    padding: EdgeInsets.symmetric(vertical: 12)),
+                    padding: const EdgeInsets.symmetric(vertical: 12)),
               ])),
           const SizedBox(height: 14),
           GestureDetector(
@@ -655,12 +686,12 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                       const Icon(Icons.cloud_upload_outlined,
                           size: 30, color: AppColors.gold),
                       const SizedBox(height: 8),
-                      Text('Upload photos',
+                      Text(AppLocalizations.of(context).uploadPhotos,
                           style: AppTheme.dm(
                               size: 14,
                               weight: FontWeight.w700,
                               color: AppColors.navy)),
-                      Text('or drag & drop',
+                      Text(AppLocalizations.of(context).dragDrop,
                           style: AppTheme.dm(size: 12, color: AppColors.muted))
                     ]))),
           ),
@@ -712,7 +743,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                           decoration: BoxDecoration(
                               color: AppColors.gold.withValues(alpha: 0.8),
                               borderRadius: BorderRadius.circular(4)),
-                          child: Text('Cover',
+                          child: Text(AppLocalizations.of(context).coverLabel,
                               style: AppTheme.dm(
                                   size: 10,
                                   weight: FontWeight.w700,
@@ -845,7 +876,7 @@ class _SegmentToggle extends StatelessWidget {
                       const BorderRadius.horizontal(left: Radius.circular(9)),
                 ),
                 alignment: Alignment.center,
-                child: Text('Yes',
+                child: Text(AppLocalizations.of(context).yesLabel,
                     style: AppTheme.dm(
                         size: 14,
                         weight: FontWeight.w600,
@@ -866,7 +897,7 @@ class _SegmentToggle extends StatelessWidget {
                       const BorderRadius.horizontal(right: Radius.circular(9)),
                 ),
                 alignment: Alignment.center,
-                child: Text('No',
+                child: Text(AppLocalizations.of(context).noBtn,
                     style: AppTheme.dm(
                         size: 14,
                         weight: FontWeight.w600,
@@ -906,7 +937,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Location',
+        title: Text(AppLocalizations.of(context).selectLocation,
             style: AppTheme.dm(
                 size: 16, weight: FontWeight.w700, color: AppColors.navy)),
         backgroundColor: AppColors.cream,
@@ -949,7 +980,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
             left: 20,
             right: 30,
             child: NavyButton(
-              label: 'Confirm Location',
+              label: AppLocalizations.of(context).confirmLocation,
               onTap: () => Navigator.pop(context, _currentCenter),
             ),
           ),

@@ -13,6 +13,7 @@ import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/features/shared/widgets/browse_empty_state.dart';
 import 'package:sahely/features/shared/widgets/search_header_with_input.dart';
 import 'package:sahely/features/shared/widgets/small_prop_card.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class BrowseScreen extends StatefulWidget {
   const BrowseScreen({super.key});
@@ -173,162 +174,184 @@ class _BrowseScreenState extends State<BrowseScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            ListView(
+            ListView.builder(
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
-              children: [
-                SearchHeaderWithInput(
-                  controller: _searchController,
-                  onSubmitted: (v) => setState(() => _appliedSearchQuery = v),
-                  onBack: () => Navigator.pop(context),
-                  onFilter: () {
-                    AppNavigation.goToFilters(
-                      context,
-                      initialFilters: _filters,
-                      onApplyFilters: (result) {
-                        setState(() => _filters = result);
-                      },
-                    );
-                  },
-                ),
-                const SizedBox(height: 18),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: AppTheme.dm(size: 14, color: AppColors.textSecondary),
-                        children: [
-                          TextSpan(
-                            text: '${results.length} ',
-                            style: AppTheme.dm(weight: FontWeight.w700, color: AppColors.navy),
-                          ),
-                          const TextSpan(text: 'stays in North Coast'),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: _showSortMenu,
-                      behavior: HitTestBehavior.opaque,
-                      child: Row(children: [
-                        const Icon(Icons.filter_list, size: 14, color: AppColors.navy),
-                        const SizedBox(width: 6),
-                        Text('Sort: ${_sortBy.replaceAll(' ↑', '').replaceAll(' ↓', '')}',
-                            style: AppTheme.dm(
-                                size: 13,
-                                weight: FontWeight.w600,
-                                color: AppColors.navy)),
-                      ]),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                // Filter Chips
-                SizedBox(
-                  height: 40,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
+              itemCount: results.isEmpty
+                  ? 7
+                  : 6 +
+                      results.length +
+                      ((_appliedSearchQuery.isEmpty && _filters == null)
+                          ? 3
+                          : 0),
+              itemBuilder: (context, index) {
+                final l = AppLocalizations.of(context);
+                if (index == 0) {
+                  return SearchHeaderWithInput(
+                    controller: _searchController,
+                    onSubmitted: (v) => setState(() => _appliedSearchQuery = v),
+                    onBack: () => Navigator.pop(context),
+                    onFilter: () {
+                      AppNavigation.goToFilters(
+                        context,
+                        initialFilters: _filters,
+                        onApplyFilters: (result) {
+                          setState(() => _filters = result);
+                        },
+                      );
+                    },
+                  );
+                }
+                if (index == 1) return const SizedBox(height: 18);
+                if (index == 2) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ChoiceChipPill(
-                        'Top rated',
-                        selected: _sortBy == 'Top Rated',
-                        borderColor: _sortBy == 'Top Rated' ? AppColors.navy : AppColors.border,
-                        onTap: () {
-                          setState(() {
-                            _sortBy = (_sortBy == 'Top Rated') ? 'Recommended' : 'Top Rated';
-                          });
-                        },
+                      RichText(
+                        text: TextSpan(
+                          style: AppTheme.dm(size: 14, color: AppColors.textSecondary),
+                          children: [
+                            TextSpan(
+                              text: '${results.length} ',
+                              style: AppTheme.dm(weight: FontWeight.w700, color: AppColors.navy),
+                            ),
+                            TextSpan(text: l.staysSuffix),
+                          ],
+                        ),
                       ),
-                      const SizedBox(width: 8),
-                      ChoiceChipPill(
-                        _sortBy.startsWith('Price') ? (_priceAscending ? 'Price ↑' : 'Price ↓') : 'Price',
-                        selected: _sortBy.startsWith('Price'),
-                        borderColor: _sortBy.startsWith('Price') ? AppColors.navy : AppColors.border,
-                        onTap: () {
-                          setState(() {
-                            if (_sortBy.startsWith('Price')) {
-                              _priceAscending = !_priceAscending;
-                            } else {
-                              _priceAscending = true;
-                            }
-                            _sortBy = _priceAscending ? 'Price ↑' : 'Price ↓';
-                          });
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      ChoiceChipPill(
-                        'Newest',
-                        selected: _sortBy == 'Newest',
-                        borderColor: _sortBy == 'Newest' ? AppColors.navy : AppColors.border,
-                        onTap: () {
-                          setState(() {
-                             _sortBy = (_sortBy == 'Newest') ? 'Recommended' : 'Newest';
-                          });
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      ChoiceChipPill(
-                        'Beachfront',
-                        selected: _filters?['type'] == 'Beachfront',
-                        borderColor: _filters?['type'] == 'Beachfront' ? AppColors.navy : AppColors.border,
-                        onTap: () {
-                          setState(() {
-                            _filters ??= {};
-                            if (_filters!['type'] == 'Beachfront') {
-                              _filters!.remove('type');
-                            } else {
-                              _filters!['type'] = 'Beachfront';
-                            }
-                          });
-                        },
+                      GestureDetector(
+                        onTap: _showSortMenu,
+                        behavior: HitTestBehavior.opaque,
+                        child: Row(children: [
+                          const Icon(Icons.filter_list, size: 14, color: AppColors.navy),
+                          const SizedBox(width: 6),
+                          Text('Sort: ${_sortBy.replaceAll(' ↑', '').replaceAll(' ↓', '')}',
+                              style: AppTheme.dm(
+                                  size: 13,
+                                  weight: FontWeight.w600,
+                                  color: AppColors.navy)),
+                        ]),
                       ),
                     ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                if (results.isEmpty)
-                  const BrowseEmptyState()
-                else ...[
-                  for (var p in results) ...[
-                    PropertyCard(
+                  );
+                }
+                if (index == 3) return const SizedBox(height: 12);
+                if (index == 4) {
+                  // Filter Chips
+                  return SizedBox(
+                    height: 40,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        ChoiceChipPill(
+                          'Top rated',
+                          selected: _sortBy == 'Top Rated',
+                          borderColor: _sortBy == 'Top Rated' ? AppColors.navy : AppColors.border,
+                          onTap: () {
+                            setState(() {
+                              _sortBy = (_sortBy == 'Top Rated') ? 'Recommended' : 'Top Rated';
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        ChoiceChipPill(
+                          _sortBy.startsWith('Price') ? (_priceAscending ? 'Price ↑' : 'Price ↓') : 'Price',
+                          selected: _sortBy.startsWith('Price'),
+                          borderColor: _sortBy.startsWith('Price') ? AppColors.navy : AppColors.border,
+                          onTap: () {
+                            setState(() {
+                              if (_sortBy.startsWith('Price')) {
+                                _priceAscending = !_priceAscending;
+                              } else {
+                                _priceAscending = true;
+                              }
+                              _sortBy = _priceAscending ? 'Price ↑' : 'Price ↓';
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        ChoiceChipPill(
+                          'Newest',
+                          selected: _sortBy == 'Newest',
+                          borderColor: _sortBy == 'Newest' ? AppColors.navy : AppColors.border,
+                          onTap: () {
+                            setState(() {
+                               _sortBy = (_sortBy == 'Newest') ? 'Recommended' : 'Newest';
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        ChoiceChipPill(
+                          'Beachfront',
+                          selected: _filters?['type'] == 'Beachfront',
+                          borderColor: _filters?['type'] == 'Beachfront' ? AppColors.navy : AppColors.border,
+                          onTap: () {
+                            setState(() {
+                              _filters ??= {};
+                              if (_filters!['type'] == 'Beachfront') {
+                                _filters!.remove('type');
+                              } else {
+                                _filters!['type'] = 'Beachfront';
+                              }
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                if (index == 5) {
+                  if (results.isEmpty) return const BrowseEmptyState();
+                  return const SizedBox(height: 20);
+                }
+
+                final resultIndex = index - 6;
+                if (resultIndex < results.length) {
+                  final p = results[resultIndex];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: PropertyCard(
                       property: p,
                       onTap: () =>
                           AppNavigation.goToPropertyDetail(context, extra: p),
                     ),
-                    const SizedBox(height: 16),
-                  ],
-                ],
-                if (results.isNotEmpty && _appliedSearchQuery.isEmpty && _filters == null) ...[
-                  const SectionHeader(
-                      title: 'Top Rated in North Coast', action: null),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 240,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      clipBehavior: Clip.none,
-                      children: [
-                        SmallPropCard(
-                            image: Sample.lagoon.image,
-                            name: 'Cyan Chalet',
-                            price: '3,200',
-                            rating: '4.9'),
-                        const SizedBox(width: 12),
-                        SmallPropCard(
-                            image: Sample.dunes.image,
-                            name: 'Sand Loft',
-                            price: '2,800',
-                            rating: '4.8'),
-                        const SizedBox(width: 12),
-                        SmallPropCard(
-                            image: Sample.lagoon.image,
-                            name: 'Wave Villa',
-                            price: '5,500',
-                            rating: '5.0'),
-                      ],
-                    ),
+                  );
+                }
+
+                final footerIndex =
+                    resultIndex - results.length;
+                if (footerIndex == 0) {
+                  return SectionHeader(
+                      title: l.topRatedSection, action: null);
+                }
+                if (footerIndex == 1) return const SizedBox(height: 12);
+                return SizedBox(
+                  height: 240,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    clipBehavior: Clip.none,
+                    children: [
+                      SmallPropCard(
+                          image: Sample.lagoon.image,
+                          name: 'Cyan Chalet',
+                          price: '3,200',
+                          rating: '4.9'),
+                      const SizedBox(width: 12),
+                      SmallPropCard(
+                          image: Sample.dunes.image,
+                          name: 'Sand Loft',
+                          price: '2,800',
+                          rating: '4.8'),
+                      const SizedBox(width: 12),
+                      SmallPropCard(
+                          image: Sample.lagoon.image,
+                          name: 'Wave Villa',
+                          price: '5,500',
+                          rating: '5.0'),
+                    ],
                   ),
-                ],
-              ],
+                );
+              },
             ),
             const FloatingNav(active: 0),
           ],

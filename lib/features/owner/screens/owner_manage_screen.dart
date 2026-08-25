@@ -6,6 +6,11 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/features/owner/widgets/pending_request_card.dart';
 
+import '../../../core/navigation/app_routes.dart';
+import '../../../data/sample_data.dart';
+import '../../shared/properties/domain/entities/property.dart';
+import 'package:sahely/l10n/app_localizations.dart';
+
 class OwnerManageScreen extends StatelessWidget {
   const OwnerManageScreen({super.key});
 
@@ -17,7 +22,14 @@ class OwnerManageScreen extends StatelessWidget {
         children: [
           Row(children: [
             GestureDetector(
-              onTap: () => AppNavigation.goBack(context),
+              onTap: () {
+                if (Navigator.canPop(context)) {
+                  Navigator.pop(context);
+                } else {
+                  // Navigate back to the Manage Tab (Profile Screen) in the shell
+                  AppNavigation.safeGo(context, AppRoutes.ownerProfile);
+                }
+              },
               behavior: HitTestBehavior.opaque,
               child: Container(
                 width: 34,
@@ -72,7 +84,7 @@ class OwnerManageScreen extends StatelessWidget {
                   const Icon(Icons.verified_user_outlined,
                       size: 14, color: AppColors.success),
                   const SizedBox(width: 6),
-                  Text('Established Host',
+                  Text(AppLocalizations.of(context).establishedHost,
                       style: AppTheme.dm(
                           size: 11,
                           weight: FontWeight.w700,
@@ -81,10 +93,14 @@ class OwnerManageScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            const StatRow(cards: [
-              StatCard(value: '3', label: 'Properties'),
-              StatCard(value: '7', label: 'Active Bookings'),
-              StatCard(value: '68.4k', label: 'EGP / month'),
+            StatRow(cards: [
+              StatCard(
+                value: '${Sample.ownerProperties.where((p) => p.status == PropertyStatus.active).length}',
+                label: AppLocalizations.of(context).statProperties,
+                onTap: () => AppNavigation.goToOwnerProperties(context, filter: 'Active'),
+              ),
+              StatCard(value: '7', label: AppLocalizations.of(context).statActiveBookings),
+              StatCard(value: '68.4k', label: AppLocalizations.of(context).statEgpMonth),
             ]),
             const SizedBox(height: 14),
             Row(children: [
@@ -137,7 +153,8 @@ class OwnerManageScreen extends StatelessWidget {
                                   size: 14,
                                   weight: FontWeight.w700,
                                   color: AppColors.navy)),
-                          Text('3 active · tap for insights',
+                          Text(
+                              '${Sample.ownerProperties.where((p) => p.status == PropertyStatus.active).length} active · tap for insights',
                               style: AppTheme.dm(
                                   size: 12, color: AppColors.muted)),
                         ])),
@@ -154,7 +171,7 @@ class OwnerManageScreen extends StatelessWidget {
                 const [Color(0xFF1B2744), Color(0xFF0F1626)]),
             const SizedBox(height: 20),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('Pending Requests',
+              Text(AppLocalizations.of(context).pendingRequests,
                   style: AppTheme.dm(
                       size: 18,
                       weight: FontWeight.w700,
@@ -162,7 +179,7 @@ class OwnerManageScreen extends StatelessWidget {
               GestureDetector(
                   onTap: () => AppNavigation.goToOwnerRequests(context),
                   behavior: HitTestBehavior.opaque,
-                  child: Text('View All · 2',
+                  child: Text(AppLocalizations.of(context).viewAll,
                       style: AppTheme.dm(
                           size: 13,
                           weight: FontWeight.w600,

@@ -3,6 +3,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 class ViolationReportScreen extends StatelessWidget {
   const ViolationReportScreen({super.key});
@@ -16,7 +17,7 @@ class ViolationReportScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
               children: [
-                const TopBar(title: 'Violation Report'),
+                TopBar(title: AppLocalizations.of(context).violationReport),
                 const SizedBox(height: 16),
                 WhiteCard(
                   padding: const EdgeInsets.all(16),
@@ -33,14 +34,14 @@ class ViolationReportScreen extends StatelessWidget {
                                     weight: FontWeight.w700,
                                     color: AppColors.navy)),
                           ),
-                          const StatusBadge('Open', kind: BadgeKind.red),
+                          StatusBadge(AppLocalizations.of(context).openBadge, kind: BadgeKind.red),
                         ],
                       ),
                       const SizedBox(height: 4),
                       Text('Azure Beach Villa · SHLY-8842',
                           style: AppTheme.dm(size: 13, color: AppColors.muted)),
                       const SizedBox(height: 20),
-                      Text('Description',
+                      Text(AppLocalizations.of(context).descriptionLabel,
                           style: AppTheme.dm(
                               size: 14, weight: FontWeight.w700, color: AppColors.navy)),
                       const SizedBox(height: 8),
@@ -56,19 +57,19 @@ class ViolationReportScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Financial Impact',
+                      Text(AppLocalizations.of(context).financialImpact,
                           style: AppTheme.dm(
                               size: 14, weight: FontWeight.w700, color: AppColors.navy)),
                       const SizedBox(height: 12),
-                      KeyValueRow('Deduction Amount', '− ${CurrencyFormatter.format(1500)}',
+                      KeyValueRow(AppLocalizations.of(context).deductionAmount, '− ${CurrencyFormatter.format(1500)}',
                           valueColor: const Color(0xFFB22222)),
-                      const KeyValueRow('Date Reported', 'Jun 18, 2026'),
-                      const KeyValueRow('Applied to Payout', 'Pending'),
+                      KeyValueRow(AppLocalizations.of(context).dateReported, 'Jun 18, 2026'),
+                      KeyValueRow(AppLocalizations.of(context).appliedToPayout, 'Pending'),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text('Evidence Provided by Team',
+                Text(AppLocalizations.of(context).evidenceProvided,
                     style: AppTheme.dm(
                         size: 15, weight: FontWeight.w700, color: AppColors.navy)),
                 const SizedBox(height: 12),
@@ -85,14 +86,14 @@ class ViolationReportScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Timeline',
+                      Text(AppLocalizations.of(context).timelineTitle,
                           style: AppTheme.dm(
                               size: 14, weight: FontWeight.w700, color: AppColors.navy)),
                       const SizedBox(height: 16),
-                      _timelineStep('Violation Reported', 'Jun 18, 10:24 AM', true),
-                      _timelineStep('Evidence Verified', 'Jun 18, 02:15 PM', true),
-                      _timelineStep('Deduction Calculated', 'Jun 18, 04:30 PM', true),
-                      _timelineStep('Owner Notified', 'Jun 18, 04:35 PM', true, last: true),
+                      _timelineStep(AppLocalizations.of(context).violationReported, 'Jun 18, 10:24 AM', true),
+                      _timelineStep(AppLocalizations.of(context).evidenceVerified, 'Jun 18, 02:15 PM', true),
+                      _timelineStep(AppLocalizations.of(context).deductionCalculated, 'Jun 18, 04:30 PM', true),
+                      _timelineStep(AppLocalizations.of(context).ownerNotified, 'Jun 18, 04:35 PM', true, last: true),
                     ],
                   ),
                 ),

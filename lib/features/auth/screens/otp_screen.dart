@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/ui.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class OtpScreen extends StatefulWidget {
     required this.hint,
     required this.cta,
     required this.onVerify,
-    this.bottomText = 'Wrong email? Change it',
+    this.bottomText,
     this.isPhone = false,
   });
 
@@ -28,7 +29,7 @@ class OtpScreen extends StatefulWidget {
   final String hint;
   final String cta;
   final VoidCallback onVerify;
-  final String bottomText;
+  final String? bottomText;
   final bool isPhone;
 
   @override
@@ -132,8 +133,8 @@ class _OtpScreenState extends State<OtpScreen> {
                             [
                               TextSpan(
                                   text: widget.isPhone
-                                      ? 'We sent a 6-digit code to\n'
-                                      : 'Enter the 6-digit code we emailed to\n'),
+                                      ? AppLocalizations.of(context).otpSentTo
+                                      : AppLocalizations.of(context).otpEnterCode),
                               TextSpan(
                                 text: widget.isPhone
                                     ? _formatPhone(widget.phone)
@@ -187,8 +188,8 @@ class _OtpScreenState extends State<OtpScreen> {
                       child: RichText(
                         text: TextSpan(
                           text: _secondsRemaining == 0
-                              ? 'Resend code now'
-                              : 'Resend code in ',
+                              ? AppLocalizations.of(context).resendNow
+                              : AppLocalizations.of(context).resendIn,
                           style: AppTheme.dm(size: 13, color: AppColors.muted),
                           children: [
                             if (_secondsRemaining > 0)
@@ -205,16 +206,17 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                     const Spacer(),
                     const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Text(
-                        widget.bottomText,
-                        style: AppTheme.dm(
-                            size: 13,
-                            weight: FontWeight.w600,
-                            color: AppColors.gold),
-                      ),
-                    ),
+                     GestureDetector(
+                       onTap: () => Navigator.pop(context),
+                       child: Text(
+                         widget.bottomText ??
+                             AppLocalizations.of(context).wrongEmail,
+                         style: AppTheme.dm(
+                             size: 13,
+                             weight: FontWeight.w600,
+                             color: AppColors.gold),
+                       ),
+                     ),
                     const SizedBox(height: 24),
                   ],
                 ),

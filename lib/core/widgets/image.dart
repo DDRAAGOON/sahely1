@@ -10,6 +10,56 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/buttons.dart';
 
+/// Performance-optimized drop-in replacement for [Image.network]:
+/// disk-caches downloads and decodes at display size instead of full res.
+class AppNetworkImage extends StatelessWidget {
+  const AppNetworkImage({
+    super.key,
+    required this.url,
+    this.width,
+    this.height,
+    this.fit = BoxFit.cover,
+    this.errorWidget,
+  });
+
+  final String url;
+  final double? width;
+  final double? height;
+  final BoxFit fit;
+  final ImageErrorWidgetBuilder? errorWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: url,
+      width: width,
+      height: height,
+      fit: fit,
+      fadeInDuration: const Duration(milliseconds: 150),
+      memCacheWidth: _bounded(width),
+      memCacheHeight: _bounded(height),
+      placeholder: (_, __) => Container(
+        width: width,
+        height: height,
+        color: AppColors.cardWarm.withValues(alpha: 0.5),
+      ),
+      errorWidget: (context, url, error) {
+        final custom = errorWidget;
+        if (custom != null) return custom(context, error, StackTrace.empty);
+        return Container(
+            width: width, height: height, color: AppColors.cardWarm);
+      },
+    );
+  }
+
+  static int? _bounded(double? logicalSide) {
+    if (logicalSide == null || !logicalSide.isFinite || logicalSide <= 0) {
+      return null;
+    }
+    return (logicalSide * 2).toInt();
+  }
+}
+
 /// Rounded photo with a soft bottom fade.
 class BlendedImage extends StatelessWidget {
   const BlendedImage({
@@ -218,8 +268,8 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
       final double dy = -(scale - 1) * size.height / 2;
 
       _transformationController.value = Matrix4.identity()
-        ..translate(dx, dy)
-        ..scale(scale);
+        ..translateByDouble(dx, dy, 0, 1)
+        ..scaleByDouble(scale, scale, scale, 1);
 
       setState(() => _isZoomed = true);
     }
