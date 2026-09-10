@@ -75,6 +75,67 @@ class WishlistRepositoryImpl implements WishlistRepository {
   }
 
   @override
+  Future<void> syncItemCollections(WishlistItem item, Role role, List<String> collectionIds) async {
+    try {
+      final oldItem = await dataSource.getItem(item.propertyId, role);
+      final oldCollectionIds = oldItem?.collectionIds ?? [];
+
+      final newItem = item.copyWith(collectionIds: collectionIds);
+      final dto = WishlistItemDto.fromEntity(newItem);
+      
+      if (collectionIds.isEmpty) {
+        await dataSource.deleteItem(item.propertyId, role);
+      } else {
+        await dataSource.saveItem(dto, role);
+      }
+
+      // Update counts for all collections
+      final collections = await dataSource.getCollections(role);
+      
+      // Collections added
+      final added = collectionIds.where((id) => !oldCollectionIds.contains(id));
+      // Collections removed
+      final removed = oldCollectionIds.where((id) => !collectionIds.contains(id));
+
+      for (var id in added) {
+        final idx = collections.indexWhere((c) => c.id == id);
+        if (idx != -1) {
+          final c = collections[idx];
+          await dataSource.saveCollection(
+            WishlistCollectionDto(
+              id: c.id,
+              name: c.name,
+              itemCount: c.itemCount + 1,
+              coverImage: dto.propertyImage,
+              isShared: c.isShared,
+            ),
+            role,
+          );
+        }
+      }
+
+      for (var id in removed) {
+        final idx = collections.indexWhere((c) => c.id == id);
+        if (idx != -1) {
+          final c = collections[idx];
+          await dataSource.saveCollection(
+            WishlistCollectionDto(
+              id: c.id,
+              name: c.name,
+              itemCount: (c.itemCount - 1).clamp(0, 999),
+              coverImage: c.coverImage,
+              isShared: c.isShared,
+            ),
+            role,
+          );
+        }
+      }
+    } catch (e) {
+      throw ExceptionMapper.map(e);
+    }
+  }
+
+  @override
   Future<void> saveCollection(WishlistCollection collection, Role role) async {
     try {
       await dataSource.saveCollection(

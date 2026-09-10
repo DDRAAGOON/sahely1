@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sahely/core/utils/responsive.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
@@ -126,39 +127,68 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
       return const BrowseEmptyState();
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
-      itemCount: results.length,
-      itemBuilder: (context, index) {
-        final p = results[index];
-        
-        String badge = 'Featured';
-        Color badgeColor = AppColors.gold;
-        
-        if (_selectedFilter == 'Trending Now') {
-          badge = 'Trending';
-          badgeColor = AppColors.error;
-        } else if (_selectedFilter == 'Best Offers') {
-          badge = '-15%';
-          badgeColor = AppColors.success;
-        } else if (_selectedFilter == 'Newly Added') {
-          badge = 'New';
-          badgeColor = AppColors.gold;
-        } else if (p.rating >= 4.8) {
-          badge = 'Top Rated';
-          badgeColor = AppColors.error;
-        }
+    String badgeFor(dynamic p) {
+      String badge = 'Featured';
+      Color badgeColor = AppColors.gold;
 
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: HeroPropertyCard(
-            property: p,
-            badge: badge,
-            badgeColor: badgeColor,
-          ),
+      if (_selectedFilter == 'Trending Now') {
+        badge = 'Trending';
+        badgeColor = AppColors.error;
+      } else if (_selectedFilter == 'Best Offers') {
+        badge = '-15%';
+        badgeColor = AppColors.success;
+      } else if (_selectedFilter == 'Newly Added') {
+        badge = 'New';
+        badgeColor = AppColors.gold;
+      } else if (p.rating >= 4.8) {
+        badge = 'Top Rated';
+        badgeColor = AppColors.error;
+      }
+      return '$badge\u0000$badgeColor';
+    }
+
+    // Responsive: single-column cards on phones; 2–3 column grid on tablets.
+    return LayoutBuilder(builder: (context, constraints) {
+      final cols = Responsive.gridColumns(constraints.maxWidth);
+      if (cols == 1) {
+        return ListView.builder(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
+          itemCount: results.length,
+          itemBuilder: (context, index) {
+            final p = results[index];
+            final parts = badgeFor(p).split('\u0000');
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: HeroPropertyCard(
+                property: p,
+                badge: parts[0],
+                badgeColor: Color(int.parse(parts[1])),
+              ),
+            );
+          },
         );
-      },
-    );
+      }
+
+      return GridView.builder(
+        padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: cols,
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 14,
+          childAspectRatio: 0.62,
+        ),
+        itemCount: results.length,
+        itemBuilder: (context, index) {
+          final p = results[index];
+          final parts = badgeFor(p).split('\u0000');
+          return HeroPropertyCard(
+            property: p,
+            badge: parts[0],
+            badgeColor: Color(int.parse(parts[1])),
+          );
+        },
+      );
+    });
   }
 
   Widget _buildDiscoverySections() {

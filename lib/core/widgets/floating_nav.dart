@@ -83,40 +83,47 @@ class FloatingNav extends StatelessWidget {
       left: 14,
       right: 14,
       bottom: 12,
-      child: Container(
-        height: 62,
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.62),
-          borderRadius: BorderRadius.circular(28),
-          border:
-              Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 30,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(28),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                for (var i = 0; i < displayItems.length; i++)
-                  _NavButton(
-                    item: displayItems[i],
-                    selected: i == active,
-                    onTap: () => (onTap != null)
-                        ? onTap!(i, displayItems[i])
-                        : _defaultOnTap(context, i, displayItems[i]),
-                  ),
-              ],
+      // On tablets / desktop keep the island phone-sized and centered
+      // instead of stretching edge-to-edge.
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 520),
+          child: Container(
+          height: 62,
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.62),
+            borderRadius: BorderRadius.circular(28),
+            border:
+                Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 30,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  for (var i = 0; i < displayItems.length; i++)
+                    _NavButton(
+                      item: displayItems[i],
+                      selected: i == active,
+                      onTap: () => (onTap != null)
+                          ? onTap!(i, displayItems[i])
+                          : _defaultOnTap(context, i, displayItems[i]),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
+      ),
       ),
     );
   }

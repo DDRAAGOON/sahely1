@@ -48,6 +48,7 @@ class AppLocalizations {
 
   // --- App ---
   String get appName => t('appName');
+  String get guestFallback => t('guestFallback');
   String get tagline => t('tagline');
 
   // --- Auth ---
@@ -58,6 +59,28 @@ class AppLocalizations {
   String get email => t('email');
   String get password => t('password');
   String get confirmPassword => t('confirmPassword');
+  String get requiredField => t('requiredField');
+  String get enterValidEmail => t('enterValidEmail');
+  String get enterValidPhone => t('enterValidPhone');
+  String get passwordMinChars => t('passwordMinChars');
+  String get passwordsDoNotMatch => t('passwordsDoNotMatch');
+  String get mustAgreeTerms => t('mustAgreeTerms');
+  String get didntGetIt => t('didntGetIt');
+  String get networkError => t('networkError');
+  String get emailRequired => t('emailRequired');
+  String get passwordRequired => t('passwordRequired');
+  String get invalidCredentials => t('invalidCredentials');
+  String get accountSuspended => t('accountSuspended');
+  String accountSuspendedWithDetails(String date, String reason) => 
+      tf('accountSuspended', {'date': date, 'reason': reason});
+  String get accountBanned => t('accountBanned');
+  String get rateLimit => t('rateLimit');
+  String get noInternet => t('noInternet');
+  String get serverError => t('serverError');
+  String get retry => t('retry');
+  String get otpRequired => t('otpRequired');
+  String get invalidOtp => t('invalidOtp');
+  String get otpExpired => t('otpExpired');
 
   // --- Navigation ---
   String get home => t('home');
@@ -77,7 +100,6 @@ class AppLocalizations {
   String get seeAll => t('seeAll');
   String get loading => t('loading');
   String get error => t('error');
-  String get retry => t('retry');
   String get cancel => t('cancel');
   String get delete => t('delete');
   String get edit => t('edit');
@@ -217,6 +239,8 @@ class AppLocalizations {
 
   // --- Booking flow ---
   String get selectDate => t('selectDate');
+  String get selectFutureDate => t('selectFutureDate');
+  String get selectedDatesLabel => t('selectedDatesLabel');
   String get planYourStay => t('planYourStay');
   String get checkInLabel => t('checkInLabel');
   String get checkOutLabel => t('checkOutLabel');
@@ -515,6 +539,30 @@ class AppLocalizations {
   String get keepMine => t('keepMine');
   String get chatWithReviewer => t('chatWithReviewer');
   String get makeChangesResubmit => t('makeChangesResubmit');
+
+  // --- Terms & Conditions ---
+  String get termsOwnerTitle => t('termsOwnerTitle');
+  String get termsRenterTitle => t('termsRenterTitle');
+  String get termsBrokerTitle => t('termsBrokerTitle');
+  String get termsDocRef => t('termsDocRef');
+  String get termsIntroOwner => t('termsIntroOwner');
+  String get termsIntroRenter => t('termsIntroRenter');
+  String get termsIntroBroker => t('termsIntroBroker');
+  String get termsAgreeFootnote => t('termsAgreeFootnote');
+  String get termsOwnerSection1Title => t('termsOwnerSection1Title');
+  String get termsOwnerSection2Title => t('termsOwnerSection2Title');
+  String get termsOwnerSection3Title => t('termsOwnerSection3Title');
+  String get termsOwnerSection4Title => t('termsOwnerSection4Title');
+  String get termsRenterSection1Title => t('termsRenterSection1Title');
+  String get termsRenterSection2Title => t('termsRenterSection2Title');
+  String get termsRenterSection3Title => t('termsRenterSection3Title');
+  String get termsRenterSection4Title => t('termsRenterSection4Title');
+  String get termsBrokerSection1Title => t('termsBrokerSection1Title');
+  String get termsBrokerSection2Title => t('termsBrokerSection2Title');
+  String get termsBrokerSection3Title => t('termsBrokerSection3Title');
+  String get termsBrokerSection4Title => t('termsBrokerSection4Title');
+  String get termsBrokerSection5Title => t('termsBrokerSection5Title');
+  String get termsMasterRulesTitle => t('termsMasterRulesTitle');
 
   /// Localized label for owner property filter tabs (canonical input).
   static String ownerTabLabel(AppLocalizations l, String tab) {

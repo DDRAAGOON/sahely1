@@ -14,6 +14,9 @@ class Booking extends Equatable {
   final DateTime checkOut;
   final int totalPaid;
   final List<Map<String, dynamic>> checklist;
+  /// Server-side property id (null for legacy/local-only bookings).
+  final String? propertyId;
+  final String? specialRequests;
 
   const Booking({
     required this.id,
@@ -27,6 +30,8 @@ class Booking extends Equatable {
     required this.checkOut,
     required this.totalPaid,
     this.checklist = const [],
+    this.propertyId,
+    this.specialRequests,
   });
 
   BookingStatus get status {

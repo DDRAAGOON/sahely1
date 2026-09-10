@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sahely/core/navigation/app_navigation.dart';
 
+import 'package:sahely/core/network/api_client.dart';
+import 'package:sahely/core/network/api_envelope.dart';
+import 'package:sahely/core/network/api_endpoints.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_add_credit_button.dart';
@@ -9,12 +11,97 @@ import 'package:sahely/features/renter/presentation/screens/wallet/widgets/walle
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/wallet_stats_tiles.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/pages/add_credit_sheet.dart';
 
-class WalletScreen extends StatelessWidget {
+/// LIVE wallet screen — balance, season totals and recent activity all come
+/// from GET /wallet, /wallet/transactions and /violations/mine.
+class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});
+
+  @override
+  State<WalletScreen> createState() => _WalletScreenState();
+}
+
+class _WalletScreenState extends State<WalletScreen> {
+  final ApiClient _api = ApiClient();
+
+  bool _loading = true;
+  int _balancePiastres = 0;
+  int _addedThisSeasonPiastres = 0;
+  int _openViolations = 0;
+  List<Map<String, dynamic>> _recent = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _loading = true);
+    int balance = 0;
+    int added = 0;
+    int violations = 0;
+    final recent = <Map<String, dynamic>>[];
+
+    try {
+      final wRes = await _api.get(ApiEndpoints.wallet);
+      final w = asMap(unwrapData(wRes.data));
+      balance = w['spendable_piastres'] as int? ??
+          w['balance_piastres'] as int? ??
+          (w['balance'] as num?)?.toInt() ??
+          0;
+    } catch (_) {}
+
+    try {
+      final tRes =
+          await _api.get(ApiEndpoints.walletTransactions, queryParameters: {
+        'page': 1,
+        'limit': 10,
+      });
+      final td = unwrapData(tRes.data);
+      final list = ((td is Map ? td['data'] : td) as List?) ?? const [];
+      for (final raw in list) {
+        final tx = Map<String, dynamic>.from(raw as Map);
+        final amount = (tx['amount_piastres'] ?? tx['amount'] ?? 0) as num;
+        if (amount > 0) added += amount.toInt();
+        recent.add({
+          'type': '${tx['type'] ?? 'transaction'}',
+          'title':
+              '${tx['description'] ?? tx['type'] ?? 'Transaction'}'
+                  .replaceAll('_', ' '),
+          'subtitle': '${tx['created_at'] ?? ''}'.substring(0,
+              '${tx['created_at'] ?? ''}'.length >= 10 ? 10 : '${tx['created_at'] ?? ''}'.length),
+          'amount': amount.toInt(),
+        });
+      }
+    } catch (_) {}
+
+    try {
+      final vRes = await _api.get('/violations/mine');
+      final vd = unwrapData(vRes.data);
+      final vlist = ((vd is Map ? vd['violations'] : vd) as List?) ?? const [];
+      violations = vlist
+          .where((e) {
+            final st =
+                '${(e as Map)['status'] ?? ''}'.toLowerCase();
+            return st == 'pending' || st == 'open';
+          })
+          .length;
+    } catch (_) {}
+
+    if (!mounted) return;
+    setState(() {
+      _balancePiastres = balance;
+      _addedThisSeasonPiastres = added;
+      _openViolations = violations;
+      _recent = recent;
+      _loading = false;
+    });
+  }
 
   void _showAddCreditSheet(BuildContext context) {
     showModalBottomSheet(
-      useRootNavigator: true, context: context,
+      useRootNavigator: true,
+      context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => const AddCreditSheet(),
@@ -60,80 +147,48 @@ class WalletScreen extends StatelessWidget {
           ),
         ),
         centerTitle: false,
+        actions: [
+          IconButton(
+            onPressed: _load,
+            icon: const Icon(Icons.refresh, color: AppColors.navy),
+          ),
+        ],
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Balance Card (EGP 250 = 25000 piastres)
-              const WalletBalanceCard(
-                balance: 25000,
-                subtitle: 'Use credit toward bookings & services',
-              ),
-
-              const SizedBox(height: 16),
-
-              // Add Credit Button
-              WalletAddCreditButton(
-                onAddCredit: () => _showAddCreditSheet(context),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Stats Tiles
-              const WalletStatsTiles(
-                addedThisSeason: 120000, // EGP 1,200
-                openViolations: 1,
-              ),
-
-              const SizedBox(height: 24),
-
-              // Recent Activity Section
-              WalletRecentActivity(
-                transactions: const [
-                  {
-                    'type': 'booking',
-                    'title': 'Booking · Azure Villa',
-                    'subtitle': 'Jun 14',
-                    'amount': -2109000, // EGP -21,090
-                  },
-                  {
-                    'type': 'credit_added',
-                    'title': 'Credit added',
-                    'subtitle': 'Jun 10 · Visa ••42',
-                    'amount': 50000, // EGP +500
-                  },
-                  {
-                    'type': 'violation',
-                    'title': 'Late checkout fine',
-                    'subtitle': 'Jun 9 · Violation',
-                    'amount': -30000, // EGP -300
-                  },
-                ],
-                onViewAll: () => AppNavigation.goToTransactionHistory(context),
-              ),
-
-              const SizedBox(height: 24),
-
-              // View Full History Link
-              Center(
-                child: GestureDetector(
-                  onTap: () => AppNavigation.goToTransactionHistory(context),
-                  child: Text(
-                    'View Full History →',
-                    style: AppTheme.dm(
-                      size: 14,
-                      weight: FontWeight.w600,
-                      color: AppColors.gold,
-                    ),
+        child: _loading
+            ? const Center(child: CircularProgressIndicator())
+            : RefreshIndicator(
+                onRefresh: _load,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      WalletBalanceCard(
+                        balance: _balancePiastres,
+                        subtitle: 'Use credit toward bookings & services',
+                      ),
+                      const SizedBox(height: 16),
+                      WalletAddCreditButton(
+                        onAddCredit: () {
+                          _showAddCreditSheet(context);
+                          Future.delayed(
+                              const Duration(milliseconds: 400), _load);
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      WalletStatsTiles(
+                        addedThisSeason: _addedThisSeasonPiastres,
+                        openViolations: _openViolations,
+                      ),
+                      const SizedBox(height: 24),
+                      WalletRecentActivity(transactions: _recent, onViewAll: () {}),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }

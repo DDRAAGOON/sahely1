@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:provider/provider.dart';
-import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
@@ -227,7 +225,7 @@ class BrokerProfilePage extends StatelessWidget {
                 SettingsRow(
                     icon: Icons.language,
                     label: AppLocalizations.of(context).languageLabel,
-                    value: AppLocalizations.nativeLanguageName(context.watch<LocaleProvider>().locale.languageCode),
+                    value: AppLocalizations.nativeLanguageName(Localizations.localeOf(context).languageCode),
                     onTap: () => AppNavigation.goToLanguage(context)),
                 SettingsRow(
                     icon: Icons.attach_money,

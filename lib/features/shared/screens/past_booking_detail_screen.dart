@@ -35,7 +35,7 @@ class PastBookingDetailScreen extends StatelessWidget {
     final name = property?.name ?? bookingData?['propertyName'] ?? 'Property';
     final loc = property?.area ?? bookingData?['location'] ?? 'Location';
     final img = property?.image ?? bookingData?['imageUrl'] ?? '';
-    final guestName = bookingData?['guestName'] ?? 'Mariam Hassan';
+    final guestName = bookingData?['guestName'] ?? 'Guest';
     final amount = bookingData?['total'] ?? '5,400';
 
     return PhoneScaffold(

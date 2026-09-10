@@ -6,6 +6,7 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/bouncy_button.dart';
+import 'package:sahely/features/owner/widgets/approved_request_sheet.dart';
 
 class OwnerRequestsScreen extends StatefulWidget {
   const OwnerRequestsScreen({super.key});
@@ -224,8 +225,12 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
         guests: guests,
         price: price,
         aiInsight: aiInsight,
-        onApprove: () => ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Request approved'))),
+        onApprove: () => showApprovedRequestSheet(
+          context,
+          guestName: name,
+          propertyName: unit,
+          dates: dates,
+        ),
         onDecline: () => _showDeclineBottomSheet(name),
         onBlock: () => _showBlockConfirmation(name),
       ),

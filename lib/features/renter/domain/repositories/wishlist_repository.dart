@@ -5,6 +5,7 @@ abstract class WishlistRepository {
   Future<bool> isWishlisted(String propertyId, Role role);
   Future<void> saveWishlistItem(WishlistItem item, Role role, String collectionId);
   Future<void> deleteWishlistItem(String propertyId, Role role);
+  Future<void> syncItemCollections(WishlistItem item, Role role, List<String> collectionIds);
   Future<void> saveCollection(WishlistCollection collection, Role role);
   Future<List<WishlistCollection>> getCollections(Role role);
   Future<WishlistItem?> getWishlistItem(String propertyId, Role role);

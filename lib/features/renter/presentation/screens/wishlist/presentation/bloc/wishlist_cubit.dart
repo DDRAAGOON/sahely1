@@ -120,6 +120,36 @@ class WishlistCubit extends Cubit<WishlistState> {
     }
   }
 
+  Future<void> updatePropertyCollections({
+    required String propertyId,
+    required String propertyName,
+    required String propertyImage,
+    required List<String> collectionIds,
+    Role? role,
+  }) async {
+    final targetRole = role ?? _activeRole;
+    try {
+      final item = WishlistItem(
+        propertyId: propertyId,
+        propertyName: propertyName,
+        propertyImage: propertyImage,
+        collectionIds: collectionIds,
+        addedAt: DateTime.now(),
+      );
+
+      // We need to handle counts for ALL collections involved.
+      await _addToWishlistUseCase.repository.syncItemCollections(
+        item,
+        targetRole,
+        collectionIds,
+      );
+      
+      await loadCollections(targetRole);
+    } catch (e) {
+      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to update collections'));
+    }
+  }
+
   Future<void> saveToSpecificCollection({
     required String propertyId,
     required String propertyName,

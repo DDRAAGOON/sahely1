@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
@@ -19,6 +20,8 @@ class OtpScreen extends StatefulWidget {
     required this.onVerify,
     this.bottomText,
     this.isPhone = false,
+    this.onCodeChanged,
+    this.onResend,
   });
 
   final String title;
@@ -31,12 +34,14 @@ class OtpScreen extends StatefulWidget {
   final VoidCallback onVerify;
   final String? bottomText;
   final bool isPhone;
+  final ValueChanged<String>? onCodeChanged;
+  final Future<void> Function()? onResend;
 
   @override
-  State<OtpScreen> createState() => _OtpScreenState();
+  State<OtpScreen> createState() => OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class OtpScreenState extends State<OtpScreen> {
   final List<TextEditingController> _controllers =
       List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
@@ -60,6 +65,25 @@ class _OtpScreenState extends State<OtpScreen> {
       f.dispose();
     }
     super.dispose();
+  }
+
+  /// Joined OTP digits — read by parents through a [GlobalKey<OtpScreenState>].
+  String get code => _controllers.map((c) => c.text).join();
+
+  void _handlePaste(String value) {
+    final digits = value.replaceAll(RegExp(r'\D'), '');
+    for (var i = 0; i < 6; i++) {
+      if (i < digits.length) {
+        _controllers[i].text = digits[i];
+      } else {
+        _controllers[i].clear();
+      }
+    }
+    // Set focus to the appropriate box
+    final focusIndex = digits.length >= 6 ? 5 : digits.length;
+    _focusNodes[focusIndex].requestFocus();
+    
+    widget.onCodeChanged?.call(code);
   }
 
   void _startCountdown() {
@@ -155,10 +179,20 @@ class _OtpScreenState extends State<OtpScreen> {
                               controller: _controllers[i],
                               focusNode: _focusNodes[i],
                               onChanged: (value) {
+                                if (value.length > 1) {
+                                  _handlePaste(value);
+                                  return;
+                                }
                                 if (value.isNotEmpty && i < 5) {
                                   _focusNodes[i + 1].requestFocus();
-                                } else if (value.isEmpty && i > 0) {
+                                }
+                                widget.onCodeChanged?.call(code);
+                              },
+                              onDelete: () {
+                                if (i > 0) {
                                   _focusNodes[i - 1].requestFocus();
+                                  _controllers[i - 1].clear();
+                                  widget.onCodeChanged?.call(code);
                                 }
                               },
                             ),
@@ -184,7 +218,12 @@ class _OtpScreenState extends State<OtpScreen> {
                     NavyButton(label: widget.cta, onTap: widget.onVerify),
                     const SizedBox(height: 18),
                     GestureDetector(
-                      onTap: _secondsRemaining == 0 ? _startCountdown : null,
+                      onTap: _secondsRemaining == 0
+                          ? () async {
+                              _startCountdown();
+                              await widget.onResend?.call();
+                            }
+                          : null,
                       child: RichText(
                         text: TextSpan(
                           text: _secondsRemaining == 0
@@ -229,34 +268,97 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 }
 
-class _OtpInputBox extends StatelessWidget {
-  const _OtpInputBox({required this.controller, required this.focusNode, required this.onChanged});
+class _OtpInputBox extends StatefulWidget {
+  const _OtpInputBox({
+    required this.controller,
+    required this.focusNode,
+    required this.onChanged,
+    required this.onDelete,
+  });
   final TextEditingController controller;
   final FocusNode focusNode;
   final ValueChanged<String> onChanged;
+  final VoidCallback onDelete;
+
+  @override
+  State<_OtpInputBox> createState() => _OtpInputBoxState();
+}
+
+class _OtpInputBoxState extends State<_OtpInputBox> {
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.focusNode.addListener(_onFocusChange);
+    widget.focusNode.onKeyEvent = (node, event) {
+      if (event is KeyDownEvent &&
+          event.logicalKey == LogicalKeyboardKey.backspace &&
+          widget.controller.text.isEmpty) {
+        widget.onDelete();
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    };
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _isFocused = widget.focusNode.hasFocus;
+    });
+    if (widget.focusNode.hasFocus) {
+      widget.controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: widget.controller.text.length),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.focusNode.removeListener(_onFocusChange);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       height: 54,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(
+          color: _isFocused ? AppColors.gold : AppColors.border,
+          width: _isFocused ? 2 : 1,
+        ),
+        boxShadow: _isFocused
+            ? [
+                BoxShadow(
+                  color: AppColors.gold.withValues(alpha: 0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                )
+              ]
+            : null,
       ),
       child: TextField(
-        controller: controller,
-        focusNode: focusNode,
-        onChanged: onChanged,
+        controller: widget.controller,
+        focusNode: widget.focusNode,
+        onChanged: widget.onChanged,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
-        maxLength: 1,
-        style: AppTheme.dm(size: 20, weight: FontWeight.w700, color: AppColors.navy),
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(6),
+        ],
+        style: AppTheme.dm(
+            size: 20, weight: FontWeight.w700, color: AppColors.navy),
         decoration: const InputDecoration(
           counterText: '',
           border: InputBorder.none,
+          contentPadding: EdgeInsets.zero,
         ),
       ),
     );
   }
 }
+

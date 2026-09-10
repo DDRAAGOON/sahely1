@@ -17,26 +17,29 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  late String _selectedLanguageCode;
-
-  static const List<Map<String, String>> _languages = [
-    {'name': 'English', 'code': 'en', 'flag': '🇺🇸'},
-    {'name': 'العربية', 'code': 'ar', 'flag': '🇪🇬'},
-    {'name': 'Français', 'code': 'fr', 'flag': '🇫🇷'},
-    {'name': 'Deutsch', 'code': 'de', 'flag': '🇩🇪'},
-    {'name': 'Italiano', 'code': 'it', 'flag': '🇮🇹'},
-    {'name': 'Español', 'code': 'es', 'flag': '🇪🇸'},
-    {'name': 'Русский', 'code': 'ru', 'flag': '🇷🇺'},
-  ];
+  String? _selectedLanguageCode;
 
   @override
   void initState() {
     super.initState();
-    _selectedLanguageCode = context.read<LocaleProvider>().locale.languageCode;
+    final locale = context.read<LocaleProvider>().locale;
+    _selectedLanguageCode = locale?.languageCode ?? 'system';
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final List<Map<String, String>> languages = [
+      {'name': l.t('followSystem'), 'code': 'system', 'flag': '⚙️'},
+      {'name': 'English', 'code': 'en', 'flag': '🇺🇸'},
+      {'name': 'العربية', 'code': 'ar', 'flag': '🇪🇬'},
+      {'name': 'Français', 'code': 'fr', 'flag': '🇫🇷'},
+      {'name': 'Deutsch', 'code': 'de', 'flag': '🇩🇪'},
+      {'name': 'Italiano', 'code': 'it', 'flag': '🇮🇹'},
+      {'name': 'Español', 'code': 'es', 'flag': '🇪🇸'},
+      {'name': 'Русский', 'code': 'ru', 'flag': '🇷🇺'},
+    ];
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Container(
@@ -68,7 +71,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     const SheetHandle(),
                     const SizedBox(height: 8),
                     Text(
-                      AppLocalizations.of(context).language,
+                      l.language,
                       style: AppTheme.dm(
                         size: 16,
                         weight: FontWeight.w700,
@@ -76,10 +79,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    for (var i = 0; i < _languages.length; i++)
+                    for (var i = 0; i < languages.length; i++)
                       GestureDetector(
                         onTap: () => setState(() {
-                          _selectedLanguageCode = _languages[i]['code']!;
+                          _selectedLanguageCode = languages[i]['code']!;
                         }),
                         behavior: HitTestBehavior.opaque,
                         child: Container(
@@ -87,7 +90,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
-                                color: i == _languages.length - 1
+                                color: i == languages.length - 1
                                     ? Colors.transparent
                                     : const Color(0xFFF4EFE7),
                               ),
@@ -95,26 +98,26 @@ class _LanguageScreenState extends State<LanguageScreen> {
                           ),
                           child: Row(
                             children: [
-                              Text(_languages[i]['flag']!,
+                              Text(languages[i]['flag']!,
                                   style: const TextStyle(fontSize: 20)),
                               const SizedBox(width: 12),
                               Expanded(
-                                child: Text(_languages[i]['name']!,
+                                child: Text(languages[i]['name']!,
                                     style: AppTheme.dm(
                                       size: 14,
                                       weight: _selectedLanguageCode ==
-                                              _languages[i]['code']
+                                              languages[i]['code']
                                           ? FontWeight.w700
                                           : FontWeight.w400,
                                     )),
                               ),
                               Icon(
-                                _selectedLanguageCode == _languages[i]['code']
+                                _selectedLanguageCode == languages[i]['code']
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,
                                 size: 20,
                                 color: _selectedLanguageCode ==
-                                        _languages[i]['code']
+                                        languages[i]['code']
                                     ? AppColors.gold
                                     : AppColors.border,
                               ),
@@ -124,11 +127,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       ),
                     const SizedBox(height: 14),
                     NavyButton(
-                      label: AppLocalizations.of(context).save,
+                      label: l.save,
                       onTap: () {
                         context
                             .read<LocaleProvider>()
-                            .setLocale(_selectedLanguageCode);
+                            .setLocale(_selectedLanguageCode == 'system' ? null : _selectedLanguageCode);
                         Navigator.of(context).pop();
                       },
                     ),

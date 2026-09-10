@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
@@ -141,7 +143,9 @@ class _NotificationSettingsScreenState
                       const Divider(height: 1, indent: 16, endIndent: 16),
                       _toggleRow(
                         title: AppLocalizations.of(context).emailChannel,
-                        subtitle: 'mariam@example.com',
+                        subtitle: context.watch<ProfileProvider>().email.isNotEmpty
+                            ? context.watch<ProfileProvider>().email
+                            : '—',
                         value: _emailNotifications,
                         onChanged: (v) =>
                             setState(() => _emailNotifications = v),

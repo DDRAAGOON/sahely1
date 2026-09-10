@@ -20,6 +20,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
   Timer? _timer;
   int _secondsRemaining = 120; // 2 minutes
+  bool _hasAttemptedSubmit = false;
+  String? _emailError;
+  bool _submitting = false;
+  
+  static final RegExp _emailRegex =
+      RegExp(r'^[\w\.\-+]+@([\w\-]+\.)+[a-zA-Z]{2,}$');
 
   @override
   void initState() {
@@ -50,6 +56,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     _timer?.cancel();
     _emailController.dispose();
     super.dispose();
+  }
+
+  String? _validateEmail(String value) {
+    final l = AppLocalizations.of(context);
+    if (value.isEmpty) {
+      return l.emailRequired;
+    }
+    if (!_emailRegex.hasMatch(value)) {
+      return l.enterValidEmail;
+    }
+    return null;
+  }
+
+  void _clearEmailError() {
+    if (_emailError != null) {
+      setState(() => _emailError = null);
+    }
   }
 
   @override
@@ -89,17 +112,53 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     const SizedBox(height: 24),
                     FieldGroup(
                         label: AppLocalizations.of(context).emailAddress,
-                        child: AppTextField(
-                          controller: _emailController,
-                          hintText: 'mariam.hassan@gmail.com',
-                          height: 50,
-                          radius: 999,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            AppTextField(
+                              controller: _emailController,
+                              hintText: 'mariam.hassan@gmail.com',
+                              height: 50,
+                              radius: 999,
+                              borderColor: _emailError != null ? AppColors.error : null,
+                              onChanged: _hasAttemptedSubmit ? (value) {
+                                _clearEmailError();
+                              } : null,
+                            ),
+                            if (_emailError != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 6, left: 4),
+                                child: Text(_emailError!,
+                                    style: AppTheme.dm(size: 12, color: AppColors.error)),
+                              ),
+                          ],
                         )),
                     const SizedBox(height: 24),
                     NavyButton(
-                        label: AppLocalizations.of(context).sendOtp,
+                        label: _submitting ? AppLocalizations.of(context).loading : AppLocalizations.of(context).sendOtp,
                         radius: 999,
-                        onTap: () => AppNavigation.goToResetOtp(context)),
+                        onTap: _submitting ? null : () async {
+                          setState(() => _hasAttemptedSubmit = true);
+                          
+                          final email = _emailController.text.trim();
+                          final emailError = _validateEmail(email);
+                          
+                          if (emailError != null) {
+                            setState(() => _emailError = emailError);
+                            return;
+                          }
+                          
+                          setState(() => _submitting = true);
+                          
+                          // Simulate API call
+                          await Future.delayed(const Duration(seconds: 1));
+                          
+                          if (!mounted) return;
+                          setState(() => _submitting = false);
+                          if (context.mounted) {
+                            AppNavigation.goToResetOtp(context);
+                          }
+                        }),
                     const SizedBox(height: 16),
                     Center(
                       child: GestureDetector(
@@ -108,8 +167,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         child: RichText(
                           text: TextSpan(
                             text: _secondsRemaining == 0
-                                ? "Resend code now"
-                                : "Didn't get it? Resend in ",
+                                ? AppLocalizations.of(context).resendNow
+                                : "${AppLocalizations.of(context).didntGetIt} ${AppLocalizations.of(context).resendIn}",
                             style:
                                 AppTheme.dm(size: 13, color: AppColors.muted),
                             children: [
@@ -162,12 +221,49 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   final _confirmController = TextEditingController();
   bool _obscure1 = true;
   bool _obscure2 = true;
+  bool _hasAttemptedSubmit = false;
+  String? _passwordError;
+  String? _confirmError;
+  bool _submitting = false;
 
   @override
   void dispose() {
     _passController.dispose();
     _confirmController.dispose();
     super.dispose();
+  }
+
+  String? _validatePassword(String value) {
+    final l = AppLocalizations.of(context);
+    if (value.isEmpty) {
+      return l.passwordRequired;
+    }
+    if (value.length < 8 || 
+        !value.contains(RegExp(r'[a-zA-Z]')) || 
+        !value.contains(RegExp(r'[0-9]'))) {
+      return l.passwordMinChars;
+    }
+    return null;
+  }
+
+  String? _validateConfirmPassword(String value) {
+    final l = AppLocalizations.of(context);
+    if (value.isEmpty || value != _passController.text) {
+      return l.passwordsDoNotMatch;
+    }
+    return null;
+  }
+
+  void _clearPasswordError() {
+    if (_passwordError != null) {
+      setState(() => _passwordError = null);
+    }
+  }
+
+  void _clearConfirmError() {
+    if (_confirmError != null) {
+      setState(() => _confirmError = null);
+    }
   }
 
   @override
@@ -204,45 +300,76 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
             const SizedBox(height: 14),
             FieldGroup(
               label: AppLocalizations.of(context).newPassword,
-              child: AppTextField(
-                controller: _passController,
-                hintText: '••••••••',
-                height: 50,
-                radius: 999,
-                fontSize: 18,
-                letterSpacing: 3,
-                obscureText: _obscure1,
-                trailing: GestureDetector(
-                  onTap: () => setState(() => _obscure1 = !_obscure1),
-                  child: Icon(
-                      _obscure1
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      size: 20,
-                      color: AppColors.muted),
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppTextField(
+                    controller: _passController,
+                    hintText: '••••••••',
+                    height: 50,
+                    radius: 999,
+                    fontSize: 18,
+                    letterSpacing: 3,
+                    obscureText: _obscure1,
+                    borderColor: _passwordError != null ? AppColors.error : null,
+                    trailing: GestureDetector(
+                      onTap: () => setState(() => _obscure1 = !_obscure1),
+                      child: Icon(
+                          _obscure1
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          size: 20,
+                          color: AppColors.muted),
+                    ),
+                    onChanged: _hasAttemptedSubmit ? (value) {
+                      _clearPasswordError();
+                      _clearConfirmError();
+                    } : null,
+                  ),
+                  if (_passwordError != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6, left: 4),
+                      child: Text(_passwordError!,
+                          style: AppTheme.dm(size: 12, color: AppColors.error)),
+                    ),
+                ],
               ),
             ),
             const SizedBox(height: 14),
             FieldGroup(
               label: AppLocalizations.of(context).confirmPassword,
-              child: AppTextField(
-                controller: _confirmController,
-                hintText: '••••••••',
-                height: 50,
-                radius: 999,
-                fontSize: 18,
-                letterSpacing: 3,
-                obscureText: _obscure2,
-                trailing: GestureDetector(
-                  onTap: () => setState(() => _obscure2 = !_obscure2),
-                  child: Icon(
-                      _obscure2
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      size: 20,
-                      color: AppColors.muted),
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppTextField(
+                    controller: _confirmController,
+                    hintText: '••••••••',
+                    height: 50,
+                    radius: 999,
+                    fontSize: 18,
+                    letterSpacing: 3,
+                    obscureText: _obscure2,
+                    borderColor: _confirmError != null ? AppColors.error : null,
+                    trailing: GestureDetector(
+                      onTap: () => setState(() => _obscure2 = !_obscure2),
+                      child: Icon(
+                          _obscure2
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          size: 20,
+                          color: AppColors.muted),
+                    ),
+                    onChanged: _hasAttemptedSubmit ? (value) {
+                      _clearConfirmError();
+                    } : null,
+                  ),
+                  if (_confirmError != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6, left: 4),
+                      child: Text(_confirmError!,
+                          style: AppTheme.dm(size: 12, color: AppColors.error)),
+                    ),
+                ],
               ),
             ),
             const SizedBox(height: 12),
@@ -265,9 +392,36 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     color: AppColors.success)),
             const SizedBox(height: 30),
             NavyButton(
-                label: AppLocalizations.of(context).updatePassword,
+                label: _submitting ? AppLocalizations.of(context).loading : AppLocalizations.of(context).updatePassword,
                 radius: 999,
-                onTap: () => AppNavigation.goToPasswordUpdated(context)),
+                onTap: _submitting ? null : () async {
+                  setState(() => _hasAttemptedSubmit = true);
+                  
+                  final password = _passController.text;
+                  final confirm = _confirmController.text;
+                  
+                  final passwordError = _validatePassword(password);
+                  final confirmError = _validateConfirmPassword(confirm);
+                  
+                  if (passwordError != null || confirmError != null) {
+                    setState(() {
+                      _passwordError = passwordError;
+                      _confirmError = confirmError;
+                    });
+                    return;
+                  }
+                  
+                  setState(() => _submitting = true);
+                  
+                  // Simulate API call
+                  await Future.delayed(const Duration(seconds: 1));
+                  
+                  if (!mounted) return;
+                  setState(() => _submitting = false);
+                  if (context.mounted) {
+                    AppNavigation.goToPasswordUpdated(context);
+                  }
+                }),
           ],
         ),
       ),

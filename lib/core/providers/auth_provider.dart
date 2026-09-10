@@ -11,13 +11,13 @@ class AuthProvider extends ChangeNotifier {
 
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
-  bool _isAuthenticated = true;
+  bool _isAuthenticated = false;
 
   bool get isAuthenticated => _isAuthenticated;
 
   /// True once the user has completed all 4 verification steps
   /// (email, phone, ID, payment card). Persisted in secure storage.
-  bool _isVerified = true;
+  bool _isVerified = false;
 
   bool get isVerified => _isVerified;
 
@@ -27,10 +27,21 @@ class AuthProvider extends ChangeNotifier {
 
   /// Reads token+role from secure storage and updates local state.
   Future<void> checkAuthStatus() async {
-    // MOCKED for direct access
-    _isAuthenticated = true;
-    _isVerified = true;
-    _token = "mock_token";
+    try {
+      _token = await _secureStorage.read(key: _tokenKey);
+      final verifiedStr = await _secureStorage.read(key: _verifiedKey);
+      
+      if (_token != null && _token!.isNotEmpty) {
+        _isAuthenticated = true;
+        _isVerified = verifiedStr == 'true';
+      } else {
+        _isAuthenticated = false;
+        _isVerified = false;
+      }
+    } catch (_) {
+      _isAuthenticated = false;
+      _isVerified = false;
+    }
 
     // Restore persisted role
     await RoleState().init();

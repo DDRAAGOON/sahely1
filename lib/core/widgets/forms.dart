@@ -25,6 +25,7 @@ class AppTextField extends StatefulWidget {
     this.textAlign = TextAlign.start,
     this.inputFormatters,
     this.textColor,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
@@ -44,6 +45,7 @@ class AppTextField extends StatefulWidget {
   final TextAlign textAlign;
   final List<TextInputFormatter>? inputFormatters;
   final Color? textColor;
+  final ValueChanged<String>? onChanged;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -91,13 +93,15 @@ class _AppTextFieldState extends State<AppTextField> {
       decoration: BoxDecoration(
         color: widget.backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.circular(widget.radius),
-        border : null,
+        border: widget.borderColor != null
+            ? Border.all(color: widget.borderColor!, width: widget.borderWidth)
+            : null,
       ),
       alignment: isMultiline ? Alignment.topLeft : Alignment.center,
       child: TextFormField(
         controller: widget.controller,
         focusNode: _focusNode,
-        onChanged: (_) => setState(() {}),
+        onChanged: widget.onChanged ?? (widget.controller != null ? (_) => setState(() {}) : null),
         // Trigger rebuild to update border if text is empty/full
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,

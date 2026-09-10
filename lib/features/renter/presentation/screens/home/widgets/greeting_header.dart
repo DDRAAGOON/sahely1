@@ -1,4 +1,6 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sahely/core/providers/profile_provider.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -10,6 +12,9 @@ class GreetingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final profileName = context.watch<ProfileProvider>().name;
+    final displayName =
+        profileName.isNotEmpty ? profileName : AppLocalizations.of(context).guestFallback;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -27,7 +32,7 @@ class GreetingHeader extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'Mariam Hassan',
+                displayName,
                 style: AppTheme.dm(
                     size: 24, weight: FontWeight.w700, color: AppColors.navy),
               ),

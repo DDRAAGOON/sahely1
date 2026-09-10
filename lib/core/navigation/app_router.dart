@@ -140,36 +140,13 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
               SignInScreen(from: state.uri.queryParameters['from'])),
       GoRoute(
         path: AppRoutes.verifyEmail,
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>?;
-          final l = AppLocalizations.of(context);
-          return OtpScreen(
-            title: l.verifyEmailTitle,
-            email: extra?['email'],
-            icon: Icons.mail_outline,
-            hint: l.verifyEmailHint,
-            cta: l.verifyEmailCta,
-            onVerify: () => context.push(AppRoutes.verifyPhone, extra: extra),
-          );
-        },
+        builder: (context, state) =>
+            RegisterEmailOtpScreen(extra: state.extra as Map<String, dynamic>?),
       ),
       GoRoute(
         path: AppRoutes.verifyPhone,
-        builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>?;
-          final l = AppLocalizations.of(context);
-          return OtpScreen(
-            title: l.verifyNumberTitle,
-            phone: extra?['phone'],
-            icon: Icons.phone_iphone,
-            hint: l.verifyNumberHint,
-            cta: l.verifyNumberCta,
-            bottomText: l.verifyNumberBottom,
-            isPhone: true,
-            onVerify: () =>
-                context.push(AppRoutes.idVerification, extra: extra),
-          );
-        },
+        builder: (context, state) =>
+            RegisterPhoneOtpScreen(extra: state.extra as Map<String, dynamic>?),
       ),
       GoRoute(
           path: AppRoutes.forgotPassword,

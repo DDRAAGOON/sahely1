@@ -11,6 +11,12 @@ class AppConfig {
   static const String _env =
       String.fromEnvironment('SAHELY_ENV', defaultValue: 'dev');
 
+  /// When true, repositories call the real NestJS backend; when false they
+  /// fall back to the in-app mock data sources. Flip with:
+  /// --dart-define=SAHELY_REMOTE=false
+  static const bool useRemoteApi =
+      bool.fromEnvironment('SAHELY_REMOTE', defaultValue: true);
+
   static AppEnvironment get environment {
     switch (_env) {
       case 'prod':

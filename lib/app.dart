@@ -52,6 +52,19 @@ class _SahelyAppState extends State<SahelyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
+      localeListResolutionCallback: (locales, supportedLocales) {
+        if (locales == null || locales.isEmpty) {
+          return const Locale('en'); // Fallback to English
+        }
+        for (final locale in locales) {
+          for (final supportedLocale in supportedLocales) {
+            if (locale.languageCode == supportedLocale.languageCode) {
+              return locale;
+            }
+          }
+        }
+        return const Locale('en'); // Fallback to English
+      },
     );
   }
 }

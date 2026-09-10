@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/currency_provider.dart';
-import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/l10n/app_localizations.dart';
@@ -86,7 +85,7 @@ class ProfileListRows extends StatelessWidget {
             label: AppLocalizations.of(context).languageLabel,
             trailing: Text(
               AppLocalizations.nativeLanguageName(
-                  context.watch<LocaleProvider>().locale.languageCode),
+                  Localizations.localeOf(context).languageCode),
               style: AppTheme.dm(
                 size: 13,
                 color: AppColors.secondary,

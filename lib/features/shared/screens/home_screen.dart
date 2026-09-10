@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
@@ -48,6 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // Live identity for the greeting header.
+    final profile = context.read<ProfileProvider>();
+    Future.microtask(() => profile.fetchProfileData());
     final cubit = context.read<RenterHomeCubit>();
     final cubitState = cubit.state;
     if (cubitState is RenterHomeLoaded) {

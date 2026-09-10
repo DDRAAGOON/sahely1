@@ -38,30 +38,18 @@ class SaveHeart extends StatelessWidget {
                     role: role,
                   );
             } else {
-              // Logic: If no custom collections, save to "All Saved" directly.
-              // Otherwise, show the collection picker sheet.
-              final hasCustomCollections = state.collections.any((c) =>
-                  c.id != WishlistConstants.allSavedCollectionId);
+              // ALWAYS save to "All Saved" first (Instagram logic)
+              context.read<WishlistCubit>().toggleWishlist(
+                    propertyId: property.name,
+                    propertyName: property.name,
+                    propertyImage: property.image,
+                    role: role,
+                  );
 
-              if (!hasCustomCollections) {
-                // No custom collections → save to default directly
-                context.read<WishlistCubit>().toggleWishlist(
-                      propertyId: property.name,
-                      propertyName: property.name,
-                      propertyImage: property.image,
-                      role: role,
-                    );
-                
-                // Show a quick snackbar to confirm
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Saved to All Saved'),
-                    duration: Duration(seconds: 2),
-                    backgroundColor: AppColors.navy,
-                  ),
-                );
-              } else {
-                // Has custom collections → ask where to save
+              final hasCustomCollections = state.collections.length > 1;
+
+              if (hasCustomCollections) {
+                // Has custom collections → open sheet to manage
                 showModalBottomSheet(
                   context: context,
                   useRootNavigator: true,
@@ -75,6 +63,15 @@ class SaveHeart extends StatelessWidget {
                       propertyImage: property.image,
                       role: role,
                     ),
+                  ),
+                );
+              } else {
+                // No custom collections → just show a quick snackbar
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Saved to All Saved'),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: AppColors.navy,
                   ),
                 );
               }

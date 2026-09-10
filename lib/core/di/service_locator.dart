@@ -73,6 +73,7 @@ import 'package:sahely/features/owner/presentation/bloc/owner_home_cubit.dart';
 import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
 import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
 import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
+import 'package:sahely/features/renter/data/datasources/renter_api_data_source.dart';
 import 'package:sahely/features/shared/properties/domain/use_cases/paginate_properties_use_case.dart';
 import 'package:sahely/features/renter/presentation/screens/search/bloc/search_cubit.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
@@ -105,6 +106,7 @@ import 'package:sahely/features/renter/presentation/screens/wishlist/presentatio
 import 'package:sahely/features/shared/profile/domain/repositories/profile_repository.dart';
 import 'package:sahely/features/shared/profile/data/repositories/profile_repository_impl.dart';
 import 'package:sahely/features/shared/profile/data/datasources/profile_remote_datasource.dart';
+import 'package:sahely/features/shared/profile/data/datasources/profile_api_data_source.dart';
 import 'package:sahely/features/shared/profile/domain/usecases/get_profile_usecase.dart';
 import 'package:sahely/features/shared/profile/domain/usecases/update_profile_usecase.dart';
 import 'package:sahely/features/shared/profile/domain/usecases/upload_profile_image_usecase.dart';
@@ -287,7 +289,9 @@ Future<void> init() async {
   sl.registerLazySingleton<MockWishlistDataSource>(() => MockWishlistDataSource());
   sl.registerLazySingleton<MockBookingsDataSource>(() => MockBookingsDataSource());
   sl.registerLazySingleton<MockReviewDataSource>(() => MockReviewDataSource());
-  sl.registerLazySingleton<ProfileRemoteDataSource>(() => MockProfileRemoteDataSource());
+  sl.registerLazySingleton<ProfileRemoteDataSource>(() => AppConfig.useRemoteApi
+      ? ApiProfileRemoteDataSource(ApiClient()) as ProfileRemoteDataSource
+      : MockProfileRemoteDataSource());
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -300,7 +304,11 @@ Future<void> init() async {
     () => OwnerRepositoryImpl(remoteDataSource: sl()),
   );
   sl.registerLazySingleton<RenterRepository>(
-    () => RenterRepositoryImpl(remoteDataSource: sl()),
+    () => RenterRepositoryImpl(
+        remoteDataSource: sl(),
+        apiDataSource: AppConfig.useRemoteApi
+            ? RenterApiDataSource(ApiClient())
+            : null),
   );
 
   sl.registerLazySingleton<BrokerBookingsRepository>(

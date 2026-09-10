@@ -54,18 +54,21 @@ class _HeartButtonState extends State<HeartButton> {
             HapticFeedback.lightImpact();
 
             if (!isWishlisted) {
-              final hasCustomCollections = state.collections.any(
-                  (c) => c.id != WishlistConstants.allSavedCollectionId);
+              // ALWAYS save to "All Saved" first (Instagram logic)
+              context.read<WishlistCubit>().toggleWishlist(
+                    propertyId: widget.propertyId,
+                    propertyName: widget.propertyName,
+                    propertyImage: widget.propertyImage,
+                    role: _currentRole,
+                  );
 
-              if (!hasCustomCollections) {
-                // No custom collections → save to default directly
-                context.read<WishlistCubit>().toggleWishlist(
-                      propertyId: widget.propertyId,
-                      propertyName: widget.propertyName,
-                      propertyImage: widget.propertyImage,
-                      role: _currentRole,
-                    );
+              final hasCustomCollections = state.collections.length > 1;
 
+              if (hasCustomCollections) {
+                // Has custom collections → open sheet to manage
+                _showAddToCollectionSheet(context);
+              } else {
+                // No custom collections → just show a quick snackbar
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Saved to All Saved'),
@@ -73,11 +76,9 @@ class _HeartButtonState extends State<HeartButton> {
                     backgroundColor: AppColors.navy,
                   ),
                 );
-              } else {
-                // Has custom collections → ask where to save
-                _showAddToCollectionSheet(context);
               }
             } else {
+              // Already saved → remove directly
               context.read<WishlistCubit>().toggleWishlist(
                     propertyId: widget.propertyId,
                     propertyName: widget.propertyName,

@@ -19,8 +19,10 @@ class EnvConfig {
 
   static EnvConfig dev = const EnvConfig(
     environment: AppEnvironment.dev,
-    baseUrl: 'https://dev-api.sahely.com',
-    apiVersion: 'v1',
+    // Deployed dev backend (Vercel). For a local NestJS instance use:
+    // baseUrl: 'http://10.0.2.2:43000' (Android emulator) / LAN IP (device).
+    baseUrl: 'https://apisahely.staysahely.com',
+    apiVersion: 'api/v1',
     appName: 'Sahely (Dev)',
     enableLogs: true,
     enableCrashReporting: false,
@@ -28,8 +30,8 @@ class EnvConfig {
 
   static EnvConfig staging = const EnvConfig(
     environment: AppEnvironment.staging,
-    baseUrl: 'https://staging-api.sahely.com',
-    apiVersion: 'v1',
+    baseUrl: 'https://apisahely.staysahely.com',
+    apiVersion: 'api/v1',
     appName: 'Sahely (Staging)',
     enableLogs: true,
     enableCrashReporting: true,

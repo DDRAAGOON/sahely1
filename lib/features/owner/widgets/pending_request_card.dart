@@ -7,6 +7,7 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/bouncy_button.dart';
 
 import '../../../core/navigation/app_navigation.dart';
+import 'approved_request_sheet.dart';
 
 class PendingRequestCard extends StatelessWidget {
   const PendingRequestCard({
@@ -168,8 +169,11 @@ class PendingRequestCard extends StatelessWidget {
                 height: 48,
                 radius: 12,
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Request Approved')),
+                  showApprovedRequestSheet(
+                    context,
+                    guestName: 'Omar Khalil',
+                    propertyName: mockData['propertyName']! as String,
+                    dates: mockData['dates']! as String,
                   );
                   if (onApprove != null) onApprove!();
                 },

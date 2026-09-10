@@ -31,7 +31,12 @@ class ListingSubmittedScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SuccessCheck(gold: true, size: 110),
+                      const SuccessCheck(
+                          gold: true,
+                          size: 118,
+                          linearGradient: true,
+                          glow: true,
+                          checkColor: AppColors.navy),
                       const SizedBox(height: 32),
                       Text('Listing Submitted 🥳',
                           style: AppTheme.dm(

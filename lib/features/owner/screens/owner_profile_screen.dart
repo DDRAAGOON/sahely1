@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
@@ -9,7 +8,6 @@ import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/features/owner/widgets/owner_bio_card.dart';
 import 'package:sahely/features/owner/widgets/owner_gradient_cta.dart';
 import 'package:sahely/features/owner/widgets/owner_profile_header.dart';
-import 'package:sahely/core/providers/locale_provider.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 
 class OwnerProfileScreen extends StatelessWidget {
@@ -104,7 +102,7 @@ class OwnerProfileScreen extends StatelessWidget {
               SettingsRow(
                 icon: Icons.language,
                 label: AppLocalizations.of(context).languageLabel,
-                value: AppLocalizations.nativeLanguageName(context.watch<LocaleProvider>().locale.languageCode),
+                value: AppLocalizations.nativeLanguageName(Localizations.localeOf(context).languageCode),
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToLanguage(context),
               ),
