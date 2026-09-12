@@ -56,9 +56,9 @@ class _RenterShellState extends State<RenterShell> {
           );
           return;
         }
-        
+
         // Use standard way to close app if on home and tapped twice
-        SystemNavigator.pop(); 
+        SystemNavigator.pop();
       },
       child: Scaffold(
         backgroundColor: AppColors.cream,
@@ -80,4 +80,3 @@ class _RenterShellState extends State<RenterShell> {
     );
   }
 }
-

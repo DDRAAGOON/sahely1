@@ -128,5 +128,6 @@ class WishlistCollectionDto extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, name, itemCount, coverImage, isShared, members];
+  List<Object?> get props =>
+      [id, name, itemCount, coverImage, isShared, members];
 }

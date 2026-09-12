@@ -39,11 +39,17 @@ class LevelStatsRow extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: '$currentStars',
-                        style: AppTheme.dm(color: AppColors.gold, size: 24, weight: FontWeight.w700),
+                        style: AppTheme.dm(
+                            color: AppColors.gold,
+                            size: 24,
+                            weight: FontWeight.w700),
                       ),
                       TextSpan(
                         text: ' ★',
-                        style: AppTheme.dm(color: AppColors.gold, size: 24, weight: FontWeight.w700),
+                        style: AppTheme.dm(
+                            color: AppColors.gold,
+                            size: 24,
+                            weight: FontWeight.w700),
                       ),
                     ],
                   ),

@@ -18,22 +18,25 @@ class LazyLoadState<T> {
     this.errorMessage,
   });
 
-  factory LazyLoadState.idle() => const LazyLoadState._(status: LazyLoadStatus.idle);
-  
-  factory LazyLoadState.loading() => const LazyLoadState._(status: LazyLoadStatus.loading);
-  
+  factory LazyLoadState.idle() =>
+      const LazyLoadState._(status: LazyLoadStatus.idle);
+
+  factory LazyLoadState.loading() =>
+      const LazyLoadState._(status: LazyLoadStatus.loading);
+
   factory LazyLoadState.loaded(T data) => LazyLoadState._(
         status: LazyLoadStatus.loaded,
         data: data,
       );
-  
+
   factory LazyLoadState.error(String message) => LazyLoadState._(
         status: LazyLoadStatus.error,
         errorMessage: message,
       );
-  
-  factory LazyLoadState.cancelled() => const LazyLoadState._(status: LazyLoadStatus.cancelled);
-  
+
+  factory LazyLoadState.cancelled() =>
+      const LazyLoadState._(status: LazyLoadStatus.cancelled);
+
   factory LazyLoadState.refreshing(T? oldData) => LazyLoadState._(
         status: LazyLoadStatus.refreshing,
         data: oldData,

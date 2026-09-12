@@ -40,7 +40,7 @@ class AppRoutes {
   static const String brokerDashboard = '/broker/dashboard';
   static const String brokerPortfolio = '/broker/portfolio';
   static const String brokerWallet = '/broker/wallet';
-  
+
   static const String brokerReferredDetail = '/broker/referred-detail';
   static const String brokerReferralIssue = '/broker/referral-issue';
   static const String brokerRefer = '/broker/refer';
@@ -101,6 +101,12 @@ class AppRoutes {
   static const String allProperties = '/all-properties';
   static const String propertyDetail = '/property';
   static const String propertyReviews = '/property-reviews';
+
+  // Shared links, opened from App Links, universal links or sahely://app.
+  // The paths match the share URLs the API generates.
+  static const String joinCollectionLink = '/wishlists/join/:token';
+  static const String referralLink = '/join';
+  static const String propertyLink = '/properties/:id';
   static const String booking = '/booking';
   static const String bookingConfirmed = '/booking-confirmed';
   static const String bookings = '/bookings';

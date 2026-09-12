@@ -9,12 +9,18 @@ class PropertyInfoSection extends StatelessWidget {
   final double rating;
   final int reviewCount;
 
+  /// The unit and floor the listing records, when it has them.
+  final String unit;
+  final int? floor;
+
   const PropertyInfoSection({
     super.key,
     required this.propertyName,
     required this.location,
     required this.rating,
     required this.reviewCount,
+    this.unit = '',
+    this.floor,
   });
 
   @override
@@ -86,13 +92,17 @@ class PropertyInfoSection extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Unit Info
-            Row(
-              children: [
-                _buildUnitInfoItem('Unit 8-214', Icons.home),
-                const SizedBox(width: 16),
-                _buildUnitInfoItem('Floor 2 of 2', Icons.layers),
-              ],
-            ),
+            if (unit.isNotEmpty || floor != null)
+              Row(
+                children: [
+                  if (unit.isNotEmpty)
+                    _buildUnitInfoItem('Unit $unit', Icons.home),
+                  if (unit.isNotEmpty && floor != null)
+                    const SizedBox(width: 16),
+                  if (floor != null)
+                    _buildUnitInfoItem('Floor $floor', Icons.layers),
+                ],
+              ),
           ],
         ),
       ),

@@ -83,7 +83,8 @@ class _PropertyCardBaseState extends State<PropertyCardBase> {
                           color: AppColors.navy.withValues(alpha: 0.55),
                           borderRadius: BorderRadius.circular(999),
                         ),
-                        child: Text('★ ${AppLocalizations.of(context).guestFavourite}',
+                        child: Text(
+                            '★ ${AppLocalizations.of(context).guestFavourite}',
                             style: AppTheme.dm(
                                 size: 10,
                                 weight: FontWeight.w700,
@@ -169,10 +170,12 @@ class _PropertyCardBaseState extends State<PropertyCardBase> {
                           Pill(t, border: AppColors.navy, fg: AppColors.navy),
                         if (p.petsOk)
                           Pill('🐾 ${AppLocalizations.of(context).petsOk}',
-                              bg: const Color(0xFFD7EEDD), fg: AppColors.success)
+                              bg: const Color(0xFFD7EEDD),
+                              fg: AppColors.success)
                         else
                           Pill(AppLocalizations.of(context).noPets,
-                              bg: const Color(0xFFFDECEC), fg: const Color(0xFFB22222)),
+                              bg: const Color(0xFFFDECEC),
+                              fg: const Color(0xFFB22222)),
                       ],
                     ),
                   ),

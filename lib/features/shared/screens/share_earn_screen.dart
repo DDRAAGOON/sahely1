@@ -7,16 +7,41 @@ import 'package:sahely/core/widgets/sheet_handle.dart';
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/l10n/app_localizations.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/features/broker/data/datasources/broker_api_data_source.dart';
+import 'package:sahely/features/shared/referrals/data/referrals_api_data_source.dart';
 
 class ShareEarnScreen extends StatelessWidget {
   const ShareEarnScreen({super.key});
+
+  /// Shares the account's invite link from the API: a broker's owner-referral
+  /// link (`POST /broker/referral-link`) or everyone else's referral link
+  /// (`GET /referrals/code`). Opening it lands on `/join?ref=CODE`.
+  Future<void> _shareInvite(BuildContext context, Role role) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final data = role == Role.broker
+          ? await sl<BrokerApiDataSource>().createReferralLink()
+          : await sl<ReferralsApiDataSource>().fetchCode();
+      final url = '${data['share_url'] ?? data['referral_url'] ?? ''}';
+      if (url.isEmpty) throw StateError('The API returned no invite link.');
+      await SharePlus.instance
+          .share(ShareParams(text: 'Join me on Sahely: $url'));
+    } catch (_) {
+      messenger.showSnackBar(const SnackBar(
+          content:
+              Text('Could not create your invite link. Please try again.')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final role = context.watch<RoleState>().currentRole;
 
     String title = "Invite & Earn 🎉";
-    String subtitle = "Share Sahely with your network and earn exclusive rewards.";
+    String subtitle =
+        "Share Sahely with your network and earn exclusive rewards.";
     String rewardText = "Earn +15 Sahel Stars";
     String buttonText = "Share Referral Link";
     IconData icon = Icons.share_outlined;
@@ -29,7 +54,8 @@ class ShareEarnScreen extends StatelessWidget {
 
     if (role == Role.broker) {
       title = "Refer an Owner 🏠";
-      subtitle = "Earn stars for every property listed and approved through you.";
+      subtitle =
+          "Earn stars for every property listed and approved through you.";
       rewardText = "Earn +50 Sahel Stars";
       buttonText = "Share Broker Code";
       icon = Icons.home_work_outlined;
@@ -107,7 +133,8 @@ class ShareEarnScreen extends StatelessWidget {
                             border: Border.all(color: const Color(0xFFEAD9A8)),
                             borderRadius: BorderRadius.circular(20)),
                         child: Row(mainAxisSize: MainAxisSize.min, children: [
-                          const Icon(Icons.star, size: 16, color: AppColors.gold),
+                          const Icon(Icons.star,
+                              size: 16, color: AppColors.gold),
                           const SizedBox(width: 6),
                           Text(rewardText,
                               style: AppTheme.dm(
@@ -117,7 +144,7 @@ class ShareEarnScreen extends StatelessWidget {
                         ])),
                     const SizedBox(height: 24),
                     GestureDetector(
-                      onTap: () => Navigator.maybePop(context),
+                      onTap: () => _shareInvite(context, role),
                       child: Container(
                           height: 52,
                           width: double.infinity,
@@ -146,7 +173,8 @@ class ShareEarnScreen extends StatelessWidget {
                     GestureDetector(
                         onTap: () => Navigator.maybePop(context),
                         child: Text(AppLocalizations.of(context).maybeLater,
-                            style: AppTheme.dm(size: 13, color: AppColors.muted))),
+                            style:
+                                AppTheme.dm(size: 13, color: AppColors.muted))),
                   ],
                 ),
               ),
@@ -157,4 +185,3 @@ class ShareEarnScreen extends StatelessWidget {
     );
   }
 }
-

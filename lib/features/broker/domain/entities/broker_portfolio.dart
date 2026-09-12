@@ -15,5 +15,6 @@ class BrokerPortfolio extends Equatable {
   });
 
   @override
-  List<Object?> get props => [totalCount, activeCount, notListedCount, properties];
+  List<Object?> get props =>
+      [totalCount, activeCount, notListedCount, properties];
 }

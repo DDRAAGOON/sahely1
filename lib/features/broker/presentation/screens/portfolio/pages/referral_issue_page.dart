@@ -121,16 +121,16 @@ class ReferralIssuePage extends StatelessWidget {
                       style: AppTheme.dm(
                           size: 13, color: AppColors.ink, height: 1.5),
                       children: [
-                        const TextSpan(
-                            text:
-                                "The review team paused this listing because the current photos don't meet Sahely's quality bar — they're low-light and don't show the full space, so guests can't see what they're booking. The listing stays "),
-                        TextSpan(
-                            text: 'offline',
-                            style: AppTheme.dm(weight: FontWeight.w700)),
-                        const TextSpan(
-                            text:
-                                ' until the items above are added and it passes a re-review (about 24h). No commission is earned while a referred property is offline.'),
-                      ]))),
+                    const TextSpan(
+                        text:
+                            "The review team paused this listing because the current photos don't meet Sahely's quality bar — they're low-light and don't show the full space, so guests can't see what they're booking. The listing stays "),
+                    TextSpan(
+                        text: 'offline',
+                        style: AppTheme.dm(weight: FontWeight.w700)),
+                    const TextSpan(
+                        text:
+                            ' until the items above are added and it passes a re-review (about 24h). No commission is earned while a referred property is offline.'),
+                  ]))),
           const SizedBox(height: 14),
           const StatRow(cards: [
             StatCard(
@@ -165,14 +165,14 @@ class ReferralIssuePage extends StatelessWidget {
                               color: const Color(0xFF8A6A1E),
                               height: 1.4),
                           children: [
-                        const TextSpan(text: 'Reach out to the owner, '),
-                        TextSpan(
-                            text: 'Tarek S.',
-                            style: AppTheme.dm(weight: FontWeight.w700)),
-                        const TextSpan(
-                            text:
-                                ', and help them add what\'s needed — a quick morning re-shoot usually clears this so you both start earning.')
-                      ]))),
+                    const TextSpan(text: 'Reach out to the owner, '),
+                    TextSpan(
+                        text: 'Tarek S.',
+                        style: AppTheme.dm(weight: FontWeight.w700)),
+                    const TextSpan(
+                        text:
+                            ', and help them add what\'s needed — a quick morning re-shoot usually clears this so you both start earning.')
+                  ]))),
             ]),
           ),
         ],

@@ -15,7 +15,7 @@ class PriceTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatted = CurrencyFormatter.format(price);
-    
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.baseline,

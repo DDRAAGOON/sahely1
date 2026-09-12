@@ -50,7 +50,9 @@ class ReviewDto extends Equatable {
       likes: json['likes'] as int? ?? 0,
       isLikedByMe: json['isLikedByMe'] as bool? ?? false,
       ownerResponse: json['ownerResponse'] != null
-          ? ReviewReplyDto.fromJson(json['ownerResponse'] as Map<String, dynamic>) : null,
+          ? ReviewReplyDto.fromJson(
+              json['ownerResponse'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -85,7 +87,8 @@ class ReviewDto extends Equatable {
       rating: rating,
       comment: comment,
       photos: photos,
-      createdAt: DateTime.parse(createdAt),
+      createdAt: DateTime.tryParse(createdAt) ??
+          DateTime.fromMillisecondsSinceEpoch(0),
       likes: likes,
       isLikedByMe: isLikedByMe,
       ownerResponse: ownerResponse?.toEntity(),
@@ -108,7 +111,8 @@ class ReviewDto extends Equatable {
       likes: entity.likes,
       isLikedByMe: entity.isLikedByMe,
       ownerResponse: entity.ownerResponse != null
-          ? ReviewReplyDto.fromEntity(entity.ownerResponse!) : null,
+          ? ReviewReplyDto.fromEntity(entity.ownerResponse!)
+          : null,
     );
   }
 
@@ -172,7 +176,8 @@ class ReviewReplyDto extends Equatable {
       userId: userId,
       userName: userName,
       comment: comment,
-      createdAt: DateTime.parse(createdAt),
+      createdAt: DateTime.tryParse(createdAt) ??
+          DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 

@@ -28,7 +28,8 @@ class SegmentTabs extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: i == active ? AppColors.navy : AppColors.white,
                   border: i == active
-                      ? Border.all(color: AppColors.navy, width: 0) : null,
+                      ? Border.all(color: AppColors.navy, width: 0)
+                      : null,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(tabs[i],

@@ -5,34 +5,92 @@ import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:sahely/core/di/service_locator.dart' show sl;
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/sheet_handle.dart';
 import 'package:sahely/core/widgets/image.dart';
+import 'package:sahely/features/renter/data/datasources/wishlist_api_data_source.dart';
 
-class ShareCollectionScreen extends StatelessWidget {
+/// Share sheet for a wishlist collection.
+///
+/// The link is the collection's invite URL from the API
+/// (`POST /wishlists/:id/share-link`). Opening it joins the collection - in
+/// the app when it is installed, on the website otherwise.
+class ShareCollectionScreen extends StatefulWidget {
+  final String collectionId;
   final String collectionName;
   final String collectionImage;
   final int placesCount;
-  final String shareableLink;
 
   const ShareCollectionScreen({
     super.key,
-    this.collectionName = 'Beach Trip 2026',
-    this.collectionImage = 'https://images.unsplash.com/photo-1707075108813-edefd7b3308d?w=800&q=72&auto=format&fit=crop',
-    this.placesCount = 5,
-    this.shareableLink = 'sahely.app/c/beach-2026',
+    this.collectionId = '',
+    this.collectionName = '',
+    this.collectionImage = '',
+    this.placesCount = 0,
   });
 
-  void _shareViaWhatsApp() async {
-    final url =
-        'whatsapp://send?text=${Uri.encodeComponent('Check out this collection "$collectionName": $shareableLink')}';
+  @override
+  State<ShareCollectionScreen> createState() => _ShareCollectionScreenState();
+}
+
+class _ShareCollectionScreenState extends State<ShareCollectionScreen> {
+  String? _link;
+  bool _failed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.collectionId.isEmpty) {
+      _failed = true;
+    } else {
+      _createLink();
+    }
+  }
+
+  Future<void> _createLink() async {
     try {
-      if (await canLaunchUrl(Uri.parse(url))) {
-        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      final link = await sl<WishlistApiDataSource>()
+          .createShareLink(widget.collectionId);
+      if (!mounted) return;
+      setState(() {
+        _link = link.isEmpty ? null : link;
+        _failed = link.isEmpty;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _failed = true);
+    }
+  }
+
+  /// The link, or null (with a message) while it is not available.
+  String? _requireLink() {
+    final link = _link;
+    if (link == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(_failed
+              ? 'This collection cannot be shared right now.'
+              : 'Creating the link, one moment…')));
+    }
+    return link;
+  }
+
+  String get _message =>
+      'Check out this collection "${widget.collectionName}": $_link';
+
+  Future<void> _shareViaWhatsApp() async {
+    if (_requireLink() == null) return;
+    final url =
+        Uri.parse('whatsapp://send?text=${Uri.encodeComponent(_message)}');
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+        return;
       }
     } catch (_) {}
+    // WhatsApp is not installed: fall back to the system share sheet.
+    await SharePlus.instance.share(ShareParams(text: _message));
   }
 
   void _shareViaInstagram() async {
@@ -45,6 +103,11 @@ class ShareCollectionScreen extends StatelessWidget {
   }
 
   Future<void> _saveToGallery(BuildContext context) async {
+    if (widget.collectionImage.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('This collection has no cover yet.')));
+      return;
+    }
     try {
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text('Saving image...')));
@@ -59,7 +122,7 @@ class ShareCollectionScreen extends StatelessWidget {
           return;
         }
       }
-      final response = await http.get(Uri.parse(collectionImage));
+      final response = await http.get(Uri.parse(widget.collectionImage));
       if (response.statusCode == 200) {
         await Gal.putImageBytes(response.bodyBytes);
         if (context.mounted) {
@@ -76,7 +139,23 @@ class ShareCollectionScreen extends StatelessWidget {
   }
 
   void _openMoreSharing() {
-    SharePlus.instance.share(ShareParams(text: 'Check out this collection "$collectionName": $shareableLink'));
+    if (_requireLink() == null) return;
+    SharePlus.instance.share(ShareParams(text: _message));
+  }
+
+  void _invite() {
+    final link = _requireLink();
+    if (link == null) return;
+    SharePlus.instance
+        .share(ShareParams(text: 'Help me add & vote on places: $link'));
+  }
+
+  void _copyLink() {
+    final link = _requireLink();
+    if (link == null) return;
+    Clipboard.setData(ClipboardData(text: link));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text('Link copied!')));
   }
 
   @override
@@ -95,16 +174,20 @@ class ShareCollectionScreen extends StatelessWidget {
           Row(children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: AppNetworkImage(url: collectionImage, width: 52, height: 52, errorWidget: (_, __, ___) => Container(
+                child: AppNetworkImage(
+                    url: widget.collectionImage,
+                    width: 52,
+                    height: 52,
+                    errorWidget: (_, __, ___) => Container(
                         width: 52, height: 52, color: AppColors.cardWarm))),
             const SizedBox(width: 12),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(collectionName,
+              Text(widget.collectionName,
                   style: AppTheme.dm(
                       size: 15,
                       weight: FontWeight.w700,
                       color: AppColors.navy)),
-              Text('$placesCount places · shareable link',
+              Text('${widget.placesCount} places · shareable link',
                   style: AppTheme.dm(size: 12, color: AppColors.muted)),
             ]),
           ]),
@@ -120,14 +203,14 @@ class ShareCollectionScreen extends StatelessWidget {
               const Icon(Icons.link, size: 16, color: AppColors.gold),
               const SizedBox(width: 8),
               Expanded(
-                  child: Text(shareableLink,
+                  child: Text(
+                      _link ??
+                          (_failed ? 'Link unavailable' : 'Creating link…'),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: AppTheme.dm(size: 12, color: AppColors.muted))),
               GestureDetector(
-                onTap: () {
-                  Clipboard.setData(ClipboardData(text: shareableLink));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Link copied!')));
-                },
+                onTap: _copyLink,
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -179,8 +262,7 @@ class ShareCollectionScreen extends StatelessWidget {
                     TextSpan(text: ' on places')
                   ]))),
               GestureDetector(
-                onTap: () =>
-                    SharePlus.instance.share(ShareParams(text: 'Help me add & vote on places: $shareableLink')),
+                onTap: _invite,
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -225,7 +307,8 @@ class ShareCollectionScreen extends StatelessWidget {
                       ? LinearGradient(
                           colors: gradient,
                           begin: Alignment.topLeft,
-                          end: Alignment.bottomRight) : null,
+                          end: Alignment.bottomRight)
+                      : null,
                   shape: BoxShape.circle,
                   border: border ? Border.all(color: AppColors.border) : null),
               child: Icon(icon,
@@ -237,4 +320,3 @@ class ShareCollectionScreen extends StatelessWidget {
         ),
       );
 }
-

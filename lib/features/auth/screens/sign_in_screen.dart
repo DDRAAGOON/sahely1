@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
@@ -10,8 +9,6 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
-import 'package:sahely/data/models.dart';
-import 'package:sahely/features/auth/mock_auth_service.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -31,7 +28,7 @@ class _SignInScreenState extends State<SignInScreen> {
   String? _emailError;
   String? _passwordError;
   bool _hasAttemptedSubmit = false;
-  
+
   static final RegExp _emailRegex =
       RegExp(r'^[\w\.\-+]+@([\w\-]+\.)+[a-zA-Z]{2,}$');
 
@@ -55,21 +52,21 @@ class _SignInScreenState extends State<SignInScreen> {
     setState(() => _busy = true);
     AuthResponse resp;
     try {
-      resp = await MockAuthService().signIn(email, password);
+      resp = await AuthApiService().login(email, password);
     } on AuthApiException catch (e) {
       if (!mounted) return;
       setState(() => _busy = false);
-      
+
       // Map specific API errors to localized messages
       String errorMessage;
       switch (e.code) {
+        case 'ERR_UNAUTHORIZED':
         case 'ERR_AUTH_INVALID_CREDENTIALS':
           errorMessage = l.invalidCredentials;
           break;
         case 'ERR_ACCOUNT_SUSPENDED':
           errorMessage = l.accountSuspendedWithDetails(
             e.data?['suspendedUntil'] ?? '',
-            e.data?['reason'] ?? ''
           );
           break;
         case 'ERR_ACCOUNT_BANNED':
@@ -84,7 +81,7 @@ class _SignInScreenState extends State<SignInScreen> {
         default:
           errorMessage = e.message;
       }
-      
+
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(errorMessage),
@@ -115,18 +112,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
     if (!mounted) return;
     setState(() => _busy = false);
-
-    // If router provided a 'from' query param, go there; otherwise go to role home
-    final target = widget.from != null
-        ? Uri.decodeComponent(widget.from!)
-        : (resp.role == Role.broker
-            ? '/broker/home'
-            : (resp.role == Role.owner
-                ? '/owner/home'
-                : '/renter/home'));
-
-    if (!mounted) return;
-    context.go(target);
   }
 
   @override
@@ -191,9 +176,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     hintText: 'you@example.com',
                     height: 50,
                     borderColor: _emailError != null ? AppColors.error : null,
-                    onChanged: _hasAttemptedSubmit ? (value) {
-                      _clearEmailError();
-                    } : null,
+                    onChanged: _hasAttemptedSubmit
+                        ? (value) {
+                            _clearEmailError();
+                          }
+                        : null,
                   ),
                   if (_emailError != null)
                     Padding(
@@ -225,10 +212,13 @@ class _SignInScreenState extends State<SignInScreen> {
                     height: 50,
                     fontSize: 18,
                     letterSpacing: 3,
-                    borderColor: _passwordError != null ? AppColors.error : null,
-                    onChanged: _hasAttemptedSubmit ? (value) {
-                      _clearPasswordError();
-                    } : null,
+                    borderColor:
+                        _passwordError != null ? AppColors.error : null,
+                    onChanged: _hasAttemptedSubmit
+                        ? (value) {
+                            _clearPasswordError();
+                          }
+                        : null,
                     trailing: GestureDetector(
                       onTap: () => setState(() => _obscure = !_obscure),
                       child: Icon(
@@ -251,8 +241,8 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
             const SizedBox(height: 22),
             NavyButton(
-                label: _busy ? l.loading : l.signIn,
-                onTap: _busy ? null : _submit,
+              label: _busy ? l.loading : l.signIn,
+              onTap: _busy ? null : _submit,
             ),
             const SizedBox(height: 24),
             Row(
@@ -270,13 +260,18 @@ class _SignInScreenState extends State<SignInScreen> {
             _SocialButton(
               label: l.continueGoogle,
               dark: false,
-              leading: const AppNetworkImage(url: 'https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png', width: 22, height: 22),
+              leading: const AppNetworkImage(
+                  url:
+                      'https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png',
+                  width: 22,
+                  height: 22),
             ),
             const SizedBox(height: 12),
             _SocialButton(
               label: l.continueApple,
               dark: true,
-              leading: const Icon(Icons.apple, color: AppColors.white, size: 20),
+              leading:
+                  const Icon(Icons.apple, color: AppColors.white, size: 20),
             ),
             const SizedBox(height: 22),
             GestureDetector(
@@ -337,4 +332,3 @@ class _SocialButton extends StatelessWidget {
     );
   }
 }
-

@@ -92,7 +92,8 @@ class BlendedImage extends StatelessWidget {
                   const ColoredBox(color: AppColors.cardWarm),
               errorWidget: (_, __, ___) =>
                   const ColoredBox(color: AppColors.cardWarm),
-              memCacheHeight: (height * 2).toInt(), // Optimization: limit cache size
+              memCacheHeight:
+                  (height * 2).toInt(), // Optimization: limit cache size
             ),
             if (overlay)
               const DecoratedBox(
@@ -167,8 +168,10 @@ class SahelyImage extends StatelessWidget {
               width: width ?? double.infinity,
               color: AppColors.navy,
             ),
-      memCacheHeight: (height != null && height!.isFinite) ? (height! * 2).toInt() : null,
-      memCacheWidth: (width != null && width!.isFinite) ? (width! * 2).toInt() : null,
+      memCacheHeight:
+          (height != null && height!.isFinite) ? (height! * 2).toInt() : null,
+      memCacheWidth:
+          (width != null && width!.isFinite) ? (width! * 2).toInt() : null,
     );
 
     Widget result = image;
@@ -288,46 +291,52 @@ class _SahelyImageViewerState extends State<SahelyImageViewer> {
 
   void _onDownloadTap() {
     showModalBottomSheet(
-      useRootNavigator: true, context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      context: context,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        decoration: const BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2))),
-            const SizedBox(height: 24),
-            Text('Download Options',
-                style: AppTheme.dm(
-                    size: 17, weight: FontWeight.w700, color: AppColors.navy)),
-            const SizedBox(height: 24),
-            NavyButton(
-              label: 'Download Current Image',
-              onTap: () {
-                Navigator.pop(ctx);
-                _executeDownload([widget.images[_currentIndex]]);
-              },
-            ),
-            if (widget.images.length > 1) ...[
-              const SizedBox(height: 12),
+      builder: (ctx) => SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(2))),
+              const SizedBox(height: 24),
+              Text('Download Options',
+                  style: AppTheme.dm(
+                      size: 17,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
+              const SizedBox(height: 24),
               NavyButton(
-                label: 'Download All Images (${widget.images.length})',
-                outline: true,
+                label: 'Download Current Image',
                 onTap: () {
                   Navigator.pop(ctx);
-                  _executeDownload(widget.images);
+                  _executeDownload([widget.images[_currentIndex]]);
                 },
               ),
+              if (widget.images.length > 1) ...[
+                const SizedBox(height: 12),
+                NavyButton(
+                  label: 'Download All Images (${widget.images.length})',
+                  outline: true,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _executeDownload(widget.images);
+                  },
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

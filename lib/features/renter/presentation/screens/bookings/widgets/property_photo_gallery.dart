@@ -40,12 +40,16 @@ class PropertyPhotoGallery extends StatelessWidget {
             onTap: () => _openGallery(context, 0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: AppNetworkImage(url: photoList[0].toString(), width: double.infinity, height: 120, errorWidget: (context, error, stackTrace) {
-                  return Container(
-                    height: 120,
-                    color: AppColors.border,
-                  );
-                }),
+              child: AppNetworkImage(
+                  url: photoList[0].toString(),
+                  width: double.infinity,
+                  height: 120,
+                  errorWidget: (context, error, stackTrace) {
+                    return Container(
+                      height: 120,
+                      color: AppColors.border,
+                    );
+                  }),
             ),
           ),
         ),
@@ -60,12 +64,16 @@ class PropertyPhotoGallery extends StatelessWidget {
                     _openGallery(context, photoList.length > 1 ? 1 : 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: AppNetworkImage(url: photoList.length > 1 ? photoList[1].toString() : '', width: double.infinity, height: 56, errorWidget: (context, error, stackTrace) {
-                      return Container(
-                        height: 56,
-                        color: AppColors.border,
-                      );
-                    }),
+                  child: AppNetworkImage(
+                      url: photoList.length > 1 ? photoList[1].toString() : '',
+                      width: double.infinity,
+                      height: 56,
+                      errorWidget: (context, error, stackTrace) {
+                        return Container(
+                          height: 56,
+                          color: AppColors.border,
+                        );
+                      }),
                 ),
               ),
               const SizedBox(height: 8),
@@ -76,12 +84,18 @@ class PropertyPhotoGallery extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: Stack(
                     children: [
-                      AppNetworkImage(url: photoList.length > 2 ? photoList[2].toString() : '', width: double.infinity, height: 56, errorWidget: (context, error, stackTrace) {
-                          return Container(
-                            height: 56,
-                            color: AppColors.border,
-                          );
-                        }),
+                      AppNetworkImage(
+                          url: photoList.length > 2
+                              ? photoList[2].toString()
+                              : '',
+                          width: double.infinity,
+                          height: 56,
+                          errorWidget: (context, error, stackTrace) {
+                            return Container(
+                              height: 56,
+                              color: AppColors.border,
+                            );
+                          }),
                       if (photoList.length > 3)
                         Container(
                           height: 56,
@@ -109,4 +123,3 @@ class PropertyPhotoGallery extends StatelessWidget {
     );
   }
 }
-

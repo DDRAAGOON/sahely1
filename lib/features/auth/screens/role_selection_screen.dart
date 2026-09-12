@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
+import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/l10n/app_localizations.dart';
+import 'package:sahely/core/widgets/fill_viewport.dart';
 
 class RoleSelectionScreen extends StatefulWidget {
   const RoleSelectionScreen({super.key});
@@ -17,16 +18,16 @@ class RoleSelectionScreen extends StatefulWidget {
 class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
   int selected = 0;
 
-  /// Canonical role values (passed to navigation) with localized display.
-  static const List<(String, String, IconData)> _roles = [
-    ('Renter', 'roleRenterDesc', Icons.person_outline),
-    ('Property Owner', 'roleOwnerDesc', Icons.apartment_outlined),
-    ('Broker', 'roleBrokerDesc', Icons.handshake_outlined),
-  ];
+  List<(String, String Function(AppLocalizations), IconData)> _getRoles() => [
+        ('Renter', (l) => l.roleRenterDesc, Icons.person_outline),
+        ('Property Owner', (l) => l.roleOwnerDesc, Icons.apartment_outlined),
+        ('Broker', (l) => l.roleBrokerDesc, Icons.handshake_outlined),
+      ];
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final roles = _getRoles();
     String roleTitle(String canonical) {
       switch (canonical) {
         case 'Renter':
@@ -41,7 +42,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
     }
 
     return PhoneScaffold(
-      child: Padding(
+      child: FillViewport(
         padding: const EdgeInsets.fromLTRB(24, 18, 24, 40),
         child: Column(
           children: [
@@ -56,23 +57,21 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                 textAlign: TextAlign.center,
                 style: AppTheme.dm(size: 14, color: AppColors.muted)),
             const SizedBox(height: 28),
-            for (var i = 0; i < _roles.length; i++) ...[
+            for (var i = 0; i < roles.length; i++) ...[
               _RoleCard(
-                title: roleTitle(_roles[i].$1),
-                subtitle: l.t(_roles[i].$2),
-                iconData: _roles[i].$3,
+                title: roleTitle(roles[i].$1),
+                subtitle: roles[i].$2(l),
+                iconData: roles[i].$3,
                 selected: i == selected,
                 onTap: () => setState(() => selected = i),
               ),
-              if (i < _roles.length - 1) const SizedBox(height: 14),
+              if (i < roles.length - 1) const SizedBox(height: 14),
             ],
             const Spacer(),
             NavyButton(
               label: l.continueBtn,
-              onTap: () => context.push(
-                '/create',
-                extra: _roles[selected].$1,
-              ),
+              onTap: () => AppNavigation.goToRegister(context,
+                  extra: roles[selected].$1),
             ),
           ],
         ),
@@ -106,7 +105,7 @@ class _RoleCard extends StatelessWidget {
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: selected ? AppColors.goldSoft : AppColors.white,
-              border : null,
+              border: null,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(

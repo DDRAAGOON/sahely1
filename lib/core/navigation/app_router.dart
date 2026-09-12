@@ -28,6 +28,7 @@ import 'package:sahely/features/shared/screens/concierge_screen.dart';
 import 'package:sahely/features/shared/screens/services_screen.dart';
 import 'package:sahely/core/navigation/app_routes.dart';
 import 'package:sahely/features/shared/shared_go_routes.dart';
+import 'package:sahely/features/shared/links/link_screens.dart';
 
 /// The global navigator key for the main router.
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -38,7 +39,7 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
 
   return GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: AppRoutes.splash,
+    initialLocation: AppRoutes.welcome,
     debugLogDiagnostics: false,
     refreshListenable: routerRefresh,
     redirect: (BuildContext context, GoRouterState state) {
@@ -63,23 +64,32 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         AppRoutes.idVerification,
         AppRoutes.facialScan,
         AppRoutes.verificationComplete,
+        // An invite link must work before the account exists.
+        AppRoutes.referralLink,
       ];
 
       bool isPublic(String path) =>
           publicPrefixes.any((p) => path == p || path.startsWith(p));
 
-      // If not authenticated and trying to access a protected route -> send to signin
+      // 1. If not authenticated and trying to access a protected route -> send to signin
       if (!isAuth && !isPublic(loc)) {
         final encoded = Uri.encodeComponent(loc);
         return '${AppRoutes.signIn}?from=$encoded';
       }
 
-      // If authenticated and at an auth screen, send them to their role home
+      // 2. If authenticated and at an intro/auth screen, send them to their role home
       if (isAuth &&
-          (loc == AppRoutes.signIn ||
-              loc == AppRoutes.welcome ||
-              loc == AppRoutes.createAccount ||
-              loc == AppRoutes.roleSelection)) {
+          (loc.startsWith(AppRoutes.splash) ||
+              loc.startsWith(AppRoutes.welcome) ||
+              loc.startsWith(AppRoutes.signIn) ||
+              loc.startsWith(AppRoutes.createAccount) ||
+              loc.startsWith(AppRoutes.roleSelection))) {
+        // Handle deep link if 'from' is present in query parameters
+        final from = state.uri.queryParameters['from'];
+        if (from != null) {
+          return Uri.decodeComponent(from);
+        }
+
         return switch (role) {
           Role.broker => AppRoutes.brokerHome,
           Role.owner => AppRoutes.ownerHome,
@@ -87,22 +97,17 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
         };
       }
 
-      // Role-based guarding: prevent access to broker/owner sections if role mismatches
-      if (isAuth) {
-        if (loc.startsWith('/broker') && role != Role.broker) {
-          return role == Role.owner
-              ? AppRoutes.ownerHome
-              : AppRoutes.renterHome;
+      // 3. Root redirect to welcome if unauth, or home if auth
+      if (loc == '/') {
+        if (isAuth) {
+          return switch (role) {
+            Role.broker => AppRoutes.brokerHome,
+            Role.owner => AppRoutes.ownerHome,
+            _ => AppRoutes.renterHome,
+          };
         }
-        if (loc.startsWith('/owner') && role != Role.owner) {
-          return role == Role.broker
-              ? AppRoutes.brokerHome
-              : AppRoutes.renterHome;
-        }
+        return AppRoutes.welcome;
       }
-
-      // Root redirect to splash
-      if (loc == '/') return AppRoutes.splash;
 
       // No redirect
       return null;
@@ -115,6 +120,23 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
           key: state.pageKey,
           child: const NotificationSettingsScreen(),
         ),
+      ),
+
+      // ---- Shared links ----
+      GoRoute(
+        path: AppRoutes.joinCollectionLink,
+        builder: (context, state) =>
+            JoinCollectionScreen(token: state.pathParameters['token'] ?? ''),
+      ),
+      GoRoute(
+        path: AppRoutes.referralLink,
+        builder: (context, state) =>
+            ReferralLinkScreen(code: state.uri.queryParameters['ref'] ?? ''),
+      ),
+      GoRoute(
+        path: AppRoutes.propertyLink,
+        builder: (context, state) =>
+            PropertyLinkScreen(propertyId: state.pathParameters['id'] ?? ''),
       ),
 
       // ---- Auth ----
@@ -246,8 +268,8 @@ GoRouter createAppRouter(AuthProvider authProvider, RoleState roleState) {
           StatefulShellBranch(routes: [
             GoRoute(
                 path: AppRoutes.brokerWishlist,
-                builder: (context, state) => const WishlistScreen(
-                    showNav: false, role: Role.broker))
+                builder: (context, state) =>
+                    const WishlistScreen(showNav: false, role: Role.broker))
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
@@ -342,12 +364,12 @@ class _RouterRefresh extends ChangeNotifier {
 }
 
 /// A container that animates between GoRouter's StatefulShellRoute branches
-/// while keeping them in the widget tree (via Stack & Offstage/IgnorePointer) 
+/// while keeping them in the widget tree (via Stack & Offstage/IgnorePointer)
 /// so they preserve their state.
 class AnimatedBranchContainer extends StatelessWidget {
   const AnimatedBranchContainer(
       {super.key, required this.currentIndex, required this.children});
-  
+
   final int currentIndex;
   final List<Widget> children;
 
@@ -369,4 +391,3 @@ class AnimatedBranchContainer extends StatelessWidget {
     );
   }
 }
-

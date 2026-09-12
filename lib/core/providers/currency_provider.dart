@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
+import 'package:sahely/core/providers/safe_notifier.dart';
 
-class CurrencyProvider extends ChangeNotifier {
+class CurrencyProvider extends ChangeNotifier with SafeNotifier {
   String _selectedCurrency = 'EGP';
   String _symbol = 'EGP';
   final _storage = const FlutterSecureStorage();

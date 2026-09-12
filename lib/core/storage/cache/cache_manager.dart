@@ -41,7 +41,8 @@ class CacheManager {
 
       case CachePolicy.remoteFirst:
         try {
-          return await _fetchRemoteAndSave(key, remoteCall, toJson, ttl, version);
+          return await _fetchRemoteAndSave(
+              key, remoteCall, toJson, ttl, version);
         } catch (e) {
           return _readFromCache(key, fromJson);
         }

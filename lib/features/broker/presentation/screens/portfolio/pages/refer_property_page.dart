@@ -49,14 +49,12 @@ class _ReferPropertyPageState extends State<ReferPropertyPage> {
                 const SizedBox(height: 8),
                 const ReferPropertyHeader(),
                 const SizedBox(height: 24),
-                
                 ReferPropertyInput(
                   label: 'Owner Name',
                   hint: 'Full name',
                   controller: _ownerNameController,
                 ),
                 const SizedBox(height: 16),
-                
                 ReferPropertyInput(
                   label: 'Phone',
                   hint: '+20 ...',
@@ -64,14 +62,12 @@ class _ReferPropertyPageState extends State<ReferPropertyPage> {
                   keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(height: 16),
-                
                 ReferPropertyInput(
                   label: 'Property Name',
                   hint: 'Property name',
                   controller: _propertyNameController,
                 ),
                 const SizedBox(height: 16),
-                
                 ReferPropertyDropdown(
                   label: 'Location Area',
                   value: _selectedArea,
@@ -83,11 +79,11 @@ class _ReferPropertyPageState extends State<ReferPropertyPage> {
                   },
                 ),
                 const SizedBox(height: 24),
-                
                 CopyReferralLinkButton(
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Referral link copied to clipboard')),
+                      const SnackBar(
+                          content: Text('Referral link copied to clipboard')),
                     );
                   },
                 ),

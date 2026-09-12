@@ -4,7 +4,7 @@ import '../entities/sort_type.dart';
 class SortPropertiesUseCase {
   List<Property> execute(List<Property> properties, SortType sortType) {
     final results = List<Property>.from(properties);
-    
+
     switch (sortType) {
       case SortType.priceLowToHigh:
         results.sort((a, b) => a.price.compareTo(b.price));
@@ -22,7 +22,7 @@ class SortPropertiesUseCase {
       case SortType.none:
         break;
     }
-    
+
     return results;
   }
 }

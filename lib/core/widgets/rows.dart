@@ -77,7 +77,8 @@ class KeyValueRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 11),
       decoration: topBorder
           ? const BoxDecoration(
-              border: Border(top: BorderSide(color: AppColors.border))) : null,
+              border: Border(top: BorderSide(color: AppColors.border)))
+          : null,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

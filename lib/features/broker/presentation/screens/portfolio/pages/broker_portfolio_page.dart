@@ -5,109 +5,167 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/price.dart';
 import 'package:sahely/core/widgets/ratings.dart';
-import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/core/widgets/image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/core/di/service_locator.dart';
+import 'package:sahely/features/broker/domain/entities/broker_portfolio.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/bloc/broker_portfolio_cubit.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/bloc/broker_portfolio_state.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
-class BrokerPortfolioPage extends StatefulWidget {
+class BrokerPortfolioPage extends StatelessWidget {
   const BrokerPortfolioPage({super.key});
 
   @override
-  State<BrokerPortfolioPage> createState() => _BrokerPortfolioPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<BrokerPortfolioCubit>()..loadPortfolio(),
+      child: const _BrokerPortfolioView(),
+    );
+  }
 }
 
-class _BrokerPortfolioPageState extends State<BrokerPortfolioPage> {
+class _BrokerPortfolioView extends StatefulWidget {
+  const _BrokerPortfolioView();
+
+  @override
+  State<_BrokerPortfolioView> createState() => _BrokerPortfolioViewState();
+}
+
+class _BrokerPortfolioViewState extends State<_BrokerPortfolioView> {
   int _selectedTab = 0; // 0: All, 1: Active, 2: Not listed
+
+  /// Tab 0 shows everything, tab 1 only live listings, tab 2 the rest.
+  List<Property> _visible(List<Property> all) {
+    return switch (_selectedTab) {
+      1 => all.where((p) => p.status == PropertyStatus.active).toList(),
+      2 => all.where((p) => p.status != PropertyStatus.active).toList(),
+      _ => all,
+    };
+  }
+
+  /// The chips a card shows, built from the fields the API actually returns.
+  List<String> _tags(Property p) => [
+        p.type,
+        '${p.guests} Guests',
+        if (p.beds > 0) '${p.beds} Beds',
+        if (p.minutesToBeach != null) '${p.minutesToBeach} min to beach',
+      ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.cream,
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
-          children: [
-            TopBar(
-              title: 'Referred Properties',
-              subtitle: '51 accepted · guest-ready',
-              onBack: () => Navigator.pop(context),
-            ),
-            const SizedBox(height: 12),
-            Text(
-                'Only properties accepted by Sahely and live for guests appear here — with the details renters see.',
-                style: AppTheme.dm(size: 12, color: AppColors.muted)),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 38,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ChoiceChipPill(
-                    'All 55',
-                    selected: _selectedTab == 0,
-                    height: 38,
-                    onTap: () => setState(() => _selectedTab = 0),
+        child: BlocBuilder<BrokerPortfolioCubit, BrokerPortfolioState>(
+          builder: (context, state) {
+            final portfolio = state is BrokerPortfolioLoaded
+                ? state.portfolio
+                : const BrokerPortfolio(
+                    totalCount: 0,
+                    activeCount: 0,
+                    notListedCount: 0,
+                    properties: [],
+                  );
+            final visible = _visible(portfolio.properties);
+
+            return ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+              children: [
+                TopBar(
+                  title: 'Referred Properties',
+                  subtitle: '${portfolio.activeCount} accepted · guest-ready',
+                  onBack: () => Navigator.pop(context),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                    'Only properties accepted by Sahely and live for guests appear here — with the details renters see.',
+                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                const SizedBox(height: 16),
+                SizedBox(
+                  height: 38,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      ChoiceChipPill(
+                        'All ${portfolio.totalCount}',
+                        selected: _selectedTab == 0,
+                        height: 38,
+                        onTap: () => setState(() => _selectedTab = 0),
+                      ),
+                      const SizedBox(width: 8),
+                      ChoiceChipPill(
+                        'Active ${portfolio.activeCount}',
+                        selected: _selectedTab == 1,
+                        height: 38,
+                        onTap: () => setState(() => _selectedTab = 1),
+                      ),
+                      const SizedBox(width: 8),
+                      ChoiceChipPill(
+                        'Not listed ${portfolio.notListedCount}',
+                        selected: _selectedTab == 2,
+                        height: 38,
+                        onTap: () => setState(() => _selectedTab = 2),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  ChoiceChipPill(
-                    'Active 51',
-                    selected: _selectedTab == 1,
-                    height: 38,
-                    onTap: () => setState(() => _selectedTab = 1),
-                  ),
-                  const SizedBox(width: 8),
-                  ChoiceChipPill(
-                    'Not listed 4',
-                    selected: _selectedTab == 2,
-                    height: 38,
-                    onTap: () => setState(() => _selectedTab = 2),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            
-            // Filtered Content
-            if (_selectedTab == 0 || _selectedTab == 1) ...[
-              _refCard(
-                  context,
-                  Sample.azure.image,
-                  'Azure Beach Villa',
-                  'Hacienda Bay',
-                  4.8,
-                  124,
-                  4500,
-                  const ['Villa', '6 Guests', 'Pool', '🐾 Pets OK']),
-              const SizedBox(height: 16),
-              _refCard(context, Sample.lagoon.image, 'Lagoon Retreat', 'Marassi',
-                  4.9, 86, 6200, const ['Chalet', '8 Guests', 'Sea view']),
-              const SizedBox(height: 16),
-              _refCard(context, Sample.dunes.image, 'Golden Dunes', 'Marassi', 4.7,
-                  53, 3800, const ['Villa', '4 Guests', 'Beach']),
-            ],
-            
-            if (_selectedTab == 2) ...[
-              _refCard(
-                  context,
-                  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
-                  'Sunset Loft',
-                  'Amwaj',
-                  0.0,
-                  0,
-                  2900,
-                  const ['Apartment', 'Review Pending'],
-                  isLive: false),
-            ],
-          ],
+                ),
+                const SizedBox(height: 20),
+                if (state is BrokerPortfolioLoading ||
+                    state is BrokerPortfolioInitial)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 40),
+                    child: Center(
+                      child: CircularProgressIndicator(color: AppColors.gold),
+                    ),
+                  )
+                else if (state is BrokerPortfolioError)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Center(
+                      child: Text(state.message,
+                          textAlign: TextAlign.center,
+                          style: AppTheme.dm(color: AppColors.muted)),
+                    ),
+                  )
+                else
+                  for (final p in visible) ...[
+                    _refCard(
+                      context,
+                      p,
+                      p.image,
+                      p.name,
+                      p.area,
+                      p.rating,
+                      p.reviews,
+                      p.price,
+                      _tags(p),
+                      isLive: p.status == PropertyStatus.active,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _refCard(BuildContext context, String img, String name, String area,
-          double rating, int reviews, int price, List<String> tags,
+  Widget _refCard(
+          BuildContext context,
+          Property property,
+          String img,
+          String name,
+          String area,
+          double rating,
+          int reviews,
+          int price,
+          List<String> tags,
           {bool isLive = true}) =>
       GestureDetector(
-        onTap: () => AppNavigation.goToBrokerReferredDetail(context),
+        onTap: () =>
+            AppNavigation.goToBrokerReferredDetail(context, extra: property),
         behavior: HitTestBehavior.opaque,
         child: WhiteCard(
           padding: EdgeInsets.zero,
@@ -120,7 +178,9 @@ class _BrokerPortfolioPageState extends State<BrokerPortfolioPage> {
                   height: 150,
                   width: double.infinity,
                   child: Stack(fit: StackFit.expand, children: [
-                    AppNetworkImage(url: img, errorWidget: (_, __, ___) =>
+                    AppNetworkImage(
+                        url: img,
+                        errorWidget: (_, __, ___) =>
                             const ColoredBox(color: AppColors.cardWarm)),
                     DecoratedBox(
                         decoration: BoxDecoration(
@@ -163,8 +223,8 @@ class _BrokerPortfolioPageState extends State<BrokerPortfolioPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Flexible(
-                                child: RatingRow(
-                                    rating: rating, reviews: reviews),
+                                child:
+                                    RatingRow(rating: rating, reviews: reviews),
                               ),
                               const SizedBox(width: 8),
                               PriceTag(price: price)
@@ -181,4 +241,3 @@ class _BrokerPortfolioPageState extends State<BrokerPortfolioPage> {
         ),
       );
 }
-

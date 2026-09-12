@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
 
@@ -13,8 +13,9 @@ class GreetingHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final profileName = context.watch<ProfileProvider>().name;
-    final displayName =
-        profileName.isNotEmpty ? profileName : AppLocalizations.of(context).guestFallback;
+    final displayName = profileName.isNotEmpty
+        ? profileName
+        : AppLocalizations.of(context).guestFallback;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

@@ -26,7 +26,8 @@ double _popScale(double t) {
     final k = (t - seg1) / (seg2 - seg1);
     return 1.12 + (0.96 - 1.12) * Curves.easeInOut.transform(k);
   }
-  return 0.96 + (1.00 - 0.96) * Curves.easeOut.transform((t - seg2) / (1 - seg2));
+  return 0.96 +
+      (1.00 - 0.96) * Curves.easeOut.transform((t - seg2) / (1 - seg2));
 }
 
 class _AuthSuccessBadgeState extends State<AuthSuccessBadge>
@@ -37,9 +38,7 @@ class _AuthSuccessBadgeState extends State<AuthSuccessBadge>
 
   /// Ripple ring loop (like `.sah-ring`, 1.8s infinite).
   late final AnimationController _ring = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1800),
-      value: 0.35)
+      vsync: this, duration: const Duration(milliseconds: 1800), value: 0.35)
     ..repeat();
 
   /// Stroke draw-in for the shield + check.
@@ -79,8 +78,7 @@ class _AuthSuccessBadgeState extends State<AuthSuccessBadge>
           AnimatedBuilder(
               animation: _ring,
               builder: (_, __) {
-                final t =
-                    Curves.easeOut.transform(_ring.value.clamp(0.0, 1.0));
+                final t = Curves.easeOut.transform(_ring.value.clamp(0.0, 1.0));
                 return Container(
                   width: size * (0.7 + t * 1.4),
                   height: size * (0.7 + t * 1.4),
@@ -128,8 +126,7 @@ class _AuthSuccessBadgeState extends State<AuthSuccessBadge>
                             ? CustomPaint(
                                 painter: _ShieldCheckPainter(progress: _draw))
                             : CustomPaint(
-                                painter:
-                                    _PlainCheckPainter(progress: _draw)),
+                                painter: _PlainCheckPainter(progress: _draw)),
                       ),
                     ),
                   ),
@@ -169,8 +166,8 @@ class _ShieldCheckPainter extends CustomPainter {
     canvas.scale(size.width / 24, size.height / 24);
 
     // Shield draws over the first ~70% of the animation…
-    final shieldT = Curves.easeOut
-        .transform((progress.value / 0.7).clamp(0.0, 1.0));
+    final shieldT =
+        Curves.easeOut.transform((progress.value / 0.7).clamp(0.0, 1.0));
     // …the check draws over the last half, overlapping slightly.
     final checkT = Curves.easeOut
         .transform(((progress.value - 0.5) / 0.5).clamp(0.0, 1.0));
@@ -181,7 +178,10 @@ class _ShieldCheckPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
-    for (final (path, t, w) in [(_shield, shieldT, 2.0), (_check, checkT, 2.2)]) {
+    for (final (path, t, w) in [
+      (_shield, shieldT, 2.0),
+      (_check, checkT, 2.2)
+    ]) {
       if (t <= 0) continue;
       final metric = path.computeMetrics().first;
       paint.strokeWidth = w;
@@ -212,8 +212,10 @@ class _PlainCheckPainter extends CustomPainter {
     canvas.save();
     canvas.scale(size.width / 24, size.height / 24);
     final metric = _path.computeMetrics().first;
-    final partial = metric.extractPath(0,
-        metric.length * Curves.easeOut.transform(progress.value.clamp(0.0, 1.0)));
+    final partial = metric.extractPath(
+        0,
+        metric.length *
+            Curves.easeOut.transform(progress.value.clamp(0.0, 1.0)));
     final paint = Paint()
       ..color = Colors.white
       ..style = PaintingStyle.stroke

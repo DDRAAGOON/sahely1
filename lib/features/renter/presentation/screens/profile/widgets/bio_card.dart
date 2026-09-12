@@ -4,7 +4,6 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 
-
 class BioCard extends StatelessWidget {
   final String bio;
   final String? instagramHandle;

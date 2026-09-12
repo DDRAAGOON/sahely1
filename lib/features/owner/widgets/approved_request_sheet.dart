@@ -24,6 +24,7 @@ Future<void> showApprovedRequestSheet(
     isDismissible: true,
     enableDrag: true,
     useRootNavigator: true,
+    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     barrierColor: AppColors.navy.withValues(alpha: 0.45),
     builder: (sheetCtx) => Container(
@@ -34,7 +35,7 @@ Future<void> showApprovedRequestSheet(
       ),
       child: SafeArea(
         top: false,
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(26, 14, 26, 30),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -86,23 +87,26 @@ Future<void> showApprovedRequestSheet(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Payout on check-in',
-                            style:
-                                AppTheme.dm(size: 12, color: AppColors.muted)),
-                        const SizedBox(height: 2),
-                        Text(
-                            payoutDisplay ??
-                                CurrencyFormatter.format(
-                                    (payoutAmount ?? 18000).toInt()),
-                            style: AppTheme.dm(
-                                size: 17,
-                                weight: FontWeight.w700,
-                                color: AppColors.navy)),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Payout on check-in',
+                              style: AppTheme.dm(
+                                  size: 12, color: AppColors.muted)),
+                          const SizedBox(height: 2),
+                          Text(
+                              payoutDisplay ??
+                                  CurrencyFormatter.format(
+                                      (payoutAmount ?? 18000).toInt()),
+                              style: AppTheme.dm(
+                                  size: 17,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy)),
+                        ],
+                      ),
                     ),
+                    const SizedBox(width: 10),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 6),

@@ -22,8 +22,6 @@ class BookingConfirmedScreen extends StatelessWidget {
     final pName =
         property?.name ?? args?['propertyName'] ?? 'Azure Beach Villa';
 
-
-
     return PhoneScaffold(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -49,10 +47,12 @@ class BookingConfirmedScreen extends StatelessWidget {
                 children: [
                   const KeyValueRow('Check-in', 'Jun 21, 3:00 PM'),
                   const KeyValueRow('Check-out', 'Jun 25, 11:00 AM'),
-                  KeyValueRow(AppLocalizations.of(context).guestsLabel, '$guests adults'),
+                  KeyValueRow(AppLocalizations.of(context).guestsLabel,
+                      '$guests adults'),
                   const KeyValueRow('Unit · Floor', 'B-214 · Floor 2'),
                   const KeyValueRow('Booking ref', 'SHLY-8842'),
-                  KeyValueRow('Total paid', CurrencyFormatter.format(total.toInt()),
+                  KeyValueRow(
+                      'Total paid', CurrencyFormatter.format(total.toInt()),
                       bold: true, topBorder: true),
                 ],
               ),

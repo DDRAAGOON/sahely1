@@ -46,7 +46,8 @@ class UploadTask {
     if (_state.status.isUploading || _state.status.isSuccess) return;
 
     _cancellationToken = CancellationToken();
-    _updateState(_state.copyWith(status: UploadStatus.uploading, failure: null));
+    _updateState(
+        _state.copyWith(status: UploadStatus.uploading, failure: null));
 
     try {
       final url = await uploader(
@@ -82,8 +83,8 @@ class UploadTask {
 
   void pause() {
     if (_state.status.isUploading) {
-       // Pause implementation depends on the underlying network library
-       // For now, we update status.
+      // Pause implementation depends on the underlying network library
+      // For now, we update status.
       _updateState(_state.copyWith(status: UploadStatus.paused));
     }
   }

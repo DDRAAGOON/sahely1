@@ -8,10 +8,13 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/pull_to_refresh.dart';
 import 'package:sahely/core/widgets/ui.dart';
-import 'package:sahely/data/sample_data.dart';
 
 import '../../../core/utils/currency_formatter.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/features/owner/domain/entities/owner_guest_booking.dart';
+import 'package:sahely/features/owner/domain/repositories/owner_repository.dart';
 
 class OwnerBookingsScreen extends StatefulWidget {
   final int initialMainTab;
@@ -25,96 +28,172 @@ class OwnerBookingsScreen extends StatefulWidget {
 class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
   late int _mainTab;
   int _subTab = 1; // 0: Upcoming, 1: Active, 2: Past
+  late Future<List<OwnerGuestBooking>> _guestBookings;
 
   @override
   void initState() {
     super.initState();
     _mainTab = widget.initialMainTab;
+    _guestBookings = _loadGuests();
+    // "My Stays" lists the owner's own trips as a guest.
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => context.read<BookingsProvider>().load());
   }
+
+  Future<List<OwnerGuestBooking>> _loadGuests() =>
+      sl<OwnerRepository>().getGuestBookings();
 
   @override
   Widget build(BuildContext context) {
     final bookingsProvider = context.watch<BookingsProvider>();
 
     return PhoneScaffold(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
-        children: [
-          TopBar(
-              title: AppLocalizations.of(context).bookings,
-              subtitle: AppLocalizations.of(context).manageGuests,
-              showBack: false),
-          const SizedBox(height: 16),
-          // Main Role Toggle
-          SegmentTabs(
-            tabs: const ['My Guests', 'My Stays'],
-            active: _mainTab,
-            onTap: (i) => setState(() {
-              _mainTab = i;
-              // Sync subtab with main tab defaults if needed
-              if (_mainTab == 1) _subTab = 1; // Default to Active for stays
-            }),
-          ),
-          const SizedBox(height: 14),
-          // Status Tabs
-          SegmentTabs(
-            tabs: const ['Upcoming', 'Active', 'Past'],
-            active: _subTab,
-            onTap: (i) => setState(() => _subTab = i),
-          ),
-          const SizedBox(height: 18),
-          if (_mainTab == 0)
-            _buildMyGuests()
-          else
-            _buildMyStays(bookingsProvider),
-        ],
+      child: PullToRefresh(
+        onRefresh: () => context.read<BookingsProvider>().load(force: true),
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
+          children: [
+            TopBar(
+                title: AppLocalizations.of(context).bookings,
+                subtitle: AppLocalizations.of(context).manageGuests,
+                showBack: false),
+            const SizedBox(height: 16),
+            // Main Role Toggle
+            SegmentTabs(
+              tabs: const ['My Guests', 'My Stays'],
+              active: _mainTab,
+              onTap: (i) => setState(() {
+                _mainTab = i;
+                // Sync subtab with main tab defaults if needed
+                if (_mainTab == 1) _subTab = 1; // Default to Active for stays
+              }),
+            ),
+            const SizedBox(height: 14),
+            // Status Tabs
+            SegmentTabs(
+              tabs: const ['Upcoming', 'Active', 'Past'],
+              active: _subTab,
+              onTap: (i) => setState(() => _subTab = i),
+            ),
+            const SizedBox(height: 18),
+            if (_mainTab == 0)
+              _buildMyGuests()
+            else
+              _buildMyStays(bookingsProvider),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildMyGuests() {
-    if (_subTab == 0) {
-      return Column(children: [
-        _ownerBookingCard(
-            context,
-            Sample.azure,
-            'Omar Khalil',
-            '★ 4.9 · ID ✓ · 12 stays',
-            ['Jun 21–25', '4 guests · 2A 2C', CurrencyFormatter.format(18000)],
-            'Upcoming',
-            BadgeKind.navy),
-        const SizedBox(height: 14),
-        _ownerBookingCard(
-            context,
-            Sample.dunes,
-            'Sara Mansour',
-            '★ 4.6 · ID ✓ · 3 stays',
-            ['Jul 2–6', '2 guests', CurrencyFormatter.format(15200)],
-            'Upcoming',
-            BadgeKind.navy,
-            grayscale: true),
-      ]);
-    } else if (_subTab == 1) {
-      return _ownerBookingCard(
+    return FutureBuilder<List<OwnerGuestBooking>>(
+      future: _guestBookings,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Padding(
+            padding: EdgeInsets.only(top: 40),
+            child:
+                Center(child: CircularProgressIndicator(color: AppColors.gold)),
+          );
+        }
+        if (snapshot.hasError) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: Column(children: [
+              Text('Could not load your guests.',
+                  style: AppTheme.dm(size: 14, color: AppColors.muted)),
+              TextButton(
+                onPressed: () => setState(() => _guestBookings = _loadGuests()),
+                child: Text(AppLocalizations.of(context).retry,
+                    style: AppTheme.dm(
+                        size: 14,
+                        weight: FontWeight.w600,
+                        color: AppColors.gold)),
+              ),
+            ]),
+          );
+        }
+        final phase = GuestStayPhase.values[_subTab];
+        final guests = snapshot.data!.where((b) => b.phase == phase).toList();
+        if (guests.isEmpty) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Text('No bookings found in this category',
+                  style: AppTheme.dm(size: 14, color: AppColors.muted)),
+            ),
+          );
+        }
+        return Column(children: [
+          for (final booking in guests) ...[
+            _guestCard(booking),
+            const SizedBox(height: 14),
+          ],
+        ]);
+      },
+    );
+  }
+
+  Widget _guestCard(OwnerGuestBooking booking) {
+    final property = booking.property ??
+        Property(
+            id: booking.id,
+            name: 'Listing unavailable',
+            area: '',
+            image: '',
+            price: 0,
+            rating: 0,
+            reviews: 0);
+    final chips = [
+      _stayDates(booking.checkIn, booking.checkOut),
+      booking.guests == 1 ? '1 guest' : '${booking.guests} guests',
+      CurrencyFormatter.format(booking.payoutEgp.round()),
+    ];
+    final meta =
+        '${booking.nights} ${booking.nights == 1 ? 'night' : 'nights'} · ${booking.reference}';
+
+    return switch (booking.phase) {
+      GuestStayPhase.upcoming => _ownerBookingCard(context, property,
+          booking.guestName, meta, chips, 'Upcoming', BadgeKind.navy,
+          orderNumber: booking.reference),
+      GuestStayPhase.active => _ownerBookingCard(
           context,
-          Sample.lagoon,
-          'Nour Adel',
-          '★ 5.0 · checked in today',
-          ['Jun 14–18', '4 guests', CurrencyFormatter.format(22400)],
-          'Checked in',
+          property,
+          booking.guestName,
+          meta,
+          chips,
+          booking.checkedIn ? 'Checked in' : 'Arriving',
           BadgeKind.green,
-          active: true);
-    } else {
-      return _ownerBookingCard(
-          context,
-          Sample.dunes,
-          'Hana Tarek',
-          '★ checked out Jun 11',
-          ['Jun 8–11', '2 guests', CurrencyFormatter.format(11400)],
-          'Done',
-          BadgeKind.gray,
-          rated: true);
-    }
+          orderNumber: booking.reference,
+          active: true),
+      GuestStayPhase.past => _ownerBookingCard(context, property,
+          booking.guestName, meta, chips, 'Done', BadgeKind.gray,
+          orderNumber: booking.reference, rated: true),
+    };
+  }
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  /// `Jun 21–25`, or `Jun 29 – Jul 3` across months.
+  static String _stayDates(DateTime checkIn, DateTime checkOut) {
+    final start = '${_months[checkIn.month - 1]} ${checkIn.day}';
+    if (checkIn.month == checkOut.month) return '$start–${checkOut.day}';
+    return '$start – ${_months[checkOut.month - 1]} ${checkOut.day}';
   }
 
   Widget _buildMyStays(BookingsProvider provider) {
@@ -217,7 +296,8 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                               color: AppColors.navy,
                               weight: FontWeight.w600)),
                       const SizedBox(height: 2),
-                      Text('${AppLocalizations.of(context).orderNo} ${booking.orderNumber}',
+                      Text(
+                          '${AppLocalizations.of(context).orderNo} ${booking.orderNumber}',
                           style: AppTheme.dm(
                               size: 12, color: const Color(0xFF5B5B5B))),
                     ],
@@ -230,10 +310,14 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
               ReviewButton(
                 onTap: () => AppNavigation.goToOwnerRateGuest(
                   context,
-                  extra: Sample.allTrending.firstWhere(
-                    (p) => p.name == booking.propertyName,
-                    orElse: () => Sample.azure,
-                  ),
+                  extra: Property(
+                      id: booking.id,
+                      name: booking.propertyName,
+                      area: booking.location,
+                      image: booking.imageUrl,
+                      price: 0,
+                      rating: 0,
+                      reviews: 0),
                 ),
               ),
             ],
@@ -251,16 +335,23 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
       List<String> chips,
       String badge,
       BadgeKind kind,
-      {bool active = false,
-      bool rated = false,
-      bool grayscale = false}) {
+      {required String orderNumber,
+      bool active = false,
+      bool rated = false}) {
     String route = '/owner/booking-upcoming';
     if (active) route = '/owner/booking-active';
     if (rated) route = '/owner/booking-past';
+    final extra = <String, dynamic>{
+      'prop': property,
+      'badge': badge,
+      'kind': kind,
+      'orderNumber': orderNumber,
+      'dates': chips.first,
+      'guests': chips.length > 1 ? chips[1] : '',
+    };
 
     return GestureDetector(
-      onTap: () => AppNavigation.safePush(context, route,
-          extra: {'prop': property, 'badge': badge, 'kind': kind}),
+      onTap: () => AppNavigation.safePush(context, route, extra: extra),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -334,21 +425,14 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                                   weight: FontWeight.w700,
                                   color: AppColors.navy)),
                           const SizedBox(height: 2),
-                          Row(children: [
-                            if (!guestMeta.startsWith('★')) ...[
-                              const Icon(Icons.star,
-                                  size: 12, color: AppColors.gold),
-                              const SizedBox(width: 4),
-                            ],
-                            Text(guestMeta,
-                                style: AppTheme.dm(
-                                    size: 12, color: AppColors.muted)),
-                          ]),
+                          Text(guestMeta,
+                              style: AppTheme.dm(
+                                  size: 12, color: AppColors.muted)),
                         ])),
                   ]),
                   const SizedBox(height: 16),
                   if (active) ...[
-                    _kv(AppLocalizations.of(context).orderNo, 'SHLY-7741'),
+                    _kv(AppLocalizations.of(context).orderNo, orderNumber),
                     _kv('Dates', chips.first),
                     _kv('Guests', chips[1]),
                     const SizedBox(height: 16),
@@ -377,11 +461,7 @@ class _OwnerBookingsScreenState extends State<OwnerBookingsScreen> {
                     Center(
                       child: GestureDetector(
                         onTap: () => AppNavigation.safePush(context, route,
-                            extra: {
-                              'prop': property,
-                              'badge': badge,
-                              'kind': kind
-                            }),
+                            extra: extra),
                         child: Text('View booking details →',
                             style: AppTheme.dm(
                                 size: 14,

@@ -25,7 +25,7 @@ class SecurityManager {
   Future<void> initialize() async {
     try {
       await network.initialize();
-      
+
       final isSecure = await device.isDeviceSecure();
       if (!isSecure) {
         await logger.log(

@@ -38,15 +38,19 @@ class FeatureFlagManager {
     switch (_policy) {
       case FeatureFlagPolicy.localOnly:
         return _localOverrides[flag.key] ?? flag.defaultValue;
-      
+
       case FeatureFlagPolicy.remoteOnly:
         return _getFromProviders(flag.key) ?? flag.defaultValue;
 
       case FeatureFlagPolicy.localFirst:
-        return _localOverrides[flag.key] ?? _getFromProviders(flag.key) ?? flag.defaultValue;
+        return _localOverrides[flag.key] ??
+            _getFromProviders(flag.key) ??
+            flag.defaultValue;
 
       case FeatureFlagPolicy.remoteFirst:
-        return _getFromProviders(flag.key) ?? _localOverrides[flag.key] ?? flag.defaultValue;
+        return _getFromProviders(flag.key) ??
+            _localOverrides[flag.key] ??
+            flag.defaultValue;
     }
   }
 

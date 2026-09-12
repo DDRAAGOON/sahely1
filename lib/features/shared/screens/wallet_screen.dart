@@ -65,11 +65,13 @@ class _WalletScreenState extends State<WalletScreen> {
         if (amount > 0) added += amount.toInt();
         recent.add({
           'type': '${tx['type'] ?? 'transaction'}',
-          'title':
-              '${tx['description'] ?? tx['type'] ?? 'Transaction'}'
-                  .replaceAll('_', ' '),
-          'subtitle': '${tx['created_at'] ?? ''}'.substring(0,
-              '${tx['created_at'] ?? ''}'.length >= 10 ? 10 : '${tx['created_at'] ?? ''}'.length),
+          'title': '${tx['description'] ?? tx['type'] ?? 'Transaction'}'
+              .replaceAll('_', ' '),
+          'subtitle': '${tx['created_at'] ?? ''}'.substring(
+              0,
+              '${tx['created_at'] ?? ''}'.length >= 10
+                  ? 10
+                  : '${tx['created_at'] ?? ''}'.length),
           'amount': amount.toInt(),
         });
       }
@@ -79,13 +81,10 @@ class _WalletScreenState extends State<WalletScreen> {
       final vRes = await _api.get('/violations/mine');
       final vd = unwrapData(vRes.data);
       final vlist = ((vd is Map ? vd['violations'] : vd) as List?) ?? const [];
-      violations = vlist
-          .where((e) {
-            final st =
-                '${(e as Map)['status'] ?? ''}'.toLowerCase();
-            return st == 'pending' || st == 'open';
-          })
-          .length;
+      violations = vlist.where((e) {
+        final st = '${(e as Map)['status'] ?? ''}'.toLowerCase();
+        return st == 'pending' || st == 'open';
+      }).length;
     } catch (_) {}
 
     if (!mounted) return;
@@ -184,7 +183,8 @@ class _WalletScreenState extends State<WalletScreen> {
                         openViolations: _openViolations,
                       ),
                       const SizedBox(height: 24),
-                      WalletRecentActivity(transactions: _recent, onViewAll: () {}),
+                      WalletRecentActivity(
+                          transactions: _recent, onViewAll: () {}),
                     ],
                   ),
                 ),

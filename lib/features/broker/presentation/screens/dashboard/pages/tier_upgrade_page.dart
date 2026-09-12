@@ -4,6 +4,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/fill_viewport.dart';
 
 class BrokerTierUpgradePage extends StatelessWidget {
   const BrokerTierUpgradePage({super.key});
@@ -11,7 +12,7 @@ class BrokerTierUpgradePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PhoneScaffold(
-      child: Padding(
+      child: FillViewport(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           SizedBox(

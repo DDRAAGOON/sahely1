@@ -83,8 +83,10 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                           ),
                           const SizedBox(height: 16),
                           BrokerSearchBar(
-                            onSearchTap: () => AppNavigation.goToBrowse(context),
-                            onFilterTap: () => AppNavigation.goToFilters(context),
+                            onSearchTap: () =>
+                                AppNavigation.goToBrowse(context),
+                            onFilterTap: () =>
+                                AppNavigation.goToFilters(context),
                             onChatTap: () => AppNavigation.goToAiChat(context),
                           ),
                           const SizedBox(height: 16),
@@ -193,7 +195,8 @@ class _BrokerHomePageState extends State<BrokerHomePage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: ReferPropertyBanner(
-                              onTap: () => AppNavigation.goToBrokerRefer(context),
+                              onTap: () =>
+                                  AppNavigation.goToBrokerRefer(context),
                             ),
                           ),
                           const SizedBox(height: 120),

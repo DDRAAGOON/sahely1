@@ -1,11 +1,16 @@
 import 'package:sahely/core/errors/exception_mapper.dart';
+import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
 import '../../domain/repositories/search_repository.dart';
 import '../datasources/search_local_data_source.dart';
 
 class SearchRepositoryImpl implements SearchRepository {
   final SearchLocalDataSource localDataSource;
+  final RenterRepository properties;
 
-  SearchRepositoryImpl({required this.localDataSource});
+  SearchRepositoryImpl({
+    required this.localDataSource,
+    required this.properties,
+  });
 
   @override
   Future<List<String>> getRecentSearches() async {
@@ -34,13 +39,15 @@ class SearchRepositoryImpl implements SearchRepository {
     }
   }
 
+  /// The places and listing names people can search for, taken from the live
+  /// listings: every area first, then the listing titles.
   @override
   Future<List<String>> getRawSuggestionData() async {
     try {
-      // Fetches raw strings for compounds, locations etc. from API or Local
-      return [
-        'Marassi', 'Hacienda', 'Amwaj', 'Seashell', 'Telal', 'La Vista'
-      ];
+      final listings = await properties.getAllProperties();
+      final areas = listings.map((p) => p.area.trim());
+      final names = listings.map((p) => p.name.trim());
+      return {...areas, ...names}.where((s) => s.isNotEmpty).toList();
     } catch (e) {
       throw ExceptionMapper.map(e);
     }

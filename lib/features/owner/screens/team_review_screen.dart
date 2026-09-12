@@ -17,7 +17,8 @@ class TeamReviewScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
         children: [
           TopBar(
-              title: AppLocalizations.of(context).reviewResult, subtitle: 'Palm Shores · reviewed in 3h'),
+              title: AppLocalizations.of(context).reviewResult,
+              subtitle: 'Palm Shores · reviewed in 3h'),
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.all(14),
@@ -76,23 +77,27 @@ class TeamReviewScreen extends StatelessWidget {
                         size: 14, weight: FontWeight.w700, color: Colors.white))
               ]),
               const SizedBox(height: 12),
-              Row(children: [
-                Text(CurrencyFormatter.format(5500),
-                    style: AppTheme.dm(size: 14, color: Colors.white54)
-                        .copyWith(decoration: TextDecoration.lineThrough)),
-                const SizedBox(width: 10),
-                Text(CurrencyFormatter.format(6800),
-                    style: AppTheme.dm(
-                        size: 20,
-                        weight: FontWeight.w700,
-                        color: AppColors.gold)),
-                const SizedBox(width: 8),
-                Text('+24%',
-                    style: AppTheme.dm(
-                        size: 13,
-                        weight: FontWeight.w700,
-                        color: const Color(0xFF7BE0A0))),
-              ]),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: AlignmentDirectional.centerStart,
+                child: Row(children: [
+                  Text(CurrencyFormatter.format(5500),
+                      style: AppTheme.dm(size: 14, color: Colors.white54)
+                          .copyWith(decoration: TextDecoration.lineThrough)),
+                  const SizedBox(width: 10),
+                  Text(CurrencyFormatter.format(6800),
+                      style: AppTheme.dm(
+                          size: 20,
+                          weight: FontWeight.w700,
+                          color: AppColors.gold)),
+                  const SizedBox(width: 8),
+                  Text('+24%',
+                      style: AppTheme.dm(
+                          size: 13,
+                          weight: FontWeight.w700,
+                          color: const Color(0xFF7BE0A0))),
+                ]),
+              ),
               const SizedBox(height: 8),
               Text(
                   'Similar 3-bed villas in Marassi with a pool rent at ${CurrencyFormatter.defaultSymbol} 6,500–7,200 this season. You can keep your price — this is a suggestion.',
@@ -109,7 +114,9 @@ class TeamReviewScreen extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                     child: WideButton(
-                        label: AppLocalizations.of(context).keepMine, color: Colors.white24, height: 42)),
+                        label: AppLocalizations.of(context).keepMine,
+                        color: Colors.white24,
+                        height: 42)),
               ]),
             ]),
           ),

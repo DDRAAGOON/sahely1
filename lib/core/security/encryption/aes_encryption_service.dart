@@ -6,7 +6,8 @@ import 'encryption_failure.dart';
 
 class AesEncryptionService implements EncryptionService {
   @override
-  String encrypt({required String data, required String key, required String iv}) {
+  String encrypt(
+      {required String data, required String key, required String iv}) {
     try {
       final encrypter = Encrypter(AES(Key.fromBase64(key)));
       final encrypted = encrypter.encrypt(data, iv: IV.fromBase64(iv));
@@ -17,10 +18,14 @@ class AesEncryptionService implements EncryptionService {
   }
 
   @override
-  String decrypt({required String encryptedData, required String key, required String iv}) {
+  String decrypt(
+      {required String encryptedData,
+      required String key,
+      required String iv}) {
     try {
       final encrypter = Encrypter(AES(Key.fromBase64(key)));
-      final decrypted = encrypter.decrypt(Encrypted.fromBase64(encryptedData), iv: IV.fromBase64(iv));
+      final decrypted = encrypter.decrypt(Encrypted.fromBase64(encryptedData),
+          iv: IV.fromBase64(iv));
       return decrypted;
     } catch (e) {
       throw EncryptionException('Failed to decrypt data: $e');

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'package:sahely/core/di/service_locator.dart' show sl;
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/features/broker/domain/entities/broker_wallet.dart';
+import 'package:sahely/features/broker/domain/repositories/broker_repository.dart';
 
+/// Commission history from `/broker/commissions`, this month and last month.
+/// Payments the broker made as a guest are not part of the broker API, so
+/// the Payments filter lists nothing.
 class BrokerHistoryPage extends StatefulWidget {
   const BrokerHistoryPage({super.key});
 
@@ -14,59 +20,102 @@ class BrokerHistoryPage extends StatefulWidget {
 class _BrokerHistoryPageState extends State<BrokerHistoryPage> {
   String _selectedFilter = 'All';
   final List<String> _filters = ['All', 'Commissions', 'Payments'];
+  List<BrokerCommission> _commissions = const [];
 
-  final List<Map<String, dynamic>> _thisMonthItems = [
-    {
-      'type': 'Commissions',
-      'title': 'Retroactive bonus',
-      'subtitle': 'Gold tier upgrade · Jun 13',
-      'amount': '+2,400',
-      'color': AppColors.success,
-      'isBonus': true,
-    },
-    {
-      'type': 'Commissions',
-      'title': 'Commission · Palm Chalet',
-      'subtitle': 'Jun 12',
-      'amount': '+1,820',
-      'color': AppColors.success,
-    },
-    {
-      'type': 'Commissions',
-      'title': 'Commission · Dune House',
-      'subtitle': 'Jun 9 · Pending',
-      'amount': '+960',
-      'color': AppColors.navy,
-      'pending': true,
-    },
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final wallet = await sl<BrokerRepository>().getBrokerWallet(0);
+      if (mounted) setState(() => _commissions = wallet.commissions);
+    } catch (_) {
+      // The empty state says nothing was found.
+    }
+  }
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
-  final List<Map<String, dynamic>> _lastMonthItems = [
-    {
-      'type': 'Commissions',
-      'title': 'Commission · Marina Loft',
-      'subtitle': 'May 24',
-      'amount': '+1,450',
-      'color': AppColors.success,
-    },
-    {
-      'type': 'Payments',
-      'title': 'Booking payment',
-      'subtitle': 'Own stay · May 18',
-      'amount': '−9,800',
-      'color': const Color(0xFFB22222),
-    },
-  ];
+  /// `EGP 1,820` -> `1820`.
+  static int _amount(String formatted) =>
+      int.tryParse(formatted.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
 
-  List<Map<String, dynamic>> _filterItems(List<Map<String, dynamic>> items) {
-    if (_selectedFilter == 'All') return items;
-    return items.where((item) => item['type'] == _selectedFilter).toList();
+  /// `18000` -> `18,000`.
+  static String _grouped(int value) {
+    final digits = value.toString();
+    final buffer = StringBuffer();
+    for (var i = 0; i < digits.length; i++) {
+      if (i > 0 && (digits.length - i) % 3 == 0) buffer.write(',');
+      buffer.write(digits[i]);
+    }
+    return buffer.toString();
+  }
+
+  /// Commission rows for a month (0 = this month, -1 = last month).
+  List<Map<String, dynamic>> _items(int monthOffset) {
+    if (_selectedFilter == 'Payments') return const [];
+    final now = DateTime.now();
+    final month = DateTime(now.year, now.month + monthOffset);
+    return [
+      for (final c in _commissions.where(
+          (c) => c.date.year == month.year && c.date.month == month.month))
+        _row(c),
+    ];
+  }
+
+  Map<String, dynamic> _row(BrokerCommission c) {
+    final status = c.status.toLowerCase();
+    final pending = status.contains('pend') || status.contains('hold');
+    final reversed = status.contains('revers') || status.contains('cancel');
+    final date = '${_months[c.date.month - 1]} ${c.date.day}';
+    return {
+      'title': 'Commission · ${c.propertyName}',
+      'subtitle':
+          pending ? '$date · Pending' : (reversed ? '$date · Reversed' : date),
+      'amount': '${reversed ? '−' : '+'}${_grouped(_amount(c.amount))}',
+      'color': reversed
+          ? const Color(0xFFB22222)
+          : (pending ? AppColors.navy : AppColors.success),
+      'pending': pending,
+    };
   }
 
   @override
   Widget build(BuildContext context) {
-    final filteredThisMonth = _filterItems(_thisMonthItems);
-    final filteredLastMonth = _filterItems(_lastMonthItems);
+    final thisMonth = _items(0);
+    final lastMonth = _items(-1);
+
+    Widget section(List<Map<String, dynamic>> items) => WhiteCard(
+          child: Column(
+            children: List.generate(items.length, (index) {
+              final item = items[index];
+              return _brk(
+                item['title'],
+                item['subtitle'],
+                item['amount'],
+                item['color'],
+                pending: item['pending'] ?? false,
+                last: index == items.length - 1,
+              );
+            }),
+          ),
+        );
 
     return PhoneScaffold(
       child: ListView(
@@ -90,7 +139,6 @@ class _BrokerHistoryPageState extends State<BrokerHistoryPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: isActive ? AppColors.navy : AppColors.white,
-                      border: isActive ? null : null,
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Text(
@@ -107,88 +155,18 @@ class _BrokerHistoryPageState extends State<BrokerHistoryPage> {
             ),
           ),
           const SizedBox(height: 16),
-          if (filteredThisMonth.isNotEmpty) ...[
+          if (thisMonth.isNotEmpty) ...[
             const SectionLabel('THIS MONTH'),
             const SizedBox(height: 8),
-            WhiteCard(
-              child: Column(
-                children: List.generate(filteredThisMonth.length, (index) {
-                  final item = filteredThisMonth[index];
-                  final isLast = index == filteredThisMonth.length - 1;
-                  
-                  if (item['isBonus'] == true) {
-                    return Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFDF9F4),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  color: AppColors.gold.withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Icon(Icons.star, size: 16, color: AppColors.gold),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(item['title'], style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
-                                    Text(item['subtitle'], style: AppTheme.dm(size: 11, color: AppColors.muted)),
-                                  ],
-                                ),
-                              ),
-                              Text(item['amount'],
-                                  style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: item['color'])),
-                            ],
-                          ),
-                        ),
-                        if (!isLast) const Divider(height: 1, color: Color(0xFFF4EFE7)),
-                      ],
-                    );
-                  }
-
-                  return _brk(
-                    item['title'],
-                    item['subtitle'],
-                    item['amount'],
-                    item['color'],
-                    pending: item['pending'] ?? false,
-                    last: isLast,
-                  );
-                }),
-              ),
-            ),
+            section(thisMonth),
             const SizedBox(height: 16),
           ],
-          if (filteredLastMonth.isNotEmpty) ...[
+          if (lastMonth.isNotEmpty) ...[
             const SectionLabel('LAST MONTH'),
             const SizedBox(height: 8),
-            WhiteCard(
-              child: Column(
-                children: List.generate(filteredLastMonth.length, (index) {
-                  final item = filteredLastMonth[index];
-                  return _brk(
-                    item['title'],
-                    item['subtitle'],
-                    item['amount'],
-                    item['color'],
-                    pending: item['pending'] ?? false,
-                    last: index == filteredLastMonth.length - 1,
-                  );
-                }),
-              ),
-            ),
+            section(lastMonth),
           ],
-          if (filteredThisMonth.isEmpty && filteredLastMonth.isEmpty)
+          if (thisMonth.isEmpty && lastMonth.isEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 40),
               child: Center(
@@ -222,18 +200,22 @@ class _BrokerHistoryPageState extends State<BrokerHistoryPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
+                  Text(title,
+                      style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
                   Text(
                     sub,
                     style: AppTheme.dm(
                       size: 11,
-                      color: pending ? const Color(0xFFD2760A) : AppColors.muted,
+                      color:
+                          pending ? const Color(0xFFD2760A) : AppColors.muted,
                     ),
                   ),
                 ],
               ),
             ),
-            Text(amount, style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: color)),
+            Text(amount,
+                style: AppTheme.dm(
+                    size: 14, weight: FontWeight.w700, color: color)),
           ],
         ),
       );

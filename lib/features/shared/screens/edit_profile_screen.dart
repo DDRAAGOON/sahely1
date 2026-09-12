@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/providers/profile_provider.dart';
@@ -58,32 +58,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
+  /// Saves to the backend (`PUT /users/me`); the screen only closes once the
+  /// server has taken it.
   void _handleSave() async {
     setState(() => _isLoading = true);
 
-    // Save to provider
-    context.read<ProfileProvider>().updateProfile(
-          bio: _bioController.text,
-          instagram: _instagramController.text,
-          tiktok: _tiktokController.text,
-          facebook: _facebookController.text,
-          avatarPath: _localAvatarPath,
+    final saved = await context.read<ProfileProvider>().saveProfile(
+          bio: _bioController.text.trim(),
+          instagram: _instagramController.text.trim(),
+          tiktok: _tiktokController.text.trim(),
+          facebook: _facebookController.text.trim(),
+          avatarLocalPath: _localAvatarPath,
         );
 
-    // Mock API delay
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (mounted) {
-      setState(() => _isLoading = false);
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated successfully')),
-      );
-    }
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        saved ? 'Profile updated successfully' : 'Could not save your profile',
+      ),
+    ));
+    if (saved) Navigator.pop(context);
   }
 
   Color _getCounterColor() {
-    int length = _bioController.text.length;
+    final length = _bioController.text.length;
     if (length > 140) return AppColors.red;
     if (length > 120) return AppColors.warning;
     return AppColors.secondary;
@@ -189,12 +188,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     // Social Accounts Section
                     Row(
                       children: [
-                        Text(
-                          'Link social accounts',
-                          style: AppTheme.dm(
-                            size: 15,
-                            weight: FontWeight.w700,
-                            color: AppColors.navy,
+                        Flexible(
+                          child: Text(
+                            'Link social accounts',
+                            style: AppTheme.dm(
+                              size: 15,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 6),

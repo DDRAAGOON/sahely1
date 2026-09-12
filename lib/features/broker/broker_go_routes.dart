@@ -40,7 +40,8 @@ final List<GoRoute> brokerGoRoutes = [
   GoRoute(
       path: AppRoutes.brokerReferredDetail,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (context, state) => const ReferredPropertyDetailPage()),
+      builder: (context, state) => ReferredPropertyDetailPage(
+          property: state.extra is Property ? state.extra as Property : null)),
   GoRoute(
       path: AppRoutes.brokerReferralIssue,
       parentNavigatorKey: rootNavigatorKey,
@@ -102,15 +103,14 @@ final List<GoRoute> brokerGoRoutes = [
     builder: (context, state) {
       final args = state.extra as Map<String, dynamic>?;
       return BrokerSmartLockScreen(
-        propertyName: args?['propertyName'] ?? 'Azure Beach Villa',
-        bookingRef: args?['bookingRef'] ?? 'SHLY-8842',
-        passcode: args?['passcode'] ?? '1248',
-        checkIn: args?['checkIn'] ??
-            DateTime.now().subtract(const Duration(hours: 2)),
+        propertyName: args?['propertyName'] ?? '',
+        bookingRef: args?['bookingRef'] ?? '',
+        bookingId: args?['bookingId'] ?? '',
+        checkIn: args?['checkIn'] ?? DateTime.now(),
         checkOut:
-            args?['checkOut'] ?? DateTime.now().add(const Duration(days: 3)),
-        propertyLat: args?['lat'] ?? 31.02,
-        propertyLng: args?['lng'] ?? 29.60,
+            args?['checkOut'] ?? DateTime.now().add(const Duration(days: 1)),
+        propertyLat: args?['propertyLat'] ?? args?['lat'] ?? 0.0,
+        propertyLng: args?['propertyLng'] ?? args?['lng'] ?? 0.0,
       );
     },
   ),

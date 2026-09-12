@@ -61,7 +61,8 @@ class BrokerPastStaysSection extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: AppNetworkImage(url: booking.imageUrl, width: 80, height: 80),
+              child:
+                  AppNetworkImage(url: booking.imageUrl, width: 80, height: 80),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -129,4 +130,3 @@ class BrokerPastStaysSection extends StatelessWidget {
     );
   }
 }
-

@@ -29,7 +29,8 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (role == UpcomingBookingRole.owner || role == UpcomingBookingRole.broker) {
+    if (role == UpcomingBookingRole.owner ||
+        role == UpcomingBookingRole.broker) {
       return _buildBusinessView(context);
     }
     return _buildRenterView(context);
@@ -49,12 +50,17 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
               children: [
-                TopBar(title: role == UpcomingBookingRole.owner ? 'Booking Details' : 'Referral Detail'),
+                TopBar(
+                    title: role == UpcomingBookingRole.owner
+                        ? 'Booking Details'
+                        : 'Referral Detail'),
                 const SizedBox(height: 20),
-                
+
                 // Property Info
                 GestureDetector(
-                  onTap: () => AppNavigation.goToPropertyDetail(context, extra: {
+                  onTap: () =>
+                      AppNavigation.goToPropertyDetail(context, extra: {
+                    'id': property?.id ?? bookingData?['propertyId'] ?? '',
                     'name': name,
                     'location': loc,
                     'imageUrl': img,
@@ -64,38 +70,70 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
                     child: Row(children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: AppNetworkImage(url: img, width: 64, height: 64, errorWidget: (_,__,___) => Container(width: 64, height: 64, color: AppColors.cardWarm)),
+                        child: AppNetworkImage(
+                            url: img,
+                            width: 64,
+                            height: 64,
+                            errorWidget: (_, __, ___) => Container(
+                                width: 64,
+                                height: 64,
+                                color: AppColors.cardWarm)),
                       ),
                       const SizedBox(width: 14),
-                      Expanded(child: Column(
+                      Expanded(
+                          child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(name, style: AppTheme.dm(size: 16, weight: FontWeight.w700, color: AppColors.navy)),
-                          Text(loc, style: AppTheme.dm(size: 13, color: AppColors.muted)),
+                          Text(name,
+                              style: AppTheme.dm(
+                                  size: 16,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy)),
+                          Text(loc,
+                              style: AppTheme.dm(
+                                  size: 13, color: AppColors.muted)),
                         ],
                       )),
-                      const Icon(Icons.chevron_right, size: 18, color: AppColors.faint),
+                      const Icon(Icons.chevron_right,
+                          size: 18, color: AppColors.faint),
                     ]),
                   ),
                 ),
                 const SizedBox(height: 16),
 
                 // Guest Info
-                Text(AppLocalizations.of(context).guestInfo, style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+                Text(AppLocalizations.of(context).guestInfo,
+                    style: AppTheme.dm(
+                        size: 15,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy)),
                 const SizedBox(height: 12),
                 WhiteCard(
                   padding: const EdgeInsets.all(16),
                   child: Row(children: [
-                    const AvatarCircle(size: 40, colors: [AppColors.gold, AppColors.goldBright]),
+                    const AvatarCircle(
+                        size: 40,
+                        colors: [AppColors.gold, AppColors.goldBright]),
                     const SizedBox(width: 12),
-                    Expanded(child: Column(
+                    Expanded(
+                        child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(guestName, style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
-                        Text('${AppLocalizations.of(context).verifiedRenter} · 5★', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                        Text(guestName,
+                            style: AppTheme.dm(
+                                size: 15,
+                                weight: FontWeight.w700,
+                                color: AppColors.navy)),
+                        Text(
+                            '${AppLocalizations.of(context).verifiedRenter} · 5★',
+                            style:
+                                AppTheme.dm(size: 12, color: AppColors.muted)),
                       ],
                     )),
-                    const IconCircleButton(icon: Icons.chat_bubble_outline, size: 36, bg: AppColors.cream),
+                    const IconCircleButton(
+                        icon: Icons.chat_bubble_outline,
+                        size: 36,
+                        bg: AppColors.cream),
                   ]),
                 ),
                 const SizedBox(height: 24),
@@ -116,14 +154,26 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
 
                 // Commission if Broker
                 if (role == UpcomingBookingRole.broker) ...[
-                  Text(AppLocalizations.of(context).yourCommission, style: AppTheme.dm(size: 15, weight: FontWeight.w700, color: AppColors.navy)),
+                  Text(AppLocalizations.of(context).yourCommission,
+                      style: AppTheme.dm(
+                          size: 15,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy)),
                   const SizedBox(height: 12),
                   WhiteCard(
                     padding: const EdgeInsets.all(16),
                     child: Row(children: [
-                      Text('4% Commission', style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.muted)),
+                      Text('4% Commission',
+                          style: AppTheme.dm(
+                              size: 14,
+                              weight: FontWeight.w600,
+                              color: AppColors.muted)),
                       const Spacer(),
-                      Text('EGP 216', style: AppTheme.dm(size: 16, weight: FontWeight.w800, color: AppColors.success)),
+                      Text('EGP 216',
+                          style: AppTheme.dm(
+                              size: 16,
+                              weight: FontWeight.w800,
+                              color: AppColors.success)),
                     ]),
                   ),
                   const SizedBox(height: 24),
@@ -131,9 +181,14 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
 
                 // Actions
                 if (role == UpcomingBookingRole.owner) ...[
-                  NavyButton(label: AppLocalizations.of(context).manageDoorAccess, onTap: () {}),
+                  NavyButton(
+                      label: AppLocalizations.of(context).manageDoorAccess,
+                      onTap: () {}),
                   const SizedBox(height: 12),
-                  NavyButton(label: AppLocalizations.of(context).viewChecklist, outline: true, onTap: () {}),
+                  NavyButton(
+                      label: AppLocalizations.of(context).viewChecklist,
+                      outline: true,
+                      onTap: () {}),
                 ],
               ],
             ),
@@ -144,28 +199,34 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
   }
 
   Widget _stat(String l, String v) => WhiteCard(
-    padding: const EdgeInsets.all(14),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(l, style: AppTheme.dm(size: 11, color: AppColors.muted)),
-        const SizedBox(height: 4),
-        Text(v, style: AppTheme.dm(size: 13, weight: FontWeight.w700, color: AppColors.navy)),
-      ],
-    ),
-  );
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l, style: AppTheme.dm(size: 11, color: AppColors.muted)),
+            const SizedBox(height: 4),
+            Text(v,
+                style: AppTheme.dm(
+                    size: 13, weight: FontWeight.w700, color: AppColors.navy)),
+          ],
+        ),
+      );
 
   Widget _buildRenterView(BuildContext context) {
     final booking = bookingData ?? {};
-    final String propertyName = (booking['propertyName'] ?? 'Property').toString();
+    final String propertyName =
+        (booking['propertyName'] ?? 'Property').toString();
     final String location = (booking['location'] ?? 'Location').toString();
     final String imageUrl = (booking['imageUrl'] ?? '').toString();
     final String guests = (booking['guests'] ?? '1 Guest').toString();
-    final int total = (booking['total'] is num) ? (booking['total'] as num).toInt() : 0;
+    final int total =
+        (booking['total'] is num) ? (booking['total'] as num).toInt() : 0;
     final List<String> photos = (booking['photos'] is List)
-        ? (booking['photos'] as List).map((e) => e.toString()).toList() : [];
+        ? (booking['photos'] as List).map((e) => e.toString()).toList()
+        : [];
     final List<String> amenities = (booking['amenities'] is List)
-        ? (booking['amenities'] as List).map((e) => e.toString()).toList() : [];
+        ? (booking['amenities'] as List).map((e) => e.toString()).toList()
+        : [];
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -184,12 +245,18 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(propertyName, style: AppTheme.dm(size: 24, weight: FontWeight.w800, color: AppColors.navy)),
+                  Text(propertyName,
+                      style: AppTheme.dm(
+                          size: 24,
+                          weight: FontWeight.w800,
+                          color: AppColors.navy)),
                   const SizedBox(height: 4),
                   Row(children: [
-                    const Icon(Icons.location_on_outlined, size: 14, color: AppColors.muted),
+                    const Icon(Icons.location_on_outlined,
+                        size: 14, color: AppColors.muted),
                     const SizedBox(width: 4),
-                    Text(location, style: AppTheme.dm(size: 14, color: AppColors.muted)),
+                    Text(location,
+                        style: AppTheme.dm(size: 14, color: AppColors.muted)),
                   ]),
                   const SizedBox(height: 24),
                   BookingDetailsCard(
@@ -211,7 +278,8 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
                   const SizedBox(height: 32),
                   const ArrivalChecklistSection(),
                   const SizedBox(height: 32),
-                  Text(AppLocalizations.of(context).amenitiesTitle, style: AppTheme.dm(size: 18, weight: FontWeight.w700)),
+                  Text(AppLocalizations.of(context).amenitiesTitle,
+                      style: AppTheme.dm(size: 18, weight: FontWeight.w700)),
                   const SizedBox(height: 16),
                   Wrap(
                     spacing: 8,
@@ -219,12 +287,23 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
                     children: amenities.map((a) => _featurePill(a)).toList(),
                   ),
                   const SizedBox(height: 32),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                    Text(AppLocalizations.of(context).totalPayment, style: AppTheme.dm(size: 16, weight: FontWeight.w600)),
-                    Text('EGP $total', style: AppTheme.dm(size: 18, weight: FontWeight.w800, color: AppColors.navy)),
-                  ]),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(AppLocalizations.of(context).totalPayment,
+                            style:
+                                AppTheme.dm(size: 16, weight: FontWeight.w600)),
+                        Text('EGP $total',
+                            style: AppTheme.dm(
+                                size: 18,
+                                weight: FontWeight.w800,
+                                color: AppColors.navy)),
+                      ]),
                   const SizedBox(height: 40),
-                  NavyButton(label: AppLocalizations.of(context).cancelBooking, outline: true, onTap: () => _showCancelDialog(context)),
+                  NavyButton(
+                      label: AppLocalizations.of(context).cancelBooking,
+                      outline: true,
+                      onTap: () => _showCancelDialog(context)),
                   const SizedBox(height: 120),
                 ],
               ),
@@ -241,24 +320,31 @@ class UpcomingBookingDetailScreen extends StatelessWidget {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(AppLocalizations.of(context).cancelBooking, style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
-        content: Text(AppLocalizations.of(context).cancelBookingQ, style: AppTheme.dm(size: 14, color: AppColors.muted)),
+        title: Text(AppLocalizations.of(context).cancelBooking,
+            style: AppTheme.dm(
+                size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+        content: Text(AppLocalizations.of(context).cancelBookingQ,
+            style: AppTheme.dm(size: 14, color: AppColors.muted)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context).noLabel)),
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context).yesCancel)),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context).noLabel)),
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppLocalizations.of(context).yesCancel)),
         ],
       ),
     );
   }
 
   Widget _featurePill(String label) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-    decoration: BoxDecoration(
-      color: AppColors.white,
-      border: Border.all(color: AppColors.borderDefault),
-      borderRadius: BorderRadius.circular(10),
-    ),
-    child: Text(label, style: AppTheme.dm(size: 12, weight: FontWeight.w600)),
-  );
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          border: Border.all(color: AppColors.borderDefault),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child:
+            Text(label, style: AppTheme.dm(size: 12, weight: FontWeight.w600)),
+      );
 }
-

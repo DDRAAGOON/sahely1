@@ -218,10 +218,9 @@ class _StarsEarnedDialogState extends State<StarsEarnedDialog>
                     child: Text(
                       'Keep earning',
                       style: AppTheme.dm(
-                        size: 15,
-                        weight: FontWeight.w700,
-                        color: AppColors.white
-                      ),
+                          size: 15,
+                          weight: FontWeight.w700,
+                          color: AppColors.white),
                     ),
                   ),
                 ),

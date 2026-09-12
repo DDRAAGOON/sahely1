@@ -86,7 +86,9 @@ class PasscodeDisplay extends StatelessWidget {
                   Icon(
                     isInRange ? Icons.copy_rounded : Icons.lock_outline,
                     size: 14,
-                    color: isInRange ? const Color(0xFFC49F45) : const Color(0xFFF87171),
+                    color: isInRange
+                        ? const Color(0xFFC49F45)
+                        : const Color(0xFFF87171),
                   ),
                   const SizedBox(width: 8),
                   Text(

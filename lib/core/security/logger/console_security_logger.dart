@@ -5,8 +5,9 @@ import 'security_log_entry.dart';
 class ConsoleSecurityLogger implements SecurityLogger {
   @override
   Future<void> log(SecurityLogEntry entry) async {
-    final logMessage = '[SECURITY] [${entry.level.name.toUpperCase()}] [${entry.eventType.name}] ${entry.message} ${entry.metadata ?? ''}';
-    
+    final logMessage =
+        '[SECURITY] [${entry.level.name.toUpperCase()}] [${entry.eventType.name}] ${entry.message} ${entry.metadata ?? ''}';
+
     developer.log(
       logMessage,
       name: 'security.logger',

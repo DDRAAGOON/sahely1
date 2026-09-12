@@ -7,7 +7,8 @@ class ValidationResult {
   const ValidationResult._(this.isValid, this.errors);
 
   factory ValidationResult.success() => const ValidationResult._(true, []);
-  factory ValidationResult.failure(List<ValidationError> errors) => ValidationResult._(false, errors);
+  factory ValidationResult.failure(List<ValidationError> errors) =>
+      ValidationResult._(false, errors);
 
   String? get firstErrorMessage => errors.isEmpty ? null : errors.first.message;
 

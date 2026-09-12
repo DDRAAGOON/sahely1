@@ -47,7 +47,8 @@ double _popScale(double t) {
     final k = (t - seg1) / (seg2 - seg1);
     return 1.12 + (0.96 - 1.12) * Curves.easeInOut.transform(k);
   }
-  return 0.96 + (1.00 - 0.96) * Curves.easeOut.transform((t - seg2) / (1 - seg2));
+  return 0.96 +
+      (1.00 - 0.96) * Curves.easeOut.transform((t - seg2) / (1 - seg2));
 }
 
 class _SuccessCheckState extends State<SuccessCheck>
@@ -172,7 +173,8 @@ class _SuccessCheckState extends State<SuccessCheck>
     if (widget.gold) {
       // Screens 20/38-style: radial-gradient(circle at 50% 40%, bright, base)
       return const RadialGradient(
-          center: Alignment(0, -0.2), colors: [AppColors.goldBright, AppColors.gold]);
+          center: Alignment(0, -0.2),
+          colors: [AppColors.goldBright, AppColors.gold]);
     }
     // Green badges (screens 28/38): brighter core fading to the base color,
     // e.g. radial-gradient(circle at 50% 38%, #28a85f, #1B6B3A).

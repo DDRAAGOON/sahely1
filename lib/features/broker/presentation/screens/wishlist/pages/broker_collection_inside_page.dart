@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -38,7 +38,9 @@ class _BrokerCollectionInsidePageState
   @override
   void initState() {
     super.initState();
-    context.read<WishlistCubit>().loadWishlistItems(widget.collectionId, Role.broker);
+    context
+        .read<WishlistCubit>()
+        .loadWishlistItems(widget.collectionId, Role.broker);
   }
 
   @override
@@ -77,16 +79,17 @@ class _BrokerCollectionInsidePageState
 
                 AppNavigation.goToShareCollection(
                   context,
+                  collectionId: widget.collectionId,
                   collectionName: widget.collectionName,
-                  collectionImage: collection.coverImage ?? 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+                  collectionImage: collection.coverImage ?? '',
                   placesCount: collection.itemCount,
-                  shareableLink: 'sahely.app/broker/c/${widget.collectionName.toLowerCase().replaceAll(' ', '-')}',
                 );
               },
               onCompareTap: () {
                 AppNavigation.goToCompare(
                   context,
                   collectionName: widget.collectionName,
+                  collectionId: widget.collectionId,
                   memberNames: widget.memberNames,
                 );
               },
@@ -116,8 +119,7 @@ class _BrokerCollectionInsidePageState
                           const SizedBox(height: 16),
                           Text(
                             'No properties in this collection yet',
-                            style: AppTheme.dm(
-                                color: AppColors.secondary),
+                            style: AppTheme.dm(color: AppColors.secondary),
                           ),
                         ],
                       ),

@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/core/network/api_envelope.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/pull_to_refresh.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_filter_chips.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_section_header.dart';
 import 'package:sahely/features/renter/presentation/screens/wallet/widgets/history_transaction_row.dart';
+import 'package:sahely/features/wallet/data/datasources/wallet_remote_data_source.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 
+/// The account's own wallet history (`GET /wallet/transactions`), newest
+/// first and grouped by month.
 class TransactionHistoryScreen extends StatefulWidget {
   const TransactionHistoryScreen({super.key});
 
@@ -18,47 +25,74 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   String _selectedFilter = 'All';
   final List<String> _filters = ['All', 'Payments', 'Credit', 'Violations'];
 
-  // Mock data - Grouped by month
-  final Map<String, List<Map<String, dynamic>>> _transactions = {
-    'THIS MONTH': [
-      {
-        'type': 'payment',
-        'title': 'Booking payment',
-        'subtitle': 'Azure Villa · Jun 14',
-        'amount': -2109000, // In piastres
-      },
-      {
-        'type': 'credit',
-        'title': 'Credit added',
-        'subtitle': 'Visa ••42 · Jun 10',
-        'amount': 50000,
-      },
-      {
-        'type': 'violation',
-        'title': 'Late checkout fine',
-        'subtitle': 'Jun 9',
-        'amount': -30000,
-        'isViolation': true,
-      },
-    ],
-    'LAST MONTH': [
-      {
-        'type': 'refund',
-        'title': 'Refund · cancelled stay',
-        'subtitle': 'May 28',
-        'amount': 120000,
-      },
-      {
-        'type': 'payment',
-        'title': 'Booking payment',
-        'subtitle': 'Lagoon Retreat · May 20',
-        'amount': -1840000,
-      },
-    ],
-  };
+  List<_Entry> _entries = const [];
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final result = await sl<WalletRemoteDataSource>().getTransactionRows();
+    if (!mounted) return;
+    setState(() {
+      _loading = false;
+      result.fold(
+        (_) => _entries = const [],
+        (rows) => _entries = rows.map(_Entry.fromJson).toList()
+          ..sort((a, b) => b.at.compareTo(a.at)),
+      );
+    });
+  }
+
+  /// The rows the selected chip keeps.
+  List<_Entry> get _visible => _entries.where((e) {
+        switch (_selectedFilter) {
+          case 'Payments':
+            return e.type == 'payment' || e.type == 'refund';
+          case 'Credit':
+            return e.type == 'credit';
+          case 'Violations':
+            return e.type == 'violation';
+          default:
+            return true;
+        }
+      }).toList();
+
+  /// The visible rows as month sections, newest month first.
+  List<(String, List<_Entry>)> _sections(BuildContext context) {
+    final now = DateTime.now();
+    final thisMonth = DateTime(now.year, now.month);
+    final lastMonth = DateTime(now.year, now.month - 1);
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final l = AppLocalizations.of(context);
+
+    final grouped = <DateTime, List<_Entry>>{};
+    for (final entry in _visible) {
+      final month = DateTime(entry.at.year, entry.at.month);
+      grouped.putIfAbsent(month, () => []).add(entry);
+    }
+
+    final months = grouped.keys.toList()..sort((a, b) => b.compareTo(a));
+    return [
+      for (final month in months)
+        (
+          month == thisMonth
+              ? l.thisMonth
+              : month == lastMonth
+                  ? l.lastMonth
+                  : DateFormat.yMMMM(locale).format(month),
+          grouped[month]!,
+        ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final sections = _sections(context);
+
     return Scaffold(
       backgroundColor: AppColors.cream,
       appBar: AppBar(
@@ -124,9 +158,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                 filters: _filters,
                 selectedFilter: _selectedFilter,
                 onFilterSelected: (filter) {
-                  setState(() {
-                    _selectedFilter = filter;
-                  });
+                  setState(() => _selectedFilter = filter);
                 },
               ),
             ),
@@ -135,67 +167,64 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
             // Transaction List
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                children: [
-                  // THIS MONTH Section
-                  if (_hasTransactionsForMonth('THIS MONTH')) ...[
-                    HistorySectionHeader(title: AppLocalizations.of(context).thisMonth),
-                    const SizedBox(height: 12),
-                    ..._buildTransactionList('THIS MONTH'),
-                    const SizedBox(height: 24),
-                  ],
+              child: PullToRefresh(
+                onRefresh: _load,
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  children: [
+                    for (final (title, entries) in sections) ...[
+                      HistorySectionHeader(title: title),
+                      const SizedBox(height: 12),
+                      _card(entries),
+                      const SizedBox(height: 24),
+                    ],
 
-                  // LAST MONTH Section
-                  if (_hasTransactionsForMonth('LAST MONTH')) ...[
-                    HistorySectionHeader(title: AppLocalizations.of(context).lastMonth),
-                    const SizedBox(height: 12),
-                    ..._buildTransactionList('LAST MONTH'),
-                    const SizedBox(height: 24),
-                  ],
+                    // Empty State
+                    if (sections.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 48),
+                        child: Center(
+                          child: _loading
+                              ? const CircularProgressIndicator(
+                                  color: AppColors.gold)
+                              : const Column(
+                                  children: [
+                                    Icon(
+                                      Icons.receipt_long,
+                                      size: 64,
+                                      color: AppColors.border,
+                                    ),
+                                    SizedBox(height: 16),
+                                    Text(
+                                      'No transactions found',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: AppColors.secondary,
+                                        fontFamily: 'DM Sans',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ),
 
-                  // Empty State
-                  if (!_hasTransactionsForMonth('THIS MONTH') &&
-                      !_hasTransactionsForMonth('LAST MONTH'))
+                    // Footer Note
                     const Padding(
-                      padding: EdgeInsets.only(top: 48),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.receipt_long,
-                              size: 64,
-                              color: AppColors.border,
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'No transactions found',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.secondary,
-                                fontFamily: 'DM Sans',
-                              ),
-                            ),
-                          ],
+                      padding: EdgeInsets.only(top: 8, bottom: 40),
+                      child: Text(
+                        'Renter view — every booking payment, credit top-up & violation in one place.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: AppColors.secondary,
+                          fontFamily: 'DM Sans',
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
                     ),
-
-                  // Footer Note
-                  const Padding(
-                    padding: EdgeInsets.only(top: 8, bottom: 40),
-                    child: Text(
-                      'Renter view — every booking payment, credit top-up & violation in one place.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: AppColors.secondary,
-                        fontFamily: 'DM Sans',
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -204,86 +233,87 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
     );
   }
 
-  bool _hasTransactionsForMonth(String month) {
-    if (_transactions[month] == null) return false;
-    if (_selectedFilter == 'All') return _transactions[month]!.isNotEmpty;
+  Widget _card(List<_Entry> entries) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.border),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          for (var i = 0; i < entries.length; i++) ...[
+            HistoryTransactionRow(
+              type: entries[i].type,
+              title: entries[i].title,
+              subtitle: entries[i].subtitle,
+              amount: entries[i].amountPiastres,
+              isViolation: entries[i].type == 'violation',
+            ),
+            if (i != entries.length - 1)
+              const Divider(height: 1, color: AppColors.border),
+          ],
+        ],
+      ),
+    );
+  }
+}
 
-    return _transactions[month]!.any((transaction) {
-      if (_selectedFilter == 'Payments') {
-        return transaction['type'] == 'payment' ||
-            transaction['type'] == 'refund';
-      } else if (_selectedFilter == 'Credit') {
-        return transaction['type'] == 'credit';
-      } else if (_selectedFilter == 'Violations') {
-        return transaction['type'] == 'violation';
-      }
-      return false;
-    });
+/// One wallet movement, in the shape the history row renders.
+class _Entry {
+  const _Entry({
+    required this.type,
+    required this.title,
+    required this.subtitle,
+    required this.amountPiastres,
+    required this.at,
+  });
+
+  /// payment · credit · refund · violation — the four kinds the chips offer.
+  final String type;
+  final String title;
+  final String subtitle;
+
+  /// Piastres, negative when the money left the wallet.
+  final int amountPiastres;
+  final DateTime at;
+
+  factory _Entry.fromJson(Map<String, dynamic> json) {
+    final kind = '${json['type'] ?? ''}'.toLowerCase();
+    final reference = '${pick(json, 'reference_type') ?? ''}'.toLowerCase();
+    final category = '${json['category'] ?? ''}'.toLowerCase();
+    final amount = (asNum(json['amount']) ?? 0).abs().toInt();
+    final at = asDate(pick(json, 'created_at')) ?? DateTime.now();
+
+    final outgoing = kind == 'debit' || kind == 'hold' || kind == 'withdrawal';
+    final isViolation =
+        reference.contains('violation') || category.contains('violation');
+    final isRefund = kind == 'refund' || reference.contains('refund');
+
+    return _Entry(
+      type: isViolation
+          ? 'violation'
+          : isRefund
+              ? 'refund'
+              : outgoing
+                  ? 'payment'
+                  : 'credit',
+      title: '${json['description'] ?? _label(kind, reference)}',
+      subtitle: DateFormat('d MMM').format(at),
+      amountPiastres: outgoing ? -amount : amount,
+      at: at,
+    );
   }
 
-  List<Widget> _buildTransactionList(String month) {
-    final transactions = _transactions[month]!;
-    List<Map<String, dynamic>> filteredTransactions = [];
-
-    for (var transaction in transactions) {
-      if (_selectedFilter != 'All') {
-        if (_selectedFilter == 'Payments' &&
-            transaction['type'] != 'payment' &&
-            transaction['type'] != 'refund') {
-          continue;
-        } else if (_selectedFilter == 'Credit' &&
-            transaction['type'] != 'credit') {
-          continue;
-        } else if (_selectedFilter == 'Violations' &&
-            transaction['type'] != 'violation') {
-          continue;
-        }
-      }
-      filteredTransactions.add(transaction);
-    }
-
-    if (filteredTransactions.isEmpty) return [];
-
-    return [
-      Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          children: filteredTransactions.asMap().entries.map((entry) {
-            final index = entry.key;
-            final transaction = entry.value;
-            final isLast = index == filteredTransactions.length - 1;
-
-            return Column(
-              children: [
-                HistoryTransactionRow(
-                  type: transaction['type'],
-                  title: transaction['title'],
-                  subtitle: transaction['subtitle'],
-                  amount: transaction['amount'],
-                  isViolation: transaction['isViolation'] ?? false,
-                ),
-                if (!isLast)
-                  const Divider(
-                    height: 1,
-                    color: AppColors.border,
-                    indent: 0,
-                  ),
-              ],
-            );
-          }).toList(),
-        ),
-      ),
-    ];
+  static String _label(String kind, String reference) {
+    if (reference.isNotEmpty) return reference.replaceAll('_', ' ');
+    return kind.isEmpty ? 'Transaction' : kind;
   }
 }

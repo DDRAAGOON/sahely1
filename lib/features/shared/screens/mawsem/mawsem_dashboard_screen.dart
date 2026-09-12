@@ -16,8 +16,7 @@ class MawsemDashboardScreen extends StatelessWidget {
     final profile = context.watch<ProfileProvider>();
     final levelData = profile.levelData;
     final nextLevel = profile.nextLevelData;
-    final int starsToNext =
-        nextLevel != null ? nextLevel['stars'] - profile.stars : 0;
+    final int starsToNext = profile.starsToNext;
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -53,16 +52,17 @@ class MawsemDashboardScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
                 child: MawsemHeroCard(
-                  levelName: levelData['name'],
-                  levelNumber: levelData['level'],
-                  totalLevels: 7,
+                  levelName: '${levelData['name'] ?? ''}',
+                  levelNumber: levelData['level'] as int,
+                  totalLevels: profile.levels.length,
                   currentStars: profile.stars,
                   nextLevelName:
                       nextLevel != null ? nextLevel['name'] : 'Max Level',
                   nextLevelThreshold:
                       nextLevel != null ? nextLevel['stars'] : profile.stars,
                   starsToNext: starsToNext,
-                  seasonEndDays: 87,
+                  seasonEndDays: profile.seasonDaysLeft,
+                  seasonName: profile.seasonName,
                 ),
               ),
             ),

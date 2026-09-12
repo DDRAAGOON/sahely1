@@ -2,11 +2,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/features/broker/domain/use_cases/get_broker_dashboard_use_case.dart';
 
 import 'package:sahely/features/broker/presentation/bloc/broker_home_state.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
-class BrokerHomeCubit extends Cubit<BrokerHomeState> {
+class BrokerHomeCubit extends Cubit<BrokerHomeState>
+    with SafeEmit<BrokerHomeState> {
   final GetBrokerDashboardUseCase _getBrokerDashboardUseCase;
 
-  BrokerHomeCubit({required GetBrokerDashboardUseCase getBrokerDashboardUseCase})
+  BrokerHomeCubit(
+      {required GetBrokerDashboardUseCase getBrokerDashboardUseCase})
       : _getBrokerDashboardUseCase = getBrokerDashboardUseCase,
         super(BrokerHomeInitial());
 

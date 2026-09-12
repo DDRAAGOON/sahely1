@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sahely/core/providers/safe_notifier.dart';
 
-class LocaleProvider extends ChangeNotifier {
+class LocaleProvider extends ChangeNotifier with SafeNotifier {
   Locale? _locale;
   final _storage = const FlutterSecureStorage();
 

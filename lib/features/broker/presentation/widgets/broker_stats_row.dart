@@ -70,7 +70,7 @@ class _StatCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          border : null,
+          border: null,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.02),

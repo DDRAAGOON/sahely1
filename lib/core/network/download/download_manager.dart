@@ -8,16 +8,19 @@ class DownloadManager {
   final Map<String, DownloadTask> _tasks = {};
   final List<String> _queue = [];
   final DownloadPolicy _policy;
-  
+
   int _activeDownloads = 0;
 
-  final _globalStateController = StreamController<Map<String, DownloadState>>.broadcast();
+  final _globalStateController =
+      StreamController<Map<String, DownloadState>>.broadcast();
 
-  DownloadManager({DownloadPolicy policy = DownloadPolicy.defaultPolicy}) : _policy = policy;
+  DownloadManager({DownloadPolicy policy = DownloadPolicy.defaultPolicy})
+      : _policy = policy;
 
-  Stream<Map<String, DownloadState>> get globalStateStream => _globalStateController.stream;
-  
-  Map<String, DownloadState> get currentStates => 
+  Stream<Map<String, DownloadState>> get globalStateStream =>
+      _globalStateController.stream;
+
+  Map<String, DownloadState> get currentStates =>
       _tasks.map((key, task) => MapEntry(key, task.state));
 
   void addTask(DownloadTask task) {
@@ -25,7 +28,7 @@ class DownloadManager {
 
     _tasks[task.id] = task;
     _queue.add(task.id);
-    
+
     task.stateStream.listen((state) {
       _notifyGlobal();
       if (state.status.isFinished) {

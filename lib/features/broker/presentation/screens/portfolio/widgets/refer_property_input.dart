@@ -43,7 +43,8 @@ class ReferPropertyInput extends StatelessWidget {
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: AppTheme.dm(size: 15, color: AppColors.subtle),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               border: InputBorder.none,
             ),
           ),

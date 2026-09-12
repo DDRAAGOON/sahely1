@@ -9,8 +9,9 @@ import 'package:sahely/features/shared/properties/domain/use_cases/recent_search
 import 'package:sahely/features/shared/properties/domain/use_cases/clear_recent_searches_use_case.dart';
 import 'package:sahely/features/shared/properties/domain/use_cases/save_search_use_case.dart';
 import 'search_state.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
-class SearchCubit extends Cubit<SearchState> {
+class SearchCubit extends Cubit<SearchState> with SafeEmit<SearchState> {
   final GetPropertiesUseCase _getPropertiesUseCase;
   final SearchPropertiesUseCase _searchPropertiesUseCase;
   final FilterPropertiesUseCase _filterPropertiesUseCase;
@@ -51,7 +52,8 @@ class SearchCubit extends Cubit<SearchState> {
         status: SearchStatus.success,
       ));
     } catch (e) {
-      emit(state.copyWith(status: SearchStatus.error, errorMessage: e.toString()));
+      emit(state.copyWith(
+          status: SearchStatus.error, errorMessage: e.toString()));
     }
   }
 
@@ -65,7 +67,8 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void _applySearchAndFilter() {
-    var results = _searchPropertiesUseCase.execute(state.allProperties, state.query);
+    var results =
+        _searchPropertiesUseCase.execute(state.allProperties, state.query);
     results = _filterPropertiesUseCase.execute(results, state.filter);
     results = _sortPropertiesUseCase.execute(results, state.sortType);
     emit(state.copyWith(filteredResults: results));

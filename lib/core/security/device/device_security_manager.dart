@@ -9,7 +9,7 @@ class DeviceSecurityManager {
     final rooted = await _service.isRooted();
     final emulator = await _service.isEmulator();
     final developerMode = await _service.isDeveloperMode();
-    
+
     // Logic for "secure" can be customized
     return !rooted && !emulator && !developerMode;
   }

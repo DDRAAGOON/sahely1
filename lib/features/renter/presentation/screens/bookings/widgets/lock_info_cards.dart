@@ -57,12 +57,14 @@ class LockInfoCards extends StatelessWidget {
   Widget _buildCard(String label, String value) {
     return Expanded(
       child: Container(
-        height: 80, // Fixed height to ensure both match exactly
+        // Same minimum height for both cards; grows with a large system font.
+        constraints: const BoxConstraints(minHeight: 80),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         decoration: BoxDecoration(
           color: const Color(0xFF1E293B).withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
+          border:
+              Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

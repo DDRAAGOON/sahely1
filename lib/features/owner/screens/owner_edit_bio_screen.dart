@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/avatars.dart';
@@ -18,15 +21,44 @@ class OwnerEditBioScreen extends StatefulWidget {
 }
 
 class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
-  final _bioController = TextEditingController(
-      text:
-          'Hosting beachfront villas across Marassi & Hacienda Bay. Superhost since 2023 🏖');
-  final _instaController = TextEditingController(text: '@layla.stays');
+  final _bioController = TextEditingController();
+  final _instaController = TextEditingController();
   final _tiktokController = TextEditingController();
   final _fbController = TextEditingController();
 
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
+  bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // The account's own bio and handles, never a sample profile.
+    final profile = context.read<ProfileProvider>();
+    _bioController.text = profile.bio;
+    _instaController.text = profile.instagram ?? '';
+    _tiktokController.text = profile.tiktok ?? '';
+    _fbController.text = profile.facebook ?? '';
+  }
+
+  /// Saves to the backend (`PUT /users/me`) and only then closes.
+  Future<void> _save() async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    final saved = await context.read<ProfileProvider>().saveProfile(
+          bio: _bioController.text.trim(),
+          instagram: _instaController.text.trim(),
+          tiktok: _tiktokController.text.trim(),
+          facebook: _fbController.text.trim(),
+          avatarLocalPath: _imageFile?.path,
+        );
+    if (!mounted) return;
+    setState(() => _saving = false);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(saved ? 'Profile updated' : 'Could not save your profile'),
+    ));
+    if (saved) Navigator.pop(context);
+  }
 
   @override
   void dispose() {
@@ -110,9 +142,9 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: AppColors.goldSoft,
-          borderRadius: BorderRadius.circular(16),
-          border : null),
+            color: AppColors.goldSoft,
+            borderRadius: BorderRadius.circular(16),
+            border: null),
         child: Column(
           children: [
             Icon(icon, size: 28, color: AppColors.navy),
@@ -169,7 +201,8 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                                 image: _imageFile != null
                                     ? DecorationImage(
                                         image: FileImage(_imageFile!),
-                                        fit: BoxFit.cover) : null,
+                                        fit: BoxFit.cover)
+                                    : null,
                               ),
                               child: _imageFile == null
                                   ? const AvatarCircle(
@@ -178,7 +211,8 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                                         Color(0xFFD8B98A),
                                         Color(0xFF7D5A2C)
                                       ],
-                                    ) : null,
+                                    )
+                                  : null,
                             ),
                             Positioned(
                               bottom: 0,
@@ -189,7 +223,7 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
                                 decoration: const BoxDecoration(
                                   color: AppColors.gold,
                                   shape: BoxShape.circle,
-                                  border : null,
+                                  border: null,
                                 ),
                                 child: const Icon(Icons.camera_alt,
                                     size: 16, color: AppColors.navy),
@@ -289,8 +323,8 @@ class _OwnerEditBioScreenState extends State<OwnerEditBioScreen> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: NavyButton(
-              label: 'Save Profile',
-              onTap: () => Navigator.pop(context),
+              label: _saving ? 'Saving…' : 'Save Profile',
+              onTap: _save,
             ),
           ),
         ],

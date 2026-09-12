@@ -164,13 +164,17 @@ class ActiveBookingCard extends StatelessWidget {
                               const Icon(Icons.lock_outline,
                                   color: Color(0xFFC9A84C), size: 18),
                               const SizedBox(width: 8),
-                              Text(
-                                'Digital Lock',
-                                style: AppTheme.dm(
-                                  color: Colors.white,
-                                  weight: FontWeight.w700,
-                                  size: 14,
-                                ),
+                              Flexible(
+                                child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      'Digital Lock',
+                                      style: AppTheme.dm(
+                                        color: Colors.white,
+                                        weight: FontWeight.w700,
+                                        size: 14,
+                                      ),
+                                    )),
                               ),
                             ],
                           ),
@@ -254,4 +258,3 @@ class ActiveBookingCard extends StatelessWidget {
     );
   }
 }
-

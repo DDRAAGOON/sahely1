@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
-import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/features/owner/screens/listing_submitted_screen.dart';
 
+import '../../../core/di/service_locator.dart';
+import '../../../core/errors/exception_mapper.dart';
+import '../../../core/errors/failures.dart';
 import '../../../core/navigation/app_navigation.dart';
+import '../domain/repositories/owner_repository.dart';
 
 class AddPropertyScreen extends StatefulWidget {
   const AddPropertyScreen({super.key});
@@ -44,6 +46,10 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
   }
 
   bool _submitted = false;
+
+  /// True while the create/upload/submit calls are in flight, so a double
+  /// tap cannot create the same listing twice.
+  bool _saving = false;
 
   // State Variables
   String? _propertyType;
@@ -107,47 +113,78 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
     super.dispose();
   }
 
-  Property _createPropertyObject(PropertyStatus status) {
-    return Property(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      name: _nameController.text.isEmpty
-          ? (status == PropertyStatus.draft ? 'New Draft Listing' : 'Untitled Property')
-          : _nameController.text,
-      area: _areaController.text.split(',').first,
-      image: _pickedImages.isNotEmpty ? _pickedImages.first.path : '',
-      price: int.tryParse(_referralController.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
-      rating: 0.0,
-      reviews: 0,
-      type: _propertyType ?? '',
-      beds: int.tryParse(_numBedsController.text) ?? 0,
-      guests: int.tryParse(_guestsController.text) ?? 0,
-      petsOk: _petsOk ?? true,
-      tags: _selectedAmenities.toList(),
-      status: status,
+  /// Collects the wizard fields into the payload the API expects.
+  NewPropertyDraft _draft() {
+    int? parseInt(TextEditingController c) =>
+        int.tryParse(c.text.replaceAll(RegExp(r'[^0-9]'), ''));
+
+    final area = _areaController.text.split(',');
+    return NewPropertyDraft(
+      title: _nameController.text.trim().isEmpty
+          ? 'Untitled Property'
+          : _nameController.text.trim(),
+      description: _descController.text.trim(),
+      pricePerNightEgp: parseInt(_referralController) ?? 0,
+      propertyType: _propertyType,
+      bedrooms: parseInt(_numBedsController),
+      bathrooms: parseInt(_bathroomsController),
+      maxGuests: parseInt(_guestsController),
+      areaSqm: parseInt(_sqmController),
+      beachDistanceMeters: parseInt(_metersFromSeaController),
+      addressLine1: _addressController.text.trim(),
+      city: area.first.trim(),
+      governorate: area.length > 1 ? area.last.trim() : null,
+      unitNumber: _propNoController.text.trim(),
+      floorNumber: _floorController.text.trim(),
+      imagePaths: _pickedImages.map((x) => x.path).toList(),
     );
   }
 
-  void _submit() {
-    final newProp = _createPropertyObject(PropertyStatus.underReview);
-    Sample.ownerProperties.insert(0, newProp);
-    setState(() => _submitted = true);
-    
-    // Auto navigate to properties after a short delay from success screen if needed, 
-    // but the requirement says "وديني ليها"
-    Future.delayed(const Duration(seconds: 3), () {
-       if (mounted) AppNavigation.goToOwnerProperties(context, filter: 'Under Review');
-    });
+  /// Sends the listing to the review queue: create -> upload photos -> submit.
+  Future<void> _submit() async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      await sl<OwnerRepository>()
+          .createProperty(_draft(), submitForReview: true);
+      if (!mounted) return;
+      setState(() => _submitted = true);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(_message(e))));
+    }
   }
 
-  void _saveAsDraft() {
-    final newProp = _createPropertyObject(PropertyStatus.draft);
-    Sample.ownerProperties.insert(0, newProp);
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocalizations.of(context).draftSaved)),
-    );
-    
-    AppNavigation.goToOwnerProperties(context, filter: 'Draft');
+  /// Saves the listing without submitting it, so the owner can finish later.
+  Future<void> _saveAsDraft() async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      await sl<OwnerRepository>()
+          .createProperty(_draft(), submitForReview: false);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).draftSaved)),
+      );
+      AppNavigation.goToOwnerProperties(context, filter: 'Draft');
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(_message(e))));
+    }
+  }
+
+  /// Listing requires an approved KYC; say so plainly instead of showing a
+  /// raw error code.
+  String _message(Object error) {
+    final failure = error is Failure ? error : ExceptionMapper.map(error);
+    if ((failure.code ?? '').toUpperCase().contains('KYC')) {
+      return 'Verify your identity before listing a property.';
+    }
+    return failure.message;
   }
 
   Future<void> _pickImages() async {
@@ -180,7 +217,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                     height: 32,
                     decoration: BoxDecoration(
                         color: AppColors.white,
-                        border : null,
+                        border: null,
                         borderRadius: BorderRadius.circular(9)),
                     child: const Icon(Icons.chevron_left,
                         size: 20, color: AppColors.navy))),
@@ -208,7 +245,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
             child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text('${AppLocalizations.of(context).stepOf(step + 1, 4)} · ${_localizedTitle(context, step)}',
+                child: Text(
+                    '${AppLocalizations.of(context).stepOf(step + 1, 4)} · ${_localizedTitle(context, step)}',
                     style: AppTheme.dm(size: 12, color: AppColors.muted)))),
         Expanded(child: _stepBody()),
         Container(
@@ -226,7 +264,9 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             SizedBox(
               width: 170,
               child: NavyButton(
-                  label: step == 3 ? AppLocalizations.of(context).submitListing : AppLocalizations.of(context).continueBtn,
+                  label: step == 3
+                      ? AppLocalizations.of(context).submitListing
+                      : AppLocalizations.of(context).continueBtn,
                   height: 45,
                   onTap: () => step == 3 ? _submit() : setState(() => step++)),
             ),
@@ -246,7 +286,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                   color: AppColors.white,
-                  border : null,
+                  border: null,
                   borderRadius: BorderRadius.circular(10)),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
@@ -269,8 +309,9 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
           const SizedBox(height: 12),
           FieldGroup(
               label: AppLocalizations.of(context).propertyNameLabel,
-              child:
-                  AppTextField(controller: _nameController, hintText: AppLocalizations.of(context).nameHint)),
+              child: AppTextField(
+                  controller: _nameController,
+                  hintText: AppLocalizations.of(context).nameHint)),
           const SizedBox(height: 12),
           FieldGroup(
               label: AppLocalizations.of(context).descriptionLabel,
@@ -322,7 +363,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   style: AppTheme.dm(
                       size: 13, weight: FontWeight.w600, color: AppColors.navy),
                   children: [
-                    TextSpan(text: AppLocalizations.of(context).mixedGroupsAllowedQ),
+                    TextSpan(
+                        text: AppLocalizations.of(context).mixedGroupsAllowedQ),
                     TextSpan(
                         text: '(unrelated men & women)',
                         style: AppTheme.dm(
@@ -340,7 +382,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   style: AppTheme.dm(
                       size: 13, weight: FontWeight.w600, color: AppColors.navy),
                   children: [
-                    TextSpan(text: AppLocalizations.of(context).referralCodeLabel),
+                    TextSpan(
+                        text: AppLocalizations.of(context).referralCodeLabel),
                     TextSpan(
                         text: '(optional)',
                         style: AppTheme.dm(
@@ -379,7 +422,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                 color: const Color(0xFFCFE0E8),
                 borderRadius: BorderRadius.circular(16),
                 image: _selectedLatLng != null
-                    ? null : null, // Could add a static map preview here
+                    ? null
+                    : null, // Could add a static map preview here
               ),
               child: Stack(
                 children: [
@@ -482,14 +526,16 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                           color: AppColors.white,
-                          border : null,
+                          border: null,
                           borderRadius: BorderRadius.circular(10)),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: _propertyView,
                           hint: Text(AppLocalizations.of(context).selectView,
                               style: AppTheme.dm(
-                                  size: 14, color: AppColors.muted.withValues(alpha: 0.6))),
+                                  size: 14,
+                                  color:
+                                      AppColors.muted.withValues(alpha: 0.6))),
                           isExpanded: true,
                           icon: const Icon(Icons.keyboard_arrow_down,
                               size: 18, color: AppColors.muted),
@@ -516,7 +562,8 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
                   'What is this? List everything in your home. Guests use this exact list as their arrival checklist — only add what\'s really there, or you may get a violation.',
               icon: Icons.help_outline),
           const SizedBox(height: 14),
-          SectionLabel('${AppLocalizations.of(context).addedLabel} · ${_selectedAmenities.length}'),
+          SectionLabel(
+              '${AppLocalizations.of(context).addedLabel} · ${_selectedAmenities.length}'),
           const SizedBox(height: 8),
           WhiteCard(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
@@ -826,7 +873,7 @@ class _NumericInput extends StatelessWidget {
       height: 50,
       decoration: BoxDecoration(
         color: AppColors.white,
-        border : null,
+        border: null,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Center(
@@ -840,7 +887,8 @@ class _NumericInput extends StatelessWidget {
             border: InputBorder.none,
             isDense: true,
             hintText: '0',
-            hintStyle: AppTheme.dm(color: AppColors.muted.withValues(alpha: 0.6), size: 16),
+            hintStyle: AppTheme.dm(
+                color: AppColors.muted.withValues(alpha: 0.6), size: 16),
             contentPadding: EdgeInsets.zero,
           ),
         ),
@@ -861,7 +909,7 @@ class _SegmentToggle extends StatelessWidget {
       height: 50,
       decoration: BoxDecoration(
         color: AppColors.white,
-        border : null,
+        border: null,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(

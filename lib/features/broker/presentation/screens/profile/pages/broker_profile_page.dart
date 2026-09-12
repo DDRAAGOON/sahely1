@@ -3,6 +3,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/l10n/app_localizations.dart';
+import 'package:sahely/l10n/app_localizations_ext.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
 
@@ -63,7 +64,8 @@ class BrokerProfilePage extends StatelessWidget {
               const SizedBox(height: 12),
               Align(
                   alignment: Alignment.centerLeft,
-                  child: StatusBadge(AppLocalizations.of(context).goldBroker, kind: BadgeKind.gold)),
+                  child: StatusBadge(AppLocalizations.of(context).goldBroker,
+                      kind: BadgeKind.gold)),
               const SizedBox(height: 12),
               _brokerCta(
                 context,
@@ -114,7 +116,8 @@ class BrokerProfilePage extends StatelessWidget {
                                     AlwaysStoppedAnimation(AppColors.gold))),
                         const SizedBox(height: 6),
                         Text('45 properties to Elite (5%)',
-                            style: AppTheme.dm(size: 11, color: AppColors.gold)),
+                            style:
+                                AppTheme.dm(size: 11, color: AppColors.gold)),
                       ]),
                 ),
               ),
@@ -148,11 +151,11 @@ class BrokerProfilePage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                             Text(AppLocalizations.of(context).addPaymentCard,
-                                style:
-                                    AppTheme.dm(size: 13, weight: FontWeight.w700)),
+                                style: AppTheme.dm(
+                                    size: 13, weight: FontWeight.w700)),
                             Text(AppLocalizations.of(context).forYourAccount,
-                                style:
-                                    AppTheme.dm(size: 11, color: AppColors.muted)),
+                                style: AppTheme.dm(
+                                    size: 11, color: AppColors.muted)),
                           ])),
                       Text('Add →',
                           style: AppTheme.dm(
@@ -225,7 +228,8 @@ class BrokerProfilePage extends StatelessWidget {
                 SettingsRow(
                     icon: Icons.language,
                     label: AppLocalizations.of(context).languageLabel,
-                    value: AppLocalizations.nativeLanguageName(Localizations.localeOf(context).languageCode),
+                    value: AppLocalizations.of(context).languageNameFor(
+                        Localizations.localeOf(context).languageCode),
                     onTap: () => AppNavigation.goToLanguage(context)),
                 SettingsRow(
                     icon: Icons.attach_money,

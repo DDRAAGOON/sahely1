@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/auth_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -37,8 +36,8 @@ Future<void> showLogoutDialog(BuildContext context) async {
             foregroundColor: Colors.white,
             elevation: 0,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           ),
           child: Text('Log Out',
               style: AppTheme.dm(
@@ -50,8 +49,5 @@ Future<void> showLogoutDialog(BuildContext context) async {
 
   if (result == true && context.mounted) {
     await context.read<AuthProvider>().logout();
-    if (context.mounted) {
-      AppNavigation.safeGo(context, '/signin');
-    }
   }
 }

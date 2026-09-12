@@ -30,10 +30,21 @@ android {
 
     defaultConfig {
         applicationId = "com.sahely.sahely"
-        minSdkVersion = flutter.minSdkVersion
-        targetSdk = 35
+        minSdkVersion = 24
+        targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // The Maps key is injected at build time so it never sits in the
+        // manifest in source control. Supply it via android/key.properties
+        // (googleMapsApiKey=...) or -PGOOGLE_MAPS_API_KEY=... on the CLI.
+        manifestPlaceholders += [
+            GOOGLE_MAPS_API_KEY: (
+                project.findProperty('GOOGLE_MAPS_API_KEY')
+                    ?: keystoreProperties.getProperty('googleMapsApiKey')
+                    ?: ''
+            )
+        ]
     }
 
     signingConfigs {
@@ -50,8 +61,23 @@ android {
     buildTypes {
         release {
             // Falls back to debug keys only when key.properties is absent
-            // (local development). Production builds require a real keystore.
+            // (local development). Production builds require a real keystore -
+            // the warning below makes an unsigned release impossible to miss.
+            if (!keystorePropertiesFile.exists()) {
+                logger.warn('*** Sahely: android/key.properties is missing - ' +
+                    'this release build is signed with DEBUG keys and must ' +
+                    'not be published. See key.properties.example. ***')
+            }
             signingConfig = keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug
+
+            // Shrink and obfuscate. Flutter ships the ProGuard rules its
+            // engine needs; the extra file covers our own plugins.
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile('proguard-android-optimize.txt'),
+                'proguard-rules.pro'
+            )
         }
     }
 }

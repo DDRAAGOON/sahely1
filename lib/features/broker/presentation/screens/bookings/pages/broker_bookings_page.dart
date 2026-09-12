@@ -120,7 +120,7 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
                               extra: {
                                 'propertyName': booking.propertyName,
                                 'bookingRef': booking.orderNo,
-                                'passcode': '8842',
+                                'bookingId': booking.id,
                                 'checkIn': booking.checkIn,
                                 'checkOut': booking.checkOut,
                                 'propertyLat': 31.0263,
@@ -175,9 +175,6 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
                               'name': booking.propertyName,
                               'location': booking.area,
                               'imageUrl': booking.imageUrl,
-                              'rating': 4.8,
-                              'reviewCount': 124,
-                              'pricePerNight': 4500,
                             });
                           },
                         ),
@@ -198,9 +195,6 @@ class _BrokerBookingsPageState extends State<BrokerBookingsPage> {
                         'name': booking.propertyName,
                         'location': booking.area,
                         'imageUrl': booking.imageUrl,
-                        'rating': 4.8,
-                        'reviewCount': 124,
-                        'pricePerNight': 4500,
                       });
                     },
                   ),

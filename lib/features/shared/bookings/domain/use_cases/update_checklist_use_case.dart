@@ -5,7 +5,8 @@ class UpdateChecklistUseCase {
 
   UpdateChecklistUseCase(this.repository);
 
-  Future<void> execute(String bookingId, List<Map<String, dynamic>> newChecklist) {
+  Future<void> execute(
+      String bookingId, List<Map<String, dynamic>> newChecklist) {
     return repository.updateChecklist(bookingId, newChecklist);
   }
 }

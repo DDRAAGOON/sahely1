@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sahely/data/models.dart';
+import 'package:sahely/core/providers/safe_notifier.dart';
 
-class RoleState extends ChangeNotifier {
+class RoleState extends ChangeNotifier with SafeNotifier {
   static final RoleState _instance = RoleState._internal();
 
   factory RoleState() => _instance;

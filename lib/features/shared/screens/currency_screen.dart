@@ -141,9 +141,10 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                                     ? Icons.radio_button_checked
                                     : Icons.radio_button_unchecked,
                                 size: 20,
-                                color: _selectedCurrency == _currencies[i]['code']
-                                    ? AppColors.gold
-                                    : AppColors.border,
+                                color:
+                                    _selectedCurrency == _currencies[i]['code']
+                                        ? AppColors.gold
+                                        : AppColors.border,
                               ),
                             ],
                           ),

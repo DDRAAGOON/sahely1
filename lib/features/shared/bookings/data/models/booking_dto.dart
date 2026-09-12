@@ -3,6 +3,7 @@ import '../../domain/entities/booking.dart';
 
 class BookingDto extends Equatable {
   final String id;
+  final String propertyId;
   final String propertyName;
   final String location;
   final String orderNumber;
@@ -16,6 +17,7 @@ class BookingDto extends Equatable {
 
   const BookingDto({
     required this.id,
+    this.propertyId = '',
     required this.propertyName,
     required this.location,
     required this.orderNumber,
@@ -26,7 +28,13 @@ class BookingDto extends Equatable {
     required this.checkOut,
     required this.totalPaid,
     required this.checklist,
+    this.latitude,
+    this.longitude,
   });
+
+  /// Where the listing is, when the backend has coordinates for it.
+  final double? latitude;
+  final double? longitude;
 
   BookingDto copyWith({
     String? id,

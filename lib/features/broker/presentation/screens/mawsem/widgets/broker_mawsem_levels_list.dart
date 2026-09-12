@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 
@@ -168,11 +168,15 @@ class BrokerMawsemLevelsList extends StatelessWidget {
                 color: AppColors.navy,
               ),
             ),
-            Text(
-              'climb for higher commission',
-              style: AppTheme.dm(
-                size: 12,
-                color: AppColors.secondary,
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                'climb for higher commission',
+                textAlign: TextAlign.end,
+                style: AppTheme.dm(
+                  size: 12,
+                  color: AppColors.secondary,
+                ),
               ),
             ),
           ],

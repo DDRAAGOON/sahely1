@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "data": {
+    "commissions": [
+      {
+        "booking_id": "0cc7fe44-34c8-4716-9254-bf474879e514",
+        "commission_piastres": 70000,
+        "commission_egp": "700.00",
+        "commission_rate": "0.0200",
+        "booking_status": "CANCELLED",
+        "status": "reversed",
+        "check_in": "2026-10-24",
+        "check_out": "2026-10-31"
+      },
+      {
+        "booking_id": "4dbb2723-aba4-4238-bf6c-45b9dabe54e8",
+        "commission_piastres": 18200,
+        "commission_egp": "182.00",
+        "commission_rate": "0.0200",
+        "booking_status": "EXPIRED",
+        "status": "pending",
+        "check_in": "2026-08-21",
+        "check_out": "2026-08-28"
+      }
+    ]
+  }
+}

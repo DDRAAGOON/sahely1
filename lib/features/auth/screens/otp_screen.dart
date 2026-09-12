@@ -82,7 +82,7 @@ class OtpScreenState extends State<OtpScreen> {
     // Set focus to the appropriate box
     final focusIndex = digits.length >= 6 ? 5 : digits.length;
     _focusNodes[focusIndex].requestFocus();
-    
+
     widget.onCodeChanged?.call(code);
   }
 
@@ -156,9 +156,8 @@ class OtpScreenState extends State<OtpScreen> {
                         children: widget.subtitleSpans ??
                             [
                               TextSpan(
-                                  text: widget.isPhone
-                                      ? AppLocalizations.of(context).otpSentTo
-                                      : AppLocalizations.of(context).otpEnterCode),
+                                  text:
+                                      '${widget.isPhone ? AppLocalizations.of(context).otpSentTo : AppLocalizations.of(context).otpEnterCode} '),
                               TextSpan(
                                 text: widget.isPhone
                                     ? _formatPhone(widget.phone)
@@ -245,17 +244,17 @@ class OtpScreenState extends State<OtpScreen> {
                     ),
                     const Spacer(),
                     const SizedBox(height: 20),
-                     GestureDetector(
-                       onTap: () => Navigator.pop(context),
-                       child: Text(
-                         widget.bottomText ??
-                             AppLocalizations.of(context).wrongEmail,
-                         style: AppTheme.dm(
-                             size: 13,
-                             weight: FontWeight.w600,
-                             color: AppColors.gold),
-                       ),
-                     ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Text(
+                        widget.bottomText ??
+                            AppLocalizations.of(context).wrongEmail,
+                        style: AppTheme.dm(
+                            size: 13,
+                            weight: FontWeight.w600,
+                            color: AppColors.gold),
+                      ),
+                    ),
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -361,4 +360,3 @@ class _OtpInputBoxState extends State<_OtpInputBox> {
     );
   }
 }
-

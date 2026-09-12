@@ -110,8 +110,7 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
               ),
               const SizedBox(height: 20),
               InfoNote(
-                  text:
-                      AppLocalizations.of(context).bankEncryptedNote,
+                  text: AppLocalizations.of(context).bankEncryptedNote,
                   icon: Icons.lock_outline),
             ],
           ),
@@ -119,7 +118,8 @@ class _PayoutBankScreenState extends State<PayoutBankScreen> {
         Padding(
           padding: const EdgeInsets.all(16),
           child: NavyButton(
-              label: AppLocalizations.of(context).saveAccount, onTap: () => Navigator.maybePop(context)),
+              label: AppLocalizations.of(context).saveAccount,
+              onTap: () => Navigator.maybePop(context)),
         ),
       ]),
     );

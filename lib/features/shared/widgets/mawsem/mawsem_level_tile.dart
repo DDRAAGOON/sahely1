@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 class MawsemLevelTile extends StatelessWidget {
@@ -74,7 +74,8 @@ class MawsemLevelTile extends StatelessWidget {
           color: bgColor,
           borderRadius: BorderRadius.circular(13),
           border: (isCurrent || hasGoldBorder)
-              ? Border.all(color: AppColors.gold, width: 2) : null,
+              ? Border.all(color: AppColors.gold, width: 2)
+              : null,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -110,13 +111,17 @@ class MawsemLevelTile extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        '$number · $name',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: textColor,
-                          fontFamily: 'DM Sans',
+                      Flexible(
+                        child: Text(
+                          '$number · $name',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: textColor,
+                            fontFamily: 'DM Sans',
+                          ),
                         ),
                       ),
                       if (isCurrent) ...[

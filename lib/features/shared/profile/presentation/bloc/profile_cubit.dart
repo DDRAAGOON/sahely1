@@ -10,8 +10,9 @@ import '../../domain/usecases/update_currency_usecase.dart';
 import '../../domain/usecases/delete_account_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
 import 'profile_state.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
-class ProfileCubit extends Cubit<ProfileState> {
+class ProfileCubit extends Cubit<ProfileState> with SafeEmit<ProfileState> {
   final GetProfileUseCase getProfileUseCase;
   final UpdateProfileUseCase updateProfileUseCase;
   final UploadProfileImageUseCase uploadProfileImageUseCase;
@@ -115,7 +116,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  Future<void> changePassword(String currentPassword, String newPassword) async {
+  Future<void> changePassword(
+      String currentPassword, String newPassword) async {
     emit(state.copyWith(status: ProfileStatus.loading));
     try {
       await changePasswordUseCase.execute(currentPassword, newPassword);

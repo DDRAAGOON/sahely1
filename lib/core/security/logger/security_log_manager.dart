@@ -37,17 +37,27 @@ class SecurityLogManager {
     if (metadata == null) return null;
 
     final sensitiveKeys = {
-      'password', 'token', 'apiKey', 'api_key', 'secret', 'cvv', 'pin', 
-      'access_token', 'refresh_token', 'auth', 'authorization'
+      'password',
+      'token',
+      'apiKey',
+      'api_key',
+      'secret',
+      'cvv',
+      'pin',
+      'access_token',
+      'refresh_token',
+      'auth',
+      'authorization'
     };
 
     final sanitized = Map<String, dynamic>.from(metadata);
-    
+
     for (final key in sanitized.keys.toList()) {
       if (sensitiveKeys.any((s) => key.toLowerCase().contains(s))) {
         sanitized[key] = '[REDACTED]';
       } else if (sanitized[key] is Map<String, dynamic>) {
-        sanitized[key] = _sanitizeMetadata(sanitized[key] as Map<String, dynamic>);
+        sanitized[key] =
+            _sanitizeMetadata(sanitized[key] as Map<String, dynamic>);
       }
     }
 

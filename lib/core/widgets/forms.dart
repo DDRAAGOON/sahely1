@@ -84,8 +84,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
     // If user didn't force a color, we apply the logic
     if (widget.borderColor == null) {
-      if (_isFocused || hasText) {
-      }
+      if (_isFocused || hasText) {}
     }
 
     return Container(
@@ -101,7 +100,8 @@ class _AppTextFieldState extends State<AppTextField> {
       child: TextFormField(
         controller: widget.controller,
         focusNode: _focusNode,
-        onChanged: widget.onChanged ?? (widget.controller != null ? (_) => setState(() {}) : null),
+        onChanged: widget.onChanged ??
+            (widget.controller != null ? (_) => setState(() {}) : null),
         // Trigger rebuild to update border if text is empty/full
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,
@@ -119,7 +119,8 @@ class _AppTextFieldState extends State<AppTextField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: AppTheme.dm(
-              size: widget.fontSize, color: AppColors.muted.withValues(alpha: 0.6)),
+              size: widget.fontSize,
+              color: AppColors.muted.withValues(alpha: 0.6)),
           contentPadding: EdgeInsets.fromLTRB(
               widget.leading != null ? 0 : (widget.radius >= 999 ? 18 : 14),
               isMultiline ? 12 : 0,
@@ -165,7 +166,7 @@ class FakeField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: radius >= 999 ? 18 : 14),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border : null,
+        border: null,
         borderRadius: BorderRadius.circular(radius),
       ),
       child: Row(
@@ -175,7 +176,9 @@ class FakeField extends StatelessWidget {
               value,
               style: AppTheme.dm(
                 size: fontSize,
-                color: hint ? AppColors.muted.withValues(alpha: 0.6) : AppColors.ink,
+                color: hint
+                    ? AppColors.muted.withValues(alpha: 0.6)
+                    : AppColors.ink,
                 letterSpacing: letterSpacing,
               ),
             ),
@@ -211,11 +214,11 @@ class FieldGroup extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (labelWidget != null)
-                labelWidget!
-              else
-                Text(label ?? '',
-                    style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
+              Flexible(
+                child: labelWidget ??
+                    Text(label ?? '',
+                        style: AppTheme.dm(size: 13, weight: FontWeight.w600)),
+              ),
               if (trailingLabel != null) trailingLabel!,
             ],
           ),

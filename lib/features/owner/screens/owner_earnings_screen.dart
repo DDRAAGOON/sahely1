@@ -13,6 +13,18 @@ import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 
 import '../../../core/utils/currency_formatter.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/core/network/api_envelope.dart';
+import 'package:sahely/features/shared/violations/data/violations_api_data_source.dart';
+import 'package:sahely/features/wallet/data/datasources/wallet_remote_data_source.dart';
+
+/// What one tab shows - used by the screen and by the PDF export.
+typedef _Period = ({
+  String label,
+  String amount,
+  List<(String, String)> stats,
+  List<Map<String, String>> transactions,
+});
 
 class OwnerEarningsScreen extends StatefulWidget {
   const OwnerEarningsScreen({super.key});
@@ -22,7 +34,131 @@ class OwnerEarningsScreen extends StatefulWidget {
 }
 
 class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
-  int _activeTab = 0; // 0: Month, 1: Quarter, 2: Year
+  int _activeTab = 0; // 0: Month, 1: Last 6 months, 2: Year
+  Map<String, dynamic> _dashboard = const {};
+  List<Map<String, dynamic>> _transactions = const [];
+  int _openViolations = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  /// Totals from `/wallets/me/dashboard`, entries from
+  /// `/wallets/me/transactions` and open cases from `/violations/mine`.
+  Future<void> _load() async {
+    final wallet = sl<WalletRemoteDataSource>();
+    final dashboard = await wallet.getOwnerDashboard();
+    final transactions = await wallet.getOwnerTransactions(limit: 50);
+    var violations = 0;
+    try {
+      final rows = await sl<ViolationsApiDataSource>().mine();
+      violations = rows.where((v) => !_closed('${v['status'] ?? ''}')).length;
+    } catch (_) {}
+    if (!mounted) return;
+    setState(() {
+      dashboard.fold((_) {}, (d) => _dashboard = d);
+      transactions.fold((_) {}, (t) => _transactions = t);
+      _openViolations = violations;
+    });
+  }
+
+  static bool _closed(String status) {
+    final s = status.toLowerCase();
+    return s.contains('resolv') ||
+        s.contains('clos') ||
+        s.contains('dismiss') ||
+        s.contains('reject');
+  }
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  /// `18000` -> `18,000`.
+  static String _grouped(int value) {
+    final digits = value.toString();
+    final buffer = StringBuffer();
+    for (var i = 0; i < digits.length; i++) {
+      if (i > 0 && (digits.length - i) % 3 == 0) buffer.write(',');
+      buffer.write(digits[i]);
+    }
+    return buffer.toString();
+  }
+
+  String _compact(String key) {
+    final egp = asNum(_dashboard[key])?.toDouble() ?? 0;
+    return egp >= 1000
+        ? '${(egp / 1000).toStringAsFixed(1)}k'
+        : egp.round().toString();
+  }
+
+  _Period _period() {
+    final now = DateTime.now();
+    final (label, key, since) = switch (_activeTab) {
+      0 => ('This Month', 'thisMonthEgp', DateTime(now.year, now.month)),
+      1 => (
+          'Last 6 Months',
+          'last6MonthsEgp',
+          DateTime(now.year, now.month - 5)
+        ),
+      _ => ('This Year', 'thisYearEgp', DateTime(now.year)),
+    };
+    final rows = _transactions
+        .where((t) {
+          final at = asDate(pick(t, 'created_at'));
+          return at != null && !at.isBefore(since);
+        })
+        .take(10)
+        .map(_toRow)
+        .toList();
+    return (
+      label: label,
+      amount: CurrencyFormatter.format(
+          (asNum(_dashboard[key])?.toDouble() ?? 0).round()),
+      stats: [
+        ('Upcoming', _compact('upcomingEgp')),
+        ('Paid', _compact('paidEgp')),
+        ('Pending', _compact('pendingEgp')),
+      ],
+      transactions: rows,
+    );
+  }
+
+  /// A wallet entry: `amount` is in piastres, `type` credit / debit.
+  Map<String, String> _toRow(Map<String, dynamic> t) {
+    final at = asDate(pick(t, 'created_at'));
+    final piastres = asNum(t['amount'])?.toDouble() ?? 0;
+    final credit = '${t['type'] ?? ''}'.toLowerCase() != 'debit';
+    final description = '${t['description'] ?? ''}'.trim();
+    final category = '${t['category'] ?? ''}'.trim();
+    final fallback =
+        category.isEmpty ? (credit ? 'Credit' : 'Debit') : category;
+    return {
+      'name': description.isNotEmpty
+          ? description
+          : fallback[0].toUpperCase() + fallback.substring(1),
+      'date': at == null ? '' : '${_months[at.month - 1]} ${at.day}',
+      'amount': '${credit ? '+' : '−'}${_grouped((piastres / 100).round())}',
+      'status': !credit
+          ? 'Withdrawn'
+          : description.toLowerCase().contains('pending')
+              ? 'Pending'
+              : 'Paid',
+    };
+  }
 
   Future<void> _exportPDF(BuildContext context) async {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -48,50 +184,14 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
       final pdf = pw.Document();
 
       // Gather current data
-      String periodLabel = '';
-      String periodAmount = '';
-      List<Map<String, String>> stats = [];
-      List<Map<String, String>> transactions = [];
-
-      if (_activeTab == 0) {
-        periodLabel = 'This Month';
-        periodAmount = CurrencyFormatter.format(68400);
-        stats = [
-          {'label': 'Upcoming', 'value': '24.5k'},
-          {'label': 'Paid', 'value': '38.9k'},
-          {'label': 'Pending', 'value': '5.0k'},
-        ];
-        transactions = [
-          {'name': 'Azure Villa', 'date': 'Jun 14', 'amount': '+18,000', 'status': 'Paid'},
-        ];
-      } else if (_activeTab == 1) {
-        periodLabel = 'This Quarter';
-        periodAmount = CurrencyFormatter.format(215800);
-        stats = [
-          {'label': 'Upcoming', 'value': '42.0k'},
-          {'label': 'Paid', 'value': '173.8k'},
-          {'label': 'Pending', 'value': '15.0k'},
-        ];
-        transactions = [
-          {'name': 'Azure Villa', 'date': 'Jun 14', 'amount': '+18,000', 'status': 'Paid'},
-          {'name': 'Sunset Suite', 'date': 'May 28', 'amount': '+45,000', 'status': 'Paid'},
-          {'name': 'Beach Cabin', 'date': 'Apr 12', 'amount': '+12,000', 'status': 'Paid'},
-        ];
-      } else {
-        periodLabel = 'This Year';
-        periodAmount = CurrencyFormatter.format(840000);
-        stats = [
-          {'label': 'Upcoming', 'value': '120.0k'},
-          {'label': 'Paid', 'value': '720.0k'},
-          {'label': 'Pending', 'value': '40.0k'},
-        ];
-        transactions = [
-          {'name': 'Azure Villa', 'date': 'Jun 14', 'amount': '+18,000', 'status': 'Paid'},
-          {'name': 'Sunset Suite', 'date': 'May 28', 'amount': '+45,000', 'status': 'Paid'},
-          {'name': 'Beach Cabin', 'date': 'Apr 12', 'amount': '+12,000', 'status': 'Paid'},
-          {'name': 'Royal Palace', 'date': 'Jan 15', 'amount': '+150,000', 'status': 'Paid'},
-        ];
-      }
+      final period = _period();
+      final periodLabel = period.label;
+      final periodAmount = period.amount;
+      final stats = [
+        for (final (label, value) in period.stats)
+          {'label': label, 'value': value},
+      ];
+      final transactions = period.transactions;
 
       pdf.addPage(
         pw.Page(
@@ -184,7 +284,8 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
 
       // Save the PDF file
       final output = await getTemporaryDirectory();
-      final file = File("${output.path}/sahely_report_${periodLabel.replaceAll(' ', '_')}.pdf");
+      final file = File(
+          "${output.path}/sahely_report_${periodLabel.replaceAll(' ', '_')}.pdf");
       await file.writeAsBytes(await pdf.save());
 
       // Show print/share dialog
@@ -215,63 +316,46 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String periodLabel = 'This Month';
-    String periodAmount = CurrencyFormatter.format(68400);
-    String periodChange = '▲ 12%';
-    List<StatCard> statCards = [
-      StatCard(value: '24.5k', label: AppLocalizations.of(context).statUpcoming),
-      StatCard(value: '38.9k', label: AppLocalizations.of(context).statPaid, valueColor: AppColors.success),
-      StatCard(value: '5.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A))
+    final period = _period();
+    final periodLabel = period.label;
+    final periodAmount = period.amount;
+    const periodChange = '';
+    final statCards = [
+      StatCard(
+          value: period.stats[0].$2,
+          label: AppLocalizations.of(context).statUpcoming),
+      StatCard(
+          value: period.stats[1].$2,
+          label: AppLocalizations.of(context).statPaid,
+          valueColor: AppColors.success),
+      StatCard(
+          value: period.stats[2].$2,
+          label: AppLocalizations.of(context).statPending,
+          valueColor: const Color(0xFFD2760A)),
     ];
-    List<Widget> txns = [];
-
-    if (_activeTab == 0) {
-      periodLabel = 'This Month';
-      periodAmount = CurrencyFormatter.format(68400);
-      periodChange = '▲ 12%';
-      statCards = [
-        StatCard(value: '24.5k', label: AppLocalizations.of(context).statUpcoming),
-        StatCard(value: '38.9k', label: AppLocalizations.of(context).statPaid, valueColor: AppColors.success),
-        StatCard(value: '5.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A))
-      ];
-      txns = [
-        _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft,
-            last: true),
-      ];
-    } else if (_activeTab == 1) {
-      periodLabel = 'This Quarter';
-      periodAmount = CurrencyFormatter.format(215800);
-      periodChange = '▲ 8%';
-      statCards = [
-        StatCard(value: '42.0k', label: AppLocalizations.of(context).statUpcoming),
-        StatCard(value: '173.8k', label: AppLocalizations.of(context).statPaid, valueColor: AppColors.success),
-        StatCard(
-            value: '15.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A))
-      ];
-      txns = [
-        _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft),
-        _txn('Sunset Suite', 'May 28', '+45,000', 'Paid', BadgeKind.greenSoft),
-        _txn('Beach Cabin', 'Apr 12', '+12,000', 'Paid', BadgeKind.greenSoft,
-            last: true),
-      ];
-    } else {
-      periodLabel = 'This Year';
-      periodAmount = CurrencyFormatter.format(840000);
-      periodChange = '▲ 15%';
-      statCards = [
-        StatCard(value: '120.0k', label: AppLocalizations.of(context).statUpcoming),
-        StatCard(value: '720.0k', label: AppLocalizations.of(context).statPaid, valueColor: AppColors.success),
-        StatCard(
-            value: '40.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A))
-      ];
-      txns = [
-        _txn('Azure Villa', 'Jun 14', '+18,000', 'Paid', BadgeKind.greenSoft),
-        _txn('Sunset Suite', 'May 28', '+45,000', 'Paid', BadgeKind.greenSoft),
-        _txn('Beach Cabin', 'Apr 12', '+12,000', 'Paid', BadgeKind.greenSoft),
-        _txn('Royal Palace', 'Jan 15', '+150,000', 'Paid', BadgeKind.greenSoft,
-            last: true),
-      ];
-    }
+    final entries = period.transactions;
+    final txns = entries.isEmpty
+        ? <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text('No transactions in this period.',
+                  style: AppTheme.dm(size: 13, color: AppColors.muted)),
+            ),
+          ]
+        : [
+            for (var i = 0; i < entries.length; i++)
+              _txn(
+                  entries[i]['name']!,
+                  entries[i]['date']!,
+                  entries[i]['amount']!,
+                  entries[i]['status']!,
+                  switch (entries[i]['status']) {
+                    'Paid' => BadgeKind.greenSoft,
+                    'Pending' => BadgeKind.orange,
+                    _ => BadgeKind.gray,
+                  },
+                  last: i == entries.length - 1),
+          ];
 
     return PhoneScaffold(
       child: ListView(
@@ -293,7 +377,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
           SizedBox(
             height: 36,
             child: SegmentTabs(
-              tabs: const ['Month', 'Quarter', 'Year'],
+              tabs: const ['Month', '6 Months', 'Year'],
               active: _activeTab,
               onTap: (index) {
                 setState(() {
@@ -315,11 +399,16 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
                   style: AppTheme.dm(size: 13, color: const Color(0xFFCDD4E0))),
               const SizedBox(height: 6),
               Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                Text(periodAmount,
-                    style: AppTheme.dm(
-                        size: 30,
-                        weight: FontWeight.w700,
-                        color: Colors.white)),
+                Flexible(
+                  child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(periodAmount,
+                          style: AppTheme.dm(
+                              size: 30,
+                              weight: FontWeight.w700,
+                              color: Colors.white))),
+                ),
                 const SizedBox(width: 10),
                 Padding(
                     padding: const EdgeInsets.only(bottom: 6),
@@ -379,7 +468,7 @@ class _OwnerEarningsScreenState extends State<OwnerEarningsScreen> {
                                 size: 14,
                                 weight: FontWeight.w700,
                                 color: AppColors.navy)),
-                        Text('1 active · review details',
+                        Text('$_openViolations active · review details',
                             style:
                                 AppTheme.dm(size: 12, color: AppColors.muted)),
                       ])),

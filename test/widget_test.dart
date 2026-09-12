@@ -11,8 +11,7 @@ Widget _wrap(Widget child) => MultiProvider(
       child: MaterialApp(
         locale: const Locale('en'),
         localizationsDelegates: const [AppLocalizations.delegate],
-        supportedLocales:
-            AppLocalizations.supportedLanguages.map((c) => Locale(c)).toList(),
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(body: child),
       ),
     );

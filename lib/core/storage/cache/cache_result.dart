@@ -10,7 +10,8 @@ class CacheResult<T> {
   factory CacheResult.success(T data, {bool isFromCache = false}) =>
       CacheResult._(data: data, isFromCache: isFromCache);
 
-  factory CacheResult.failure(CacheFailure failure) => CacheResult._(failure: failure);
+  factory CacheResult.failure(CacheFailure failure) =>
+      CacheResult._(failure: failure);
 
   bool get isSuccess => failure == null;
 }

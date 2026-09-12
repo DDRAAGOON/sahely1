@@ -93,11 +93,13 @@ class CollabCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10)),
                     child: Row(children: [
                       const AvatarCircle(
-                          size: 22, colors: [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
+                          size: 22,
+                          colors: [Color(0xFF7FA8BF), Color(0xFF2C5066)]),
                       const SizedBox(width: 8),
                       Expanded(
                           child: Text(comment,
-                              style: AppTheme.dm(size: 12, color: AppColors.ink))),
+                              style:
+                                  AppTheme.dm(size: 12, color: AppColors.ink))),
                     ]),
                   ),
                 ),

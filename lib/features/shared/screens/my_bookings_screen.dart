@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/providers/bookings_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/pull_to_refresh.dart';
 import 'package:sahely/features/shared/screens/active_booking_detail_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/active_booking_card.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/bookings_filter_tabs.dart';
@@ -24,6 +25,13 @@ class MyBookingsScreen extends StatefulWidget {
 class _MyBookingsScreenState extends State<MyBookingsScreen> {
   String _selectedTab = 'Active';
   final List<String> _tabs = ['Upcoming', 'Active', 'Past'];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => context.read<BookingsProvider>().load());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,178 +72,181 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
   Widget _buildContent() {
     final bookingsProvider = context.watch<BookingsProvider>();
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 120),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (_selectedTab == 'Active') ...[
-            if (bookingsProvider.activeBookings.isEmpty)
-              Center(
-                  child: Padding(
-                padding: const EdgeInsets.only(top: 60),
-                child: Text(AppLocalizations.of(context).noActiveBookings,
-                    style: AppTheme.dm(color: AppColors.secondary)),
-              ))
-            else
-              ...bookingsProvider.activeBookings.map((booking) => Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: ActiveBookingCard(
-                      propertyName: booking.propertyName,
-                      location: booking.location,
-                      orderNumber: booking.orderNumber,
-                      dates: booking.dates,
-                      guests: booking.guests,
-                      imageUrl: booking.imageUrl,
-                      onDigitalLockTap: () {
-                        AppNavigation.goToSmartLock(
-                          context,
-                          extra: {
-                            'propertyName': booking.propertyName,
-                            'bookingRef': booking.orderNumber,
-                            'passcode': '8842',
-                            'checkIn': booking.checkIn,
-                            'checkOut': booking.checkOut,
-                            'propertyLat': 31.0263,
-                            'propertyLng': 28.9402,
-                          },
-                        );
+    return PullToRefresh(
+      onRefresh: () => context.read<BookingsProvider>().load(force: true),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 120),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_selectedTab == 'Active') ...[
+              if (bookingsProvider.activeBookings.isEmpty)
+                Center(
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: Text(AppLocalizations.of(context).noActiveBookings,
+                      style: AppTheme.dm(color: AppColors.secondary)),
+                ))
+              else
+                ...bookingsProvider.activeBookings.map((booking) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: ActiveBookingCard(
+                        propertyName: booking.propertyName,
+                        location: booking.location,
+                        orderNumber: booking.orderNumber,
+                        dates: booking.dates,
+                        guests: booking.guests,
+                        imageUrl: booking.imageUrl,
+                        onDigitalLockTap: () {
+                          AppNavigation.goToSmartLock(
+                            context,
+                            extra: {
+                              'propertyName': booking.propertyName,
+                              'bookingRef': booking.orderNumber,
+                              'bookingId': booking.id,
+                              'checkIn': booking.checkIn,
+                              'checkOut': booking.checkOut,
+                              'propertyLat': booking.latitude ?? 0.0,
+                              'propertyLng': booking.longitude ?? 0.0,
+                            },
+                          );
+                        },
+                        onSOSTap: () {
+                          AppNavigation.goToSos(context,
+                              extra: {'bookingId': booking.id});
+                        },
+                        onViewDetailsTap: () {
+                          AppNavigation.goToBookingDetail(
+                            context,
+                            extra: {
+                              'propertyId': booking.propertyId,
+                              'propertyName': booking.propertyName,
+                              'location': booking.location,
+                              'orderNumber': booking.orderNumber,
+                              'dates': booking.dates,
+                              'guests': booking.guests,
+                              'imageUrl': booking.imageUrl,
+                              'role': ActiveBookingRole.renter,
+                            },
+                          );
+                        },
+                      ),
+                    )),
+            ] else if (_selectedTab == 'Upcoming') ...[
+              if (bookingsProvider.upcomingBookings.isEmpty)
+                Center(
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: Text(AppLocalizations.of(context).noUpcomingBookings,
+                      style: AppTheme.dm(color: AppColors.secondary)),
+                ))
+              else
+                ...bookingsProvider.upcomingBookings.map((booking) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: UpcomingBookingCard(
+                        propertyName: booking.propertyName,
+                        location: booking.location,
+                        dates: booking.dates,
+                        orderNumber: booking.orderNumber,
+                        imageUrl: booking.imageUrl,
+                        onTap: () {
+                          AppNavigation.goToBookingUpcoming(
+                            context,
+                            extra: {
+                              'propertyName': booking.propertyName,
+                              'location': booking.location,
+                              'imageUrl': booking.imageUrl,
+                              'orderNumber': booking.orderNumber,
+                              'checkIn': booking.checkIn,
+                              'checkOut': booking.checkOut,
+                              'guests': booking.guests,
+                              'total': booking.totalPaid,
+                              'nights': booking.checkOut
+                                  .difference(booking.checkIn)
+                                  .inDays,
+                              'daysUntilCheckIn': booking.checkIn
+                                  .difference(DateTime.now())
+                                  .inDays,
+                              'photos': [
+                                booking.imageUrl,
+                                booking.imageUrl,
+                                booking.imageUrl
+                              ],
+                              'description':
+                                  'A beautiful stay in the heart of ${booking.location}. Enjoy world-class amenities and breathtaking views.',
+                              'amenities': const [
+                                'Wi-Fi',
+                                'Pool',
+                                'Parking',
+                                'Kitchen'
+                              ],
+                              'included': const [
+                                'Breakfast',
+                                'Free Cleaning',
+                                'Airport Transfer'
+                              ],
+                              'latitude': 31.0263,
+                              'longitude': 28.9402,
+                              'pricePerNight': 2500,
+                              'cleaningVat': 150,
+                            },
+                          );
+                        },
+                      ),
+                    )),
+            ] else ...[
+              if (bookingsProvider.pastBookings.isEmpty)
+                Center(
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: Text(AppLocalizations.of(context).noPastStays,
+                      style: AppTheme.dm(color: AppColors.secondary)),
+                ))
+              else
+                PastStaysSection(
+                  pastBookings: bookingsProvider.pastBookings,
+                  onCardTap: (booking) {
+                    AppNavigation.goToBookingPast(
+                      context,
+                      extra: {
+                        'propertyName': booking.propertyName,
+                        'location': booking.location,
+                        'imageUrl': booking.imageUrl,
+                        'orderNumber': booking.orderNumber,
+                        'checkIn': booking.checkIn,
+                        'checkOut': booking.checkOut,
+                        'guests': booking.guests,
+                        'total': booking.totalPaid,
+                        'nights':
+                            booking.checkOut.difference(booking.checkIn).inDays,
+                        'photos': [
+                          booking.imageUrl,
+                          booking.imageUrl,
+                          booking.imageUrl
+                        ],
+                        'description':
+                            'Your wonderful stay at ${booking.propertyName} in ${booking.location}. We hope to see you again!',
+                        'amenities': const [
+                          'Wi-Fi',
+                          'Pool',
+                          'Parking',
+                          'Kitchen'
+                        ],
+                        'included': const ['Breakfast', 'Free Cleaning'],
+                        'pricePerNight': 2500,
+                        'cleaningVat': 150,
+                        'hasReview': false,
+                        // Logic could check if a review exists
                       },
-                      onSOSTap: () {
-                        AppNavigation.goToSos(context);
-                      },
-                      onViewDetailsTap: () {
-                        AppNavigation.goToBookingDetail(
-                          context,
-                          extra: {
-                            'propertyName': booking.propertyName,
-                            'location': booking.location,
-                            'orderNumber': booking.orderNumber,
-                            'dates': booking.dates,
-                            'guests': booking.guests,
-                            'imageUrl': booking.imageUrl,
-                            'role': ActiveBookingRole.renter,
-                          },
-                        );
-                      },
-                    ),
-                  )),
-          ] else if (_selectedTab == 'Upcoming') ...[
-            if (bookingsProvider.upcomingBookings.isEmpty)
-              Center(
-                  child: Padding(
-                padding: const EdgeInsets.only(top: 60),
-                child: Text(AppLocalizations.of(context).noUpcomingBookings,
-                    style: AppTheme.dm(color: AppColors.secondary)),
-              ))
-            else
-              ...bookingsProvider.upcomingBookings.map((booking) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: UpcomingBookingCard(
-                      propertyName: booking.propertyName,
-                      location: booking.location,
-                      dates: booking.dates,
-                      orderNumber: booking.orderNumber,
-                      imageUrl: booking.imageUrl,
-                      onTap: () {
-                        AppNavigation.goToBookingUpcoming(
-                          context,
-                          extra: {
-                            'propertyName': booking.propertyName,
-                            'location': booking.location,
-                            'imageUrl': booking.imageUrl,
-                            'orderNumber': booking.orderNumber,
-                            'checkIn': booking.checkIn,
-                            'checkOut': booking.checkOut,
-                            'guests': booking.guests,
-                            'total': booking.totalPaid,
-                            'nights': booking.checkOut
-                                .difference(booking.checkIn)
-                                .inDays,
-                            'daysUntilCheckIn': booking.checkIn
-                                .difference(DateTime.now())
-                                .inDays,
-                            'photos': [
-                              booking.imageUrl,
-                              booking.imageUrl,
-                              booking.imageUrl
-                            ],
-                            'description':
-                                'A beautiful stay in the heart of ${booking.location}. Enjoy world-class amenities and breathtaking views.',
-                            'amenities': const [
-                              'Wi-Fi',
-                              'Pool',
-                              'Parking',
-                              'Kitchen'
-                            ],
-                            'included': const [
-                              'Breakfast',
-                              'Free Cleaning',
-                              'Airport Transfer'
-                            ],
-                            'latitude': 31.0263,
-                            'longitude': 28.9402,
-                            'pricePerNight': 2500,
-                            'cleaningVat': 150,
-                          },
-                        );
-                      },
-                    ),
-                  )),
-          ] else ...[
-            if (bookingsProvider.pastBookings.isEmpty)
-              Center(
-                  child: Padding(
-                padding: const EdgeInsets.only(top: 60),
-                child: Text(AppLocalizations.of(context).noPastStays,
-                    style: AppTheme.dm(color: AppColors.secondary)),
-              ))
-            else
-              PastStaysSection(
-                pastBookings: bookingsProvider.pastBookings,
-                onCardTap: (booking) {
-                  AppNavigation.goToBookingPast(
-                    context,
-                    extra: {
-                      'propertyName': booking.propertyName,
-                      'location': booking.location,
-                      'imageUrl': booking.imageUrl,
-                      'orderNumber': booking.orderNumber,
-                      'checkIn': booking.checkIn,
-                      'checkOut': booking.checkOut,
-                      'guests': booking.guests,
-                      'total': booking.totalPaid,
-                      'nights': booking.checkOut
-                          .difference(booking.checkIn)
-                          .inDays,
-                      'photos': [
-                        booking.imageUrl,
-                        booking.imageUrl,
-                        booking.imageUrl
-                      ],
-                      'description':
-                          'Your wonderful stay at ${booking.propertyName} in ${booking.location}. We hope to see you again!',
-                      'amenities': const [
-                        'Wi-Fi',
-                        'Pool',
-                        'Parking',
-                        'Kitchen'
-                      ],
-                      'included': const ['Breakfast', 'Free Cleaning'],
-                      'pricePerNight': 2500,
-                      'cleaningVat': 150,
-                      'hasReview': false,
-                      // Logic could check if a review exists
-                    },
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
 }
-
-

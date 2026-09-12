@@ -7,7 +7,8 @@ class GetWishlistItemsUseCase {
 
   GetWishlistItemsUseCase(this.repository);
 
-  Future<List<WishlistItem>> execute({required Role role, String? collectionId}) {
+  Future<List<WishlistItem>> execute(
+      {required Role role, String? collectionId}) {
     if (collectionId != null) {
       return repository.getWishlistItemsByCollection(collectionId, role);
     }

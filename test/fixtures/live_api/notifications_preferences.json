@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "data": {
+    "id": "dedb1e6b-7363-40a0-a742-f9309eae9ef0",
+    "createdAt": "2026-07-12T14:31:07.530Z",
+    "updatedAt": "2026-07-21T01:40:04.845Z",
+    "deletedAt": null,
+    "userId": "cabbca85-41b0-4235-901f-adf80ad4f2ca",
+    "emailEnabled": true,
+    "smsEnabled": true,
+    "pushEnabled": true,
+    "marketingEnabled": true
+  }
+}

@@ -6,10 +6,10 @@ class SearchSuggestionsUseCase {
 
   Future<List<String>> execute(String query) async {
     if (query.isEmpty) return [];
-    
+
     final rawData = await repository.getRawSuggestionData();
     final lowercaseQuery = query.toLowerCase();
-    
+
     return rawData
         .where((item) => item.toLowerCase().contains(lowercaseQuery))
         .toList();

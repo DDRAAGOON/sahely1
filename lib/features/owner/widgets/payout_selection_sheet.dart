@@ -49,7 +49,8 @@ class PayoutSelectionSheet extends StatelessWidget {
         color: AppColors.cream,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      padding: EdgeInsets.fromLTRB(20, 0, 20, MediaQuery.of(context).padding.bottom + 24),
+      padding: EdgeInsets.fromLTRB(
+          20, 0, 20, MediaQuery.of(context).padding.bottom + 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +71,7 @@ class PayoutSelectionSheet extends StatelessWidget {
             style: AppTheme.dm(size: 13, color: AppColors.muted),
           ),
           const SizedBox(height: 24),
-          
+
           // Accounts List
           Flexible(
             child: ListView.separated(
@@ -80,7 +81,7 @@ class PayoutSelectionSheet extends StatelessWidget {
               itemBuilder: (context, index) {
                 final acc = accounts[index];
                 final isSelected = selectedAccount?.id == acc.id;
-                
+
                 return GestureDetector(
                   onTap: () => Navigator.pop(context, acc),
                   child: Container(
@@ -88,7 +89,7 @@ class PayoutSelectionSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border : null,
+                      border: null,
                     ),
                     child: Row(
                       children: [
@@ -99,7 +100,8 @@ class PayoutSelectionSheet extends StatelessWidget {
                             color: AppColors.cream,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.account_balance_outlined, color: AppColors.navy),
+                          child: const Icon(Icons.account_balance_outlined,
+                              color: AppColors.navy),
                         ),
                         const SizedBox(width: 14),
                         Expanded(
@@ -108,17 +110,20 @@ class PayoutSelectionSheet extends StatelessWidget {
                             children: [
                               Text(
                                 '${acc.bankName} · ${acc.accountNumber}',
-                                style: AppTheme.dm(size: 14, weight: FontWeight.w700),
+                                style: AppTheme.dm(
+                                    size: 14, weight: FontWeight.w700),
                               ),
                               Text(
                                 acc.holderName,
-                                style: AppTheme.dm(size: 12, color: AppColors.muted),
+                                style: AppTheme.dm(
+                                    size: 12, color: AppColors.muted),
                               ),
                             ],
                           ),
                         ),
                         if (isSelected)
-                          const Icon(Icons.check_circle, color: AppColors.gold, size: 24),
+                          const Icon(Icons.check_circle,
+                              color: AppColors.gold, size: 24),
                       ],
                     ),
                   ),
@@ -126,9 +131,9 @@ class PayoutSelectionSheet extends StatelessWidget {
               },
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Add Account Button
           GestureDetector(
             onTap: () {
@@ -140,12 +145,13 @@ class PayoutSelectionSheet extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.white.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(16),
-                border : null,
+                border: null,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.add_circle_outline, color: AppColors.gold, size: 20),
+                  const Icon(Icons.add_circle_outline,
+                      color: AppColors.gold, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     'Add payout method',

@@ -23,7 +23,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
   final _amountController = TextEditingController(text: '20,000');
   final double _available = 38900;
   String _selectedP = '50%';
-  
+
   PayoutAccount _selectedAccount = PayoutAccount(
     id: '1',
     bankName: 'CIB Bank',
@@ -177,8 +177,7 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                           color: _selectedP == p
                               ? AppColors.navy
                               : AppColors.white,
-                          border: _selectedP == p
-                              ? null : null,
+                          border: _selectedP == p ? null : null,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
@@ -216,7 +215,8 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                          Text('${_selectedAccount.bankName} · ${_selectedAccount.accountNumber}',
+                          Text(
+                              '${_selectedAccount.bankName} · ${_selectedAccount.accountNumber}',
                               style: AppTheme.dm(
                                   size: 13, weight: FontWeight.w700)),
                           Text(_selectedAccount.holderName,
@@ -245,7 +245,8 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
           child: ListenableBuilder(
             listenable: _amountController,
             builder: (context, _) => NavyButton(
-              label: '${AppLocalizations.of(context).withdrawBtn} EGP  ${_amountController.text}',
+              label:
+                  '${AppLocalizations.of(context).withdrawBtn} EGP  ${_amountController.text}',
               onTap: _onWithdraw,
             ),
           ),
@@ -254,8 +255,6 @@ class _WithdrawAmountScreenState extends State<WithdrawAmountScreen> {
     );
   }
 }
-
-
 
 class _ThousandsFormatter extends TextInputFormatter {
   @override

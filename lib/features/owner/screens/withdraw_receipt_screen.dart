@@ -48,19 +48,23 @@ class WithdrawReceiptScreen extends StatelessWidget {
               WhiteCard(
                   padding: const EdgeInsets.all(16),
                   child: Column(children: [
-                    KeyValueRow(AppLocalizations.of(context).amountLabel, CurrencyFormatter.format(20000)),
-                    KeyValueRow(AppLocalizations.of(context).toLabel, 'CIB ••4821'),
-                    KeyValueRow(AppLocalizations.of(context).referenceLabel, 'PO-4471-2026'),
-                    KeyValueRow(AppLocalizations.of(context).requestedLabel, 'Jun 18, 9:41 AM'),
-                    KeyValueRow(AppLocalizations.of(context).estArrival, 'Jun 20',
+                    KeyValueRow(AppLocalizations.of(context).amountLabel,
+                        CurrencyFormatter.format(20000)),
+                    KeyValueRow(
+                        AppLocalizations.of(context).toLabel, 'CIB ••4821'),
+                    KeyValueRow(AppLocalizations.of(context).referenceLabel,
+                        'PO-4471-2026'),
+                    KeyValueRow(AppLocalizations.of(context).requestedLabel,
+                        'Jun 18, 9:41 AM'),
+                    KeyValueRow(
+                        AppLocalizations.of(context).estArrival, 'Jun 20',
                         valueColor: AppColors.success,
                         bold: true,
                         topBorder: true),
                   ])),
               const SizedBox(height: 14),
               InfoNote(
-                  text:
-                      AppLocalizations.of(context).notifyWhenSent,
+                  text: AppLocalizations.of(context).notifyWhenSent,
                   icon: Icons.schedule),
             ],
           ),

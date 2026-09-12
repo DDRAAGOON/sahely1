@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/fill_viewport.dart';
 
 class LevelUpScreen extends StatelessWidget {
   const LevelUpScreen({super.key});
@@ -10,7 +11,7 @@ class LevelUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PhoneScaffold(
-      child: Padding(
+      child: FillViewport(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -95,14 +96,12 @@ class LevelUpScreen extends StatelessWidget {
               ]),
             ),
             const SizedBox(height: 12),
-            const Row(children: [
-              Expanded(
-                  child: StatCard(
-                      value: '47 ★',
-                      label: 'This season',
-                      valueColor: AppColors.gold)),
-              SizedBox(width: 12),
-              Expanded(child: StatCard(value: '33', label: '★ to Level 4')),
+            const StatRow(cards: [
+              StatCard(
+                  value: '47 ★',
+                  label: 'This season',
+                  valueColor: AppColors.gold),
+              StatCard(value: '33', label: '★ to Level 4'),
             ]),
             const SizedBox(height: 18),
             NavyButton(

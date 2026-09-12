@@ -160,4 +160,3 @@ class PastBookingHeroImage extends StatelessWidget {
     );
   }
 }
-

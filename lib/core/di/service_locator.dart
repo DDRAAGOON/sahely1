@@ -23,6 +23,7 @@ import 'package:sahely/core/network/upload/upload_manager.dart';
 import 'package:sahely/core/network/download/download_manager.dart';
 import 'package:sahely/core/config/feature_flags/feature_flag_manager.dart';
 import 'package:sahely/core/navigation/deep_link/deep_link_manager.dart';
+import 'package:sahely/core/auth/token_storage.dart';
 import 'package:sahely/core/security/storage/secure_storage_service.dart';
 import 'package:sahely/core/security/storage/flutter_secure_storage_service.dart';
 import 'package:sahely/core/security/storage/secure_storage_manager.dart';
@@ -45,41 +46,45 @@ import 'package:sahely/core/security/security_manager.dart';
 // Features - Auth
 import 'package:sahely/features/auth/domain/repositories/auth_repository.dart';
 import 'package:sahely/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:sahely/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:sahely/features/auth/data/auth_api.dart';
 import 'package:sahely/features/auth/domain/services/role_resolver.dart';
-import 'package:sahely/features/auth/domain/use_cases/login_use_case.dart';
-import 'package:sahely/features/auth/domain/use_cases/logout_use_case.dart';
-import 'package:sahely/features/auth/domain/use_cases/register_use_case.dart';
-import 'package:sahely/features/auth/domain/use_cases/reset_password_use_case.dart';
+import 'package:sahely/features/auth/domain/usecases/login_usecase.dart';
+import 'package:sahely/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:sahely/features/auth/domain/usecases/register_usecase.dart'
+    show
+        RegisterStep1UseCase,
+        RegisterStep2UseCase,
+        VerifyEmailOtpUseCase,
+        SendPhoneOtpUseCase,
+        VerifyPhoneOtpUseCase;
+import 'package:sahely/features/auth/domain/usecases/reset_password_usecase.dart';
 import 'package:sahely/features/auth/presentation/bloc/auth_cubit.dart';
 
 // Features - Broker
 import 'package:sahely/features/broker/domain/repositories/broker_repository.dart';
 import 'package:sahely/features/broker/data/repositories/broker_repository_impl.dart';
-import 'package:sahely/features/broker/data/datasources/mock_broker_data_source.dart';
 import 'package:sahely/features/broker/domain/repositories/broker_bookings_repository.dart';
 import 'package:sahely/features/broker/data/repositories/broker_bookings_repository_impl.dart';
-import 'package:sahely/features/broker/data/datasources/mock_broker_bookings_data_source.dart';
 import 'package:sahely/features/broker/presentation/bloc/broker_home_cubit.dart';
 import 'package:sahely/features/broker/presentation/screens/bookings/bloc/broker_bookings_cubit.dart';
 
 // Features - Owner
 import 'package:sahely/features/owner/domain/repositories/owner_repository.dart';
 import 'package:sahely/features/owner/data/repositories/owner_repository_impl.dart';
-import 'package:sahely/features/owner/data/datasources/mock_owner_data_source.dart';
 import 'package:sahely/features/owner/domain/use_cases/get_owner_dashboard_use_case.dart';
 import 'package:sahely/features/owner/presentation/bloc/owner_home_cubit.dart';
+import 'package:sahely/features/owner/presentation/bloc/owner_properties_cubit.dart';
+import 'package:sahely/features/broker/presentation/screens/portfolio/bloc/broker_portfolio_cubit.dart';
 
 // Features - Renter
 import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
 import 'package:sahely/features/renter/data/repositories/renter_repository_impl.dart';
-import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
 import 'package:sahely/features/renter/data/datasources/renter_api_data_source.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/paginate_properties_use_case.dart';
 import 'package:sahely/features/renter/presentation/screens/search/bloc/search_cubit.dart';
 import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart';
 import 'package:sahely/features/renter/domain/repositories/verification_repository.dart';
 import 'package:sahely/features/renter/data/repositories/verification_repository_impl.dart';
-import 'package:sahely/features/renter/data/datasources/mock_verification_data_source.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
 import 'package:sahely/features/renter/domain/use_cases/verify_email_use_case.dart';
 import 'package:sahely/features/renter/domain/use_cases/verify_phone_use_case.dart';
@@ -99,7 +104,7 @@ import 'package:sahely/features/renter/domain/use_cases/remove_from_collection_u
 import 'package:sahely/features/renter/domain/use_cases/check_wishlist_status_use_case.dart';
 import 'package:sahely/features/renter/domain/repositories/wishlist_repository.dart';
 import 'package:sahely/features/renter/data/repositories/wishlist_repository_impl.dart';
-import 'package:sahely/features/renter/data/datasources/mock_wishlist_data_source.dart';
+import 'package:sahely/features/renter/data/datasources/wishlist_local_data_source.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 
 // Features - Shared Profile
@@ -115,13 +120,79 @@ import 'package:sahely/features/shared/profile/domain/usecases/change_password_u
 import 'package:sahely/features/shared/profile/domain/usecases/update_language_usecase.dart';
 import 'package:sahely/features/shared/profile/domain/usecases/update_currency_usecase.dart';
 import 'package:sahely/features/shared/profile/domain/usecases/delete_account_usecase.dart';
-import 'package:sahely/features/shared/profile/domain/usecases/logout_usecase.dart' as profile_logout;
+import 'package:sahely/features/shared/profile/domain/usecases/logout_usecase.dart'
+    as profile_logout;
 import 'package:sahely/features/shared/profile/presentation/bloc/profile_cubit.dart';
+
+// Features - Properties
+import 'package:sahely/features/properties/domain/repositories/property_repository.dart'
+    as new_property;
+import 'package:sahely/features/properties/data/repositories/property_repository_impl.dart'
+    as new_property_impl;
+import 'package:sahely/features/properties/data/datasources/property_remote_data_source.dart';
+import 'package:sahely/features/properties/domain/usecases/get_properties_usecase.dart'
+    as new_property_usecase;
+import 'package:sahely/features/properties/domain/usecases/get_property_details_usecase.dart'
+    as new_property_usecase;
+import 'package:sahely/features/properties/domain/usecases/get_trending_properties_usecase.dart'
+    as new_property_usecase;
+import 'package:sahely/features/properties/domain/usecases/get_offers_usecase.dart'
+    as new_property_usecase;
+import 'package:sahely/features/properties/domain/usecases/search_properties_usecase.dart'
+    as new_property_usecase;
+import 'package:sahely/features/properties/presentation/bloc/property_bloc.dart';
+
+// Features - Bookings
+import 'package:sahely/features/bookings/domain/repositories/booking_repository.dart'
+    as new_booking;
+import 'package:sahely/features/bookings/data/repositories/booking_repository_impl.dart'
+    as new_booking_impl;
+import 'package:sahely/features/bookings/data/datasources/booking_remote_data_source.dart';
+import 'package:sahely/features/checklist/data/checklist_remote_data_source.dart';
+import 'package:sahely/features/user/data/datasources/user_remote_data_source.dart';
+import 'package:sahely/features/user/data/repositories/user_repository_impl.dart';
+import 'package:sahely/features/user/domain/repositories/user_repository.dart';
+import 'package:sahely/features/mawsem/data/datasources/mawsem_remote_data_source.dart';
+import 'package:sahely/features/mawsem/data/repositories/mawsem_repository_impl.dart';
+import 'package:sahely/features/mawsem/domain/repositories/mawsem_repository.dart';
+import 'package:sahely/core/network/upload/file_upload_api.dart';
+import 'package:sahely/features/broker/data/datasources/broker_api_data_source.dart';
+import 'package:sahely/features/renter/data/datasources/verification_api_data_source.dart';
+import 'package:sahely/features/renter/data/datasources/wishlist_api_data_source.dart';
+import 'package:sahely/features/shared/chat/data/chat_api_data_source.dart';
+import 'package:sahely/features/shared/chat/data/chatbot_api_data_source.dart';
+import 'package:sahely/features/shared/compound/data/compound_api_data_source.dart';
+import 'package:sahely/features/shared/concierge/data/concierge_api_data_source.dart';
+import 'package:sahely/features/shared/notifications/data/notifications_api_data_source.dart';
+import 'package:sahely/features/shared/referrals/data/referrals_api_data_source.dart';
+import 'package:sahely/features/shared/reviews/data/datasources/reviews_api_data_source.dart';
+import 'package:sahely/features/shared/violations/data/violations_api_data_source.dart';
+import 'package:sahely/features/smart_lock/data/smart_lock_api_data_source.dart';
+import 'package:sahely/features/bookings/domain/usecases/create_booking_usecase.dart';
+import 'package:sahely/features/bookings/domain/usecases/calculate_booking_usecase.dart';
+import 'package:sahely/features/bookings/domain/usecases/get_my_bookings_usecase.dart';
+import 'package:sahely/features/bookings/domain/usecases/cancel_booking_usecase.dart';
+import 'package:sahely/features/bookings/presentation/bloc/booking_bloc.dart';
+
+// Features - Payments
+import 'package:sahely/features/payments/domain/repositories/payment_repository.dart';
+import 'package:sahely/features/payments/data/repositories/payment_repository_impl.dart';
+import 'package:sahely/features/payments/data/datasources/payment_remote_data_source.dart';
+import 'package:sahely/features/payments/domain/usecases/initiate_payment_usecase.dart';
+import 'package:sahely/features/payments/domain/usecases/get_payment_cards_usecase.dart';
+import 'package:sahely/features/payments/presentation/bloc/payment_bloc.dart';
+
+// Features - Wallet
+import 'package:sahely/features/wallet/domain/repositories/wallet_repository.dart';
+import 'package:sahely/features/wallet/data/repositories/wallet_repository_impl.dart';
+import 'package:sahely/features/wallet/data/datasources/wallet_remote_data_source.dart';
+import 'package:sahely/features/wallet/domain/usecases/get_wallet_usecase.dart';
+import 'package:sahely/features/wallet/domain/usecases/get_wallet_transactions_usecase.dart';
+import 'package:sahely/features/wallet/presentation/bloc/wallet_bloc.dart';
 
 // Features - Shared Reviews
 import 'package:sahely/features/shared/reviews/domain/repositories/review_repository.dart';
 import 'package:sahely/features/shared/reviews/data/repositories/review_repository_impl.dart';
-import 'package:sahely/features/shared/reviews/data/datasources/mock_review_data_source.dart';
 import 'package:sahely/features/shared/reviews/domain/use_cases/get_property_reviews_use_case.dart';
 import 'package:sahely/features/shared/reviews/domain/use_cases/get_user_reviews_use_case.dart';
 import 'package:sahely/features/shared/reviews/domain/use_cases/add_review_use_case.dart';
@@ -134,32 +205,37 @@ import 'package:sahely/features/shared/reviews/domain/use_cases/get_property_rev
 import 'package:sahely/features/shared/reviews/presentation/bloc/review_cubit.dart';
 
 // Features - Shared Notifications
-import 'package:sahely/features/shared/notifications/domain/services/notification_service.dart';
-import 'package:sahely/features/shared/notifications/data/services/mock_notification_service.dart';
 
 // Features - Shared Rewards
-import 'package:sahely/features/shared/rewards/domain/services/reward_service.dart';
-import 'package:sahely/features/shared/rewards/data/services/mock_reward_service.dart';
 
 // Features - Shared Properties
 import 'package:sahely/features/shared/properties/domain/repositories/search_repository.dart';
 import 'package:sahely/features/shared/properties/data/repositories/search_repository_impl.dart';
+import 'package:sahely/features/shared/properties/domain/use_cases/get_properties_use_case.dart'
+    as shared_property_usecase;
+import 'package:sahely/features/shared/properties/domain/use_cases/get_trending_properties_use_case.dart'
+    as shared_property_usecase;
+import 'package:sahely/features/shared/properties/domain/use_cases/search_properties_use_case.dart'
+    as shared_property_usecase;
+import 'package:sahely/features/shared/properties/domain/use_cases/filter_properties_use_case.dart'
+    as shared_property_usecase;
+import 'package:sahely/features/shared/properties/domain/use_cases/sort_properties_use_case.dart'
+    as shared_property_usecase;
+import 'package:sahely/features/shared/properties/domain/use_cases/search_suggestions_use_case.dart'
+    as shared_property_usecase;
+import 'package:sahely/features/shared/properties/domain/use_cases/recent_searches_use_case.dart'
+    as shared_property_usecase;
+import 'package:sahely/features/shared/properties/domain/use_cases/clear_recent_searches_use_case.dart'
+    as shared_property_usecase;
+import 'package:sahely/features/shared/properties/domain/use_cases/save_search_use_case.dart'
+    as shared_property_usecase;
 import 'package:sahely/features/shared/properties/data/datasources/search_local_data_source.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/get_properties_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/get_trending_properties_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/search_properties_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/filter_properties_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/sort_properties_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/get_property_details_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/search_suggestions_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/recent_searches_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/clear_recent_searches_use_case.dart';
-import 'package:sahely/features/shared/properties/domain/use_cases/save_search_use_case.dart';
 
 // Features - Shared Bookings
-import 'package:sahely/features/shared/bookings/domain/repositories/booking_repository.dart';
-import 'package:sahely/features/shared/bookings/data/repositories/booking_repository_impl.dart';
-import 'package:sahely/features/shared/bookings/data/datasources/mock_bookings_data_source.dart';
+import 'package:sahely/features/shared/bookings/domain/repositories/booking_repository.dart'
+    as shared_booking;
+import 'package:sahely/features/shared/bookings/data/repositories/booking_repository_impl.dart'
+    as shared_booking_impl;
 import 'package:sahely/features/shared/bookings/domain/services/booking_status_service.dart';
 import 'package:sahely/features/shared/bookings/domain/use_cases/get_upcoming_bookings_use_case.dart';
 import 'package:sahely/features/shared/bookings/domain/use_cases/get_active_bookings_use_case.dart';
@@ -167,7 +243,6 @@ import 'package:sahely/features/shared/bookings/domain/use_cases/get_past_bookin
 import 'package:sahely/features/shared/bookings/domain/use_cases/update_checklist_use_case.dart';
 import 'package:sahely/features/shared/bookings/domain/use_cases/book_property_use_case.dart';
 import 'package:sahely/features/shared/bookings/domain/use_cases/get_booking_details_use_case.dart';
-import 'package:sahely/features/shared/bookings/domain/use_cases/cancel_booking_use_case.dart';
 import 'package:sahely/features/shared/bookings/domain/use_cases/confirm_booking_use_case.dart';
 import 'package:sahely/features/shared/bookings/domain/use_cases/reject_booking_use_case.dart';
 import 'package:sahely/features/shared/bookings/domain/use_cases/check_booking_availability_use_case.dart';
@@ -193,10 +268,12 @@ Future<void> init() async {
   sl.registerLazySingleton<EnvConfig>(() => AppConfig.config);
 
   // Storage & Cache
-  sl.registerLazySingleton<CacheService>(() => SharedPreferencesCacheService(sl()));
+  sl.registerLazySingleton<CacheService>(
+      () => SharedPreferencesCacheService(sl()));
   sl.registerLazySingleton(() => CacheManager(sl()));
   sl.registerLazySingleton(() => RequestCacheManager(sl()));
-  sl.registerLazySingleton<ImageCacheService>(() => CachedNetworkImageService());
+  sl.registerLazySingleton<ImageCacheService>(
+      () => CachedNetworkImageService());
   sl.registerLazySingleton(() => ImageCacheManager(sl()));
 
   // Core
@@ -210,13 +287,17 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DownloadManager());
   sl.registerLazySingleton(() => FeatureFlagManager());
   sl.registerLazySingleton(() => DeepLinkManager());
-  sl.registerLazySingleton<SecureStorageService>(() => FlutterSecureStorageService());
+  sl.registerLazySingleton<SecureStorageService>(
+    () => FlutterSecureStorageService(),
+  );
+  sl.registerLazySingleton<TokenStorage>(() => TokenStorage(sl()));
   sl.registerLazySingleton(() => SecureStorageManager(service: sl()));
   sl.registerLazySingleton<EncryptionService>(() => AesEncryptionService());
   sl.registerLazySingleton(() => EncryptionManager(sl()));
-  sl.registerLazySingleton<DeviceSecurityService>(() => SafeDeviceSecurityService());
+  sl.registerLazySingleton<DeviceSecurityService>(
+      () => SafeDeviceSecurityService());
   sl.registerLazySingleton(() => DeviceSecurityManager(sl()));
-  
+
   // Security - Network
   sl.registerLazySingleton<CertificateProvider>(() {
     final env = sl<EnvConfig>().environment;
@@ -227,7 +308,8 @@ Future<void> init() async {
     };
     return AssetCertificateProvider(certificatePaths: certPaths);
   });
-  sl.registerLazySingleton<SSLPinningService>(() => SSLPinningServiceImpl(sl()));
+  sl.registerLazySingleton<SSLPinningService>(
+      () => SSLPinningServiceImpl(sl()));
   sl.registerLazySingleton(() => NetworkSecurityManager(sl()));
   sl.registerLazySingleton<SecurityLogger>(() => ConsoleSecurityLogger());
   sl.registerLazySingleton(() {
@@ -244,7 +326,8 @@ Future<void> init() async {
       ));
 
   // Lazy Loading
-  sl.registerFactoryParam<LazyLoadController<dynamic>, LazyLoaderTask<dynamic>, Map<String, dynamic>?>(
+  sl.registerFactoryParam<LazyLoadController<dynamic>, LazyLoaderTask<dynamic>,
+      Map<String, dynamic>?>(
     (task, params) => LazyLoadController<dynamic>(
       task: task,
       policy: params?['policy'] ?? LazyLoadPolicy.deferred,
@@ -255,7 +338,8 @@ Future<void> init() async {
     ),
   );
 
-  sl.registerFactoryParam<LazyLoader<dynamic>, LazyLoaderTask<dynamic>, Map<String, dynamic>?>(
+  sl.registerFactoryParam<LazyLoader<dynamic>, LazyLoaderTask<dynamic>,
+      Map<String, dynamic>?>(
     (task, params) => LazyLoader<dynamic>(
       task: task,
       policy: params?['policy'] ?? LazyLoadPolicy.deferred,
@@ -267,7 +351,8 @@ Future<void> init() async {
   );
 
   // Infinite Scroll
-  sl.registerFactoryParam<InfiniteScrollController<dynamic>, InfiniteScrollTask<dynamic>, Map<String, dynamic>?>(
+  sl.registerFactoryParam<InfiniteScrollController<dynamic>,
+      InfiniteScrollTask<dynamic>, Map<String, dynamic>?>(
     (task, params) => InfiniteScrollController<dynamic>(
       task: task,
       pageSize: params?['pageSize'] ?? 10,
@@ -280,63 +365,148 @@ Future<void> init() async {
   );
 
   // Data Sources
-  sl.registerLazySingleton<SearchLocalDataSource>(() => SearchLocalDataSourceImpl());
-  sl.registerLazySingleton<MockBrokerDataSource>(() => MockBrokerDataSource());
-  sl.registerLazySingleton<MockOwnerDataSource>(() => MockOwnerDataSource());
-  sl.registerLazySingleton<MockRenterDataSource>(() => MockRenterDataSource());
-  sl.registerLazySingleton<MockBrokerBookingsDataSource>(() => MockBrokerBookingsDataSource());
-  sl.registerLazySingleton<MockVerificationDataSource>(() => MockVerificationDataSource());
-  sl.registerLazySingleton<MockWishlistDataSource>(() => MockWishlistDataSource());
-  sl.registerLazySingleton<MockBookingsDataSource>(() => MockBookingsDataSource());
-  sl.registerLazySingleton<MockReviewDataSource>(() => MockReviewDataSource());
-  sl.registerLazySingleton<ProfileRemoteDataSource>(() => AppConfig.useRemoteApi
-      ? ApiProfileRemoteDataSource(ApiClient()) as ProfileRemoteDataSource
-      : MockProfileRemoteDataSource());
+  sl.registerLazySingleton<SearchLocalDataSource>(
+      () => SearchLocalDataSourceImpl());
+  sl.registerLazySingleton<WishlistLocalDataSource>(
+      () => WishlistLocalDataSource());
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+      () => ApiProfileRemoteDataSource(sl<ApiClient>()));
+
+  // Remote API data sources - one per backend module. Every one of them shares
+  // the single authenticated ApiClient registered above.
+  sl.registerLazySingleton<FileUploadApi>(() => FileUploadApi(sl()));
+  sl.registerLazySingleton<ChecklistRemoteDataSource>(
+    () => ChecklistRemoteDataSource(sl()),
+  );
+  sl.registerLazySingleton<WishlistApiDataSource>(
+    () => WishlistApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<ReviewsApiDataSource>(
+    () => ReviewsApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<ChatApiDataSource>(() => ChatApiDataSource(sl()));
+  sl.registerLazySingleton<ChatbotApiDataSource>(
+    () => ChatbotApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<NotificationsApiDataSource>(
+    () => NotificationsApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<ConciergeApiDataSource>(
+    () => ConciergeApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<ReferralsApiDataSource>(
+    () => ReferralsApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<ViolationsApiDataSource>(
+    () => ViolationsApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<CompoundApiDataSource>(
+    () => CompoundApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<SmartLockApiDataSource>(
+    () => SmartLockApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<BrokerApiDataSource>(
+    () => BrokerApiDataSource(sl()),
+  );
+  sl.registerLazySingleton<VerificationApiDataSource>(
+    () => VerificationApiDataSource(sl(), uploads: sl()),
+  );
+  sl.registerLazySingleton<UserRemoteDataSource>(
+    () => UserRemoteDataSource(sl()),
+  );
+  sl.registerLazySingleton<MawsemRemoteDataSource>(
+    () => MawsemRemoteDataSource(sl()),
+  );
 
   // Repositories
+  sl.registerLazySingleton<AuthApiService>(
+    () => AuthApiService(apiClient: sl()),
+  );
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSource(sl()),
+  );
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(),
+    () => AuthRepositoryImpl(
+      remoteDataSource: sl(),
+      secureStorage: sl(),
+    ),
   );
   sl.registerLazySingleton<BrokerRepository>(
-    () => BrokerRepositoryImpl(remoteDataSource: sl()),
+    () => BrokerRepositoryImpl(api: sl()),
   );
   sl.registerLazySingleton<OwnerRepository>(
-    () => OwnerRepositoryImpl(remoteDataSource: sl()),
+    () => OwnerRepositoryImpl(apiClient: sl()),
   );
   sl.registerLazySingleton<RenterRepository>(
-    () => RenterRepositoryImpl(
-        remoteDataSource: sl(),
-        apiDataSource: AppConfig.useRemoteApi
-            ? RenterApiDataSource(ApiClient())
-            : null),
+    () => RenterRepositoryImpl(api: RenterApiDataSource(sl())),
   );
 
   sl.registerLazySingleton<BrokerBookingsRepository>(
-    () => BrokerBookingsRepositoryImpl(dataSource: sl()),
+    () => BrokerBookingsRepositoryImpl(),
   );
   sl.registerLazySingleton<VerificationRepository>(
-    () => VerificationRepositoryImpl(dataSource: sl()),
+    () => VerificationRepositoryImpl(api: sl()),
   );
   sl.registerLazySingleton<WishlistRepository>(
-    () => WishlistRepositoryImpl(dataSource: sl()),
+    () => WishlistRepositoryImpl(dataSource: sl(), api: sl()),
   );
-  sl.registerLazySingleton<BookingRepository>(
-    () => BookingRepositoryImpl(dataSource: sl()),
+  sl.registerLazySingleton<shared_booking.BookingRepository>(
+    () => shared_booking_impl.BookingRepositoryImpl(apiClient: sl()),
   );
   sl.registerLazySingleton<ReviewRepository>(
-    () => ReviewRepositoryImpl(dataSource: sl()),
+    () => ReviewRepositoryImpl(api: sl(), violations: sl()),
   );
   sl.registerLazySingleton<SearchRepository>(
-    () => SearchRepositoryImpl(localDataSource: sl()),
+    () => SearchRepositoryImpl(localDataSource: sl(), properties: sl()),
   );
   sl.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(remoteDataSource: sl()),
   );
-  sl.registerLazySingleton<NotificationService>(
-    () => MockNotificationService(),
+
+  // Properties
+  sl.registerLazySingleton<PropertyRemoteDataSource>(
+    () => PropertyRemoteDataSource(sl()),
   );
-  sl.registerLazySingleton<RewardService>(
-    () => MockRewardService(),
+  sl.registerLazySingleton<new_property.PropertyRepository>(
+    () => new_property_impl.PropertyRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Bookings
+  sl.registerLazySingleton<BookingRemoteDataSource>(
+    () => BookingRemoteDataSource(sl()),
+  );
+  sl.registerLazySingleton<new_booking.BookingRepository>(
+    () => new_booking_impl.BookingRepositoryImpl(
+      remoteDataSource: sl(),
+      checklistDataSource: sl(),
+    ),
+  );
+
+  // Payments
+  sl.registerLazySingleton<PaymentRemoteDataSource>(
+    () => PaymentRemoteDataSource(sl()),
+  );
+  sl.registerLazySingleton<PaymentRepository>(
+    () => PaymentRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Wallet
+  sl.registerLazySingleton<WalletRemoteDataSource>(
+    () => WalletRemoteDataSource(sl()),
+  );
+  sl.registerLazySingleton<WalletRepository>(
+    () => WalletRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // User profile
+  sl.registerLazySingleton<UserRepository>(
+    () => UserRepositoryImpl(remoteDataSource: sl(), uploads: sl()),
+  );
+
+  // MAWSEM loyalty program
+  sl.registerLazySingleton<MawsemRepository>(
+    () => MawsemRepositoryImpl(remoteDataSource: sl()),
   );
 
   // Domain Services
@@ -348,9 +518,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetBrokerDashboardUseCase(sl()));
   sl.registerLazySingleton(() => GetBrokerPortfolioUseCase(sl()));
   sl.registerLazySingleton(() => GetBrokerWalletUseCase(sl()));
-  sl.registerLazySingleton(() => LoginUseCase(sl(), sl()));
-  sl.registerLazySingleton(() => LogoutUseCase(sl()));
-  sl.registerLazySingleton(() => RegisterUseCase(sl()));
+  sl.registerLazySingleton(() => LoginUseCase(sl()));
+  sl.registerLazySingleton(() => LogoutUseCase(sl(), sl()));
+  sl.registerLazySingleton(() => RegisterStep1UseCase(sl()));
+  sl.registerLazySingleton(() => RegisterStep2UseCase(sl()));
+  sl.registerLazySingleton(() => VerifyEmailOtpUseCase(sl()));
+  sl.registerLazySingleton(() => SendPhoneOtpUseCase(sl()));
+  sl.registerLazySingleton(() => VerifyPhoneOtpUseCase(sl()));
   sl.registerLazySingleton(() => ResetPasswordUseCase(sl()));
   sl.registerLazySingleton(() => GetVerificationStatusUseCase(sl()));
   sl.registerLazySingleton(() => VerifyEmailUseCase(sl()));
@@ -376,7 +550,7 @@ Future<void> init() async {
   // Review UseCases
   sl.registerLazySingleton(() => GetPropertyReviewsUseCase(sl()));
   sl.registerLazySingleton(() => GetUserReviewsUseCase(sl()));
-  sl.registerLazySingleton(() => AddReviewUseCase(sl(), notificationService: sl(), rewardService: sl()));
+  sl.registerLazySingleton(() => AddReviewUseCase(sl()));
   sl.registerLazySingleton(() => UpdateReviewUseCase(sl()));
   sl.registerLazySingleton(() => DeleteReviewUseCase(sl()));
   sl.registerLazySingleton(() => LikeReviewUseCase(sl()));
@@ -393,20 +567,55 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateLanguageUseCase(sl()));
   sl.registerLazySingleton(() => UpdateCurrencyUseCase(sl()));
   sl.registerLazySingleton(() => DeleteAccountUseCase(sl()));
-  sl.registerLazySingleton(() => profile_logout.LogoutUseCase(sl()));
+  sl.registerLazySingleton(() => profile_logout.LogoutUseCase(sl(), sl()));
 
   // Properties UseCases
-  sl.registerLazySingleton(() => GetPropertiesUseCase(sl()));
-  sl.registerLazySingleton(() => GetTrendingPropertiesUseCase());
-  sl.registerLazySingleton(() => SearchPropertiesUseCase());
-  sl.registerLazySingleton(() => FilterPropertiesUseCase());
-  sl.registerLazySingleton(() => SortPropertiesUseCase());
-  sl.registerLazySingleton(() => PaginatePropertiesUseCase());
-  sl.registerLazySingleton(() => GetPropertyDetailsUseCase(sl()));
-  sl.registerLazySingleton(() => SearchSuggestionsUseCase(sl()));
-  sl.registerLazySingleton(() => RecentSearchesUseCase(sl()));
-  sl.registerLazySingleton(() => ClearRecentSearchesUseCase(sl()));
-  sl.registerLazySingleton(() => SaveSearchUseCase(sl()));
+  sl.registerLazySingleton(
+      () => new_property_usecase.GetPropertiesUseCase(sl()));
+  sl.registerLazySingleton(
+      () => new_property_usecase.GetPropertyDetailsUseCase(sl()));
+  sl.registerLazySingleton(
+      () => new_property_usecase.GetTrendingPropertiesUseCase(sl()));
+  sl.registerLazySingleton(() => new_property_usecase.GetOffersUseCase(sl()));
+  sl.registerLazySingleton(
+      () => new_property_usecase.SearchPropertiesUseCase(sl()));
+
+  // Bookings UseCases
+  sl.registerLazySingleton(() => CreateBookingUseCase(sl()));
+  sl.registerLazySingleton(() => CalculateBookingUseCase(sl()));
+  sl.registerLazySingleton(() => GetMyBookingsUseCase(sl()));
+  sl.registerLazySingleton(() => CancelBookingUseCase(sl()));
+
+  // Payments UseCases
+  sl.registerLazySingleton(() => InitiatePaymentUseCase(sl()));
+  sl.registerLazySingleton(() => GetPaymentCardsUseCase(sl()));
+
+  // Wallet UseCases
+  sl.registerLazySingleton(() => GetWalletUseCase(sl()));
+  sl.registerLazySingleton(() => GetWalletTransactionsUseCase(sl()));
+
+  // Shared property UseCases - the renter home and search cubits depend on
+  // these. They are distinct classes from the same-named ones in
+  // features/properties (registered above via new_property_usecase), hence
+  // the prefix.
+  sl.registerLazySingleton(
+      () => shared_property_usecase.GetPropertiesUseCase(sl()));
+  sl.registerLazySingleton(
+      () => shared_property_usecase.GetTrendingPropertiesUseCase());
+  sl.registerLazySingleton(
+      () => shared_property_usecase.SearchPropertiesUseCase());
+  sl.registerLazySingleton(
+      () => shared_property_usecase.FilterPropertiesUseCase());
+  sl.registerLazySingleton(
+      () => shared_property_usecase.SortPropertiesUseCase());
+  sl.registerLazySingleton(
+      () => shared_property_usecase.SearchSuggestionsUseCase(sl()));
+  sl.registerLazySingleton(
+      () => shared_property_usecase.RecentSearchesUseCase(sl()));
+  sl.registerLazySingleton(
+      () => shared_property_usecase.ClearRecentSearchesUseCase(sl()));
+  sl.registerLazySingleton(
+      () => shared_property_usecase.SaveSearchUseCase(sl()));
 
   // Bookings UseCases
   sl.registerLazySingleton(() => GetUpcomingBookingsUseCase(sl(), sl()));
@@ -415,7 +624,6 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdateChecklistUseCase(sl()));
   sl.registerLazySingleton(() => BookPropertyUseCase(sl()));
   sl.registerLazySingleton(() => GetBookingDetailsUseCase(sl()));
-  sl.registerLazySingleton(() => CancelBookingUseCase(sl()));
   sl.registerLazySingleton(() => ConfirmBookingUseCase(sl()));
   sl.registerLazySingleton(() => RejectBookingUseCase(sl()));
   sl.registerLazySingleton(() => CheckBookingAvailabilityUseCase(sl()));
@@ -428,7 +636,11 @@ Future<void> init() async {
   sl.registerFactory(() => AuthCubit(
         loginUseCase: sl(),
         logoutUseCase: sl(),
-        registerUseCase: sl(),
+        registerStep1UseCase: sl(),
+        registerStep2UseCase: sl(),
+        verifyEmailOtpUseCase: sl(),
+        sendPhoneOtpUseCase: sl(),
+        verifyPhoneOtpUseCase: sl(),
         resetPasswordUseCase: sl(),
       ));
   sl.registerFactory(() => BrokerHomeCubit(getBrokerDashboardUseCase: sl()));
@@ -444,6 +656,10 @@ Future<void> init() async {
         updateChecklistUseCase: sl(),
       ));
   sl.registerFactory(() => OwnerHomeCubit(getOwnerDashboardUseCase: sl()));
+  sl.registerFactory(() => OwnerPropertiesCubit(repository: sl()));
+  sl.registerFactory(
+    () => BrokerPortfolioCubit(getBrokerPortfolioUseCase: sl()),
+  );
   sl.registerFactory(() => RenterHomeCubit(
         getPropertiesUseCase: sl(),
         getTrendingPropertiesUseCase: sl(),
@@ -503,5 +719,34 @@ Future<void> init() async {
         updateCurrencyUseCase: sl(),
         deleteAccountUseCase: sl(),
         logoutUseCase: sl(),
+      ));
+
+  // Properties BLoC
+  sl.registerFactory(() => PropertyBloc(
+        getPropertiesUseCase: sl(),
+        getPropertyDetailsUseCase: sl(),
+        getTrendingPropertiesUseCase: sl(),
+        getOffersUseCase: sl(),
+        searchPropertiesUseCase: sl(),
+      ));
+
+  // Bookings BLoC
+  sl.registerFactory(() => BookingBloc(
+        createBookingUseCase: sl(),
+        calculateBookingUseCase: sl(),
+        getMyBookingsUseCase: sl(),
+        cancelBookingUseCase: sl(),
+      ));
+
+  // Payments BLoC
+  sl.registerFactory(() => PaymentBloc(
+        initiatePaymentUseCase: sl(),
+        getPaymentCardsUseCase: sl(),
+      ));
+
+  // Wallet BLoC
+  sl.registerFactory(() => WalletBloc(
+        getWalletUseCase: sl(),
+        getWalletTransactionsUseCase: sl(),
       ));
 }

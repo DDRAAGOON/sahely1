@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "data": {
+    "steps": [
+      {
+        "step": "email",
+        "status": "completed",
+        "completed_at": "2026-07-12T14:31:15.081Z"
+      },
+      {
+        "step": "phone",
+        "status": "completed",
+        "completed_at": "2026-07-12T14:31:15.216Z"
+      },
+      {
+        "step": "identity",
+        "status": "completed",
+        "completed_at": "2026-07-12T14:31:15.350Z"
+      },
+      {
+        "step": "payment_card",
+        "status": "completed",
+        "completed_at": "2026-07-12T14:31:15.486Z"
+      }
+    ],
+    "complete": true,
+    "can_skip_identity_and_card_at_registration": false,
+    "complete_later_in_profile": [
+      "payment_card"
+    ]
+  }
+}

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+
+import 'package:sahely/core/di/service_locator.dart' show sl;
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/features/broker/domain/entities/broker_wallet.dart';
+import 'package:sahely/features/broker/domain/repositories/broker_repository.dart';
+import 'package:sahely/l10n/app_localizations.dart';
 
 import '../../../../../../core/utils/currency_formatter.dart';
 
+/// The broker's commission wallet: balances and tier from `/broker/dashboard`
+/// and `/broker/tier`, entries from `/broker/commissions`.
 class BrokerWalletPage extends StatefulWidget {
   const BrokerWalletPage({super.key});
 
@@ -16,44 +22,119 @@ class BrokerWalletPage extends StatefulWidget {
 
 class _BrokerWalletPageState extends State<BrokerWalletPage> {
   int _activeTab = 0; // 0: This Month, 1: Last Month
+  BrokerWallet? _wallet;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final wallet = await sl<BrokerRepository>().getBrokerWallet(0);
+      if (mounted) setState(() => _wallet = wallet);
+    } catch (_) {
+      // Figures stay as "—".
+    }
+  }
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  /// `EGP 1,820` -> `1820`.
+  static int _amount(String formatted) =>
+      int.tryParse(formatted.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+
+  /// `18000` -> `18,000`.
+  static String _grouped(int value) {
+    final digits = value.toString();
+    final buffer = StringBuffer();
+    for (var i = 0; i < digits.length; i++) {
+      if (i > 0 && (digits.length - i) % 3 == 0) buffer.write(',');
+      buffer.write(digits[i]);
+    }
+    return buffer.toString();
+  }
+
+  static String _compact(double egp) => egp >= 1000
+      ? '${(egp / 1000).toStringAsFixed(1)}k'
+      : egp.round().toString();
+
+  static String _rate(double rate) {
+    final percent = rate <= 1 ? rate * 100 : rate;
+    return percent == percent.roundToDouble()
+        ? '${percent.round()}%'
+        : '${percent.toStringAsFixed(1)}%';
+  }
+
+  List<BrokerCommission> _inMonth(int offset) {
+    final now = DateTime.now();
+    final month = DateTime(now.year, now.month + offset);
+    return (_wallet?.commissions ?? const <BrokerCommission>[])
+        .where((c) => c.date.year == month.year && c.date.month == month.month)
+        .toList();
+  }
+
+  static BadgeKind _badge(String status) {
+    final s = status.toLowerCase();
+    if (s.contains('pend') || s.contains('hold')) return BadgeKind.orange;
+    if (s.contains('revers') || s.contains('cancel')) return BadgeKind.gray;
+    return BadgeKind.greenSoft;
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<StatCard> statCards = [
-      StatCard(value: '18.2k', label: AppLocalizations.of(context).statEarnedMo),
-      StatCard(value: '5.4k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A)),
-      StatCard(value: '14', label: AppLocalizations.of(context).bookings)
+    final wallet = _wallet;
+    final rows = _inMonth(_activeTab == 0 ? 0 : -1);
+    final earned = rows
+        .where((c) => !c.status.toLowerCase().contains('revers'))
+        .fold<int>(0, (sum, c) => sum + _amount(c.amount));
+    final statCards = [
+      StatCard(
+          value: wallet == null ? '—' : _compact(earned.toDouble()),
+          label: AppLocalizations.of(context).statEarnedMo),
+      StatCard(
+          value: wallet == null ? '—' : _compact(wallet.pendingBalance),
+          label: AppLocalizations.of(context).statPending,
+          valueColor: const Color(0xFFD2760A)),
+      StatCard(
+          value: wallet == null ? '—' : '${rows.length}',
+          label: AppLocalizations.of(context).bookings),
     ];
-    List<Widget> commissions = [];
-
-    if (_activeTab == 0) {
-      statCards = [
-        StatCard(value: '18.2k', label: AppLocalizations.of(context).statEarnedMo),
-        StatCard(
-            value: '5.4k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A)),
-        StatCard(value: '14', label: AppLocalizations.of(context).bookings)
-      ];
-      commissions = [
-        _commission(
-            'Palm Chalet', 'Jun 12', '+1,820', 'Paid', BadgeKind.greenSoft),
-        _commission('Dune House', 'Jun 9', '+960', 'Pending', BadgeKind.orange,
-            last: true),
-      ];
-    } else {
-      statCards = [
-        StatCard(value: '15.6k', label: AppLocalizations.of(context).statEarnedMo),
-        StatCard(
-            value: '0.0k', label: AppLocalizations.of(context).statPending, valueColor: const Color(0xFFD2760A)),
-        StatCard(value: '12', label: AppLocalizations.of(context).bookings)
-      ];
-      commissions = [
-        _commission(
-            'Marina Loft', 'May 24', '+1,450', 'Paid', BadgeKind.greenSoft),
-        _commission(
-            'Sunny Villa', 'May 15', '+2,100', 'Paid', BadgeKind.greenSoft,
-            last: true),
-      ];
-    }
+    final commissions = rows.isEmpty
+        ? <Widget>[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                  _activeTab == 0
+                      ? 'No commissions this month yet.'
+                      : 'No commissions last month.',
+                  style: AppTheme.dm(size: 13, color: AppColors.muted)),
+            ),
+          ]
+        : [
+            for (var i = 0; i < rows.length; i++)
+              _commission(
+                  rows[i].propertyName,
+                  '${_months[rows[i].date.month - 1]} ${rows[i].date.day}',
+                  '+${_grouped(_amount(rows[i].amount))}',
+                  rows[i].status,
+                  _badge(rows[i].status),
+                  last: i == rows.length - 1),
+          ];
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -130,7 +211,11 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
                         style: AppTheme.dm(
                             size: 13, color: const Color(0xFFCDD4E0))),
                     const SizedBox(height: 6),
-                    Text(CurrencyFormatter.format(12840),
+                    Text(
+                        wallet == null
+                            ? '—'
+                            : CurrencyFormatter.format(
+                                wallet.availableBalance.round()),
                         style: AppTheme.dm(
                             size: 30,
                             weight: FontWeight.w700,
@@ -140,13 +225,13 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
             const SizedBox(height: 12),
             InfoNote(
                 text:
-                    'Commissions clear 48h after guest check-in. Pending balance: ${CurrencyFormatter.format(5400)}.',
+                    'Commissions clear 48h after guest check-in. Pending balance: ${wallet == null ? '—' : CurrencyFormatter.format(wallet.pendingBalance.round())}.',
                 icon: Icons.schedule),
             const SizedBox(height: 12),
             const Opacity(
                 opacity: 0.4,
                 child: GoldButton(
-                    label: 'Withdraw to Bank', 
+                    label: 'Withdraw to Bank',
                     color: Color(0xFFE2D1A6),
                     onTap: null)),
             const SizedBox(height: 6),
@@ -184,16 +269,20 @@ class _BrokerWalletPageState extends State<BrokerWalletPage> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Text('Gold tier · 4% rate',
+                        Text(
+                            wallet == null
+                                ? '—'
+                                : '${wallet.tierName} tier · ${_rate(wallet.commissionRate)} rate',
                             style: AppTheme.dm(
                                 size: 13,
                                 weight: FontWeight.w700,
                                 color: AppColors.navy)),
-                        Text('avg ${CurrencyFormatter.format(1300)} per booking',
+                        Text('avg ${wallet?.avgPerBooking ?? '—'} per booking',
                             style:
                                 AppTheme.dm(size: 11, color: AppColors.muted)),
                       ])),
-                  Text('45 to Elite',
+                  Text(
+                      wallet == null ? '' : '${wallet.toNextTier} to next tier',
                       style: AppTheme.dm(
                           size: 12,
                           weight: FontWeight.w600,

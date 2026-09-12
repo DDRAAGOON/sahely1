@@ -3,6 +3,7 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/widgets/fill_viewport.dart';
 
 class ListingSubmittedScreen extends StatelessWidget {
   final String? propertyName;
@@ -26,7 +27,7 @@ class ListingSubmittedScreen extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: Padding(
+                child: FillViewport(
                   padding: const EdgeInsets.symmetric(horizontal: 28),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

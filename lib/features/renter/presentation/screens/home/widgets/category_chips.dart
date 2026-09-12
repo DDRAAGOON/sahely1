@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -20,11 +20,21 @@ class _CategoryChipsState extends State<CategoryChips> {
   /// Canonical (English) values passed to callbacks so filtering logic
   /// stays stable regardless of the display language.
   static const List<String> _categories = [
-    'All', 'Villa', 'Chalet', 'Penthouse', 'Beachfront', 'Pool'
+    'All',
+    'Villa',
+    'Chalet',
+    'Penthouse',
+    'Beachfront',
+    'Pool'
   ];
 
   List<String> _displayLabels(AppLocalizations l) => [
-        l.catAll, l.catVilla, l.catChalet, l.catPenthouse, l.catBeachfront, l.catPool
+        l.catAll,
+        l.catVilla,
+        l.catChalet,
+        l.catPenthouse,
+        l.catBeachfront,
+        l.catPool
       ];
 
   @override
@@ -64,7 +74,8 @@ class _CategoryChipsState extends State<CategoryChips> {
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         )
-                      ] : const [],
+                      ]
+                    : const [],
               ),
               alignment: Alignment.center,
               child: Text(

@@ -94,7 +94,8 @@ class _CompareInputBarState extends State<CompareInputBar> {
               builder: (context, value, child) {
                 final isTyping = value.text.trim().isNotEmpty;
                 return GestureDetector(
-                  onTap: isTyping ? _handleSend : () => widget.onAskAI('compare'),
+                  onTap:
+                      isTyping ? _handleSend : () => widget.onAskAI('compare'),
                   child: Container(
                     width: 44,
                     height: 44,

@@ -40,13 +40,15 @@ class ReferPropertyDropdown extends StatelessWidget {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: value,
-              hint: Text('Select area', style: AppTheme.dm(size: 15, color: AppColors.subtle)),
+              hint: Text('Select area',
+                  style: AppTheme.dm(size: 15, color: AppColors.subtle)),
               isExpanded: true,
               icon: const Icon(Icons.arrow_drop_down, color: AppColors.subtle),
               items: items.map((String area) {
                 return DropdownMenuItem<String>(
                   value: area,
-                  child: Text(area, style: AppTheme.dm(size: 15, color: AppColors.navy)),
+                  child: Text(area,
+                      style: AppTheme.dm(size: 15, color: AppColors.navy)),
                 );
               }).toList(),
               onChanged: onChanged,

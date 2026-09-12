@@ -32,7 +32,9 @@ class CacheEntry<T> {
     return CacheEntry(
       data: fromJsonT(json['data'] as Map<String, dynamic>),
       timestamp: DateTime.parse(json['timestamp'] as String),
-      ttl: json['ttl'] != null ? Duration(milliseconds: json['ttl'] as int) : null,
+      ttl: json['ttl'] != null
+          ? Duration(milliseconds: json['ttl'] as int)
+          : null,
       version: json['version'] as String? ?? '1.0.0',
     );
   }

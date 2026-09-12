@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 
@@ -13,10 +16,11 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
-import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
+import 'package:sahely/features/auth/data/auth_api.dart';
 import 'package:sahely/features/auth/widgets/auth_success_badge.dart';
 import 'package:sahely/features/renter/presentation/verification/presentation/bloc/verification_cubit.dart';
+import 'package:sahely/core/widgets/fill_viewport.dart';
 
 // ===================================================== 10 · ID Verification
 class IdVerificationScreen extends StatefulWidget {
@@ -57,51 +61,56 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
 
   void _showPicker(BuildContext context, bool isFront) {
     showModalBottomSheet(
-      useRootNavigator: true, context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (ctx) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                  _selectedType == 1
-                      ? 'Upload Passport'
-                      : 'Upload ${isFront ? 'Front' : 'Back'} Side',
-                  style: AppTheme.dm(
-                      size: 18,
-                      weight: FontWeight.w700,
-                      color: AppColors.navy)),
-              const SizedBox(height: 20),
-              ListTile(
-                leading: const Icon(Icons.camera_alt_outlined,
-                    color: AppColors.gold),
-                title: Text('Take a photo',
-                    style: AppTheme.dm(size: 15, weight: FontWeight.w600)),
-                subtitle: Text('Capture with your camera',
-                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _pickImage(ImageSource.camera, isFront);
-                },
-              ),
-              const Divider(color: AppColors.border, indent: 20, endIndent: 20),
-              ListTile(
-                leading: const Icon(Icons.photo_library_outlined,
-                    color: AppColors.gold),
-                title: Text('Upload from gallery',
-                    style: AppTheme.dm(size: 15, weight: FontWeight.w600)),
-                subtitle: Text('Choose an existing photo',
-                    style: AppTheme.dm(size: 12, color: AppColors.muted)),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _pickImage(ImageSource.gallery, isFront);
-                },
-              ),
-            ],
+      builder: (ctx) => SingleChildScrollView(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    _selectedType == 1
+                        ? 'Upload Passport'
+                        : 'Upload ${isFront ? 'Front' : 'Back'} Side',
+                    style: AppTheme.dm(
+                        size: 18,
+                        weight: FontWeight.w700,
+                        color: AppColors.navy)),
+                const SizedBox(height: 20),
+                ListTile(
+                  leading: const Icon(Icons.camera_alt_outlined,
+                      color: AppColors.gold),
+                  title: Text('Take a photo',
+                      style: AppTheme.dm(size: 15, weight: FontWeight.w600)),
+                  subtitle: Text('Capture with your camera',
+                      style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _pickImage(ImageSource.camera, isFront);
+                  },
+                ),
+                const Divider(
+                    color: AppColors.border, indent: 20, endIndent: 20),
+                ListTile(
+                  leading: const Icon(Icons.photo_library_outlined,
+                      color: AppColors.gold),
+                  title: Text('Upload from gallery',
+                      style: AppTheme.dm(size: 15, weight: FontWeight.w600)),
+                  subtitle: Text('Choose an existing photo',
+                      style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _pickImage(ImageSource.gallery, isFront);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -225,7 +234,8 @@ class _IdVerificationScreenState extends State<IdVerificationScreen> {
                               ? 'Back side uploaded'
                               : 'Tap to upload back',
                           onTap: _frontImage != null
-                              ? () => _showPicker(context, false) : null,
+                              ? () => _showPicker(context, false)
+                              : null,
                         ),
                       ],
                       const SizedBox(height: 10),
@@ -396,7 +406,8 @@ class _UploadBox extends StatelessWidget {
                       image: FileImage(image!),
                       fit: BoxFit.cover,
                       opacity: 0.3,
-                    ) : null,
+                    )
+                  : null,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -434,23 +445,248 @@ class FacialScanScreen extends StatefulWidget {
 }
 
 class _FacialScanScreenState extends State<FacialScanScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final AnimationController _c = AnimationController(
       vsync: this, duration: const Duration(milliseconds: 2200))
     ..repeat(reverse: true);
 
+  /// How long the live preview runs before the selfie is taken, so the user
+  /// can centre their face ("Hold still").
+  static const _holdStill = Duration(seconds: 3);
+
+  CameraController? _camera;
+  Timer? _captureTimer;
+  bool _starting = false;
+  bool _finished = false;
+
+  /// The user refused the camera. The screen stays put - skipping is the
+  /// user's own choice - and tapping the oval asks again.
+  bool _cameraDenied = false;
+
+  /// Android stops showing the prompt after repeated refusals (iOS after the
+  /// first), so tapping the oval then points to the app settings instead.
+  bool _permanentlyDenied = false;
+
+  /// The camera was released because the app went to the background, so it
+  /// is reopened when the app returns.
+  bool _reopenOnResume = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    // Opening the camera is what raises the system permission prompt.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startCamera());
+  }
+
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _captureTimer?.cancel();
+    _camera?.dispose();
     _c.dispose();
     super.dispose();
   }
 
+  /// The camera must be released while the app is in the background and
+  /// reopened when it returns, or the preview freezes. The permission prompt
+  /// itself only makes the app inactive, so it does not trigger this.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_finished || _starting) return;
+    if (state == AppLifecycleState.paused) {
+      final camera = _camera;
+      if (camera == null) return;
+      _captureTimer?.cancel();
+      _camera = null;
+      _reopenOnResume = true;
+      camera.dispose();
+      if (mounted) setState(() {});
+    } else if (state == AppLifecycleState.resumed) {
+      if (_reopenOnResume) {
+        _reopenOnResume = false;
+        _startCamera();
+      } else if (_cameraDenied) {
+        // Back from the app settings: start only if the camera was allowed
+        // there. Checking the status never shows a prompt, so a refusal
+        // cannot turn into a prompt loop.
+        _startIfAllowed();
+      }
+    }
+  }
+
+  /// The registration details handed down from the previous steps, plus
+  /// any [extra] entries for the next screen.
+  Map<String, dynamic> _args([Map<String, dynamic> extra = const {}]) {
+    final current = GoRouterState.of(context).extra;
+    return {
+      if (current is Map) ...Map<String, dynamic>.from(current),
+      ...extra,
+    };
+  }
+
+  Future<void> _startCamera() async {
+    if (_starting || _finished || _camera != null || !mounted) return;
+    _starting = true;
+    CameraController? controller;
+    try {
+      // Shows the system "Allow camera?" prompt while the OS still allows it.
+      final status = await Permission.camera.request();
+      if (!mounted || _finished) return;
+      if (!status.isGranted) {
+        _onCameraDenied(
+          permanently: status.isPermanentlyDenied || status.isRestricted,
+        );
+        return;
+      }
+      if (_cameraDenied) {
+        setState(() {
+          _cameraDenied = false;
+          _permanentlyDenied = false;
+        });
+      }
+
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        _showCameraError(); // No camera on this device.
+        return;
+      }
+      final front = cameras.firstWhere(
+        (c) => c.lensDirection == CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
+      controller = CameraController(
+        front,
+        ResolutionPreset.high,
+        enableAudio: false,
+      );
+
+      await controller.initialize();
+
+      if (!mounted || _finished) {
+        await controller.dispose();
+        return;
+      }
+      setState(() => _camera = controller);
+      _captureTimer = Timer(_holdStill, _capture);
+    } on CameraException catch (e) {
+      await controller?.dispose();
+      if (_isPermissionDenied(e)) {
+        _onCameraDenied(permanently: true);
+      } else {
+        _showCameraError();
+      }
+    } catch (_) {
+      await controller?.dispose();
+      _showCameraError();
+    } finally {
+      _starting = false;
+    }
+  }
+
+  static bool _isPermissionDenied(CameraException e) =>
+      e.code.contains('Denied') ||
+      e.code.contains('Restricted') ||
+      e.code == 'cameraPermission';
+
+  /// A refusal never skips the step by itself: the screen waits for the user
+  /// to tap the oval again or to tap "Skip for now".
+  void _onCameraDenied({required bool permanently}) {
+    if (!mounted) return;
+    setState(() {
+      _cameraDenied = true;
+      _permanentlyDenied = permanently;
+    });
+  }
+
+  Future<void> _startIfAllowed() async {
+    if (await Permission.camera.isGranted) _startCamera();
+  }
+
+  /// Tapping the oval after a refusal asks for the camera again - through the
+  /// system prompt, or through the app settings once the OS stops showing it.
+  void _onOvalTap() {
+    if (!_cameraDenied || _starting || _finished) return;
+    if (_permanentlyDenied) {
+      _showOpenSettings();
+    } else {
+      _startCamera();
+    }
+  }
+
+  void _showOpenSettings() {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: const Text('Camera access is turned off. Allow it in '
+              'Settings to take your selfie, or tap "Skip for now".'),
+          action: SnackBarAction(
+            label: 'Settings',
+            onPressed: () => openAppSettings(),
+          ),
+        ),
+      );
+  }
+
+  Future<void> _capture() async {
+    final camera = _camera;
+    if (_finished ||
+        camera == null ||
+        !camera.value.isInitialized ||
+        camera.value.isTakingPicture) {
+      return;
+    }
+    try {
+      final photo = await camera.takePicture();
+      if (!mounted || _finished) return;
+      _finished = true;
+      context.pushReplacement(
+        '/verification-complete',
+        extra: _args({'selfiePath': photo.path}),
+      );
+    } on CameraException {
+      _showCameraError();
+    }
+  }
+
+  void _skip() {
+    if (_finished || !mounted) return;
+    _finished = true;
+    _captureTimer?.cancel();
+    context.pushReplacement('/verification-complete', extra: _args());
+  }
+
+  void _showCameraError() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Could not start the camera. Tap "Skip for now" to '
+            'continue.'),
+      ),
+    );
+  }
+
+  /// Fills the oval with the live preview without stretching it. The sensor
+  /// reports its size in landscape, so width and height are swapped for the
+  /// portrait frame.
+  Widget _preview(CameraController camera) {
+    final size = camera.value.previewSize;
+    if (size == null) return CameraPreview(camera);
+    return FittedBox(
+      fit: BoxFit.cover,
+      child: SizedBox(
+        width: size.height,
+        height: size.width,
+        child: CameraPreview(camera),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final args = GoRouterState.of(context).extra;
-
     return PhoneScaffold(
-      child: Padding(
+      child: FillViewport(
         padding: const EdgeInsets.fromLTRB(24, 6, 24, 30),
         child: Column(
           children: [
@@ -463,43 +699,65 @@ class _FacialScanScreenState extends State<FacialScanScreen>
             Text("We'll match your face to your ID — live only",
                 style: AppTheme.dm(size: 13, color: AppColors.muted)),
             const SizedBox(height: 18),
-            SizedBox(
-              width: 252,
-              height: 372,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.elliptical(252, 372)),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Color(0xFFEEF1F5), Color(0xFFE2E8EF)],
+            GestureDetector(
+              onTap: _onOvalTap,
+              behavior: HitTestBehavior.opaque,
+              child: SizedBox(
+                width: 252,
+                height: 372,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        borderRadius:
+                            BorderRadius.all(Radius.elliptical(252, 372)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFFEEF1F5), Color(0xFFE2E8EF)],
+                        ),
                       ),
                     ),
-                  ),
-                  AnimatedBuilder(
-                    animation: _c,
-                    builder: (_, child) => Container(
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.elliptical(252, 372)),
-                        border : null,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.gold
-                                .withValues(alpha: 0.35 + 0.35 * _c.value),
-                            blurRadius: 14 + 16 * _c.value,
-                            spreadRadius: 2 + 7 * _c.value,
-                          ),
+                    AnimatedBuilder(
+                      animation: _c,
+                      builder: (_, child) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                              Radius.elliptical(252, 372)),
+                          border: null,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.gold
+                                  .withValues(alpha: 0.35 + 0.35 * _c.value),
+                              blurRadius: 14 + 16 * _c.value,
+                              spreadRadius: 2 + 7 * _c.value,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // The live front-camera feed, clipped to the oval.
+                    if (_camera?.value.isInitialized ?? false)
+                      Positioned.fill(
+                          child: ClipOval(child: _preview(_camera!)))
+                    else
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.person,
+                              size: 120, color: Color(0xFF9AA6B4)),
+                          // Only after a refusal: tapping the oval asks again.
+                          if (_cameraDenied)
+                            Text('Tap to allow the camera',
+                                style: AppTheme.dm(
+                                    size: 12,
+                                    weight: FontWeight.w600,
+                                    color: AppColors.muted)),
                         ],
                       ),
-                    ),
-                  ),
-                  const Icon(Icons.person, size: 120, color: Color(0xFF9AA6B4)),
-                ],
+                  ],
+                ),
               ),
             ),
             const Spacer(),
@@ -519,21 +777,10 @@ class _FacialScanScreenState extends State<FacialScanScreen>
                 _SelfieTip('No mask'),
               ],
             ),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: () => context.pushReplacement('/verification-complete',
-                  extra: args),
-              child: Text('Simulate capture',
-                  style: AppTheme.dm(
-                      size: 12,
-                      weight: FontWeight.w600,
-                      color: AppColors.gold)),
-            ),
             const SizedBox(height: 14),
             Center(
               child: GestureDetector(
-                onTap: () => context.pushReplacement('/verification-complete',
-                    extra: args),
+                onTap: _skip,
                 child: Text('Skip for now',
                     style: AppTheme.dm(
                         size: 13,
@@ -602,7 +849,7 @@ class _SelfieTip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border : null,
+        border: null,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
@@ -638,7 +885,7 @@ class VerificationCompleteScreen extends StatelessWidget {
     if (roleStr == 'Broker') targetRoute = '/broker/home';
 
     return PhoneScaffold(
-      child: Padding(
+      child: FillViewport(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -668,39 +915,63 @@ class VerificationCompleteScreen extends StatelessWidget {
             const SizedBox(height: 34),
             GoldButton(
                 label: 'Explore Properties',
-                onTap: () {
-                  // Mark as authenticated
-                  Role role = Role.renter;
-                  if (roleStr == 'Property Owner') role = Role.owner;
-                  if (roleStr == 'Broker') role = Role.broker;
-
-                  // Update profile with user data from registration
-                  final name = args?['name'] as String?;
-                  final email = args?['email'] as String?;
-                  final phone = args?['phone'] as String?;
-
-                  context.read<ProfileProvider>().updateProfile(
-                        name: name,
-                        email: email,
-                        phone: phone,
-                      );
-
-                  context.read<AuthProvider>().login(
-                        token: 'dummy_success_token',
-                        // In a real app, this would come from a backend response
-                        role: role,
-                      );
-
-                  context.read<AuthProvider>().setVerified(true);
-                  try {
-                    context.read<VerificationCubit>().updateCardAdded();
-                  } catch (_) {}
-
-                  context.go(targetRoute);
-                }),
+                onTap: () => _enterApp(context, args, targetRoute)),
           ],
         ),
       ),
     );
+  }
+
+  /// Signs the new account in for real, then opens the app.
+  ///
+  /// The phone step already created a session if the account was active. If
+  /// it was not (the backend creates the account only once identity
+  /// verification is approved), sign in with the registration credentials
+  /// now. If the server still refuses, the account is awaiting review, so the
+  /// user goes to sign-in with a clear message - never into the app on a fake
+  /// token, which made every API call fail.
+  Future<void> _enterApp(
+    BuildContext context,
+    Map<String, dynamic>? args,
+    String targetRoute,
+  ) async {
+    if (args?['signedIn'] != true) {
+      try {
+        final resp = await AuthApiService().login(
+          '${args?['email'] ?? ''}',
+          '${args?['password'] ?? ''}',
+        );
+        if (!context.mounted) return;
+        await context.read<AuthProvider>().login(
+              token: resp.token,
+              role: resp.role,
+            );
+      } on AuthApiException {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Your account is being reviewed. You can sign in '
+                'as soon as it is approved.'),
+          ),
+        );
+        AppNavigation.goToSignIn(context);
+        return;
+      }
+    }
+
+    if (!context.mounted) return;
+    context.read<ProfileProvider>().updateProfile(
+          name: args?['name'] as String?,
+          email: args?['email'] as String?,
+          phone: args?['phone'] as String?,
+        );
+
+    // The verified badge now reflects the server's status instead of being
+    // switched on locally.
+    try {
+      context.read<VerificationCubit>().loadVerificationStatus();
+    } catch (_) {}
+
+    context.go(targetRoute);
   }
 }

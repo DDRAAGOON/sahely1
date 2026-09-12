@@ -38,18 +38,22 @@ class ReviewGivenCard extends StatelessWidget {
               // Property Thumbnail
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: AppNetworkImage(url: propertyImage, width: 40, height: 40, errorWidget: (context, error, stackTrace) {
-                    return Container(
-                      width: 40,
-                      height: 40,
-                      color: AppColors.border,
-                      child: const Icon(
-                        Icons.image,
-                        color: AppColors.secondary,
-                        size: 20,
-                      ),
-                    );
-                  }),
+                child: AppNetworkImage(
+                    url: propertyImage,
+                    width: 40,
+                    height: 40,
+                    errorWidget: (context, error, stackTrace) {
+                      return Container(
+                        width: 40,
+                        height: 40,
+                        color: AppColors.border,
+                        child: const Icon(
+                          Icons.image,
+                          color: AppColors.secondary,
+                          size: 20,
+                        ),
+                      );
+                    }),
               ),
 
               const SizedBox(width: 12),
@@ -109,4 +113,3 @@ class ReviewGivenCard extends StatelessWidget {
     );
   }
 }
-

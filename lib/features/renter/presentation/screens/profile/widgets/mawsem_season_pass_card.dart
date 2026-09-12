@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
@@ -18,14 +18,15 @@ class MawsemSeasonPassCard extends StatelessWidget {
     required this.starsCount,
   });
 
-  void _showNextLevelDetail(BuildContext context, Map<String, dynamic>? nextLevel) {
+  void _showNextLevelDetail(
+      BuildContext context, Map<String, dynamic>? nextLevel) {
     if (nextLevel == null) return;
-    
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      useRootNavigator: true, 
+      useRootNavigator: true,
       builder: (context) => LevelDetailSheet(
         levelName: nextLevel['name'],
         levelIcon: nextLevel['icon'],
@@ -48,7 +49,7 @@ class MawsemSeasonPassCard extends StatelessWidget {
     final profile = context.watch<ProfileProvider>();
     final levelData = profile.levelData;
     final nextLevel = profile.nextLevelData;
-    
+
     final int starsToNext =
         nextLevel != null ? nextLevel['stars'] - starsCount : 0;
 
@@ -130,7 +131,8 @@ class MawsemSeasonPassCard extends StatelessWidget {
                               color: AppColors.mawsemGoldBright,
                             ),
                           ),
-                          const Icon(Icons.star, color: AppColors.mawsemGoldBright, size: 12),
+                          const Icon(Icons.star,
+                              color: AppColors.mawsemGoldBright, size: 12),
                           Text(
                             ' this season',
                             style: AppTheme.dm(
@@ -165,7 +167,8 @@ class MawsemSeasonPassCard extends StatelessWidget {
                     value: progress,
                     minHeight: 7,
                     backgroundColor: AppColors.mawsemProgressTrack,
-                    valueColor: const AlwaysStoppedAnimation<Color>(AppColors.mawsemGoldBright),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                        AppColors.mawsemGoldBright),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -179,7 +182,8 @@ class MawsemSeasonPassCard extends StatelessWidget {
                         color: AppColors.mawsemTextMuted,
                       ),
                     ),
-                    const Icon(Icons.star, color: AppColors.mawsemTextMuted, size: 11),
+                    const Icon(Icons.star,
+                        color: AppColors.mawsemTextMuted, size: 11),
                     Text(
                       nextLevel != null
                           ? ' to ${nextLevel['name']}'

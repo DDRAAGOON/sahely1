@@ -51,19 +51,31 @@ class StarsProgressBar extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '$previousTotal',
-                      style: AppTheme.dm(color: AppColors.secondary, size: 13, weight: FontWeight.w600),
+                      style: AppTheme.dm(
+                          color: AppColors.secondary,
+                          size: 13,
+                          weight: FontWeight.w600),
                     ),
                     TextSpan(
                       text: ' → ',
-                      style: AppTheme.dm(color: AppColors.secondary, size: 13, weight: FontWeight.w600),
+                      style: AppTheme.dm(
+                          color: AppColors.secondary,
+                          size: 13,
+                          weight: FontWeight.w600),
                     ),
                     TextSpan(
                       text: '$currentTotal',
-                      style: AppTheme.dm(color: AppColors.navy, size: 13, weight: FontWeight.w600),
+                      style: AppTheme.dm(
+                          color: AppColors.navy,
+                          size: 13,
+                          weight: FontWeight.w600),
                     ),
                     TextSpan(
                       text: ' ★',
-                      style: AppTheme.dm(color: AppColors.gold, size: 13, weight: FontWeight.w600),
+                      style: AppTheme.dm(
+                          color: AppColors.gold,
+                          size: 13,
+                          weight: FontWeight.w600),
                     ),
                   ],
                 ),

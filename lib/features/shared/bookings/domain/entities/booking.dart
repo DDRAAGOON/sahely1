@@ -14,6 +14,7 @@ class Booking extends Equatable {
   final DateTime checkOut;
   final int totalPaid;
   final List<Map<String, dynamic>> checklist;
+
   /// Server-side property id (null for legacy/local-only bookings).
   final String? propertyId;
   final String? specialRequests;

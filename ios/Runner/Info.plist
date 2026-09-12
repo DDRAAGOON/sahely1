@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -32,6 +34,8 @@
 	<string>Sahely needs photo library access to attach photos to listings, reviews and reports.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Sahely saves images you download to your photo library.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Sahely uses Face ID to securely authenticate you.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -53,5 +57,36 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Custom-scheme deep links: wishlist share links, referral invites and
+	     the KYC hand-off from desktop. Universal Links (staysahely.com) are
+	     configured separately through the Associated Domains entitlement. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.sahely.sahely</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sahely</string>
+			</array>
+		</dict>
+	</array>
+	<!-- Schemes the app probes before offering an action (url_launcher must be
+	     able to canLaunchUrl these or the buttons silently do nothing). -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>whatsapp</string>
+		<string>tel</string>
+		<string>mailto</string>
+	</array>
+	<!-- Every Sahely endpoint is HTTPS; no arbitrary-load exception is needed. -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
 </dict>
 </plist>

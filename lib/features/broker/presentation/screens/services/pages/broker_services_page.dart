@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -19,9 +19,7 @@ class BrokerServicesPage extends StatelessWidget {
               child: Text(
                 'Broker Services',
                 style: AppTheme.dm(
-                    size: 22,
-                    weight: FontWeight.w700,
-                    color: AppColors.navy),
+                    size: 22, weight: FontWeight.w700, color: AppColors.navy),
               ),
             ),
             Expanded(

@@ -51,7 +51,7 @@ final List<GoRoute> sharedGoRoutes = [
       child: const BrowseScreen(),
     ),
   ),
-  // Filters is now a ModalBottomSheet called via AppNavigation, 
+  // Filters is now a ModalBottomSheet called via AppNavigation,
   // so we remove the separate route to avoid conflicts.
   GoRoute(
     path: '/all-properties',
@@ -67,9 +67,11 @@ final List<GoRoute> sharedGoRoutes = [
     pageBuilder: (context, state) {
       final args = state.extra;
       Widget child;
+      // The id has to be the listing's real id: the photos, the reviews and
+      // the wishlist heart on this screen all address the backend with it.
       if (args is Property) {
         child = shared_property.PropertyDetailScreen(
-          propertyId: args.name,
+          propertyId: args.id,
           propertyName: args.name,
           propertyImage: args.image,
           location: args.area,
@@ -79,27 +81,27 @@ final List<GoRoute> sharedGoRoutes = [
         );
       } else if (args is Map<String, dynamic>) {
         child = shared_property.PropertyDetailScreen(
-          propertyId: args['name'] ?? 'Property',
+          propertyId: '${args['id'] ?? args['propertyId'] ?? ''}',
           propertyName: args['name'] ?? '',
           propertyImage: args['imageUrl'] ?? args['image'] ?? '',
           location: args['location'] ?? args['area'] ?? '',
-          rating: (args['rating'] as num?)?.toDouble() ?? 4.8,
+          rating: (args['rating'] as num?)?.toDouble() ?? 0.0,
           reviewCount: (args['reviewCount'] as num?)?.toInt() ??
               (args['reviews'] as num?)?.toInt() ??
-              100,
+              0,
           pricePerNight: (args['pricePerNight'] as num?)?.toInt() ??
               (args['price'] as num?)?.toInt() ??
-              5000,
+              0,
         );
       } else {
         child = const shared_property.PropertyDetailScreen(
-          propertyId: 'Property',
-          propertyName: 'Property',
-          location: 'North Coast',
+          propertyId: '',
+          propertyName: '',
+          location: '',
           propertyImage: '',
-          rating: 4.8,
-          reviewCount: 120,
-          pricePerNight: 5000,
+          rating: 0,
+          reviewCount: 0,
+          pricePerNight: 0,
         );
       }
 
@@ -152,8 +154,7 @@ final List<GoRoute> sharedGoRoutes = [
         final role = args['role'] is UpcomingBookingRole
             ? args['role'] as UpcomingBookingRole
             : UpcomingBookingRole.renter;
-        return UpcomingBookingDetailScreen(
-            bookingData: args, role: role);
+        return UpcomingBookingDetailScreen(bookingData: args, role: role);
       }
       return const UpcomingBookingDetailScreen(
           role: UpcomingBookingRole.renter);
@@ -168,8 +169,7 @@ final List<GoRoute> sharedGoRoutes = [
         final role = args['role'] is PastBookingRole
             ? args['role'] as PastBookingRole
             : PastBookingRole.renter;
-        return PastBookingDetailScreen(
-            bookingData: args, role: role);
+        return PastBookingDetailScreen(bookingData: args, role: role);
       }
       return const PastBookingDetailScreen(role: PastBookingRole.renter);
     },
@@ -207,7 +207,7 @@ final List<GoRoute> sharedGoRoutes = [
         return SmartLockScreen(
           propertyName: args['propertyName'] ?? 'Property',
           bookingRef: args['bookingRef'] ?? '',
-          passcode: args['passcode'] ?? '',
+          bookingId: args['bookingId'] ?? '',
           checkIn: args['checkIn'] ?? DateTime.now(),
           checkOut:
               args['checkOut'] ?? DateTime.now().add(const Duration(days: 1)),
@@ -218,7 +218,6 @@ final List<GoRoute> sharedGoRoutes = [
       return SmartLockScreen(
         propertyName: 'Property',
         bookingRef: '',
-        passcode: '',
         checkIn: DateTime.now(),
         checkOut: DateTime.now().add(const Duration(days: 1)),
         propertyLat: 0.0,
@@ -235,7 +234,7 @@ final List<GoRoute> sharedGoRoutes = [
         return SmartLockScreen(
           propertyName: args['propertyName'] ?? 'Property',
           bookingRef: args['bookingRef'] ?? '',
-          passcode: args['passcode'] ?? '',
+          bookingId: args['bookingId'] ?? '',
           checkIn: args['checkIn'] ?? DateTime.now(),
           checkOut:
               args['checkOut'] ?? DateTime.now().add(const Duration(days: 1)),
@@ -246,7 +245,6 @@ final List<GoRoute> sharedGoRoutes = [
       return SmartLockScreen(
         propertyName: 'Property',
         bookingRef: '',
-        passcode: '',
         checkIn: DateTime.now(),
         checkOut: DateTime.now().add(const Duration(days: 1)),
         propertyLat: 0.0,
@@ -291,7 +289,19 @@ final List<GoRoute> sharedGoRoutes = [
   GoRoute(
     path: '/collection-chat',
     parentNavigatorKey: rootNavigatorKey,
-    builder: (context, state) => const CollectionChatScreen(),
+    builder: (context, state) {
+      final args = state.extra is Map<String, dynamic>
+          ? state.extra as Map<String, dynamic>
+          : const <String, dynamic>{};
+      return CollectionChatScreen(
+        collectionId: args['collectionId'] as String? ?? '',
+        collectionName: args['collectionName'] as String? ?? '',
+        participantNames:
+            (args['participantNames'] as List?)?.cast<String>() ?? const [],
+        propertyA: args['propertyA'] as Property?,
+        propertyB: args['propertyB'] as Property?,
+      );
+    },
   ),
   GoRoute(
     path: '/compare',
@@ -370,6 +380,10 @@ final List<GoRoute> sharedGoRoutes = [
     path: '/sos',
     parentNavigatorKey: rootNavigatorKey,
     pageBuilder: (context, state) {
+      // The stay an SOS is about, when the screen was opened from a booking.
+      final extra = state.extra;
+      final bookingId =
+          extra is Map ? '${extra['bookingId'] ?? ''}' : '';
       Widget child;
       try {
         final role = context.read<RoleState>().currentRole;
@@ -378,9 +392,10 @@ final List<GoRoute> sharedGoRoutes = [
           Role.broker => sos.UserRole.broker,
           _ => sos.UserRole.renter,
         };
-        child = sos.SosScreen(role: sosRole);
+        child = sos.SosScreen(role: sosRole, bookingId: bookingId);
       } catch (_) {
-        child = const sos.SosScreen(role: sos.UserRole.renter);
+        child = sos.SosScreen(
+            role: sos.UserRole.renter, bookingId: bookingId);
       }
 
       return CustomTransitionPage(

@@ -12,6 +12,7 @@ import '../../domain/use_cases/like_review_use_case.dart';
 import '../../domain/use_cases/report_review_use_case.dart';
 import '../../domain/use_cases/reply_to_review_use_case.dart';
 import '../../domain/use_cases/get_property_review_stats_use_case.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
 enum ReviewStatus { initial, loading, loaded, success, error }
 
@@ -47,10 +48,11 @@ class ReviewState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [reviews, stats, status, errorMessage, starsEarned];
+  List<Object?> get props =>
+      [reviews, stats, status, errorMessage, starsEarned];
 }
 
-class ReviewCubit extends Cubit<ReviewState> {
+class ReviewCubit extends Cubit<ReviewState> with SafeEmit<ReviewState> {
   final GetPropertyReviewsUseCase _getPropertyReviewsUseCase;
   final GetUserReviewsUseCase _getUserReviewsUseCase;
   final AddReviewUseCase _addReviewUseCase;
@@ -85,7 +87,8 @@ class ReviewCubit extends Cubit<ReviewState> {
     try {
       final reviews = await _getPropertyReviewsUseCase.execute(propertyId);
       final stats = await _getStatsUseCase.execute(propertyId);
-      emit(state.copyWith(status: ReviewStatus.loaded, reviews: reviews, stats: stats));
+      emit(state.copyWith(
+          status: ReviewStatus.loaded, reviews: reviews, stats: stats));
     } catch (e) {
       final message = e is Failure ? e.message : e.toString();
       emit(state.copyWith(status: ReviewStatus.error, errorMessage: message));
@@ -157,8 +160,10 @@ class ReviewCubit extends Cubit<ReviewState> {
     emit(state.copyWith(status: ReviewStatus.loading));
     try {
       await _updateReviewUseCase.execute(review);
-      final updatedReviews = state.reviews.map((r) => r.id == review.id ? review : r).toList();
-      emit(state.copyWith(status: ReviewStatus.success, reviews: updatedReviews));
+      final updatedReviews =
+          state.reviews.map((r) => r.id == review.id ? review : r).toList();
+      emit(state.copyWith(
+          status: ReviewStatus.success, reviews: updatedReviews));
     } catch (e) {
       final message = e is Failure ? e.message : e.toString();
       emit(state.copyWith(status: ReviewStatus.error, errorMessage: message));
@@ -186,7 +191,8 @@ class ReviewCubit extends Cubit<ReviewState> {
   Future<void> deleteReview(String reviewId) async {
     try {
       await _deleteReviewUseCase.execute(reviewId);
-      final updatedReviews = state.reviews.where((r) => r.id != reviewId).toList();
+      final updatedReviews =
+          state.reviews.where((r) => r.id != reviewId).toList();
       emit(state.copyWith(reviews: updatedReviews));
     } catch (e) {
       final message = e is Failure ? e.message : e.toString();

@@ -37,8 +37,7 @@ class ReviewTextField extends StatelessWidget {
             maxLines: 5,
             maxLength: 500,
             decoration: InputDecoration(
-              hintText:
-                  AppLocalizations.of(context).reviewHint,
+              hintText: AppLocalizations.of(context).reviewHint,
               hintStyle: AppTheme.dm(
                 size: 13,
                 color: AppColors.placeholder,

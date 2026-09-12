@@ -15,8 +15,8 @@ class AddToWishlistUseCase {
     required Role role,
     String? collectionId,
   }) async {
-    final bool isTargetingAllSaved =
-        collectionId == null || collectionId == WishlistConstants.allSavedCollectionId;
+    final bool isTargetingAllSaved = collectionId == null ||
+        collectionId == WishlistConstants.allSavedCollectionId;
 
     // We always want the item to be in 'all_saved'
     final Set<String> targetCollectionIds = {
@@ -35,7 +35,9 @@ class AddToWishlistUseCase {
       await repository.saveWishlistItem(
         existingItem.copyWith(collectionIds: mergedIds.toList()),
         role,
-        isTargetingAllSaved ? WishlistConstants.allSavedCollectionId : collectionId!,
+        isTargetingAllSaved
+            ? WishlistConstants.allSavedCollectionId
+            : collectionId,
       );
     } else {
       // New item
@@ -47,7 +49,11 @@ class AddToWishlistUseCase {
         addedAt: DateTime.now(),
       );
       await repository.saveWishlistItem(
-          item, role, isTargetingAllSaved ? WishlistConstants.allSavedCollectionId : collectionId!);
+          item,
+          role,
+          isTargetingAllSaved
+              ? WishlistConstants.allSavedCollectionId
+              : collectionId);
     }
   }
 }

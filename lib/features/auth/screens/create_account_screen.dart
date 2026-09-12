@@ -1,8 +1,7 @@
-﻿import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/utils/countries.dart';
@@ -11,6 +10,7 @@ import 'package:sahely/features/auth/data/auth_api.dart';
 import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/l10n/app_localizations.dart';
+import 'package:sahely/features/shared/links/referral_code_store.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   final String? role;
@@ -113,22 +113,26 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
     // Password validation: at least 8 chars with at least 1 letter and 1 number
     final password = _passwordController.text;
-    if (password.length < 8 || 
-        !password.contains(RegExp(r'[a-zA-Z]')) || 
+    if (password.length < 8 ||
+        !password.contains(RegExp(r'[a-zA-Z]')) ||
         !password.contains(RegExp(r'[0-9]'))) {
       next.add(_errPassword);
     }
-    
+
     if (_confirmController.text != _passwordController.text ||
         _confirmController.text.isEmpty) {
       next.add(_errConfirm);
     }
 
-    if (_selectedDay == null || _selectedMonth == null || _selectedYear == null) {
+    if (_selectedDay == null ||
+        _selectedMonth == null ||
+        _selectedYear == null) {
       next.add(_errDob);
     }
 
-    setState(() => _errors..clear()..addAll(next));
+    setState(() => _errors
+      ..clear()
+      ..addAll(next));
     return next.isEmpty && _agreed;
   }
 
@@ -149,7 +153,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => _TermsAndPrivacySheet(role: widget.role ?? 'Renter'),
+      builder: (context) =>
+          _TermsAndPrivacySheet(role: widget.role ?? 'Renter'),
     );
   }
 
@@ -157,7 +162,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   Future<void> _submit(AppLocalizations l, String role) async {
     setState(() => _hasAttemptedSubmit = true);
-    
+
     final valid = _validate(l);
     if (!_agreed) setState(() => _errors.add('terms'));
     if (!valid || !_agreed) {
@@ -172,8 +177,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     try {
       final api = AuthApiService();
 
-      final backendRole =
-          role == 'Property Owner' ? Role.owner : (role == 'Broker' ? Role.broker : Role.renter);
+      final backendRole = role == 'Property Owner'
+          ? Role.owner
+          : (role == 'Broker' ? Role.broker : Role.renter);
       final sessionId = await api.registerStep1(backendRole);
 
       final dob = DateTime(
@@ -191,7 +197,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         dateOfBirth: dob,
         password: _passwordController.text,
         confirmPassword: _confirmController.text,
+        referralCode: await ReferralCodeStore.read(),
       );
+      await ReferralCodeStore.clear();
 
       if (!mounted) return;
       context.push('/verify-email', extra: {
@@ -215,7 +223,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           case 'ERR_ACCOUNT_SUSPENDED':
             errorMessage = l.accountSuspendedWithDetails(
               e.data?['suspendedUntil'] ?? '',
-              e.data?['reason'] ?? ''
             );
             break;
           case 'ERR_ACCOUNT_BANNED':
@@ -230,7 +237,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           default:
             errorMessage = e.message;
         }
-        
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(errorMessage),
           backgroundColor: AppColors.error,
@@ -314,9 +321,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 child: AppTextField(
                   controller: _nameController,
                   hintText: l.fullNameHint,
-                  onChanged: _hasAttemptedSubmit ? (value) {
-                    _clearError(_errName);
-                  } : null,
+                  onChanged: _hasAttemptedSubmit
+                      ? (value) {
+                          _clearError(_errName);
+                        }
+                      : null,
                 ),
               ),
               if (fieldError(_errName, l.requiredField) != null)
@@ -328,9 +337,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   controller: _emailController,
                   hintText: 'you@example.com',
                   keyboardType: TextInputType.emailAddress,
-                  onChanged: _hasAttemptedSubmit ? (value) {
-                    _clearError(_errEmail);
-                  } : null,
+                  onChanged: _hasAttemptedSubmit
+                      ? (value) {
+                          _clearError(_errEmail);
+                        }
+                      : null,
                 ),
               ),
               if (fieldError(_errEmail, l.enterValidEmail) != null)
@@ -376,9 +387,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           FilteringTextInputFormatter.allow(
                               RegExp(r'[\d\s\-()]')),
                         ],
-                        onChanged: _hasAttemptedSubmit ? (value) {
-                          _clearError(_errPhone);
-                        } : null,
+                        onChanged: _hasAttemptedSubmit
+                            ? (value) {
+                                _clearError(_errPhone);
+                              }
+                            : null,
                       ),
                     ),
                   ],
@@ -404,10 +417,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       color: AppColors.muted,
                     ),
                   ),
-                  onChanged: _hasAttemptedSubmit ? (value) {
-                    _clearError(_errPassword);
-                    _clearError(_errConfirm);
-                  } : null,
+                  onChanged: _hasAttemptedSubmit
+                      ? (value) {
+                          _clearError(_errPassword);
+                          _clearError(_errConfirm);
+                        }
+                      : null,
                 ),
               ),
               if (fieldError(_errPassword, l.passwordMinChars) != null)
@@ -430,9 +445,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       color: AppColors.muted,
                     ),
                   ),
-                  onChanged: _hasAttemptedSubmit ? (value) {
-                    _clearError(_errConfirm);
-                  } : null,
+                  onChanged: _hasAttemptedSubmit
+                      ? (value) {
+                          _clearError(_errConfirm);
+                        }
+                      : null,
                 ),
               ),
               if (fieldError(_errConfirm, l.passwordsDoNotMatch) != null)
@@ -493,7 +510,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ),
                       child: _agreed
                           ? const Icon(Icons.check,
-                              size: 12, color: AppColors.white) : null,
+                              size: 12, color: AppColors.white)
+                          : null,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -535,8 +553,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(l.mustAgreeTerms,
-                        style:
-                            AppTheme.dm(size: 11, color: AppColors.error)),
+                        style: AppTheme.dm(size: 11, color: AppColors.error)),
                   ),
                 ),
               const SizedBox(height: 22),
@@ -716,7 +733,7 @@ class _DobBox extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        border : Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.border),
         borderRadius: BorderRadius.circular(10),
       ),
       child: DropdownButtonHideUnderline(
@@ -800,87 +817,87 @@ class _TermsAndPrivacySheet extends StatelessWidget {
             const SizedBox(height: 24),
             if (isOwner) ...[
               _section(l.termsOwnerSection1Title, [
-                l.t('termsOwnerSection1Point1'),
-                l.t('termsOwnerSection1Point2'),
-                l.t('termsOwnerSection1Point3'),
+                l.termsOwnerSection1Point1,
+                l.termsOwnerSection1Point2,
+                l.termsOwnerSection1Point3,
               ]),
               _section(l.termsOwnerSection2Title, [
-                l.t('termsOwnerSection2Point1'),
-                l.t('termsOwnerSection2Point2'),
-                l.t('termsOwnerSection2Point3'),
-                l.t('termsOwnerSection2Point4'),
+                l.termsOwnerSection2Point1,
+                l.termsOwnerSection2Point2,
+                l.termsOwnerSection2Point3,
+                l.termsOwnerSection2Point4,
               ]),
               _section(l.termsOwnerSection3Title, [
-                l.t('termsOwnerSection3Point1'),
-                l.t('termsOwnerSection3Point2'),
-                l.t('termsOwnerSection3Point3'),
-                l.t('termsOwnerSection3Point4'),
+                l.termsOwnerSection3Point1,
+                l.termsOwnerSection3Point2,
+                l.termsOwnerSection3Point3,
+                l.termsOwnerSection3Point4,
               ]),
               _section(l.termsOwnerSection4Title, [
-                l.t('termsOwnerSection4Point1'),
-                l.t('termsOwnerSection4Point2'),
-                l.t('termsOwnerSection4Point3'),
-                l.t('termsOwnerSection4Point4'),
+                l.termsOwnerSection4Point1,
+                l.termsOwnerSection4Point2,
+                l.termsOwnerSection4Point3,
+                l.termsOwnerSection4Point4,
               ]),
             ] else if (isBroker) ...[
               _section(l.termsBrokerSection1Title, [
-                l.t('termsBrokerSection1Point1'),
-                l.t('termsBrokerSection1Point2'),
+                l.termsBrokerSection1Point1,
+                l.termsBrokerSection1Point2,
               ]),
               _section(l.termsBrokerSection2Title, [
-                l.t('termsBrokerSection2Point1'),
-                l.t('termsBrokerSection2Point2'),
-                l.t('termsBrokerSection2Point3'),
+                l.termsBrokerSection2Point1,
+                l.termsBrokerSection2Point2,
+                l.termsBrokerSection2Point3,
               ]),
               _section(l.termsBrokerSection3Title, [
-                l.t('termsBrokerSection3Point1'),
-                l.t('termsBrokerSection3Point2'),
-                l.t('termsBrokerSection3Point3'),
-                l.t('termsBrokerSection3Point4'),
+                l.termsBrokerSection3Point1,
+                l.termsBrokerSection3Point2,
+                l.termsBrokerSection3Point3,
+                l.termsBrokerSection3Point4,
               ]),
               _section(l.termsBrokerSection4Title, [
-                l.t('termsBrokerSection4Point1'),
-                l.t('termsBrokerSection4Point2'),
+                l.termsBrokerSection4Point1,
+                l.termsBrokerSection4Point2,
               ]),
               _section(l.termsBrokerSection5Title, [
-                l.t('termsBrokerSection5Point1'),
-                l.t('termsBrokerSection5Point2'),
+                l.termsBrokerSection5Point1,
+                l.termsBrokerSection5Point2,
               ]),
             ] else ...[
               _section(l.termsRenterSection1Title, [
-                l.t('termsRenterSection1Point1'),
-                l.t('termsRenterSection1Point2'),
-                l.t('termsRenterSection1Point3'),
-                l.t('termsRenterSection1Point4'),
-                l.t('termsRenterSection1Point5'),
-                l.t('termsRenterSection1Point6'),
+                l.termsRenterSection1Point1,
+                l.termsRenterSection1Point2,
+                l.termsRenterSection1Point3,
+                l.termsRenterSection1Point4,
+                l.termsRenterSection1Point5,
+                l.termsRenterSection1Point6,
               ]),
               _section(l.termsRenterSection2Title, [
-                l.t('termsRenterSection2Point1'),
-                l.t('termsRenterSection2Point2'),
-                l.t('termsRenterSection2Point3'),
+                l.termsRenterSection2Point1,
+                l.termsRenterSection2Point2,
+                l.termsRenterSection2Point3,
               ]),
               _section(l.termsRenterSection3Title, [
-                l.t('termsRenterSection3Point1'),
-                l.t('termsRenterSection3Point2'),
-                l.t('termsRenterSection3Point3'),
+                l.termsRenterSection3Point1,
+                l.termsRenterSection3Point2,
+                l.termsRenterSection3Point3,
               ]),
               _section(l.termsRenterSection4Title, [
-                l.t('termsRenterSection4Point1'),
-                l.t('termsRenterSection4Point2'),
-                l.t('termsRenterSection4Point3'),
+                l.termsRenterSection4Point1,
+                l.termsRenterSection4Point2,
+                l.termsRenterSection4Point3,
               ]),
             ],
             _section(l.termsMasterRulesTitle, [
-              l.t('termsMasterRulesPoint1'),
-              l.t('termsMasterRulesPoint2'),
-              l.t('termsMasterRulesPoint3'),
-              l.t('termsMasterRulesPoint4'),
+              l.termsMasterRulesPoint1,
+              l.termsMasterRulesPoint2,
+              l.termsMasterRulesPoint3,
+              l.termsMasterRulesPoint4,
             ]),
             const SizedBox(height: 24),
             Text(
-              l.tf('termsAgreeFootnote',
-                  {'role': isOwner ? l.owner : (isBroker ? l.broker : l.renter)}),
+              l.termsAgreeFootnote(
+                  isOwner ? l.owner : (isBroker ? l.broker : l.renter)),
               style: AppTheme.dm(
                   size: 13,
                   weight: FontWeight.w600,
@@ -927,4 +944,3 @@ class _TermsAndPrivacySheet extends StatelessWidget {
     );
   }
 }
-

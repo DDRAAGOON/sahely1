@@ -39,7 +39,8 @@ class ChoiceChipPill extends StatelessWidget {
       scale: 0.95,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        curve: Curves.easeInOut, // Avoid easeOutBack to prevent negative blurRadius overshoot
+        curve: Curves
+            .easeInOut, // Avoid easeOutBack to prevent negative blurRadius overshoot
         height: height,
         width: width,
         padding: EdgeInsets.symmetric(horizontal: horizontalPadding),

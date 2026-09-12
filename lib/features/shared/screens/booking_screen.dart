@@ -45,8 +45,18 @@ class _BookingScreenState extends State<BookingScreen> {
   String _formatDate(DateTime? date) {
     if (date == null) return AppLocalizations.of(context).selectDate;
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return '${months[date.month - 1]} ${date.day}';
   }
@@ -60,8 +70,6 @@ class _BookingScreenState extends State<BookingScreen> {
     final subtotal = pPrice * _nights;
     final vat = (subtotal + (subtotal > 0 ? _cleaningFee : 0)) * 0.14;
     final total = subtotal + (subtotal > 0 ? _cleaningFee : 0) + vat;
-
-
 
     return PhoneScaffold(
       child: EntranceFaded(
@@ -108,11 +116,13 @@ class _BookingScreenState extends State<BookingScreen> {
                   const SizedBox(height: 16),
                   Row(children: [
                     Expanded(
-                        child:
-                            BookingCheckCol(AppLocalizations.of(context).checkInLabel, _formatDate(_checkIn))),
+                        child: BookingCheckCol(
+                            AppLocalizations.of(context).checkInLabel,
+                            _formatDate(_checkIn))),
                     Expanded(
-                        child:
-                            BookingCheckCol(AppLocalizations.of(context).checkOutLabel, _formatDate(_checkOut))),
+                        child: BookingCheckCol(
+                            AppLocalizations.of(context).checkOutLabel,
+                            _formatDate(_checkOut))),
                   ]),
                   const SizedBox(height: 16),
                   WhiteCard(
@@ -121,8 +131,9 @@ class _BookingScreenState extends State<BookingScreen> {
                         AppLocalizations.of(context).adults,
                         AppLocalizations.of(context).adultsAges,
                         _adults,
-                        onMinus:
-                            _adults > 1 ? () => setState(() => _adults--) : null,
+                        onMinus: _adults > 1
+                            ? () => setState(() => _adults--)
+                            : null,
                         onPlus: () => setState(() => _adults++),
                       ),
                       const Divider(height: 1, color: Color(0xFFF4EFE7)),
@@ -131,7 +142,8 @@ class _BookingScreenState extends State<BookingScreen> {
                         'Ages 2–17',
                         _children,
                         onMinus: _children > 0
-                            ? () => setState(() => _children--) : null,
+                            ? () => setState(() => _children--)
+                            : null,
                         onPlus: () => setState(() => _children++),
                       ),
                       const Divider(height: 1, color: Color(0xFFF4EFE7)),
@@ -140,7 +152,8 @@ class _BookingScreenState extends State<BookingScreen> {
                         AppLocalizations.of(context).infantsAges,
                         _infants,
                         onMinus: _infants > 0
-                            ? () => setState(() => _infants--) : null,
+                            ? () => setState(() => _infants--)
+                            : null,
                         onPlus: () => setState(() => _infants++),
                       ),
                     ]),
@@ -158,14 +171,18 @@ class _BookingScreenState extends State<BookingScreen> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                               '$_nights nights · ${_adults + _children} guests',
-                              style:
-                                  AppTheme.dm(size: 13, color: AppColors.muted))),
+                              style: AppTheme.dm(
+                                  size: 13, color: AppColors.muted))),
                       const SizedBox(height: 8),
                       KeyValueRow(
-                          '${CurrencyFormatter.format(pPrice)} × $_nights', CurrencyFormatter.formatNumber(subtotal)),
-                      KeyValueRow(AppLocalizations.of(context).cleaningFee, CurrencyFormatter.formatNumber(_cleaningFee)),
-                      KeyValueRow(AppLocalizations.of(context).vatLabel, CurrencyFormatter.formatNumber(vat)),
-                      KeyValueRow(AppLocalizations.of(context).totalLabel, CurrencyFormatter.format(total.toInt()),
+                          '${CurrencyFormatter.format(pPrice)} × $_nights',
+                          CurrencyFormatter.formatNumber(subtotal)),
+                      KeyValueRow(AppLocalizations.of(context).cleaningFee,
+                          CurrencyFormatter.formatNumber(_cleaningFee)),
+                      KeyValueRow(AppLocalizations.of(context).vatLabel,
+                          CurrencyFormatter.formatNumber(vat)),
+                      KeyValueRow(AppLocalizations.of(context).totalLabel,
+                          CurrencyFormatter.format(total.toInt()),
                           bold: true, topBorder: true),
                     ]),
                   ),

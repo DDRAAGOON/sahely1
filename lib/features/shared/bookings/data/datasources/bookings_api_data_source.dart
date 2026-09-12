@@ -12,18 +12,35 @@ class BookingsApiDataSource {
 
   Future<List<BookingDto>> fetchAllBookings() async {
     final res = await apiClient.get(ApiEndpoints.myBookings);
-    final data = unwrapData(res.data);
-    final list = (data is List)
-        ? data
-        : ((data['bookings'] ?? data['data'] ?? []) as List);
-    return list
-        .whereType<Map>()
-        .map((e) => _mapBooking(Map<String, dynamic>.from(e)))
-        .toList();
+    return asListOfMaps(unwrapData(res.data)).map(_mapBooking).toList();
   }
 
+  /// Owner-side inbox: confirmed stays and incoming requests.
+  Future<List<BookingDto>> fetchOwnerBookings() async {
+    final res = await apiClient.get(ApiEndpoints.ownerBookings);
+    return asListOfMaps(unwrapData(res.data)).map(_mapBooking).toList();
+  }
+
+  Future<List<BookingDto>> fetchOwnerRequests() async {
+    final res = await apiClient.get(ApiEndpoints.ownerRequests);
+    return asListOfMaps(unwrapData(res.data)).map(_mapBooking).toList();
+  }
+
+  Future<void> approve(String id) =>
+      apiClient.post(ApiEndpoints.bookingApprove(id));
+
+  Future<void> reject(String id) =>
+      apiClient.post(ApiEndpoints.bookingReject(id));
+
+  Future<void> checkIn(String id) =>
+      apiClient.post(ApiEndpoints.bookingCheckIn(id));
+
+  Future<void> checkOut(String id) =>
+      apiClient.post(ApiEndpoints.bookingCheckOut(id));
+
   /// Creates the booking on the backend; returns its server id.
-  Future<String> createBooking(Booking booking, {int propertyPriceEgp = 0}) async {
+  Future<String> createBooking(Booking booking,
+      {int propertyPriceEgp = 0}) async {
     final res = await apiClient.post(ApiEndpoints.bookings, data: {
       'property_id': booking.propertyId,
       'check_in': _isoDate(booking.checkIn),
@@ -38,16 +55,21 @@ class BookingsApiDataSource {
     return (data['id'] ?? data['booking']?['id'] ?? '').toString();
   }
 
-  Future<void> cancelBooking(String id) async {
-    await apiClient.post(ApiEndpoints.bookingCancel(id), data: {
-      'reason': 'Cancelled from app',
-    });
+  Future<void> cancelBooking(String id, {String? reason}) async {
+    await apiClient.post(
+      ApiEndpoints.bookingCancel(id),
+      data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
+    );
   }
 
+  /// The mobile API has no "extend stay" route: the flow is a *new* booking for
+  /// the extra nights. Callers should create that booking instead, so this
+  /// deliberately reports the gap rather than silently doing nothing.
   Future<void> extend(String id, DateTime newCheckOut) async {
-    await apiClient.post(ApiEndpoints.bookingExtend(id), data: {
-      'new_check_out': _isoDate(newCheckOut),
-    });
+    throw UnsupportedError(
+      'Extending a stay is not exposed by the mobile API. '
+      'Create a follow-up booking for the additional nights instead.',
+    );
   }
 
   Future<bool> checkAvailability(
@@ -60,9 +82,7 @@ class BookingsApiDataSource {
               ?.map((e) => e.toString().substring(0, 10))
               .toSet() ??
           {};
-      for (var d = start;
-          d.isBefore(end);
-          d = d.add(const Duration(days: 1))) {
+      for (var d = start; d.isBefore(end); d = d.add(const Duration(days: 1))) {
         if (blocked.contains(_isoDate(d))) return false;
       }
       return true;
@@ -74,36 +94,63 @@ class BookingsApiDataSource {
   static String _isoDate(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
+  /// Maps a live booking row.
+  ///
+  /// Verified field names: `reference`, `checkIn`/`checkOut` (NOT
+  /// `check_in_date`), `numberOfGuests`, `totalAmount` in piastres, and a
+  /// nested `property` object using the same camelCase entity shape as
+  /// `/properties/featured`.
   static BookingDto _mapBooking(Map<String, dynamic> b) {
-    final property = (b['property'] as Map?) ?? const {};
-    final images = (property['images'] as List?) ?? const [];
-    String image = '';
-    if (images.isNotEmpty) {
-      final first = Map<String, dynamic>.from(images.first as Map);
-      image = '${first['url'] ?? ''}';
-    }
-    final checkIn = DateTime.tryParse('${b['check_in_date'] ?? b['checkInDate'] ?? ''}') ??
-        DateTime.now().add(const Duration(days: 7));
-    final checkOut = DateTime.tryParse('${b['check_out_date'] ?? b['checkOutDate'] ?? ''}') ??
-        checkIn.add(const Duration(days: 3));
+    final property = asMap(b['property']);
+    final images = asListOfMaps(property['images']);
+    final image = images.isEmpty ? '' : '${images.first['url'] ?? ''}';
+
+    final checkIn =
+        asDate(pick(b, 'check_in')) ?? asDate(pick(b, 'check_in_date'));
+    final checkOut =
+        asDate(pick(b, 'check_out')) ?? asDate(pick(b, 'check_out_date'));
+
+    final guests = asNum(pick(b, 'number_of_guests'))?.toInt() ?? 0;
+    final totalPiastres =
+        asNum(pick(b, 'total_amount')) ?? asNum(pick(b, 'total_charged')) ?? 0;
+
+    final reference = '${b['reference'] ?? b['id'] ?? ''}';
+
     return BookingDto(
-      id: '${b['id']}',
-      propertyName:
-          '${property['title'] ?? b['property_title'] ?? 'Property'}',
+      id: '${b['id'] ?? ''}',
+      propertyId: '${pick(b, 'property_id') ?? property['id'] ?? ''}',
+      propertyName: '${property['title'] ?? ''}',
       location: '${property['governorate'] ?? property['city'] ?? ''}',
-      orderNumber: '${b['reference'] ?? b['id']}'.substring(0, 12.clamp(0, '${b['reference'] ?? b['id']}'.length)),
-      dates: '${_fmt(checkIn)} – ${_fmt(checkOut)}',
-      guests: '${b['number_of_guests'] ?? 2} guests',
+      orderNumber: reference,
+      dates: (checkIn == null || checkOut == null)
+          ? ''
+          : '${_fmt(checkIn)} - ${_fmt(checkOut)}',
+      guests: guests == 1 ? '1 guest' : '$guests guests',
       imageUrl: image,
-      checkIn: _isoDate(checkIn),
-      checkOut: _isoDate(checkOut),
-      totalPaid: (b['total_charged'] as num? ?? 0) ~/ 100,
+      checkIn: checkIn == null ? '' : _isoDate(checkIn),
+      checkOut: checkOut == null ? '' : _isoDate(checkOut),
+      totalPaid: (totalPiastres ~/ 100).toInt(),
       checklist: const [],
+      latitude: asNum(property['latitude'])?.toDouble(),
+      longitude: asNum(property['longitude'])?.toDouble(),
     );
   }
 
   static String _fmt(DateTime d) {
-    const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const m = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
     return '${m[d.month - 1]} ${d.day}';
   }
 }

@@ -18,6 +18,8 @@ class CompositeValidator<T> extends Validator<T> {
         errors.addAll(result.errors);
       }
     }
-    return errors.isEmpty ? ValidationResult.success() : ValidationResult.failure(errors);
+    return errors.isEmpty
+        ? ValidationResult.success()
+        : ValidationResult.failure(errors);
   }
 }

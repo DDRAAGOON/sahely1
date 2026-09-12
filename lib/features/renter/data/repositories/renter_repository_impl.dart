@@ -1,41 +1,50 @@
-import 'package:sahely/core/config/app_config.dart';
-import 'package:sahely/features/renter/data/datasources/mock_renter_data_source.dart';
+import 'package:sahely/core/network/api_client.dart';
 import 'package:sahely/features/renter/data/datasources/renter_api_data_source.dart';
 import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property_query.dart';
 
+/// Property feeds for the renter home, straight from `/properties`.
 class RenterRepositoryImpl implements RenterRepository {
-  final MockRenterDataSource remoteDataSource;
-  final RenterApiDataSource? apiDataSource;
+  RenterRepositoryImpl({RenterApiDataSource? api})
+      : _api = api ?? RenterApiDataSource(ApiClient());
 
-  RenterRepositoryImpl({required this.remoteDataSource, this.apiDataSource});
+  final RenterApiDataSource _api;
 
   @override
   Future<List<Property>> getAllProperties() async {
-    if (AppConfig.useRemoteApi && apiDataSource != null) {
-      final list = await apiDataSource!.fetchAllProperties();
-      return list.map((m) => Property.fromMap(m)).toList();
-    }
-    final list = await remoteDataSource.fetchAllProperties();
+    final list = await _api.fetchAllProperties();
     return list.map((m) => Property.fromMap(m)).toList();
   }
 
-  /// Trending rail — live when wired, otherwise the top of the main feed.
+  /// Trending rail.
+  @override
   Future<List<Property>> getTrending() async {
-    if (AppConfig.useRemoteApi && apiDataSource != null) {
-      final list = await apiDataSource!.fetchTrending();
-      return list.map((m) => Property.fromMap(m)).toList();
-    }
-    return getAllProperties();
+    final list = await _api.fetchTrending();
+    return list.map((m) => Property.fromMap(m)).toList();
   }
 
-  /// Best-offers rail — cheapest live listings, otherwise the main feed.
+  /// Best-offers rail.
+  @override
   Future<List<Property>> getOffers() async {
-    if (AppConfig.useRemoteApi && apiDataSource != null) {
-      final list = await apiDataSource!.fetchOffers();
-      return list.map((m) => Property.fromMap(m)).toList();
-    }
-    final all = await getAllProperties();
-    return [...all]..sort((a, b) => a.price.compareTo(b.price));
+    final list = await _api.fetchOffers();
+    return list.map((m) => Property.fromMap(m)).toList();
+  }
+
+  @override
+  Future<Property> getProperty(String id) async =>
+      Property.fromMap(await _api.fetchProperty(id));
+
+  @override
+  Future<PropertySearchResult> searchProperties(
+    PropertyQuery query, {
+    int page = 1,
+    int limit = 50,
+  }) async {
+    final result = await _api.searchProperties(query, page: page, limit: limit);
+    return (
+      properties: result.properties.map(Property.fromMap).toList(),
+      total: result.total,
+    );
   }
 }

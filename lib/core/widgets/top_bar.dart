@@ -33,7 +33,7 @@ class TopBar extends StatelessWidget {
               height: 34,
               decoration: BoxDecoration(
                 color: AppColors.white,
-                border : null,
+                border: null,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(Icons.chevron_left,

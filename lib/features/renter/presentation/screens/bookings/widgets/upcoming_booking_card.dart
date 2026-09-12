@@ -112,8 +112,7 @@ class UpcomingBookingCard extends StatelessWidget {
                         TextSpan(
                           text: 'Order no. ',
                           style: AppTheme.dm(
-                              color: const Color(0xFF717171),
-                              size: 11),
+                              color: const Color(0xFF717171), size: 11),
                         ),
                         TextSpan(
                           text: orderNumber,
@@ -135,4 +134,3 @@ class UpcomingBookingCard extends StatelessWidget {
     );
   }
 }
-

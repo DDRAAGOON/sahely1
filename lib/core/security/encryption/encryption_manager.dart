@@ -5,11 +5,15 @@ class EncryptionManager {
 
   EncryptionManager(this._service);
 
-  String encrypt({required String data, required String key, required String iv}) {
+  String encrypt(
+      {required String data, required String key, required String iv}) {
     return _service.encrypt(data: data, key: key, iv: iv);
   }
 
-  String decrypt({required String encryptedData, required String key, required String iv}) {
+  String decrypt(
+      {required String encryptedData,
+      required String key,
+      required String iv}) {
     return _service.decrypt(encryptedData: encryptedData, key: key, iv: iv);
   }
 

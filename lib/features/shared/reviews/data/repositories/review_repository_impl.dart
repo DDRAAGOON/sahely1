@@ -1,147 +1,127 @@
-import 'package:sahely/core/config/app_config.dart';
 import 'package:sahely/core/errors/exception_mapper.dart';
+import 'package:sahely/core/errors/failures.dart';
 import 'package:sahely/core/network/api_client.dart';
-import 'package:sahely/features/shared/reviews/data/datasources/mock_review_data_source.dart';
 import 'package:sahely/features/shared/reviews/data/datasources/reviews_api_data_source.dart';
 import 'package:sahely/features/shared/reviews/domain/models/review.dart';
 import 'package:sahely/features/shared/reviews/domain/repositories/review_repository.dart';
 import 'package:sahely/features/shared/reviews/data/models/review_dto.dart';
+import 'package:sahely/features/shared/violations/data/violations_api_data_source.dart';
+import 'package:sahely/core/network/api_envelope.dart';
 
+/// Reviews, backed by `/reviews`; abusive reviews are reported through the
+/// violations module, the backend's single reporting channel.
 class ReviewRepositoryImpl implements ReviewRepository {
-  final MockReviewDataSource dataSource;
-  final ReviewsApiDataSource? apiDataSource;
+  ReviewRepositoryImpl({
+    ReviewsApiDataSource? api,
+    ViolationsApiDataSource? violations,
+    ApiClient? apiClient,
+  })  : _api = api ?? ReviewsApiDataSource(apiClient ?? ApiClient()),
+        _violations =
+            violations ?? ViolationsApiDataSource(apiClient ?? ApiClient());
 
-  ReviewRepositoryImpl({required this.dataSource, ApiClient? apiClient})
-      : apiDataSource =
-            AppConfig.useRemoteApi ? ReviewsApiDataSource(apiClient ?? ApiClient()) : null;
+  final ReviewsApiDataSource _api;
+  final ViolationsApiDataSource _violations;
 
   @override
-  Future<List<Review>> getPropertyReviews(String propertyId) async {
-    try {
-      if (apiDataSource != null) {
-        final raw = await apiDataSource!.fetchPropertyReviews(propertyId);
+  Future<List<Review>> getPropertyReviews(String propertyId) =>
+      _guard(() async {
+        final raw = await _api.fetchPropertyReviews(propertyId);
         return raw.map((j) => _fromApi(j).toEntity()).toList();
-      }
-      final dtos = await dataSource.getPropertyReviews(propertyId);
-      return dtos.map((dto) => dto.toEntity()).toList();
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
-  }
+      });
 
   @override
-  Future<List<Review>> getUserReviews(String userId) async {
-    try {
-      final dtos = await dataSource.getUserReviews(userId);
-      return dtos.map((dto) => dto.toEntity()).toList();
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
-  }
+  Future<List<Review>> getUserReviews(String userId) => _guard(() async {
+        final raw = await _api.fetchUserReviews(userId);
+        return raw.map((j) => _fromApi(j).toEntity()).toList();
+      });
+
+  /// The API has no lookup by booking. A second review for the same booking
+  /// is rejected by the server when it is submitted, so there is nothing to
+  /// pre-check on the device.
+  @override
+  Future<Review?> getReviewByBookingId(String bookingId) async => null;
 
   @override
-  Future<Review?> getReviewByBookingId(String bookingId) async {
-    try {
-      final dtos = await dataSource.getReviewByBookingId(bookingId);
-      return dtos?.toEntity();
-    } catch (e) {
-      throw ExceptionMapper.map(e);
+  Future<void> addReview(Review review) {
+    if (review.bookingId.isEmpty) {
+      throw const ValidationFailure('This stay can no longer be reviewed.');
     }
-  }
-
-  @override
-  Future<void> addReview(Review review) async {
-    try {
-      if (apiDataSource != null && review.bookingId.isNotEmpty) {
-        await apiDataSource!.createReview(
+    return _guard(() => _api.createReview(
           bookingId: review.bookingId,
-          type: review.userRole.toLowerCase() == 'owner'
-              ? 'guest'
-              : 'property',
+          type: review.userRole.toLowerCase() == 'owner' ? 'guest' : 'property',
           rating: review.rating.round(),
           comment: review.comment,
-        );
-        return;
-      }
-      await dataSource.addReview(ReviewDto.fromEntity(review));
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
+        ));
   }
 
+  /// Posted reviews cannot be edited through the mobile API.
   @override
   Future<void> updateReview(Review review) async {
-    try {
-      await dataSource.updateReview(ReviewDto.fromEntity(review));
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
+    throw const ValidationFailure(
+        'Reviews cannot be edited after they are posted.');
   }
 
+  /// Only an admin can remove a review; the mobile API has no delete route.
   @override
   Future<void> deleteReview(String reviewId) async {
+    throw const ValidationFailure(
+        'Reviews cannot be deleted. Report it if it breaks the rules.');
+  }
+
+  /// "Helpful" votes are not part of the reviews API; the screen keeps the
+  /// toggle as its own state.
+  @override
+  Future<void> likeReview(String reviewId, String userId) async {}
+
+  @override
+  Future<void> reportReview(
+    String reviewId,
+    String userId,
+    String reason,
+  ) =>
+      _guard(() => _violations.report(
+            type: 'abusive_review',
+            description: reason,
+          ));
+
+  /// Owner response to a review (`POST /reviews/:id/response`).
+  @override
+  Future<void> replyToReview(String reviewId, ReviewReply reply) =>
+      _guard(() => _api.respondToReview(reviewId, reply.comment));
+
+  static Future<T> _guard<T>(Future<T> Function() call) async {
     try {
-      if (apiDataSource != null) {
-        await apiDataSource!.deleteReview(reviewId);
-        return;
-      }
-      await dataSource.deleteReview(reviewId);
+      return await call();
     } catch (e) {
       throw ExceptionMapper.map(e);
     }
   }
 
-  @override
-  Future<void> likeReview(String reviewId, String userId) async {
-    try {
-      if (apiDataSource != null) {
-        await apiDataSource!.likeReview(reviewId);
-        return;
-      }
-      await dataSource.likeReview(reviewId, userId);
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
-  }
-
-  @override
-  Future<void> reportReview(String reviewId, String userId, String reason) async {
-    try {
-      if (apiDataSource != null) {
-        await apiDataSource!.reportReview(reviewId, reason);
-        return;
-      }
-      await dataSource.reportReview(reviewId, userId, reason);
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
-  }
-
-  @override
-  Future<void> replyToReview(String reviewId, ReviewReply reply) async {
-    // Owner responses are posted from the owner web portal; local no-op here.
-  }
-
-  /// Backend review JSON → the DTO shape the UI already understands.
+  /// Backend review JSON → the DTO shape the UI already understands. Keys are
+  /// read in snake_case or camelCase, like the rest of the API.
   static ReviewDto _fromApi(Map<String, dynamic> j) {
-    final reviewer = (j['reviewer'] as Map?) ?? const {};
-    final response = (j['response'] as Map?) ?? const {};
+    final reviewer = asMap(pick(j, 'reviewer'));
+    final response = asMap(pick(j, 'response'));
+    final name = [pick(reviewer, 'first_name'), pick(reviewer, 'last_name')]
+        .where((part) => part != null && '$part'.trim().isNotEmpty)
+        .join(' ');
     return ReviewDto(
       id: '${j['id']}',
-      propertyId: '${j['property_id'] ?? ''}',
-      bookingId: '${j['booking_id'] ?? ''}',
-      userId: '${j['reviewer_id'] ?? ''}',
-      userName: '${reviewer['first_name'] ?? 'Guest'} ${reviewer['last_name'] ?? ''}'.trim(),
-      userRole: '${j['reviewer_role'] ?? 'renter'}',
-      userAvatar: reviewer['avatar_url'] as String?,
-      rating: (j['rating'] as num? ?? 0).toDouble(),
+      propertyId: '${pick(j, 'property_id') ?? ''}',
+      bookingId: '${pick(j, 'booking_id') ?? ''}',
+      userId: '${pick(j, 'reviewer_id') ?? reviewer['id'] ?? ''}',
+      userName: name.isEmpty ? 'Guest' : name,
+      userRole: '${pick(j, 'reviewer_role') ?? 'renter'}',
+      userAvatar: pick(reviewer, 'avatar_url') as String?,
+      rating: (asNum(j['rating']) ?? 0).toDouble(),
       comment: '${j['comment'] ?? ''}',
       photos: const [],
-      createdAt: '${j['created_at'] ?? ''}',
-      likes: j['helpful_count'] as int? ?? 0,
+      createdAt: '${pick(j, 'created_at') ?? ''}',
+      likes: asNum(pick(j, 'helpful_count'))?.toInt() ?? 0,
       ownerResponse: response.isEmpty
           ? null
-          : ReviewResponseTextDto('${response['response'] ?? ''}'),
+          : ReviewResponseTextDto(
+              '${response['response'] ?? response['text'] ?? ''}'),
     );
   }
 }

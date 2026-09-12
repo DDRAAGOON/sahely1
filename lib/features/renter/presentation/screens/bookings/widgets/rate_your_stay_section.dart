@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 
@@ -35,7 +35,8 @@ class RateYourStaySection extends StatelessWidget {
             children: List.generate(5, (index) {
               return const Padding(
                 padding: EdgeInsets.only(right: 6),
-                child: Icon(Icons.star_border, color: Color(0xFFE0E0E0), size: 28),
+                child:
+                    Icon(Icons.star_border, color: Color(0xFFE0E0E0), size: 28),
               );
             }),
           ),

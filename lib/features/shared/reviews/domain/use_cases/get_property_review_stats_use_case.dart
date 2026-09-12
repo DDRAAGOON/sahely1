@@ -8,7 +8,7 @@ class GetPropertyReviewStatsUseCase {
 
   Future<PropertyReviewStats> execute(String propertyId) async {
     final reviews = await repository.getPropertyReviews(propertyId);
-    
+
     if (reviews.isEmpty) {
       return const PropertyReviewStats(
         averageRating: 0.0,

@@ -31,18 +31,22 @@ class ReviewPropertyCard extends StatelessWidget {
           // Property Thumbnail
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: AppNetworkImage(url: propertyImage, width: 72, height: 72, errorWidget: (context, error, stackTrace) {
-                return Container(
-                  width: 72,
-                  height: 72,
-                  color: AppColors.border,
-                  child: const Icon(
-                    Icons.image,
-                    color: AppColors.secondary,
-                    size: 32,
-                  ),
-                );
-              }),
+            child: AppNetworkImage(
+                url: propertyImage,
+                width: 72,
+                height: 72,
+                errorWidget: (context, error, stackTrace) {
+                  return Container(
+                    width: 72,
+                    height: 72,
+                    color: AppColors.border,
+                    child: const Icon(
+                      Icons.image,
+                      color: AppColors.secondary,
+                      size: 32,
+                    ),
+                  );
+                }),
           ),
           const SizedBox(width: 12),
           // Property Info
@@ -74,4 +78,3 @@ class ReviewPropertyCard extends StatelessWidget {
     );
   }
 }
-

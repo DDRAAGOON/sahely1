@@ -7,9 +7,7 @@ import 'package:sahely/l10n/app_localizations.dart';
 Widget _wrap(Widget child) => MaterialApp(
       locale: const Locale('en'),
       localizationsDelegates: const [AppLocalizations.delegate],
-      supportedLocales: AppLocalizations.supportedLanguages
-          .map((c) => Locale(c))
-          .toList(),
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: child),
     );
 
@@ -77,8 +75,7 @@ void main() {
       expect(end!.isAfter(start!), true);
     });
 
-    testWidgets('tapping a PAST day gives visible guidance',
-        (tester) async {
+    testWidgets('tapping a PAST day gives visible guidance', (tester) async {
       await pumpCalendar(tester, onDates: (_, __) {});
 
       final now = DateTime.now();

@@ -86,12 +86,14 @@ class OwnerSmartLockScreen extends StatelessWidget {
                   children: [
                     const Icon(Icons.lock, size: 16, color: Color(0xFF717171)),
                     const SizedBox(width: 8),
-                    Text(
-                      'Change passcode (after check-out)',
-                      style: AppTheme.dm(
-                        size: 13,
-                        weight: FontWeight.w600,
-                        color: const Color(0xFF717171),
+                    Flexible(
+                      child: Text(
+                        'Change passcode (after check-out)',
+                        style: AppTheme.dm(
+                          size: 13,
+                          weight: FontWeight.w600,
+                          color: const Color(0xFF717171),
+                        ),
                       ),
                     ),
                   ],
@@ -106,9 +108,7 @@ class OwnerSmartLockScreen extends StatelessWidget {
                     size: 15, weight: FontWeight.w700, color: AppColors.navy)),
             Text('Export',
                 style: AppTheme.dm(
-                    size: 13,
-                    weight: FontWeight.w600,
-                    color: AppColors.gold)),
+                    size: 13, weight: FontWeight.w600, color: AppColors.gold)),
           ]),
           const SizedBox(height: 8),
           WhiteCard(

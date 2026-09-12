@@ -40,8 +40,7 @@ class _BookingCalendarCardState extends State<BookingCalendarCard> {
   void _selectDay(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       _focusedDay = focusedDay;
-      if (_rangeStart == null ||
-          (_rangeStart != null && _rangeEnd != null)) {
+      if (_rangeStart == null || (_rangeStart != null && _rangeEnd != null)) {
         // First pick (or re-start after a complete range).
         _rangeStart = selectedDay;
         _rangeEnd = null;
@@ -88,9 +87,13 @@ class _BookingCalendarCardState extends State<BookingCalendarCard> {
             ),
             daysOfWeekStyle: const DaysOfWeekStyle(
               weekdayStyle: TextStyle(
-                  fontSize: 11, color: AppColors.secondary, fontFamily: 'DM Sans'),
+                  fontSize: 11,
+                  color: AppColors.secondary,
+                  fontFamily: 'DM Sans'),
               weekendStyle: TextStyle(
-                  fontSize: 11, color: AppColors.secondary, fontFamily: 'DM Sans'),
+                  fontSize: 11,
+                  color: AppColors.secondary,
+                  fontFamily: 'DM Sans'),
             ),
             calendarBuilders: CalendarBuilders(
               prioritizedBuilder: (context, day, focusedDay) {
@@ -249,9 +252,7 @@ class BookingGuestRow extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: filled ? AppColors.navy : Colors.transparent,
-            border: filled
-                ? null
-                : Border.all(color: AppColors.borderDefault),
+            border: filled ? null : Border.all(color: AppColors.borderDefault),
             shape: BoxShape.circle,
           ),
           child: Icon(icon,

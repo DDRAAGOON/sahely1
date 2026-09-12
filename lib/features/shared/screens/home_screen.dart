@@ -7,10 +7,14 @@ import 'package:sahely/features/renter/presentation/bloc/renter_home_cubit.dart'
 import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/core/widgets/pull_to_refresh.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 import 'package:sahely/features/shared/widgets/mawsem/mawsem_card.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/category_chips.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property_query.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/greeting_header.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/promo_banner.dart';
 import 'package:sahely/features/renter/presentation/screens/home/widgets/search_row.dart';
@@ -46,6 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Property> _allProperties = [];
   List<Property> _filteredProperties = [];
 
+  /// Guards against a slower category search overwriting a newer one.
+  int _categoryRequest = 0;
+
   @override
   void initState() {
     super.initState();
@@ -72,44 +79,38 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onCategoryChanged(String category) {
-    setState(() {
-      _selectedCategory = category;
-      _applyFilters();
-    });
+    setState(() => _selectedCategory = category);
+    _applyFilters();
   }
 
-  void _applyFilters() {
-    List<Property> results = _allProperties;
-
-    // Filter by Category Chip
-    if (_selectedCategory != 'All') {
-      results = results.where((p) {
-        if (_selectedCategory == 'Pool') {
-          return p.tags.contains('Pool');
-        }
-        if (_selectedCategory == 'Beachfront') {
-          return p.tags.contains('Beachfront');
-        }
-        return true;
-      }).toList();
+  /// "All" shows the feed the home cubit loaded; every other chip is a real
+  /// search, because a listing's type, distance to the beach and amenities
+  /// are only known to the server.
+  Future<void> _applyFilters() async {
+    final category = _selectedCategory ?? 'All';
+    if (category == 'All') {
+      setState(() => _filteredProperties = _allProperties);
+      return;
     }
-
-    // Filter by Bottom Sheet Filters
-    if (_appliedFilters['propertyType'] != 'All') {
-      results = results
-          .where((p) => p.type == _appliedFilters['propertyType'])
-          .toList();
+    final request = ++_categoryRequest;
+    try {
+      final result = await sl<RenterRepository>()
+          .searchProperties(PropertyQuery.category(category));
+      if (!mounted || request != _categoryRequest) return;
+      setState(() => _filteredProperties = result.properties);
+    } catch (_) {
+      if (!mounted || request != _categoryRequest) return;
+      setState(() => _filteredProperties = const []);
     }
+  }
 
-    results = results.where((p) {
-      double priceEgp = p.price.toDouble();
-      return priceEgp >= _appliedFilters['minPrice'] &&
-          priceEgp <= _appliedFilters['maxPrice'];
-    }).toList();
-
-    setState(() {
-      _filteredProperties = results;
-    });
+  /// Pull to refresh: the feed, the account and the current category.
+  Future<void> _refresh() async {
+    await Future.wait([
+      context.read<RenterHomeCubit>().loadProperties(),
+      context.read<ProfileProvider>().fetchProfileData(force: true),
+    ]);
+    await _applyFilters();
   }
 
   void _showFiltersSheet() {
@@ -118,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
       initialFilters: _appliedFilters,
       allProperties: _allProperties,
       onApplyFilters: (newFilters) {
-        AppNavigation.goToAllProperties(context, filters: newFilters);
+        AppNavigation.goToSearchResults(context, filters: newFilters);
       },
     );
   }
@@ -150,157 +151,169 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Expanded(
-                    child: CustomScrollView(
-                    slivers: [
-                      // Greeting Header
-                      const SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(16, 16, 16, 14),
-                          child: GreetingHeader(),
-                        ),
-                      ),
-
-                      // Search Row
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: SearchRow(
-                            onFilterTap: _showFiltersSheet,
-                            onChatTap: () => AppNavigation.goToAiChat(context),
-                          ),
-                        ),
-                      ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 14)),
-
-                      // MAWSEM Card
-                      const SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: MawsemCard(),
-                        ),
-                      ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 14)),
-
-                      // Promo Banner
-                      const SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: PromoBanner(),
-                        ),
-                      ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 24)),
-
-                      // Category Chips
-                      SliverToBoxAdapter(
-                        child: CategoryChips(
-                          onCategorySelected: _onCategoryChanged,
-                        ),
-                      ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 24)),
-
-                      // Section Header - Trending Now
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Trending Now',
-                                style: AppTheme.dm(
-                                    size: 18,
-                                    weight: FontWeight.w700,
-                                    color: AppColors.navy),
-                              ),
-                              BouncyButton(
-                                onTap: () =>
-                                    AppNavigation.goToAllProperties(context),
-                                child: Text(
-                                  'See All',
-                                  style: AppTheme.dm(
-                                    size: 14,
-                                    weight: FontWeight.w600,
-                                    color: AppColors.gold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 12)),
-
-                      // Property Cards
-                      SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        sliver: SliverToBoxAdapter(
-                          child: SmoothListTransition(
-                            transitionKey: _selectedCategory,
-                            child: Column(
-                              children: _filteredProperties.isEmpty
-                                  ? [
-                                      const SizedBox(
-                                        height: 100,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                              color: AppColors.gold),
-                                        ),
-                                      )
-                                    ]
-                                  : _filteredProperties
-                                      .take(4)
-                                      .map((property) => Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 16),
-                                            child: PropertyCard(
-                                              property: property,
-                                              onTap: () => AppNavigation
-                                                  .goToPropertyDetail(context,
-                                                      extra: property),
-                                            ),
-                                          ))
-                                      .toList(),
+                    child: PullToRefresh(
+                      onRefresh: _refresh,
+                      child: CustomScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          // Greeting Header
+                          const SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(16, 16, 16, 14),
+                              child: GreetingHeader(),
                             ),
                           ),
-                        ),
+
+                          // Search Row
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: SearchRow(
+                                onFilterTap: _showFiltersSheet,
+                                onChatTap: () =>
+                                    AppNavigation.goToAiChat(context),
+                              ),
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 14)),
+
+                          // MAWSEM Card
+                          const SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: MawsemCard(),
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 14)),
+
+                          // Promo Banner
+                          const SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              child: PromoBanner(),
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+                          // Category Chips
+                          SliverToBoxAdapter(
+                            child: CategoryChips(
+                              onCategorySelected: _onCategoryChanged,
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+                          // Section Header - Trending Now
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Trending Now',
+                                    style: AppTheme.dm(
+                                        size: 18,
+                                        weight: FontWeight.w700,
+                                        color: AppColors.navy),
+                                  ),
+                                  BouncyButton(
+                                    onTap: () =>
+                                        AppNavigation.goToAllProperties(
+                                            context),
+                                    child: Text(
+                                      'See All',
+                                      style: AppTheme.dm(
+                                        size: 14,
+                                        weight: FontWeight.w600,
+                                        color: AppColors.gold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+
+                          // Property Cards
+                          SliverPadding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            sliver: SliverToBoxAdapter(
+                              child: SmoothListTransition(
+                                transitionKey: _selectedCategory,
+                                child: Column(
+                                  children: _filteredProperties.isEmpty
+                                      ? [
+                                          const SizedBox(
+                                            height: 100,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                  color: AppColors.gold),
+                                            ),
+                                          )
+                                        ]
+                                      : _filteredProperties
+                                          .take(4)
+                                          .map((property) => Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 16),
+                                                child: PropertyCard(
+                                                  property: property,
+                                                  onTap: () => AppNavigation
+                                                      .goToPropertyDetail(
+                                                          context,
+                                                          extra: property),
+                                                ),
+                                              ))
+                                          .toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 12)),
+
+                          // Explore North Coast Section
+                          SliverToBoxAdapter(
+                            child: _buildExploreSection(),
+                          ),
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+
+                          // Referral Banner
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: _buildReferralBanner(),
+                            ),
+                          ),
+
+                          const SliverToBoxAdapter(child: SizedBox(height: 48)),
+
+                          // Footer
+                          SliverToBoxAdapter(
+                            child: _buildFooter(),
+                          ),
+
+                          const SliverToBoxAdapter(
+                              child: SizedBox(height: 140)),
+                        ],
                       ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 12)),
-
-                      // Explore North Coast Section
-                      SliverToBoxAdapter(
-                        child: _buildExploreSection(),
-                      ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 32)),
-
-                      // Referral Banner
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: _buildReferralBanner(),
-                        ),
-                      ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 48)),
-
-                      // Footer
-                      SliverToBoxAdapter(
-                        child: _buildFooter(),
-                      ),
-
-                      const SliverToBoxAdapter(child: SizedBox(height: 140)),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
           ),
         );
       },
@@ -333,9 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text('Explore North Coast',
               style: AppTheme.dm(
-                  size: 18,
-                  weight: FontWeight.w700,
-                  color: AppColors.navy)),
+                  size: 18, weight: FontWeight.w700, color: AppColors.navy)),
         ),
         const SizedBox(height: 16),
         SizedBox(

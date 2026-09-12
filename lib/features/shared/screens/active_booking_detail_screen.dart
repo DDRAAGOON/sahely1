@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
@@ -11,7 +11,7 @@ import 'package:sahely/features/renter/presentation/screens/bookings/widgets/loc
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_details_card.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/property_photo_gallery.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/rate_your_stay_section.dart';
-import 'package:sahely/data/sample_data.dart';
+import 'package:sahely/core/theme/system_ui.dart';
 
 /// Enum for the user role to customize the active booking detail screen.
 enum ActiveBookingRole { renter, owner, broker }
@@ -43,18 +43,16 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
     super.dispose();
   }
 
-  
-
   String get _propertyName {
     if (widget.property != null) return widget.property!.name;
-    return widget.bookingData?['propertyName'] ?? 'Lagoon Retreat';
+    return widget.bookingData?['propertyName'] ?? '';
   }
 
   String get _location {
     if (widget.property != null) {
       return '${widget.property!.area} · North Coast';
     }
-    return widget.bookingData?['location'] ?? 'Marassi · North Coast';
+    return widget.bookingData?['location'] ?? '';
   }
 
   String get _imageUrl {
@@ -63,189 +61,188 @@ class _ActiveBookingDetailScreenState extends State<ActiveBookingDetailScreen> {
   }
 
   String get _orderNumber {
-    return widget.bookingData?['orderNumber'] ?? 'SHLY-7741';
+    return widget.bookingData?['orderNumber'] ?? '';
   }
 
   String get _dates {
-    return widget.bookingData?['dates'] ?? 'Jun 14–18';
+    return widget.bookingData?['dates'] ?? '';
   }
 
   String get _guests {
-    return widget.bookingData?['guests'] ?? '2A · 1C';
+    return widget.bookingData?['guests'] ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-    final prop = widget.property ?? Sample.lagoon;
+    final prop = widget.property;
     final isOwner = widget.role == ActiveBookingRole.owner;
     final isBroker = widget.role == ActiveBookingRole.broker;
 
-    return Scaffold(
-      backgroundColor: AppColors.cream,
-      body: CustomScrollView(
-        slivers: [
-          // Header with Hero Image
-          SliverToBoxAdapter(
-            child: BookedPropertyHeader(
-              propertyName: _propertyName,
-              location: _location,
-              imageUrl: _imageUrl.isNotEmpty ? _imageUrl : prop.image,
-              onBackTap: () => Navigator.pop(context),
-            ),
-          ),
-
-          // Photo Gallery
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: PropertyPhotoGallery(
-                photos: [
-                  _imageUrl.isNotEmpty ? _imageUrl : prop.image,
-                  Sample.lagoon.image,
-                  Sample.dunes.image,
-                ],
+    return LightStatusBar(
+      child: Scaffold(
+        backgroundColor: AppColors.cream,
+        body: CustomScrollView(
+          slivers: [
+            // Header with Hero Image
+            SliverToBoxAdapter(
+              child: BookedPropertyHeader(
+                propertyName: _propertyName,
+                location: _location,
+                imageUrl: _imageUrl,
+                onBackTap: () => Navigator.pop(context),
               ),
             ),
-          ),
 
-          // Booking Info Chips
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: BookingInfoChips(
-                orderNumber: _orderNumber,
-                dates: _dates,
-                guests: _guests,
+            // Photo Gallery
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: PropertyPhotoGallery(
+                  photos: [_imageUrl],
+                ),
               ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 16)),
-
-          // Door Passcode & SOS Buttons
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: DoorPasscodeSosButtons(
-                onDoorPasscodeTap: () {
-                  if (isOwner) {
-                    AppNavigation.goToOwnerSmartLock(context);
-                  } else if (isBroker) {
-                    AppNavigation.goToBrokerSmartLock(
-                      context,
-                      extra: {
-                        'propertyName': _propertyName,
-                        'bookingRef': _orderNumber,
-                        'passcode': '8842',
-                        'checkIn':
-                            widget.bookingData?['checkIn'] ?? DateTime.now(),
-                        'checkOut': widget.bookingData?['checkOut'] ??
-                            DateTime.now().add(const Duration(days: 4)),
-                        'propertyLat': 31.0263,
-                        'propertyLng': 28.9402,
-                      },
-                    );
-                  } else {
-                    AppNavigation.goToSmartLock(context, extra: prop);
-                  }
-                },
-                onSOSTap: () {
-                  if (isOwner) {
-                    AppNavigation.goToSosOwner(context);
-                  } else if (isBroker) {
-                    AppNavigation.goToBrokerSos(context);
-                  } else {
-                    AppNavigation.goToSos(context);
-                  }
-                },
+            // Booking Info Chips
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: BookingInfoChips(
+                  orderNumber: _orderNumber,
+                  dates: _dates,
+                  guests: _guests,
+                ),
               ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-          // Property Details
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: PropertyDetailsCard(
-                details: {
-                  'bedrooms': 3,
-                  'beds': 4,
-                  'bathrooms': 2,
-                  'beach': 'Hacienda White Beach',
-                },
-              ),
-            ),
-          ),
-
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
-
-          // Location
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: LocationMapSection(location: _location),
-            ),
-          ),
-
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
-
-          // Arrival Checklist
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ArrivalChecklistSection(
-                checklist: const [
-                  {'label': 'Pool clean & usable', 'completed': true},
-                  {
-                    'label': 'Wi-Fi works (password on fridge)',
-                    'completed': true
+            // Door Passcode & SOS Buttons
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: DoorPasscodeSosButtons(
+                  onDoorPasscodeTap: () {
+                    if (isOwner) {
+                      AppNavigation.goToOwnerSmartLock(context);
+                    } else if (isBroker) {
+                      AppNavigation.goToBrokerSmartLock(
+                        context,
+                        extra: {
+                          'propertyName': _propertyName,
+                          'bookingRef': _orderNumber,
+                          'bookingId': widget.bookingData?['bookingId'] ?? '',
+                          'checkIn':
+                              widget.bookingData?['checkIn'] ?? DateTime.now(),
+                          'checkOut': widget.bookingData?['checkOut'] ??
+                              DateTime.now().add(const Duration(days: 4)),
+                          'propertyLat':
+                              widget.bookingData?['propertyLat'] ?? 0.0,
+                          'propertyLng':
+                              widget.bookingData?['propertyLng'] ?? 0.0,
+                        },
+                      );
+                    } else {
+                      AppNavigation.goToSmartLock(context, extra: prop);
+                    }
                   },
-                  {'label': 'AC in all rooms', 'completed': true},
-                  {'label': '5 beds made & linens fresh', 'completed': true},
-                  {'label': 'Beach access tags (4)', 'completed': false},
-                  {'label': 'Kitchen fully equipped', 'completed': false},
-                ],
-                onChecklistChanged: (_) {},
-                onReportIssue: () {
-                  AppNavigation.push(context, '/arrival-checklist');
-                },
+                  onSOSTap: () {
+                    if (isOwner) {
+                      AppNavigation.goToSosOwner(context);
+                    } else if (isBroker) {
+                      AppNavigation.goToBrokerSos(context);
+                    } else {
+                      AppNavigation.goToSos(context);
+                    }
+                  },
+                ),
               ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
-          // Rate Your Stay
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: RateYourStaySection(
-                onAddReview: () {
-                  AppNavigation.goToWriteReview(
-                    context,
-                    extra: prop,
-                  );
-                },
+            // Property Details
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: PropertyDetailsCard(
+                  details: {
+                    'bedrooms': 3,
+                    'beds': 4,
+                    'bathrooms': 2,
+                    'beach': 'Hacienda White Beach',
+                  },
+                ),
               ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
-          // Ask Sahely AI
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 24),
-              child: AskSahelyAiSection(),
+            // Location
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: LocationMapSection(location: _location),
+              ),
             ),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 140)),
-        ],
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+            // Arrival Checklist
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ArrivalChecklistSection(
+                  checklist: const [
+                    {'label': 'Pool clean & usable', 'completed': true},
+                    {
+                      'label': 'Wi-Fi works (password on fridge)',
+                      'completed': true
+                    },
+                    {'label': 'AC in all rooms', 'completed': true},
+                    {'label': '5 beds made & linens fresh', 'completed': true},
+                    {'label': 'Beach access tags (4)', 'completed': false},
+                    {'label': 'Kitchen fully equipped', 'completed': false},
+                  ],
+                  onChecklistChanged: (_) {},
+                  onReportIssue: () {
+                    AppNavigation.push(context, '/arrival-checklist');
+                  },
+                ),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+            // Rate Your Stay
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: RateYourStaySection(
+                  onAddReview: () {
+                    AppNavigation.goToWriteReview(
+                      context,
+                      extra: prop,
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+
+            // Ask Sahely AI
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(16, 0, 16, 24),
+                child: AskSahelyAiSection(),
+              ),
+            ),
+
+            const SliverToBoxAdapter(child: SizedBox(height: 140)),
+          ],
+        ),
       ),
     );
   }
 }
-

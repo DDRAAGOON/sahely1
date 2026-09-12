@@ -14,5 +14,6 @@ class NetworkSecurityManager {
     return _sslPinningService.validateCertificate(serverCertificate);
   }
 
-  List<Uint8List> get pinnedCertificates => _sslPinningService.allowedCertificates;
+  List<Uint8List> get pinnedCertificates =>
+      _sslPinningService.allowedCertificates;
 }

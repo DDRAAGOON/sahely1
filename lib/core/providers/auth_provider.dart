@@ -3,8 +3,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:sahely/data/models.dart';
 import 'package:sahely/data/role_state.dart';
+import 'package:sahely/core/providers/safe_notifier.dart';
 
-class AuthProvider extends ChangeNotifier {
+class AuthProvider extends ChangeNotifier with SafeNotifier {
   static const _tokenKey = 'auth_token';
   static const _roleKey = 'user_role';
   static const _verifiedKey = 'is_verified';
@@ -30,7 +31,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       _token = await _secureStorage.read(key: _tokenKey);
       final verifiedStr = await _secureStorage.read(key: _verifiedKey);
-      
+
       if (_token != null && _token!.isNotEmpty) {
         _isAuthenticated = true;
         _isVerified = verifiedStr == 'true';

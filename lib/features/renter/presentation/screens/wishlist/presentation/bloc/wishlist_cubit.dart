@@ -14,6 +14,7 @@ import 'package:sahely/features/renter/domain/use_cases/rename_collection_use_ca
 import 'package:sahely/features/renter/domain/use_cases/delete_collection_use_case.dart';
 import 'package:sahely/features/renter/domain/use_cases/check_wishlist_status_use_case.dart';
 import 'package:sahely/features/renter/domain/models/wishlist_item.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
 enum WishlistStatus { initial, loading, loaded, error }
 
@@ -53,7 +54,7 @@ class WishlistState {
   }
 }
 
-class WishlistCubit extends Cubit<WishlistState> {
+class WishlistCubit extends Cubit<WishlistState> with SafeEmit<WishlistState> {
   final GetWishlistCollectionsUseCase _getCollectionsUseCase;
   final GetWishlistItemsUseCase _getItemsUseCase;
   final ToggleWishlistUseCase _toggleUseCase;
@@ -88,14 +89,16 @@ class WishlistCubit extends Cubit<WishlistState> {
   Future<void> checkStatus(String propertyId, [Role? role]) async {
     final targetRole = role ?? _activeRole;
     try {
-      final isWishlisted = await _checkStatusUseCase.execute(propertyId, targetRole);
+      final isWishlisted =
+          await _checkStatusUseCase.execute(propertyId, targetRole);
       emit(state.copyWith(
         toggledPropertyId: propertyId,
         isToggledStatus: isWishlisted,
         status: WishlistStatus.loaded,
       ));
     } catch (e) {
-      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Error checking status'));
+      emit(state.copyWith(
+          status: WishlistStatus.error, errorMessage: 'Error checking status'));
     }
   }
 
@@ -116,7 +119,8 @@ class WishlistCubit extends Cubit<WishlistState> {
 
       await loadCollections(targetRole);
     } catch (e) {
-      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to toggle'));
+      emit(state.copyWith(
+          status: WishlistStatus.error, errorMessage: 'Failed to toggle'));
     }
   }
 
@@ -143,10 +147,12 @@ class WishlistCubit extends Cubit<WishlistState> {
         targetRole,
         collectionIds,
       );
-      
+
       await loadCollections(targetRole);
     } catch (e) {
-      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to update collections'));
+      emit(state.copyWith(
+          status: WishlistStatus.error,
+          errorMessage: 'Failed to update collections'));
     }
   }
 
@@ -168,7 +174,9 @@ class WishlistCubit extends Cubit<WishlistState> {
       );
       await loadCollections(targetRole);
     } catch (e) {
-      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to save to collection'));
+      emit(state.copyWith(
+          status: WishlistStatus.error,
+          errorMessage: 'Failed to save to collection'));
     }
   }
 
@@ -186,7 +194,9 @@ class WishlistCubit extends Cubit<WishlistState> {
       );
       await loadCollections(targetRole);
     } catch (e) {
-      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to add to collection'));
+      emit(state.copyWith(
+          status: WishlistStatus.error,
+          errorMessage: 'Failed to add to collection'));
     }
   }
 
@@ -196,7 +206,9 @@ class WishlistCubit extends Cubit<WishlistState> {
       await _createCollectionUseCase.execute(name, targetRole);
       await loadCollections(targetRole);
     } catch (e) {
-      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to create collection'));
+      emit(state.copyWith(
+          status: WishlistStatus.error,
+          errorMessage: 'Failed to create collection'));
     }
   }
 
@@ -213,7 +225,9 @@ class WishlistCubit extends Cubit<WishlistState> {
         status: WishlistStatus.loaded,
       ));
     } catch (e) {
-      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to load collections'));
+      emit(state.copyWith(
+          status: WishlistStatus.error,
+          errorMessage: 'Failed to load collections'));
     }
   }
 
@@ -221,10 +235,13 @@ class WishlistCubit extends Cubit<WishlistState> {
     final targetRole = role ?? _activeRole;
     emit(state.copyWith(status: WishlistStatus.loading));
     try {
-      final items = await _getItemsUseCase.execute(collectionId: collectionId, role: targetRole);
+      final items = await _getItemsUseCase.execute(
+          collectionId: collectionId, role: targetRole);
       emit(state.copyWith(items: items, status: WishlistStatus.loaded));
     } catch (e) {
-      emit(state.copyWith(status: WishlistStatus.error, errorMessage: 'Failed to load wishlist items'));
+      emit(state.copyWith(
+          status: WishlistStatus.error,
+          errorMessage: 'Failed to load wishlist items'));
     }
   }
 }

@@ -13,7 +13,8 @@ class ChangePasswordUseCase {
       throw Exception('New password must be at least 6 characters long');
     }
     if (currentPassword == newPassword) {
-      throw Exception('New password cannot be the same as the current password');
+      throw Exception(
+          'New password cannot be the same as the current password');
     }
     return repository.changePassword(currentPassword, newPassword);
   }

@@ -56,8 +56,8 @@ class _BrokerShellState extends State<BrokerShell> {
           );
           return;
         }
-        
-        SystemNavigator.pop(); 
+
+        SystemNavigator.pop();
       },
       child: Scaffold(
         backgroundColor: AppColors.cream,
@@ -79,4 +79,3 @@ class _BrokerShellState extends State<BrokerShell> {
     );
   }
 }
-

@@ -6,6 +6,10 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/reviews_given_section.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/reviews_received_section.dart';
 import 'package:sahely/features/renter/presentation/screens/reviews/widgets/reviews_tabs.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+import 'package:sahely/features/shared/reviews/domain/repositories/review_repository.dart';
 
 class MyReviewsScreen extends StatefulWidget {
   const MyReviewsScreen({super.key});
@@ -16,11 +20,85 @@ class MyReviewsScreen extends StatefulWidget {
 
 class _MyReviewsScreenState extends State<MyReviewsScreen> {
   int _selectedTab = 0; // 0 = Given, 1 = Received (About Me)
+  List<Map<String, dynamic>> _given = const [];
+  List<Map<String, dynamic>> _received = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+  }
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  static String _role(String role) => switch (role.toLowerCase()) {
+        'broker' => 'Broker',
+        'owner' => 'Owner',
+        _ => 'Renter',
+      };
+
+  /// `GET /reviews?userId=`: the reviews I wrote (with the listing's name
+  /// and photo) and the ones hosts wrote about me.
+  Future<void> _load() async {
+    final profile = context.read<ProfileProvider>();
+    await profile.fetchProfileData();
+    final id = profile.id;
+    if (id.isEmpty) return;
+    try {
+      final reviews = await sl<ReviewRepository>().getUserReviews(id);
+      final mine = reviews.where((r) => r.userId == id).toList();
+      final aboutMe = reviews.where((r) => r.userId != id).toList();
+      final listings = <String, Property>{};
+      for (final propertyId in {for (final r in mine) r.propertyId}) {
+        if (propertyId.isEmpty) continue;
+        try {
+          listings[propertyId] =
+              await sl<RenterRepository>().getProperty(propertyId);
+        } catch (_) {}
+      }
+      if (!mounted) return;
+      setState(() {
+        _given = [
+          for (final r in mine)
+            {
+              'propertyName': listings[r.propertyId]?.name ?? '',
+              'propertyImage': listings[r.propertyId]?.image ?? '',
+              'rating': r.rating.round(),
+              'date': '${_months[r.createdAt.month - 1]} ${r.createdAt.year}',
+              'reviewText': r.comment,
+            },
+        ];
+        _received = [
+          for (final r in aboutMe)
+            {
+              'hostName': r.userName,
+              'hostRole': _role(r.userRole),
+              'hostAvatar': r.userAvatar,
+              'rating': r.rating.round(),
+              'reviewText': r.comment,
+            },
+        ];
+      });
+    } catch (_) {
+      // Both tabs stay empty.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final profile = context.watch<ProfileProvider>();
-
     return Scaffold(
       backgroundColor: AppColors.cream,
       appBar: AppBar(
@@ -83,48 +161,12 @@ class _MyReviewsScreenState extends State<MyReviewsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _selectedTab == 0
                     ? ReviewsGivenSection(
-                        reviewCount: profile.reviewsGiven,
-                        reviews: const [
-                          {
-                            'propertyName': 'Lagoon Retreat',
-                            'propertyImage':
-                                'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=200',
-                            'rating': 5,
-                            'date': 'Jun 2026',
-                            'reviewText':
-                                'Unreal pool and the smart-lock check-in was effortless. Would book again in a heartbeat.',
-                          },
-                          {
-                            'propertyName': 'Golden Dunes',
-                            'propertyImage':
-                                'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200',
-                            'rating': 4,
-                            'date': 'May 2026',
-                            'reviewText':
-                                'Beautiful villa, quiet area. Beach was a little busy on the weekend but loved it overall.',
-                          },
-                        ],
+                        reviewCount: _given.length,
+                        reviews: _given,
                       )
                     : ReviewsReceivedSection(
-                        reviewCount: profile.reviewsReceived,
-                        reviews: const [
-                          {
-                            'hostName': 'Layla M.',
-                            'hostRole': 'Owner',
-                            'hostAvatar' : null,
-                            'rating': 5,
-                            'reviewText':
-                                'Wonderful guest — left the villa spotless and communicated clearly. Welcome any time!',
-                          },
-                          {
-                            'hostName': 'Karim A.',
-                            'hostRole': 'Broker',
-                            'hostAvatar': null,
-                            'rating': 5,
-                            'reviewText':
-                                'Respectful, on-time check-out, easy to coordinate with. A 5-star guest.',
-                          },
-                        ],
+                        reviewCount: _received.length,
+                        reviews: _received,
                       ),
               ),
             ),

@@ -17,7 +17,8 @@ class BrowseEmptyState extends StatelessWidget {
             ),
             child: IntrinsicHeight(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 32),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 40, horizontal: 32),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -29,11 +30,8 @@ class BrowseEmptyState extends StatelessWidget {
                         color: AppColors.gold.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.zoom_out, 
-                        size: 38, 
-                        color: AppColors.gold
-                      ),
+                      child: const Icon(Icons.zoom_out,
+                          size: 38, color: AppColors.gold),
                     ),
                     const SizedBox(height: 32),
                     // Title
@@ -41,10 +39,9 @@ class BrowseEmptyState extends StatelessWidget {
                       'No properties match your search',
                       textAlign: TextAlign.center,
                       style: AppTheme.dm(
-                          size: 20, 
-                          weight: FontWeight.w700, 
-                          color: AppColors.navy
-                      ),
+                          size: 20,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy),
                     ),
                     const SizedBox(height: 12),
                     // Subtitle
@@ -52,10 +49,9 @@ class BrowseEmptyState extends StatelessWidget {
                       'Try adjusting your filters or search terms.',
                       textAlign: TextAlign.center,
                       style: AppTheme.dm(
-                        size: 14, 
-                        color: AppColors.textSecondary, 
-                        height: 1.4
-                      ),
+                          size: 14,
+                          color: AppColors.textSecondary,
+                          height: 1.4),
                     ),
                     const SizedBox(height: 40),
                   ],

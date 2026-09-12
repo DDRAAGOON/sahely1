@@ -35,7 +35,7 @@ class _OwnerRateGuestScreenState extends State<OwnerRateGuestScreen> {
     if (_selectedRating == 0) return;
 
     setState(() => _isSubmitting = true);
-    
+
     // Simulate API call
     await Future.delayed(const Duration(seconds: 2));
 
@@ -102,22 +102,30 @@ class _OwnerRateGuestScreenState extends State<OwnerRateGuestScreen> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(5, (index) {
-                            final rating = index + 1;
-                            return GestureDetector(
-                              onTap: () => _onRatingChanged(rating),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4),
-                                child: Icon(
-                                  index < _selectedRating ? Icons.star : Icons.star_border,
-                                  size: 40,
-                                  color: index < _selectedRating ? AppColors.gold : const Color(0xFFE0E0E0),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(5, (index) {
+                              final rating = index + 1;
+                              return GestureDetector(
+                                onTap: () => _onRatingChanged(rating),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 4),
+                                  child: Icon(
+                                    index < _selectedRating
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    size: 40,
+                                    color: index < _selectedRating
+                                        ? AppColors.gold
+                                        : const Color(0xFFE0E0E0),
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            }),
+                          ),
                         ),
                       ],
                     ),
@@ -129,7 +137,8 @@ class _OwnerRateGuestScreenState extends State<OwnerRateGuestScreen> {
                     controller: _commentController,
                     maxLines: 4,
                     decoration: InputDecoration(
-                      hintText: 'Leave a private note about the guest (optional)...',
+                      hintText:
+                          'Leave a private note about the guest (optional)...',
                       hintStyle: AppTheme.dm(color: AppColors.placeholder),
                       filled: true,
                       fillColor: AppColors.white,
@@ -153,7 +162,8 @@ class _OwnerRateGuestScreenState extends State<OwnerRateGuestScreen> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: NavyButton(
-              label: _isSubmitting ? 'Submitting...' : 'Submit Rating · earn +5 ★',
+              label:
+                  _isSubmitting ? 'Submitting...' : 'Submit Rating · earn +5 ★',
               enabled: _selectedRating > 0 && !_isSubmitting,
               onTap: _submitRating,
             ),

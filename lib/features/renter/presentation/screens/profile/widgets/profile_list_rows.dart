@@ -5,7 +5,7 @@ import 'package:sahely/core/providers/currency_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/l10n/app_localizations.dart';
-
+import 'package:sahely/l10n/app_localizations_ext.dart';
 
 class ProfileListRows extends StatelessWidget {
   final int walletBalance;
@@ -84,7 +84,7 @@ class ProfileListRows extends StatelessWidget {
             icon: Icons.language,
             label: AppLocalizations.of(context).languageLabel,
             trailing: Text(
-              AppLocalizations.nativeLanguageName(
+              AppLocalizations.of(context).languageNameFor(
                   Localizations.localeOf(context).languageCode),
               style: AppTheme.dm(
                 size: 13,

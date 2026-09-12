@@ -1,5 +1,11 @@
-﻿import 'dart:ui';
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property_query.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -75,47 +81,51 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
     _updateResultsCount();
   }
 
+  Timer? _countDebounce;
+  int _countRequest = 0;
+
+  /// "Show N stays" is the server's own count for the current selection, so
+  /// the number on the button is the number of results that follow.
   void _updateResultsCount() {
-    setState(() {
-      var results = widget.allProperties;
+    _countDebounce?.cancel();
+    _countDebounce =
+        Timer(const Duration(milliseconds: 350), _fetchResultsCount);
+  }
 
-      if (_selectedPropertyType != 'All') {
-        results = results.where((p) => p.type == _selectedPropertyType).toList();
-      }
+  Future<void> _fetchResultsCount() async {
+    final request = ++_countRequest;
+    try {
+      final result = await sl<RenterRepository>().searchProperties(
+        PropertyQuery.fromFilters(_currentFilters()),
+        limit: 1,
+      );
+      if (!mounted || request != _countRequest) return;
+      setState(() => _resultsCount = result.total);
+    } catch (_) {
+      if (!mounted || request != _countRequest) return;
+      setState(() => _resultsCount = 0);
+    }
+  }
 
-      results = results.where((p) {
-        double priceEgp = p.price.toDouble();
-        return priceEgp >= _currentRangeValues.start &&
-            priceEgp <= _currentRangeValues.end;
-      }).toList();
+  Map<String, dynamic> _currentFilters() => {
+        'propertyType': _selectedPropertyType,
+        'bedrooms': _selectedBedrooms,
+        'minPrice': _currentRangeValues.start,
+        'maxPrice': _currentRangeValues.end,
+        'amenities': _selectedAmenities.toList(),
+        'partyAllowed': _partyAllowed,
+        'petsAllowed': _petsAllowed,
+        'mixedGroupsOK': _mixedGroupsOK,
+        'adults': _adults,
+        'children': _children,
+        'checkIn': _checkInDate,
+        'checkOut': _checkOutDate,
+      };
 
-      if (_selectedBedrooms != 'Any') {
-        int needed = int.parse(_selectedBedrooms.replaceAll('+', ''));
-        results = results.where((p) => p.beds >= needed).toList();
-      }
-
-      if (_selectedAmenities.isNotEmpty) {
-        results = results.where((p) {
-          return _selectedAmenities.every((a) => p.tags.contains(a));
-        }).toList();
-      }
-
-      if (_partyAllowed) {
-        results = results.where((p) => p.tags.contains('Party Allowed')).toList();
-      }
-      if (_petsAllowed) {
-        results = results.where((p) => p.petsOk).toList();
-      }
-      if (_mixedGroupsOK) {
-        results = results.where((p) => p.tags.contains('Mixed Groups OK')).toList();
-      }
-
-      if (_adults + _children > 0) {
-        results = results.where((p) => p.guests >= (_adults + _children)).toList();
-      }
-
-      _resultsCount = results.length;
-    });
+  @override
+  void dispose() {
+    _countDebounce?.cancel();
+    super.dispose();
   }
 
   @override
@@ -194,9 +204,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       children: [
         Text('Dates',
             style: AppTheme.dm(
-                size: 16,
-                weight: FontWeight.w700,
-                color: AppColors.navy)),
+                size: 16, weight: FontWeight.w700, color: AppColors.navy)),
         const SizedBox(height: 12),
         Row(
           children: [
@@ -229,7 +237,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         decoration: BoxDecoration(
             color: AppColors.cream,
             borderRadius: BorderRadius.circular(10),
-            border : null),
+            border: null),
         child: Row(
           children: [
             const Icon(Icons.calendar_today_outlined,
@@ -273,7 +281,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                 decoration: BoxDecoration(
                   color: isSelected ? AppColors.navy : AppColors.white,
                   borderRadius: BorderRadius.circular(20),
-                  border : null,
+                  border: null,
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
@@ -281,7 +289,8 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                             blurRadius: 8,
                             offset: const Offset(0, 4),
                           )
-                        ] : null,
+                        ]
+                      : null,
                 ),
                 child: Text(
                   type,
@@ -324,7 +333,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                     decoration: BoxDecoration(
                       color: isSelected ? AppColors.navy : AppColors.white,
                       borderRadius: BorderRadius.circular(10),
-                      border : null,
+                      border: null,
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
@@ -332,7 +341,8 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               )
-                            ] : null,
+                            ]
+                          : null,
                     ),
                     child: Center(
                       child: Text(
@@ -340,9 +350,8 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                         style: AppTheme.dm(
                             size: 13,
                             weight: FontWeight.w600,
-                            color: isSelected
-                                ? AppColors.white
-                                : AppColors.navy),
+                            color:
+                                isSelected ? AppColors.white : AppColors.navy),
                       ),
                     ),
                   ),
@@ -361,9 +370,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       children: [
         Text('Guests',
             style: AppTheme.dm(
-                size: 16,
-                weight: FontWeight.w700,
-                color: AppColors.navy)),
+                size: 16, weight: FontWeight.w700, color: AppColors.navy)),
         const SizedBox(height: 12),
         _buildGuestRow(
             label: 'Adults',
@@ -408,13 +415,9 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(label,
               style: AppTheme.dm(
-                  size: 14,
-                  weight: FontWeight.w600,
-                  color: AppColors.dark)),
+                  size: 14, weight: FontWeight.w600, color: AppColors.dark)),
           Text(subtitle,
-              style: AppTheme.dm(
-                  size: 12,
-                  color: AppColors.secondary)),
+              style: AppTheme.dm(size: 12, color: AppColors.secondary)),
         ]),
         Row(children: [
           _buildStepperButton(
@@ -422,9 +425,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
           const SizedBox(width: 16),
           Text('$count',
               style: AppTheme.dm(
-                  size: 16,
-                  weight: FontWeight.w700,
-                  color: AppColors.navy)),
+                  size: 16, weight: FontWeight.w700, color: AppColors.navy)),
           const SizedBox(width: 16),
           _buildStepperButton(icon: Icons.add, onTap: onAdd, isOutline: false),
         ]),
@@ -445,7 +446,8 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
             color: isOutline ? AppColors.white : AppColors.navy,
             shape: BoxShape.circle,
             border: isOutline
-                ? Border.all(color: AppColors.navy, width: 1.5) : null,
+                ? Border.all(color: AppColors.navy, width: 1.5)
+                : null,
             boxShadow: [
               BoxShadow(
                 color: AppColors.navy.withValues(alpha: 0.1),
@@ -466,9 +468,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         Row(children: [
           Text('Price Range',
               style: AppTheme.dm(
-                  size: 16,
-                  weight: FontWeight.w700,
-                  color: AppColors.navy)),
+                  size: 16, weight: FontWeight.w700, color: AppColors.navy)),
           const SizedBox(width: 8),
           Text(
               '${CurrencyFormatter.format(_currentRangeValues.start.round())} – ${CurrencyFormatter.format(_currentRangeValues.end.round())}',
@@ -513,15 +513,11 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         TextSpan(
             text: '$label ',
             style: AppTheme.dm(
-                size: 10,
-                weight: FontWeight.w500,
-                color: AppColors.secondary)),
+                size: 10, weight: FontWeight.w500, color: AppColors.secondary)),
         TextSpan(
             text: CurrencyFormatter.format(value),
             style: AppTheme.dm(
-                size: 12,
-                weight: FontWeight.w700,
-                color: AppColors.navy)),
+                size: 12, weight: FontWeight.w700, color: AppColors.navy)),
       ]),
     );
   }
@@ -532,15 +528,13 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       children: [
         Text('House Rules',
             style: AppTheme.dm(
-                size: 16,
-                weight: FontWeight.w700,
-                color: AppColors.navy)),
+                size: 16, weight: FontWeight.w700, color: AppColors.navy)),
         const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(12),
-              border : null),
+              border: null),
           child: Column(children: [
             _buildToggleRow(
                 icon: Icons.camera_alt_outlined,
@@ -586,8 +580,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         const SizedBox(width: 12),
         Expanded(
             child: Text(label,
-                style: AppTheme.dm(
-                    size: 14, color: AppColors.dark))),
+                style: AppTheme.dm(size: 14, color: AppColors.dark))),
         Switch(
             value: value,
             onChanged: onChanged,
@@ -605,9 +598,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
       children: [
         Text('Amenities',
             style: AppTheme.dm(
-                size: 16,
-                weight: FontWeight.w700,
-                color: AppColors.navy)),
+                size: 16, weight: FontWeight.w700, color: AppColors.navy)),
         const SizedBox(height: 12),
         Wrap(
             spacing: 8,
@@ -642,7 +633,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.navy : AppColors.white,
           borderRadius: BorderRadius.circular(20),
-          border : null,
+          border: null,
           boxShadow: isSelected
               ? [
                   BoxShadow(
@@ -650,12 +641,14 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   )
-                ] : null,
+                ]
+              : null,
         ),
-        child: Text(amenity, style: AppTheme.dm(
-              size: 13,
-              weight: FontWeight.w600,
-              color: isSelected ? AppColors.white : AppColors.navy)),
+        child: Text(amenity,
+            style: AppTheme.dm(
+                size: 13,
+                weight: FontWeight.w600,
+                color: isSelected ? AppColors.white : AppColors.navy)),
       ),
     );
   }
@@ -733,18 +726,7 @@ class _SearchFiltersSheetState extends State<SearchFiltersSheet> {
   }
 
   void _applyFilters() {
-    final filters = {
-      'propertyType': _selectedPropertyType,
-      'bedrooms': _selectedBedrooms,
-      'minPrice': _currentRangeValues.start,
-      'maxPrice': _currentRangeValues.end,
-      'amenities': _selectedAmenities.toList(),
-      'partyAllowed': _partyAllowed,
-      'petsAllowed': _petsAllowed,
-      'mixedGroupsOK': _mixedGroupsOK,
-      'adults': _adults,
-      'children': _children,
-    };
+    final filters = _currentFilters();
     Navigator.of(context).pop();
     widget.onApplyFilters(filters);
   }

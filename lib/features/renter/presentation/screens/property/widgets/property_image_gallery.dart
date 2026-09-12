@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
 import 'package:sahely/core/theme/app_colors.dart';
+import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
 
 import 'package:sahely/features/renter/presentation/screens/bookings/pages/gallery/photo_viewer_screen.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/heart_button.dart';
@@ -28,11 +30,26 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
   int _currentPage = 0;
   Timer? _autoSlideTimer;
 
-  final List<String> _images = [
-    'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
-    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
-    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800',
-  ];
+  /// The listing's own photos. Starts with the cover the previous screen
+  /// already showed, so the page never flashes empty, then becomes the full
+  /// set from `GET /properties/:id`.
+  List<String> _images = const [];
+
+  /// Fetches the photos the owner uploaded for this listing.
+  Future<void> _loadImages() async {
+    try {
+      final property = await sl<RenterRepository>().getProperty(
+        widget.propertyId,
+      );
+      if (!mounted || property.images.isEmpty) return;
+      setState(() {
+        _images = property.images;
+        if (_currentPage >= _images.length) _currentPage = 0;
+      });
+    } catch (_) {
+      // Keep the cover photo we already have.
+    }
+  }
 
   void _openGallery(int index) {
     Navigator.of(context, rootNavigator: true).push(
@@ -48,12 +65,14 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
   @override
   void initState() {
     super.initState();
+    _images = widget.propertyImage.isEmpty ? const [] : [widget.propertyImage];
+    _loadImages();
     _startAutoSlide();
   }
 
   void _startAutoSlide() {
     _autoSlideTimer = Timer.periodic(const Duration(seconds: 10), (_) {
-      if (!mounted) return;
+      if (!mounted || _images.length < 2) return;
       final next = (_currentPage + 1) % _images.length;
       _pageController.animateToPage(
         next,
@@ -78,19 +97,23 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
         child: Stack(
           children: [
             // Swipeable PageView
-            PageView.builder(
-              controller: _pageController,
-              itemCount: _images.length,
-              onPageChanged: (index) {
-                setState(() => _currentPage = index);
-              },
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () => _openGallery(index),
-                  child: AppNetworkImage(url: _images[index], width: double.infinity),
-                );
-              },
-            ),
+            if (_images.isEmpty)
+              Container(color: AppColors.cardWarm)
+            else
+              PageView.builder(
+                controller: _pageController,
+                itemCount: _images.length,
+                onPageChanged: (index) {
+                  setState(() => _currentPage = index);
+                },
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () => _openGallery(index),
+                    child: AppNetworkImage(
+                        url: _images[index], width: double.infinity),
+                  );
+                },
+              ),
 
             // Bottom Fade Gradient
             Positioned(
@@ -153,7 +176,8 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_images.length, (index) {
+                children: List.generate(_images.length < 2 ? 0 : _images.length,
+                    (index) {
                   final isActive = index == _currentPage;
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
@@ -176,4 +200,3 @@ class _PropertyImageGalleryState extends State<PropertyImageGallery> {
     );
   }
 }
-

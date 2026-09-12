@@ -5,5 +5,6 @@ class GetBrokerWalletUseCase {
   final BrokerRepository repository;
   GetBrokerWalletUseCase(this.repository);
 
-  Future<BrokerWallet> execute(int monthOffset) => repository.getBrokerWallet(monthOffset);
+  Future<BrokerWallet> execute(int monthOffset) =>
+      repository.getBrokerWallet(monthOffset);
 }

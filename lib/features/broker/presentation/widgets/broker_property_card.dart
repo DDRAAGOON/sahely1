@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/property_card_base.dart' as base;
@@ -63,7 +63,8 @@ class BrokerPropertyCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ) : null,
+            )
+          : null,
     );
   }
 }

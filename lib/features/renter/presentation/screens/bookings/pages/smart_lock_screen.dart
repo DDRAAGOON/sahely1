@@ -5,7 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/core/network/api_envelope.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/features/smart_lock/data/smart_lock_api_data_source.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/check_in_out_footer.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/get_directions_button.dart';
 import 'package:sahely/features/renter/presentation/screens/bookings/widgets/lock_icon_widget.dart';
@@ -18,7 +21,10 @@ import 'package:sahely/l10n/app_localizations.dart';
 class SmartLockScreen extends StatefulWidget {
   final String propertyName;
   final String bookingRef;
-  final String passcode;
+
+  /// The stay whose door PIN this is (`GET /bookings/:id/lock/pin`).
+  final String bookingId;
+
   final DateTime checkIn;
   final DateTime checkOut;
   final double propertyLat;
@@ -28,7 +34,7 @@ class SmartLockScreen extends StatefulWidget {
     super.key,
     required this.propertyName,
     required this.bookingRef,
-    required this.passcode,
+    this.bookingId = '',
     required this.checkIn,
     required this.checkOut,
     required this.propertyLat,
@@ -40,6 +46,8 @@ class SmartLockScreen extends StatefulWidget {
 }
 
 class _SmartLockScreenState extends State<SmartLockScreen> {
+  /// The door PIN, once the backend has issued it for this stay.
+  String _passcode = '';
   bool _isInRange = false;
   double _distance = 0.0;
   bool _isLoading = true;
@@ -51,6 +59,22 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
   void initState() {
     super.initState();
     _initLocation();
+    _loadPasscode();
+  }
+
+  /// The PIN is issued by the backend and only inside the check-in window;
+  /// outside it the display stays blank rather than showing a made-up code.
+  Future<void> _loadPasscode() async {
+    if (widget.bookingId.isEmpty) return;
+    try {
+      final lock = await sl<SmartLockApiDataSource>().bookingPin(
+        widget.bookingId,
+      );
+      final pin = '${pick(lock, 'pin') ?? pick(lock, 'passcode') ?? pick(lock, 'code') ?? ''}';
+      if (mounted && pin.isNotEmpty) setState(() => _passcode = pin);
+    } catch (_) {
+      // No PIN yet: the screen keeps its locked state.
+    }
   }
 
   @override
@@ -118,14 +142,14 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
   }
 
   Future<void> _copyPasscode() async {
-    await Clipboard.setData(ClipboardData(text: widget.passcode));
+    await Clipboard.setData(ClipboardData(text: _passcode));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context).passcodeCopied),
-              backgroundColor: const Color(0xFFC49F45),
-              duration: const Duration(seconds: 2),
-            ),
+        SnackBar(
+          content: Text(AppLocalizations.of(context).passcodeCopied),
+          backgroundColor: const Color(0xFFC49F45),
+          duration: const Duration(seconds: 2),
+        ),
       );
     }
   }
@@ -148,9 +172,12 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
 
   bool get _isPast => DateTime.now().isAfter(widget.checkOut);
 
+  /// Whether the backend gave us a location for this listing.
+  bool get _hasLocation => widget.propertyLat != 0 || widget.propertyLng != 0;
+
   @override
   Widget build(BuildContext context) {
-    final bool canUnlock = _isActive && _isInRange;
+    final bool canUnlock = _isActive && _isInRange && _passcode.isNotEmpty;
     final bool isExpired = _isPast;
 
     return Container(
@@ -203,7 +230,9 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
                       ),
                       const SizedBox(height: 40),
                       PasscodeDisplay(
-                        passcode: isExpired ? '----' : widget.passcode,
+                        passcode: isExpired || _passcode.isEmpty
+                            ? '----'
+                            : _passcode,
                         isInRange: canUnlock,
                         onCopyTap: isExpired ? null : _copyPasscode,
                       ),
@@ -226,7 +255,9 @@ class _SmartLockScreenState extends State<SmartLockScreen> {
                       const SizedBox(height: 24),
                       if (!isExpired) LockInfoText(isInRange: canUnlock),
                       const SizedBox(height: 40),
-                      if (!canUnlock && !isExpired)
+                      // Directions need the listing's coordinates; without
+                      // them there is nowhere to send the guest.
+                      if (!canUnlock && !isExpired && _hasLocation)
                         GetDirectionsButton(onTap: _getDirections),
                       const SizedBox(height: 48),
                       CheckInOutFooter(

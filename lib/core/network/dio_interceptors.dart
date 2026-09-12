@@ -1,7 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:sahely/core/auth/auth_token_keys.dart';
+import 'package:sahely/core/network/public_endpoints.dart';
+
+/// Injects `Authorization: Bearer <accessToken>` into requests to protected
+/// endpoints.
+///
+/// [PublicEndpoints] (login, registration, OTP, refresh, KYC) go out without
+/// the header: a leftover token from an earlier session has no business on a
+/// login or registration call.
 class AuthInterceptor extends Interceptor {
   final FlutterSecureStorage _storage;
 
@@ -9,51 +17,26 @@ class AuthInterceptor extends Interceptor {
       : _storage = storage ?? const FlutterSecureStorage();
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await _storage.read(key: 'auth_token');
-
-    if (token != null && token.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $token';
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    // A retried request already carries the freshly refreshed token.
+    if (options.headers.containsKey('Authorization') ||
+        PublicEndpoints.isPublic(options.path)) {
+      return handler.next(options);
     }
 
-    super.onRequest(options, handler);
-  }
-}
-
-class LoggingInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (kDebugMode) {
-      debugPrint('--> ${options.method.toUpperCase()} ${options.baseUrl}${options.path}');
-      debugPrint('Headers: ${options.headers}');
-      debugPrint('Query Parameters: ${options.queryParameters}');
-      if (options.data != null) {
-        debugPrint('Body: ${options.data}');
+    try {
+      final token = await _storage.read(key: AuthTokenKeys.accessToken);
+      if (token != null && token.isNotEmpty) {
+        options.headers['Authorization'] = 'Bearer $token';
       }
-      debugPrint('--> END ${options.method.toUpperCase()}');
+    } catch (_) {
+      // Storage unavailable (e.g. locked keystore) - continue unauthenticated
+      // and let the backend answer with 401.
     }
-    super.onRequest(options, handler);
-  }
 
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    if (kDebugMode) {
-      debugPrint('<-- ${response.statusCode} ${response.requestOptions.baseUrl}${response.requestOptions.path}');
-      debugPrint('Headers: ${response.headers}');
-      debugPrint('Response: ${response.data}');
-      debugPrint('<-- END HTTP');
-    }
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (kDebugMode) {
-      debugPrint('<-- ERROR ${err.response?.statusCode} ${err.requestOptions.baseUrl}${err.requestOptions.path}');
-      debugPrint('Message: ${err.message}');
-      debugPrint('Error Data: ${err.response?.data}');
-      debugPrint('<-- END ERROR');
-    }
-    super.onError(err, handler);
+    handler.next(options);
   }
 }

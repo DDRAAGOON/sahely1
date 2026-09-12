@@ -36,10 +36,11 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
           const SizedBox(height: 12),
           Text(
             'Add Credit',
-            style: AppTheme.dm(size: 20, weight: FontWeight.w700, color: AppColors.navy),
+            style: AppTheme.dm(
+                size: 20, weight: FontWeight.w700, color: AppColors.navy),
           ),
           const SizedBox(height: 24),
-          
+
           // Amount Input
           _buildSectionTitle('Amount to add'),
           const SizedBox(height: 12),
@@ -53,7 +54,8 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
             child: TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
-              style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy),
+              style: AppTheme.dm(
+                  size: 18, weight: FontWeight.w700, color: AppColors.navy),
               decoration: const InputDecoration(
                 hintText: '0.00',
                 prefixText: 'EGP ',
@@ -88,7 +90,8 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
       alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.muted),
+        style: AppTheme.dm(
+            size: 14, weight: FontWeight.w600, color: AppColors.muted),
       ),
     );
   }
@@ -108,7 +111,8 @@ class _AddCreditSheetState extends State<AddCreditSheet> {
           Expanded(
             child: Text(
               _selectedMethod,
-              style: AppTheme.dm(size: 14, weight: FontWeight.w600, color: AppColors.navy),
+              style: AppTheme.dm(
+                  size: 14, weight: FontWeight.w600, color: AppColors.navy),
             ),
           ),
           const Icon(Icons.keyboard_arrow_down, color: AppColors.muted),

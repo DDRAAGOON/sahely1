@@ -7,8 +7,10 @@ import 'package:sahely/features/shared/properties/domain/use_cases/filter_proper
 import 'package:sahely/features/shared/properties/domain/use_cases/sort_properties_use_case.dart';
 
 import 'package:sahely/features/renter/presentation/bloc/renter_home_state.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
-class RenterHomeCubit extends Cubit<RenterHomeState> {
+class RenterHomeCubit extends Cubit<RenterHomeState>
+    with SafeEmit<RenterHomeState> {
   final GetPropertiesUseCase _getPropertiesUseCase;
   final GetTrendingPropertiesUseCase _getTrendingPropertiesUseCase;
   final SearchPropertiesUseCase _searchPropertiesUseCase;
@@ -34,8 +36,10 @@ class RenterHomeCubit extends Cubit<RenterHomeState> {
     }
   }
 
-  List<Property> getTrending(List<Property> properties, {String category = 'All'}) {
-    return _getTrendingPropertiesUseCase.execute(properties, category: category);
+  List<Property> getTrending(List<Property> properties,
+      {String category = 'All'}) {
+    return _getTrendingPropertiesUseCase.execute(properties,
+        category: category);
   }
 
   List<Property> search(List<Property> properties, String query) {

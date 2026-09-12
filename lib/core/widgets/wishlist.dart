@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/data/role_state.dart';
 import 'package:sahely/features/shared/properties/domain/entities/property.dart';
-
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/bloc/wishlist_cubit.dart';
 import 'package:sahely/features/renter/presentation/screens/wishlist/presentation/widgets/add_to_collection_sheet.dart';
-import 'package:sahely/features/renter/domain/constants/wishlist_constants.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/widgets/bouncy_button.dart';
 
@@ -20,7 +18,7 @@ class SaveHeart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final role = RoleState().currentRole;
-    
+
     return BlocBuilder<WishlistCubit, WishlistState>(
       builder: (context, state) {
         // Rely ONLY on state.items — always up to date after toggle/load

@@ -1,19 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:sahely/features/shared/properties/domain/entities/property.dart';
 
+import 'package:sahely/core/di/service_locator.dart' show sl;
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+import 'package:sahely/features/shared/reviews/domain/models/review.dart';
+import 'package:sahely/features/shared/reviews/domain/repositories/review_repository.dart';
 
-class PropertyReviewsScreen extends StatelessWidget {
+/// Every review of one listing (`GET /reviews?propertyId=`).
+class PropertyReviewsScreen extends StatefulWidget {
   final Property? property;
 
   const PropertyReviewsScreen({super.key, this.property});
 
   @override
+  State<PropertyReviewsScreen> createState() => _PropertyReviewsScreenState();
+}
+
+class _PropertyReviewsScreenState extends State<PropertyReviewsScreen> {
+  late Future<List<Review>> _reviews = _load();
+
+  Future<List<Review>> _load() {
+    final id = widget.property?.id ?? '';
+    if (id.isEmpty) return Future.value(const <Review>[]);
+    return sl<ReviewRepository>().getPropertyReviews(id);
+  }
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  static (String, BadgeKind) _role(String role) => switch (role.toLowerCase()) {
+        'broker' => ('Broker', BadgeKind.gold),
+        'owner' => ('Owner', BadgeKind.navy),
+        _ => ('Renter', BadgeKind.renterLight),
+      };
+
+  @override
   Widget build(BuildContext context) {
-    final pName = property?.name ?? 'Azure Beach Villa';
-    final pRating = property?.rating ?? 4.8;
+    final property = widget.property;
+    final hasRating = property != null && property.reviews > 0;
 
     return PhoneScaffold(
       child: Column(
@@ -22,12 +60,12 @@ class PropertyReviewsScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
             child: TopBar(
               title: 'Reviews',
-              subtitle: pName,
+              subtitle: property?.name ?? '',
               trailing: Row(
                 children: [
                   const Icon(Icons.star, size: 14, color: AppColors.gold),
                   const SizedBox(width: 4),
-                  Text('$pRating',
+                  Text(hasRating ? property.rating.toStringAsFixed(1) : '—',
                       style: AppTheme.dm(
                           size: 14,
                           weight: FontWeight.w700,
@@ -37,52 +75,46 @@ class PropertyReviewsScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
-              children: [
-                _fullReview(
-                    'Nour A.',
-                    'Renter',
-                    BadgeKind.renterLight,
-                    5,
-                    'Jun 2026',
-                    'Absolutely stunning. The pool and sea views were unreal, and check-in via the smart lock was seamless. Highly recommend for families.'),
-                const SizedBox(height: 12),
-                _fullReview(
-                    'Omar K.',
-                    'Renter',
-                    BadgeKind.renterLight,
-                    5,
-                    'May 2026',
-                    'Spotless, exactly as pictured. Host was responsive and the location is unbeatable. Will book again next season.'),
-                const SizedBox(height: 12),
-                _fullReview('Sara M.', 'Broker', BadgeKind.gold, 4, 'May 2026',
-                    'Great property for clients. Beautiful finish; only note is the beach can get busy on weekends, so arrive early.'),
-                const SizedBox(height: 12),
-                _fullReview(
-                    'Hana T.',
-                    'Renter',
-                    BadgeKind.renterLight,
-                    5,
-                    'Apr 2026',
-                    'The best stay I had in Sahel. The villa is modern and very clean. The private pool is a huge plus.'),
-                const SizedBox(height: 12),
-                _fullReview(
-                    'Tarek S.',
-                    'Renter',
-                    BadgeKind.renterLight,
-                    4,
-                    'Mar 2026',
-                    'Very nice place and great location. The smart lock made it very easy to check in and out.'),
-                const SizedBox(height: 12),
-                _fullReview(
-                    'Layla M.',
-                    'Renter',
-                    BadgeKind.renterLight,
-                    5,
-                    'Feb 2026',
-                    'Beautiful villa with amazing views. Everything was perfect.'),
-              ],
+            child: FutureBuilder<List<Review>>(
+              future: _reviews,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return const Center(
+                      child: CircularProgressIndicator(color: AppColors.gold));
+                }
+                if (snapshot.hasError) {
+                  return Center(
+                    child: TextButton(
+                      onPressed: () => setState(() => _reviews = _load()),
+                      child: Text('Could not load reviews. Tap to retry.',
+                          style: AppTheme.dm(size: 14, color: AppColors.muted)),
+                    ),
+                  );
+                }
+                final reviews = snapshot.data ?? const <Review>[];
+                if (reviews.isEmpty) {
+                  return Center(
+                    child: Text('No reviews yet.',
+                        style: AppTheme.dm(size: 14, color: AppColors.muted)),
+                  );
+                }
+                return ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
+                  itemCount: reviews.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final r = reviews[index];
+                    final (role, kind) = _role(r.userRole);
+                    return _fullReview(
+                        r.userName,
+                        role,
+                        kind,
+                        r.rating.round(),
+                        '${_months[r.createdAt.month - 1]} ${r.createdAt.year}',
+                        r.comment);
+                  },
+                );
+              },
             ),
           ),
         ],
@@ -115,11 +147,15 @@ class PropertyReviewsScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(name,
-                            style: AppTheme.dm(
-                                size: 14,
-                                weight: FontWeight.w700,
-                                color: AppColors.navy)),
+                        Flexible(
+                          child: Text(name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTheme.dm(
+                                  size: 14,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy)),
+                        ),
                         const SizedBox(width: 8),
                         StatusBadge(role, kind: kind),
                       ],

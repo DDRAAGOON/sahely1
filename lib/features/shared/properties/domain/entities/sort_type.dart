@@ -1,7 +1,1 @@
-enum SortType {
-  ratingHighToLow,
-  priceLowToHigh,
-  priceHighToLow,
-  newest,
-  none
-}
+enum SortType { ratingHighToLow, priceLowToHigh, priceHighToLow, newest, none }

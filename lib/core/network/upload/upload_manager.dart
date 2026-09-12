@@ -8,16 +8,19 @@ class UploadManager {
   final Map<String, UploadTask> _tasks = {};
   final List<String> _queue = [];
   final UploadPolicy _policy;
-  
+
   int _activeUploads = 0;
 
-  final _globalStateController = StreamController<Map<String, UploadState>>.broadcast();
+  final _globalStateController =
+      StreamController<Map<String, UploadState>>.broadcast();
 
-  UploadManager({UploadPolicy policy = UploadPolicy.defaultPolicy}) : _policy = policy;
+  UploadManager({UploadPolicy policy = UploadPolicy.defaultPolicy})
+      : _policy = policy;
 
-  Stream<Map<String, UploadState>> get globalStateStream => _globalStateController.stream;
-  
-  Map<String, UploadState> get currentStates => 
+  Stream<Map<String, UploadState>> get globalStateStream =>
+      _globalStateController.stream;
+
+  Map<String, UploadState> get currentStates =>
       _tasks.map((key, task) => MapEntry(key, task.state));
 
   void addTask(UploadTask task) {
@@ -25,7 +28,7 @@ class UploadManager {
 
     _tasks[task.id] = task;
     _queue.add(task.id);
-    
+
     task.stateStream.listen((state) {
       _notifyGlobal();
       if (state.status.isFinished) {

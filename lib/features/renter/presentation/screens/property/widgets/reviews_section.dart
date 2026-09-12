@@ -1,21 +1,84 @@
 import 'package:flutter/material.dart';
+
+import 'package:sahely/core/di/service_locator.dart' show sl;
 import 'package:sahely/core/navigation/app_navigation.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/features/shared/reviews/domain/models/review.dart';
+import 'package:sahely/features/shared/reviews/domain/repositories/review_repository.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 
-class ReviewsSection extends StatelessWidget {
+/// The first reviews of a listing on its page (`GET /reviews?propertyId=`).
+class ReviewsSection extends StatefulWidget {
+  final String propertyId;
+  final String propertyName;
   final double rating;
   final int reviewCount;
 
   const ReviewsSection({
     super.key,
+    this.propertyId = '',
+    this.propertyName = '',
     required this.rating,
     required this.reviewCount,
   });
 
   @override
+  State<ReviewsSection> createState() => _ReviewsSectionState();
+}
+
+class _ReviewsSectionState extends State<ReviewsSection> {
+  List<Review> _reviews = const [];
+  bool _loaded = false;
+
+  static const _avatarColors = [Colors.blue, Color(0xFFC9A84C)];
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    var reviews = const <Review>[];
+    if (widget.propertyId.isNotEmpty) {
+      try {
+        reviews =
+            await sl<ReviewRepository>().getPropertyReviews(widget.propertyId);
+      } catch (_) {}
+    }
+    if (mounted) {
+      setState(() {
+        _reviews = reviews;
+        _loaded = true;
+      });
+    }
+  }
+
+  static String _role(String role) => switch (role.toLowerCase()) {
+        'broker' => 'Broker',
+        'owner' => 'Owner',
+        _ => 'Renter',
+      };
+
+  @override
   Widget build(BuildContext context) {
+    final recent = _reviews.take(3).toList();
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -40,7 +103,9 @@ class ReviewsSection extends StatelessWidget {
                     const Icon(Icons.star, size: 16, color: AppColors.gold),
                     const SizedBox(width: 4),
                     Text(
-                      '$rating',
+                      widget.reviewCount == 0
+                          ? '—'
+                          : widget.rating.toStringAsFixed(1),
                       style: AppTheme.dm(
                         size: 14,
                         weight: FontWeight.w600,
@@ -48,7 +113,7 @@ class ReviewsSection extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '· $reviewCount',
+                      '· ${widget.reviewCount}',
                       style: AppTheme.dm(
                         size: 14,
                         color: AppColors.secondary,
@@ -58,9 +123,14 @@ class ReviewsSection extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    AppNavigation.goToPropertyReviews(context);
+                    AppNavigation.goToPropertyReviews(context, extra: {
+                      'id': widget.propertyId,
+                      'name': widget.propertyName,
+                      'rating': widget.rating,
+                      'reviewCount': widget.reviewCount,
+                    });
                   },
-                child: Text(
+                  child: Text(
                     AppLocalizations.of(context).seeAll,
                     style: AppTheme.dm(
                       size: 13,
@@ -73,33 +143,21 @@ class ReviewsSection extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Review Cards
-            _buildReviewCard(
-              'Nour A.',
-              'Renter',
-              5,
-              'Jun 2026',
-              'Absolutely stunning. The pool and sea views were unreal, and check-in via the smart lock was seamless.',
-              Colors.blue,
-            ),
-            const SizedBox(height: 12),
-            _buildReviewCard(
-              'Omar K.',
-              'Renter',
-              5,
-              'May 2026',
-              'Spotless, exactly as pictured. Host was responsive and the location is unbeatable. Will book again.',
-              const Color(0xFFC9A84C),
-            ),
-            const SizedBox(height: 12),
-            _buildReviewCard(
-              'Sara M.',
-              'Broker',
-              5,
-              'May 2026',
-              'Great property for clients. Beautiful finish; only note is the beach can get busy on weekends.',
-              const Color(0xFFC9A84C),
-            ),
+            // Review cards
+            if (_loaded && recent.isEmpty)
+              Text('No reviews yet.',
+                  style: AppTheme.dm(size: 13, color: AppColors.muted)),
+            for (var i = 0; i < recent.length; i++) ...[
+              if (i > 0) const SizedBox(height: 12),
+              _buildReviewCard(
+                recent[i].userName,
+                _role(recent[i].userRole),
+                recent[i].rating.round().clamp(0, 5),
+                '${_months[recent[i].createdAt.month - 1]} ${recent[i].createdAt.year}',
+                recent[i].comment,
+                _avatarColors[i % 2],
+              ),
+            ],
 
             const SizedBox(height: 16),
           ],
@@ -143,12 +201,16 @@ class ReviewsSection extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          name,
-                          style: AppTheme.dm(
-                            size: 14,
-                            weight: FontWeight.w600,
-                            color: AppColors.dark,
+                        Flexible(
+                          child: Text(
+                            name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTheme.dm(
+                              size: 14,
+                              weight: FontWeight.w600,
+                              color: AppColors.dark,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),

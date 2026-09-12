@@ -56,8 +56,8 @@ class _OwnerShellState extends State<OwnerShell> {
           );
           return;
         }
-        
-        SystemNavigator.pop(); 
+
+        SystemNavigator.pop();
       },
       child: Scaffold(
         backgroundColor: AppColors.cream,
@@ -80,4 +80,3 @@ class _OwnerShellState extends State<OwnerShell> {
     );
   }
 }
-

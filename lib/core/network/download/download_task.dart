@@ -48,7 +48,8 @@ class DownloadTask {
     if (_state.status.isDownloading || _state.status.isSuccess) return;
 
     _cancellationToken = DownloadCancellationToken();
-    _updateState(_state.copyWith(status: DownloadStatus.downloading, failure: null));
+    _updateState(
+        _state.copyWith(status: DownloadStatus.downloading, failure: null));
 
     try {
       await downloader(

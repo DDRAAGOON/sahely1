@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sahely/core/navigation/app_navigation.dart';
+import 'package:sahely/core/providers/profile_provider.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -7,101 +8,144 @@ import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/features/owner/widgets/pending_request_card.dart';
 
 import '../../../core/navigation/app_routes.dart';
-import '../../../data/sample_data.dart';
-import '../../shared/properties/domain/entities/property.dart';
 import 'package:sahely/l10n/app_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sahely/features/owner/domain/entities/owner_dashboard.dart';
+import 'package:sahely/features/owner/presentation/bloc/owner_home_cubit.dart';
+import 'package:sahely/features/owner/presentation/bloc/owner_home_state.dart';
 
-class OwnerManageScreen extends StatelessWidget {
+class OwnerManageScreen extends StatefulWidget {
   const OwnerManageScreen({super.key});
 
   @override
+  State<OwnerManageScreen> createState() => _OwnerManageScreenState();
+}
+
+class _OwnerManageScreenState extends State<OwnerManageScreen> {
+  /// Bumped on refresh so the pending-request card reloads with the rest.
+  int _tick = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<ProfileProvider>().fetchProfileData();
+    });
+  }
+
+  /// Pull to refresh: the dashboard counters and the account itself.
+  Future<void> _refresh() async {
+    await Future.wait([
+      context.read<OwnerHomeCubit>().loadDashboard(),
+      context.read<ProfileProvider>().fetchProfileData(force: true),
+    ]);
+    if (mounted) setState(() => _tick++);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final profile = context.watch<ProfileProvider>();
     return PhoneScaffold(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
-        children: [
-          Row(children: [
-            GestureDetector(
-              onTap: () {
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context);
-                } else {
-                  // Navigate back to the Manage Tab (Profile Screen) in the shell
-                  AppNavigation.safeGo(context, AppRoutes.ownerProfile);
-                }
-              },
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                width: 34,
-                height: 34,
-                margin: const EdgeInsets.only(right: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  border: Border.all(color: AppColors.border),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.chevron_left,
-                    size: 20, color: AppColors.navy),
-              ),
-            ),
-            const AvatarCircle(
-                size: 52, colors: [Color(0xFFD8B98A), Color(0xFF7D5A2C)]),
-            const SizedBox(width: 12),
-            Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Text('Manage',
-                      style: AppTheme.dm(
-                          size: 22,
-                          weight: FontWeight.w700,
-                          color: AppColors.navy)),
-                  Text('Layla Mansour',
-                      style: AppTheme.dm(size: 13, color: AppColors.muted)),
-                ])),
-            GestureDetector(
-              onTap: () => AppNavigation.goToOwnerAddProperty(context),
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                  width: 40,
-                  height: 40,
+      child: RefreshIndicator(
+        onRefresh: _refresh,
+        color: AppColors.gold,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 100),
+          children: [
+            Row(children: [
+              GestureDetector(
+                onTap: () {
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  } else {
+                    // Navigate back to the Manage Tab (Profile Screen) in the shell
+                    AppNavigation.safeGo(context, AppRoutes.ownerProfile);
+                  }
+                },
+                behavior: HitTestBehavior.opaque,
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  margin: const EdgeInsets.only(right: 12),
                   decoration: BoxDecoration(
-                      color: AppColors.gold,
-                      borderRadius: BorderRadius.circular(12)),
-                  child: const Icon(Icons.add, color: AppColors.navy)),
-            ),
-          ]),
-            const SizedBox(height: 12),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                    color: const Color(0xFFD7EEDD),
-                    borderRadius: BorderRadius.circular(8)),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(Icons.verified_user_outlined,
-                      size: 14, color: AppColors.success),
-                  const SizedBox(width: 6),
-                  Text(AppLocalizations.of(context).establishedHost,
-                      style: AppTheme.dm(
-                          size: 11,
-                          weight: FontWeight.w700,
-                          color: AppColors.success)),
-                ]),
+                    color: AppColors.white,
+                    border: Border.all(color: AppColors.border),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.chevron_left,
+                      size: 20, color: AppColors.navy),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            StatRow(cards: [
-              StatCard(
-                value: '${Sample.ownerProperties.where((p) => p.status == PropertyStatus.active).length}',
-                label: AppLocalizations.of(context).statProperties,
-                onTap: () => AppNavigation.goToOwnerProperties(context, filter: 'Active'),
+              const AvatarCircle(
+                  size: 52, colors: [Color(0xFFD8B98A), Color(0xFF7D5A2C)]),
+              const SizedBox(width: 12),
+              Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    Text('Manage',
+                        style: AppTheme.dm(
+                            size: 22,
+                            weight: FontWeight.w700,
+                            color: AppColors.navy)),
+                    Text(profile.name,
+                        style: AppTheme.dm(size: 13, color: AppColors.muted)),
+                  ])),
+              GestureDetector(
+                onTap: () => AppNavigation.goToOwnerAddProperty(context),
+                behavior: HitTestBehavior.opaque,
+                child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: AppColors.gold,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: const Icon(Icons.add, color: AppColors.navy)),
               ),
-              StatCard(value: '7', label: AppLocalizations.of(context).statActiveBookings),
-              StatCard(value: '68.4k', label: AppLocalizations.of(context).statEgpMonth),
             ]),
+            const SizedBox(height: 12),
+            // Shown only once the identity check has passed.
+            if (profile.identityVerified) ...[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFD7EEDD),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Row(mainAxisSize: MainAxisSize.min, children: [
+                    const Icon(Icons.verified_user_outlined,
+                        size: 14, color: AppColors.success),
+                    const SizedBox(width: 6),
+                    Text(AppLocalizations.of(context).establishedHost,
+                        style: AppTheme.dm(
+                            size: 11,
+                            weight: FontWeight.w700,
+                            color: AppColors.success)),
+                  ]),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            _withDashboard((dashboard) => StatRow(cards: [
+                  StatCard(
+                    value: dashboard == null
+                        ? '—'
+                        : '${dashboard.activePropertiesCount}',
+                    label: AppLocalizations.of(context).statProperties,
+                    onTap: () => AppNavigation.goToOwnerProperties(context,
+                        filter: 'Active'),
+                  ),
+                  StatCard(
+                      value: dashboard == null
+                          ? '—'
+                          : '${dashboard.bookingsCount}',
+                      label: AppLocalizations.of(context).statActiveBookings),
+                  StatCard(
+                      value: dashboard?.monthlyEarnings ?? '—',
+                      label: AppLocalizations.of(context).statEgpMonth),
+                ])),
             const SizedBox(height: 14),
             Row(children: [
               Expanded(
@@ -116,7 +160,6 @@ class OwnerManageScreen extends StatelessWidget {
                       AppColors.navy,
                       AppColors.gold,
                       '/owner/bookings',
-                      badge: '2',
                       useGo: true)),
               const SizedBox(width: 10),
               Expanded(
@@ -153,10 +196,10 @@ class OwnerManageScreen extends StatelessWidget {
                                   size: 14,
                                   weight: FontWeight.w700,
                                   color: AppColors.navy)),
-                          Text(
-                              '${Sample.ownerProperties.where((p) => p.status == PropertyStatus.active).length} active · tap for insights',
+                          _withDashboard((dashboard) => Text(
+                              '${dashboard?.activePropertiesCount ?? '—'} active · tap for insights',
                               style: AppTheme.dm(
-                                  size: 12, color: AppColors.muted)),
+                                  size: 12, color: AppColors.muted))),
                         ])),
                     const Icon(Icons.chevron_right, color: AppColors.faint),
                   ])),
@@ -186,10 +229,24 @@ class OwnerManageScreen extends StatelessWidget {
                           color: AppColors.gold))),
             ]),
             const SizedBox(height: 12),
-            PendingRequestCard(
-                onTap: () => AppNavigation.goToOwnerRequestDetail(context)),
+            PendingRequestCard(key: ValueKey(_tick)),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Builds [child] from the owner dashboard (`OwnerHomeCubit`, shared with
+  /// the Home tab); the value is null until the dashboard has loaded.
+  Widget _withDashboard(Widget Function(OwnerDashboard? dashboard) child) {
+    return BlocBuilder<OwnerHomeCubit, OwnerHomeState>(
+      builder: (context, state) {
+        if (state is OwnerHomeInitial) {
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => context.read<OwnerHomeCubit>().loadDashboard());
+        }
+        return child(state is OwnerHomeLoaded ? state.dashboard : null);
+      },
     );
   }
 
@@ -247,7 +304,7 @@ class OwnerManageScreen extends StatelessWidget {
         decoration: BoxDecoration(
             gradient: LinearGradient(colors: colors),
             borderRadius: BorderRadius.circular(14),
-            border : null),
+            border: null),
         child: Row(children: [
           Container(
               width: 38,

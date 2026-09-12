@@ -5,9 +5,9 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/image.dart';
+import 'package:sahely/features/shared/chat/data/chatbot_session.dart';
 
 class OwnerAiChatScreen extends StatefulWidget {
   const OwnerAiChatScreen({super.key});
@@ -21,11 +21,12 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
     {
       'role': 'ai',
       'text':
-          'Hi Layla 👋 I can help with your listings, pricing, guest requests, payouts and house rules. What do you need?'
+          'Hi 👋 I can help with your listings, pricing, guest requests, payouts and house rules. What do you need?'
     },
   ];
   final TextEditingController _controller = TextEditingController();
   bool _isTyping = false;
+  late final ChatbotSession _assistant = ChatbotSession();
 
   void _send(String text) async {
     if (text.trim().isEmpty) return;
@@ -35,23 +36,16 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
     });
     _controller.clear();
 
-    await Future.delayed(const Duration(seconds: 1));
-
-    String response = "I'm analyzing your request...";
-    bool showAction = false;
-
-    if (text.toLowerCase().contains('price')) {
-      response =
-          "For Hacienda Bay villas your size, August peak runs ${CurrencyFormatter.defaultSymbol} 5,200–5,800/night. Azure is at 4,500 — raising to 5,400 could add ~${CurrencyFormatter.format(16000)}/month at your current occupancy. Want me to update it?";
-      showAction = true;
-    } else if (text.toLowerCase().contains('pending')) {
-      response =
-          "Your listing 'Summer Retreat' is pending because we're verifying the owner ID. This usually takes 24-48 hours.";
+    String reply;
+    try {
+      reply = await _assistant.ask(text) ?? ChatbotSession.pendingNotice;
+    } catch (_) {
+      reply = 'The assistant is unavailable right now. Please try again.';
     }
-
+    if (!mounted) return;
     setState(() {
       _isTyping = false;
-      _messages.add({'role': 'ai', 'text': response, 'action': showAction});
+      _messages.add({'role': 'ai', 'text': reply, 'action': false});
     });
   }
 
@@ -210,61 +204,54 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
     Navigator.pop(ctx);
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
-    if (pickedFile != null) {
-      setState(() {
-        _messages
-            .add({'role': 'user', 'text': '', 'local_image': pickedFile.path});
-        _isTyping = true;
-      });
-      Future.delayed(const Duration(seconds: 1), () {
-        setState(() {
-          _isTyping = false;
-          _messages.add({
-            'role': 'ai',
-            'text': 'I see you uploaded a photo. How can I help you with it?',
-            'action': false
-          });
-        });
-      });
-    }
+    if (pickedFile == null || !mounted) return;
+    // The assistant only takes text; nothing is sent for the photo.
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Photos can't be sent to the assistant yet. "
+            'Describe it in a message instead.')));
   }
 
   void _pickImage() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       useRootNavigator: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        decoration: const BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                    color: AppColors.border,
-                    borderRadius: BorderRadius.circular(2))),
-            const SizedBox(height: 24),
-            Text('Upload Photo',
-                style: AppTheme.dm(
-                    size: 17, weight: FontWeight.w700, color: AppColors.navy)),
-            const SizedBox(height: 24),
-            WideButton(
-              label: 'Choose from Gallery',
-              onTap: () => _pickImageSource(ImageSource.gallery, ctx),
-            ),
-            const SizedBox(height: 12),
-            WideButton(
-              label: 'Take a Photo',
-              outline: true,
-              color: AppColors.navy,
-              onTap: () => _pickImageSource(ImageSource.camera, ctx),
-            ),
-          ],
+      builder: (ctx) => SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(2))),
+              const SizedBox(height: 24),
+              Text('Upload Photo',
+                  style: AppTheme.dm(
+                      size: 17,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
+              const SizedBox(height: 24),
+              WideButton(
+                label: 'Choose from Gallery',
+                onTap: () => _pickImageSource(ImageSource.gallery, ctx),
+              ),
+              const SizedBox(height: 12),
+              WideButton(
+                label: 'Take a Photo',
+                outline: true,
+                color: AppColors.navy,
+                onTap: () => _pickImageSource(ImageSource.camera, ctx),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -344,8 +331,7 @@ class _OwnerAiChatScreenState extends State<OwnerAiChatScreen> {
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-              border : null,
-              borderRadius: BorderRadius.circular(18)),
+              border: null, borderRadius: BorderRadius.circular(18)),
           child: Text(t,
               style: AppTheme.dm(size: 12, color: const Color(0xFF9A7A22)))));
 

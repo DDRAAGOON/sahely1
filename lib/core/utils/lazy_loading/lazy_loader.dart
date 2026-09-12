@@ -25,9 +25,9 @@ class LazyLoader<T> {
   LazyLoadController<T> get controller => _controller;
 
   Future<T?> refresh() => _controller.load(forceRefresh: true);
-  
+
   void cancel() => _controller.cancel();
-  
+
   void reset() => _controller.reset();
 
   void dispose() => _controller.dispose();

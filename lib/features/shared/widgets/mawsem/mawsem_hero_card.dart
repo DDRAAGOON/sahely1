@@ -1,8 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 
 import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
-import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
+import 'package:sahely/features/shared/widgets/mawsem/mawsem_scene_background.dart';
 
 /// Hero card for AL MAWSEM dashboard.
 /// Displays current level, stars, and progress to next tier.
@@ -14,7 +14,12 @@ class MawsemHeroCard extends StatelessWidget {
   final String nextLevelName;
   final int nextLevelThreshold;
   final int starsToNext;
-  final int seasonEndDays;
+
+  /// Days left in the running season, or null when no season is running.
+  final int? seasonEndDays;
+
+  /// The season name the backend reports, if any.
+  final String seasonName;
 
   const MawsemHeroCard({
     super.key,
@@ -25,9 +30,13 @@ class MawsemHeroCard extends StatelessWidget {
     required this.nextLevelName,
     required this.nextLevelThreshold,
     required this.starsToNext,
-    required this.seasonEndDays,
+    this.seasonEndDays,
+    this.seasonName = '',
   });
 
+  /// The next level, with no perk list: `GET /mawsem/perks` only answers for
+  /// the level the account is on, so the perks of a level above it are not
+  /// known to the app.
   void _showNextLevelDetail(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -35,16 +44,11 @@ class MawsemHeroCard extends StatelessWidget {
       isScrollControlled: true,
       builder: (context) => LevelDetailSheet(
         levelName: nextLevelName,
-        levelIcon: Icons.home_outlined,
+        levelIcon: Icons.star_outline,
         levelColor: const Color(0xFFBC9B43),
         starsRequired: nextLevelThreshold,
         currentStars: currentStars,
-        seasonPerks: const [
-          LevelPerk(title: 'Complimentary welcome basket'),
-          LevelPerk(title: '200 EGP credit on next booking'),
-          LevelPerk(title: 'Free early access to new units'),
-        ],
-        unlockReward: 'Gift: Local Artisan Soap Set',
+        seasonPerks: const [],
         onClose: () => Navigator.pop(context),
       ),
     );
@@ -69,25 +73,7 @@ class MawsemHeroCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          // Background Glow Circle
-          Positioned(
-            top: -100,
-            right: -80,
-            child: Container(
-              width: 350,
-              height: 350,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AppColors.gold.withValues(alpha: 0.18),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-            ),
-          ),
-
+          const Positioned.fill(child: MawsemSceneBackground()),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
@@ -97,33 +83,46 @@ class MawsemHeroCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'AL MAWSEM',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.gold,
-                        fontFamily: 'DM Sans',
-                        letterSpacing: 2,
-                      ),
+                    const Flexible(
+                      child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(
+                            'AL MAWSEM',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.gold,
+                              fontFamily: 'DM Sans',
+                              letterSpacing: 2,
+                            ),
+                          )),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: AppColors.mawsemDark,
-                        borderRadius: BorderRadius.circular(10),
+                    const SizedBox(width: 8),
+                    // The season badge only appears when a season is running.
+                    if (seasonName.isNotEmpty)
+                      Flexible(
+                        child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: AppColors.mawsemDark,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                seasonName,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.mawsemGold,
+                                  fontFamily: 'DM Sans',
+                                ),
+                              ),
+                            )),
                       ),
-                      child: const Text(
-                        'Season 2026 · Battle Pass',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.mawsemGold,
-                          fontFamily: 'DM Sans',
-                        ),
-                      ),
-                    ),
                   ],
                 ),
 
@@ -199,7 +198,8 @@ class MawsemHeroCard extends StatelessWidget {
                         const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.star, color: AppColors.mawsemGoldBright, size: 12),
+                            Icon(Icons.star,
+                                color: AppColors.mawsemGoldBright, size: 12),
                             SizedBox(width: 4),
                             Text(
                               'Sahel Stars',
@@ -257,7 +257,8 @@ class MawsemHeroCard extends StatelessWidget {
                                         fontWeight: FontWeight.w800)),
                                 const TextSpan(
                                     text: ' to ',
-                                    style: TextStyle(color: AppColors.mawsemTextMuted)),
+                                    style: TextStyle(
+                                        color: AppColors.mawsemTextMuted)),
                                 TextSpan(
                                     text: nextLevelName,
                                     style: const TextStyle(
@@ -296,13 +297,15 @@ class MawsemHeroCard extends StatelessWidget {
                 // Bottom Chips Row
                 Row(
                   children: [
-                    Expanded(
-                      child: _InfoChip(
-                        icon: Icons.access_time,
-                        label: 'Ends in $seasonEndDays days',
+                    if (seasonEndDays != null) ...[
+                      Expanded(
+                        child: _InfoChip(
+                          icon: Icons.access_time,
+                          label: 'Ends in $seasonEndDays days',
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
+                      const SizedBox(width: 12),
+                    ],
                     const Expanded(
                       child: _InfoChip(
                         icon: Icons.refresh,

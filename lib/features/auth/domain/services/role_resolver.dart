@@ -5,7 +5,7 @@ import 'package:sahely/data/models.dart';
 class RoleResolver {
   Role resolveRoleFromEmail(String email) {
     final lower = email.toLowerCase();
-    
+
     if (lower.contains('broker')) {
       return Role.broker;
     } else if (lower.contains('owner')) {

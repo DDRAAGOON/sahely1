@@ -28,9 +28,14 @@ class EditProfileAvatar extends StatelessWidget {
               Container(
                 width: 96,
                 height: 96,
-                decoration: BoxDecoration(
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.navy.withValues(alpha: 0.2),
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF7FA8BF), Color(0xFF2C5066)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
                 child: _buildImage(),
               ),
@@ -101,8 +106,8 @@ class EditProfileAvatar extends StatelessWidget {
           ),
           errorWidget: (context, url, error) => const Icon(
             Icons.person,
-            size: 48,
-            color: AppColors.navy,
+            size: 52,
+            color: Colors.white,
           ),
         ),
       );
@@ -110,8 +115,8 @@ class EditProfileAvatar extends StatelessWidget {
 
     return const Icon(
       Icons.person,
-      size: 48,
-      color: AppColors.navy,
+      size: 52,
+      color: Colors.white,
     );
   }
 }

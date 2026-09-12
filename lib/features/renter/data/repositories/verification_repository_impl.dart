@@ -1,55 +1,40 @@
 import 'package:sahely/core/errors/exception_mapper.dart';
-import 'package:sahely/features/renter/data/datasources/mock_verification_data_source.dart';
-import 'package:sahely/features/renter/presentation/verification/domain/models/verification_state.dart';
+import 'package:sahely/core/network/api_client.dart';
+import 'package:sahely/features/renter/data/datasources/verification_api_data_source.dart';
 import 'package:sahely/features/renter/domain/repositories/verification_repository.dart';
+import 'package:sahely/features/renter/presentation/verification/domain/models/verification_state.dart';
 
+/// Verification (KYC) repository.
+///
+/// The status is authoritative on the backend (`GET /auth/verification/status`)
+/// and is re-read through [getVerificationStatus]. The app cannot mark itself
+/// verified, so the `mark*` calls - made after a step has been completed
+/// against the API - have nothing to write: the next status read reflects it.
 class VerificationRepositoryImpl implements VerificationRepository {
-  final MockVerificationDataSource dataSource;
+  VerificationRepositoryImpl(
+      {VerificationApiDataSource? api, ApiClient? apiClient})
+      : _api = api ?? VerificationApiDataSource(apiClient ?? ApiClient());
 
-  VerificationRepositoryImpl({required this.dataSource});
+  final VerificationApiDataSource _api;
 
   @override
   Future<VerificationState> getVerificationStatus() async {
     try {
-      return await dataSource.fetchVerificationStatus();
+      return await _api.fetchStatus();
     } catch (e) {
       throw ExceptionMapper.map(e);
     }
   }
 
   @override
-  Future<void> markEmailAsVerified() async {
-    try {
-      await dataSource.markEmailVerified();
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
-  }
+  Future<void> markEmailAsVerified() async {}
 
   @override
-  Future<void> markPhoneAsVerified() async {
-    try {
-      await dataSource.markPhoneVerified();
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
-  }
+  Future<void> markPhoneAsVerified() async {}
 
   @override
-  Future<void> markIdAsVerified() async {
-    try {
-      await dataSource.markIdVerified();
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
-  }
+  Future<void> markIdAsVerified() async {}
 
   @override
-  Future<void> markCardAsAdded() async {
-    try {
-      await dataSource.markCardAdded();
-    } catch (e) {
-      throw ExceptionMapper.map(e);
-    }
-  }
+  Future<void> markCardAsAdded() async {}
 }

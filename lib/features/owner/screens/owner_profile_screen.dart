@@ -1,27 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:sahely/core/di/service_locator.dart' show sl;
 import 'package:sahely/core/navigation/app_navigation.dart';
+import 'package:sahely/core/network/api_envelope.dart';
+import 'package:sahely/core/providers/profile_provider.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/utils/currency_formatter.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
-
 import 'package:sahely/features/owner/widgets/owner_bio_card.dart';
 import 'package:sahely/features/owner/widgets/owner_gradient_cta.dart';
 import 'package:sahely/features/owner/widgets/owner_profile_header.dart';
+import 'package:sahely/features/payments/data/datasources/payment_remote_data_source.dart';
+import 'package:sahely/features/wallet/data/datasources/wallet_remote_data_source.dart';
 import 'package:sahely/l10n/app_localizations.dart';
+import 'package:sahely/l10n/app_localizations_ext.dart';
 
-class OwnerProfileScreen extends StatelessWidget {
+/// The owner's account: identity from the profile, the withdrawable balance
+/// from `/wallets/me` and the saved card from `/payments/cards`.
+class OwnerProfileScreen extends StatefulWidget {
   const OwnerProfileScreen({super.key});
 
   @override
+  State<OwnerProfileScreen> createState() => _OwnerProfileScreenState();
+}
+
+class _OwnerProfileScreenState extends State<OwnerProfileScreen> {
+  double? _walletEgp;
+  String? _cardLast4;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.read<ProfileProvider>().fetchProfileData();
+    });
+    _loadAccount();
+  }
+
+  Future<void> _loadAccount() async {
+    final wallet = await sl<WalletRemoteDataSource>().getMyWallet();
+    final cards = await sl<PaymentRemoteDataSource>().getPaymentCards();
+    if (!mounted) return;
+    setState(() {
+      wallet.fold((_) {}, (w) {
+        final piastres =
+            asNum(pick(w, 'withdrawable_piastres')) ?? asNum(w['balance']) ?? 0;
+        _walletEgp = piastres / 100;
+      });
+      cards.fold((_) {}, (list) {
+        _cardLast4 = list.isEmpty ? null : list.first.lastFourDigits;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final profile = context.watch<ProfileProvider>();
+    final level = profile.levelData;
+
     return SafeArea(
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
         children: [
           OwnerProfileHeader(
-            name: 'Layla Mansour',
-            email: 'layla@example.com',
+            name: profile.name,
+            email: profile.email,
             onEditProfile: () => AppNavigation.goToOwnerEditBio(context),
           ),
           const SizedBox(height: 12),
@@ -31,12 +76,14 @@ class OwnerProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          const OwnerBioCard(
-            bio:
-                'Hosting beachfront villas across Marassi & Hacienda Bay. Superhost since 2023 🏖',
-            handle: '@layla.stays',
-          ),
-          const SizedBox(height: 12),
+          if (profile.bio.isNotEmpty ||
+              (profile.instagram ?? '').isNotEmpty) ...[
+            OwnerBioCard(
+              bio: profile.bio,
+              handle: profile.instagram ?? '',
+            ),
+            const SizedBox(height: 12),
+          ],
           OwnerGradientCta(
             title: AppLocalizations.of(context).manageDashboard,
             subtitle: AppLocalizations.of(context).manageSubtitle,
@@ -45,12 +92,13 @@ class OwnerProfileScreen extends StatelessWidget {
             colors: const [Color(0xFF22335A), AppColors.navy],
           ),
           const SizedBox(height: 12),
-          const OwnerGradientCta(
+          OwnerGradientCta(
             title: 'AL MAWSEM Season Pass',
-            subtitle: 'Shore Explorer · 22 ★ · earn stars when you rent',
+            subtitle:
+                '${level['name']} · ${profile.stars} ★ · earn stars when you rent',
             icon: Icons.star,
             route: '/mawsem',
-            colors: [Color(0xFF2A2418), AppColors.navy],
+            colors: const [Color(0xFF2A2418), AppColors.navy],
           ),
           const SizedBox(height: 14),
           WhiteCard(
@@ -58,7 +106,9 @@ class OwnerProfileScreen extends StatelessWidget {
               SettingsRow(
                 icon: Icons.account_balance_wallet_outlined,
                 label: AppLocalizations.of(context).walletCredit,
-                value: CurrencyFormatter.format(1250),
+                value: _walletEgp == null
+                    ? '—'
+                    : CurrencyFormatter.format(_walletEgp!.round()),
                 valueColor: AppColors.gold,
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToOwnerEarnings(context),
@@ -66,22 +116,22 @@ class OwnerProfileScreen extends StatelessWidget {
               SettingsRow(
                 icon: Icons.credit_card_outlined,
                 label: AppLocalizations.of(context).paymentCard,
-                value: 'Visa ••42',
+                value: _cardLast4 == null ? null : '••$_cardLast4',
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToAddCard(context),
               ),
               SettingsRow(
                 icon: Icons.star_outline,
                 label: AppLocalizations.of(context).myReviews,
-                value: '★ 4.9',
+                value: profile.reviewsReceived > 0
+                    ? '${profile.reviewsReceived}'
+                    : null,
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToMyReviews(context),
               ),
               SettingsRow(
                 icon: Icons.account_balance_outlined,
                 label: 'Payout Bank · IBAN',
-                value: 'EG••4821',
-                valueColor: AppColors.success,
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToOwnerPayout(context),
               ),
@@ -102,7 +152,8 @@ class OwnerProfileScreen extends StatelessWidget {
               SettingsRow(
                 icon: Icons.language,
                 label: AppLocalizations.of(context).languageLabel,
-                value: AppLocalizations.nativeLanguageName(Localizations.localeOf(context).languageCode),
+                value: AppLocalizations.of(context).languageNameFor(
+                    Localizations.localeOf(context).languageCode),
                 iconColor: AppColors.gold,
                 onTap: () => AppNavigation.goToLanguage(context),
               ),

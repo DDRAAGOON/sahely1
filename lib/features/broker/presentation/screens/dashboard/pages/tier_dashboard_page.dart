@@ -57,12 +57,17 @@ class TierDashboardPage extends StatelessWidget {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(AppLocalizations.of(context).brokerPass,
-                    style: AppTheme.dm(
-                        size: 16,
-                        weight: FontWeight.w700,
-                        color: AppColors.gold,
-                        letterSpacing: 3)),
+                Flexible(
+                  child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(AppLocalizations.of(context).brokerPass,
+                          style: AppTheme.dm(
+                              size: 16,
+                              weight: FontWeight.w700,
+                              color: AppColors.gold,
+                              letterSpacing: 3))),
+                ),
                 Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 4),

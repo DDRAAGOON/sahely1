@@ -17,7 +17,8 @@ class ArrivalChecklistSection extends StatefulWidget {
   });
 
   @override
-  State<ArrivalChecklistSection> createState() => _ArrivalChecklistSectionState();
+  State<ArrivalChecklistSection> createState() =>
+      _ArrivalChecklistSectionState();
 }
 
 class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
@@ -26,14 +27,14 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
   @override
   void initState() {
     super.initState();
-    _items = widget.checklist != null 
-      ? List<Map<String, dynamic>>.from(widget.checklist!)
-      : [
-          {'label': 'Check gate clearance', 'completed': true},
-          {'label': 'Key collection from lockbox', 'completed': false},
-          {'label': 'Electricity & AC inspection', 'completed': false},
-          {'label': 'Welcome hamper confirmation', 'completed': false},
-        ];
+    _items = widget.checklist != null
+        ? List<Map<String, dynamic>>.from(widget.checklist!)
+        : [
+            {'label': 'Check gate clearance', 'completed': true},
+            {'label': 'Key collection from lockbox', 'completed': false},
+            {'label': 'Electricity & AC inspection', 'completed': false},
+            {'label': 'Welcome hamper confirmation', 'completed': false},
+          ];
   }
 
   @override
@@ -44,10 +45,21 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Arrival Checklist', style: AppTheme.dm(size: 18, weight: FontWeight.w700, color: AppColors.navy)),
+            Flexible(
+              child: Text('Arrival Checklist',
+                  style: AppTheme.dm(
+                      size: 18,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
+            ),
             GestureDetector(
-              onTap: widget.onReportIssue ?? () => AppNavigation.goToArrivalChecklist(context),
-              child: Text('View Details', style: AppTheme.dm(size: 13, weight: FontWeight.w600, color: AppColors.gold)),
+              onTap: widget.onReportIssue ??
+                  () => AppNavigation.goToArrivalChecklist(context),
+              child: Text('View Details',
+                  style: AppTheme.dm(
+                      size: 13,
+                      weight: FontWeight.w600,
+                      color: AppColors.gold)),
             ),
           ],
         ),
@@ -87,14 +99,21 @@ class _ArrivalChecklistSectionState extends State<ArrivalChecklistSection> {
               decoration: BoxDecoration(
                 color: isDone ? AppColors.success : Colors.transparent,
                 borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: isDone ? AppColors.success : AppColors.borderDefault),
+                border: Border.all(
+                    color:
+                        isDone ? AppColors.success : AppColors.borderDefault),
               ),
-              child: isDone ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
+              child: isDone
+                  ? const Icon(Icons.check, size: 16, color: Colors.white)
+                  : null,
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(label, style: AppTheme.dm(size: 14, color: isDone ? AppColors.muted : AppColors.navy)),
+            child: Text(label,
+                style: AppTheme.dm(
+                    size: 14,
+                    color: isDone ? AppColors.muted : AppColors.navy)),
           ),
         ],
       ),

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Android 9+ (API 28) copy of values/styles.xml.
+
+      windowLayoutInDisplayCutoutMode=shortEdges lets the app draw into the
+      camera cutout. Without it, phones with a punch-hole camera (Realme,
+      Oppo / ColorOS and others) letterbox the whole status bar in solid black
+      and start the app below it, hiding the clock and notification icons.
+      Flutter then draws behind a transparent status bar; each screen picks
+      dark or light icons (lib/core/theme/system_ui.dart).
+    -->
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+    </style>
+</resources>

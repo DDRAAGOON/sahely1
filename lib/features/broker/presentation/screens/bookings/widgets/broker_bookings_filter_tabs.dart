@@ -36,7 +36,7 @@ class BrokerBookingsFilterTabs extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isSelected ? AppColors.navy : Colors.white,
                     borderRadius: BorderRadius.circular(22),
-                    border : null,
+                    border: null,
                   ),
                   child: Center(
                     child: Text(

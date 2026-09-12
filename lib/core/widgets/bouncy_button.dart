@@ -81,7 +81,7 @@ class _BouncyButtonState extends State<BouncyButton>
       child: GestureDetector(
         onTap: () async {
           if (widget.onTap != null) {
-            // Give enough delay for the bounce down animation to become visible 
+            // Give enough delay for the bounce down animation to become visible
             // before the main thread potentially blocks to build a new screen.
             await Future.delayed(const Duration(milliseconds: 120));
             if (mounted) widget.onTap!();

@@ -2,9 +2,38 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sahely.sahely">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Network: every Sahely call is HTTPS; cleartext is disabled below. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Camera: KYC document capture, liveness selfie, listing photos. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Location: nearby chalets, map view and directions. Coarse is enough
+         for search; fine is requested only for turn-by-turn directions. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Push: booking updates, chat replies, SOS acknowledgements (API 33+). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Photo library. READ_MEDIA_IMAGES supersedes READ_EXTERNAL_STORAGE from
+         API 33; capping the legacy permission keeps Play Console from flagging
+         a broad-storage request the app does not actually need. -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!-- Saving a booking receipt / QR to the gallery (gal), API 28 and below. -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- Camera and GPS are optional: the app is fully usable without them, so
+         they must not exclude devices that lack the hardware on Play. -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
 
     <queries>
         <intent>
@@ -16,6 +45,14 @@
             <data android:scheme="whatsapp" />
         </intent>
         <intent>
+            <action android:name="android.intent.action.DIAL" />
+            <data android:scheme="tel" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+        <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
@@ -25,10 +62,14 @@
         android:label="Sahely"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:allowBackup="false">
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:usesCleartextTraffic="false"
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_GOOGLE_MAPS_API_KEY_HERE"/>
+            android:value="${GOOGLE_MAPS_API_KEY}"/>
 
         <activity
             android:name=".MainActivity"
@@ -45,6 +86,37 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- Hands opened links (App Links and sahely://) to go_router. -->
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+
+            <!-- Custom-scheme deep links: wishlist share links, referral
+                 invites and the KYC hand-off from desktop. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="sahely" android:host="app" />
+            </intent-filter>
+
+            <!-- Verified App Links for the share URLs the API generates
+                 (collection invites, referral invites, listings). Each host
+                 must serve /.well-known/assetlinks.json for Android to open
+                 the app directly; until it does, the link opens in the
+                 browser. Only these paths open the app - the rest of the
+                 website stays in the browser. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="staysahely.com" />
+                <data android:host="www.staysahely.com" />
+                <data android:host="sahely-frontend-gg5v.vercel.app" />
+                <data android:pathPrefix="/wishlists/join/" />
+                <data android:pathPrefix="/join" />
+                <data android:pathPrefix="/properties/" />
             </intent-filter>
         </activity>
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/features/shared/chat/data/chatbot_session.dart';
 
 class AiChatScreen extends StatefulWidget {
   final String? initialMessage;
@@ -22,6 +23,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
   ];
   final TextEditingController _controller = TextEditingController();
   bool _isTyping = false;
+  late final ChatbotSession _assistant = ChatbotSession();
 
   @override
   void initState() {
@@ -47,23 +49,16 @@ class _AiChatScreenState extends State<AiChatScreen> {
     });
     _controller.clear();
 
-    await Future.delayed(const Duration(seconds: 1));
-
-    String response = "I'm looking into that for you...";
-    if (text.toLowerCase().contains('wi-fi')) {
-      response =
-          "The Wi-Fi password is 'sahely2026'. You can also find a QR code on the kitchen counter.";
-    } else if (text.toLowerCase().contains('pool')) {
-      response =
-          "Tap the round dial by the pool pump to ON, set 28°C, and give it ~40 min.";
-    } else if (text.toLowerCase().contains('checkout')) {
-      response =
-          "Checkout is at 11:00 AM. Just leave the keys on the table and lock the door via the app.";
+    String reply;
+    try {
+      reply = await _assistant.ask(text) ?? ChatbotSession.pendingNotice;
+    } catch (_) {
+      reply = 'The assistant is unavailable right now. Please try again.';
     }
-
+    if (!mounted) return;
     setState(() {
       _isTyping = false;
-      _messages.add({'role': 'ai', 'text': response});
+      _messages.add({'role': 'ai', 'text': reply});
     });
   }
 
@@ -236,8 +231,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-              border : null,
-              borderRadius: BorderRadius.circular(18)),
+              border: null, borderRadius: BorderRadius.circular(18)),
           child: Text(text,
               style: AppTheme.dm(size: 12, color: const Color(0xFF9A7A22)))));
 

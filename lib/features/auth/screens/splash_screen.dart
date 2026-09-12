@@ -4,6 +4,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/brand.dart';
 import 'package:sahely/core/widgets/ui.dart';
+import 'package:sahely/core/theme/system_ui.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,45 +37,47 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.navy,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SahelyLogo(size: 108),
-                  const SizedBox(height: 6),
-                  const Wordmark(size: 46, spacing: 8),
-                  const SizedBox(height: 14),
-                  Text('Verified Chalets. Zero Chaos.',
-                      style: AppTheme.dm(
-                          size: 15, color: AppColors.gold, letterSpacing: 1)),
-                ],
+    return LightStatusBar(
+      child: Scaffold(
+        backgroundColor: AppColors.navy,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SahelyLogo(size: 108),
+                    const SizedBox(height: 6),
+                    const Wordmark(size: 46, spacing: 8),
+                    const SizedBox(height: 14),
+                    Text('Verified Chalets. Zero Chaos.',
+                        style: AppTheme.dm(
+                            size: 15, color: AppColors.gold, letterSpacing: 1)),
+                  ],
+                ),
               ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                height: 3,
-                color: Colors.white.withValues(alpha: 0.12),
-                child: AnimatedBuilder(
-                  animation: _c,
-                  builder: (_, __) => Align(
-                    alignment: Alignment.centerLeft,
-                    child: FractionallySizedBox(
-                      widthFactor: 0.08 + 0.84 * _c.value,
-                      child: Container(color: AppColors.gold),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  height: 3,
+                  color: Colors.white.withValues(alpha: 0.12),
+                  child: AnimatedBuilder(
+                    animation: _c,
+                    builder: (_, __) => Align(
+                      alignment: Alignment.centerLeft,
+                      child: FractionallySizedBox(
+                        widthFactor: 0.08 + 0.84 * _c.value,
+                        child: Container(color: AppColors.gold),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

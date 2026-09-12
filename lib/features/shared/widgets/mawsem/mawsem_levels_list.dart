@@ -1,10 +1,18 @@
-﻿import 'package:flutter/material.dart';
-import 'package:sahely/core/theme/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:sahely/core/providers/profile_provider.dart';
+import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/features/shared/widgets/mawsem/level/level_detail_sheet.dart';
 import 'package:sahely/features/shared/widgets/mawsem/level/level_perk.dart';
 import 'package:sahely/features/shared/widgets/mawsem/mawsem_level_tile.dart';
 
+/// The season ladder, exactly as the backend defines it
+/// (`GET /mawsem/levels`): the names, the star thresholds and how many levels
+/// there are all belong to the season, not to the app.
+///
+/// Perks come from `GET /mawsem/perks`, which only answers for the account's
+/// own level, so no other level claims perks it cannot confirm.
 class MawsemLevelsList extends StatelessWidget {
   final int currentLevel;
   final int currentStars;
@@ -15,206 +23,91 @@ class MawsemLevelsList extends StatelessWidget {
     required this.currentStars,
   });
 
-  void _showLevelDetail(BuildContext context, Map<String, dynamic> level) {
+  void _showLevelDetail(
+    BuildContext context,
+    Map<String, dynamic> level,
+    List<String> perks,
+  ) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (context) => LevelDetailSheet(
-        levelName: level['name'],
-        levelIcon: level['icon'],
-        levelColor: level['iconColor'],
-        starsRequired: level['stars'],
+        levelName: '${level['name'] ?? ''}',
+        levelIcon: level['icon'] as IconData,
+        levelColor: level['color'] as Color,
+        starsRequired: level['stars'] as int,
         currentStars: currentStars,
-        seasonPerks: (level['detailedPerks'] as List<LevelPerk>? ?? []),
-        unlockReward: level['reward'],
+        seasonPerks: [for (final perk in perks) LevelPerk(title: perk)],
         onClose: () => Navigator.pop(context),
       ),
     );
   }
 
-  // TODO: Fetch this levels list from backend API to support dynamic updates.
-  static const List<Map<String, dynamic>> _levels = [
-    {
-      'number': 1,
-      'name': 'Beach Walker',
-      'stars': 0,
-      'icon': Icons.person_outline,
-      'perks': 'Standard booking & dashboard',
-      'bgColor': Colors.white,
-      'textColor': AppColors.navy,
-      'iconColor': Color(0xFF717171),
-      'detailedPerks': [
-        LevelPerk(title: 'Standard booking access'),
-        LevelPerk(title: 'Basic Mawsem dashboard'),
-      ],
-      'reward': 'Coastal Starter Badge',
-    },
-    {
-      'number': 2,
-      'name': 'Shore Explorer',
-      'stars': 15,
-      'icon': Icons.waves,
-      'perks': 'Late checkout + early check-in',
-      'bgColor': Colors.white,
-      'textColor': AppColors.navy,
-      'iconColor': AppColors.mawsemTeal,
-      'detailedPerks': [
-        LevelPerk(
-            title: 'Late checkout (2 hours)',
-            subtitle: 'Subject to availability'),
-        LevelPerk(
-            title: 'Early check-in (2 hours)',
-            subtitle: 'Subject to availability'),
-      ],
-      'reward': 'Shore Explorer Badge',
-    },
-    {
-      'number': 3,
-      'name': 'Wave Rider',
-      'stars': 40,
-      'icon': Icons.waves,
-      'perks': '15% off concierge + priority support',
-      'bgColor': AppColors.mawsemBg,
-      'textColor': Colors.white,
-      'iconColor': AppColors.mawsemTeal,
-      'detailedPerks': [
-        LevelPerk(title: '15% off concierge services'),
-        LevelPerk(title: 'Priority customer support'),
-        LevelPerk(title: 'Exclusive Wave Rider offers'),
-      ],
-      'reward': 'Premium Wave Rider Badge',
-    },
-    {
-      'number': 4,
-      'name': 'Coastal Regular',
-      'stars': 80,
-      'icon': Icons.home_outlined,
-      'perks': 'Welcome basket + 200 EGP credit',
-      'bgColor': Colors.white,
-      'textColor': AppColors.navy,
-      'iconColor': Color(0xFFBC9B43),
-      'detailedPerks': [
-        LevelPerk(title: 'Complimentary welcome basket'),
-        LevelPerk(title: '200 EGP credit on next booking'),
-        LevelPerk(title: 'Free early access to new units'),
-      ],
-      'reward': 'Gift: Local Artisan Soap Set',
-    },
-    {
-      'number': 5,
-      'name': 'Sand VIP',
-      'stars': 140,
-      'icon': Icons.star_border,
-      'perks': 'Free cleaning + airport pickup',
-      'bgColor': Colors.white,
-      'textColor': AppColors.navy,
-      'iconColor': Color(0xFF6B4D8A),
-      'detailedPerks': [
-        LevelPerk(
-            title: 'Free Professional Cleaning', subtitle: 'Once per stay'),
-        LevelPerk(
-            title: 'Early access (48h)', subtitle: 'For all season promos'),
-        LevelPerk(title: 'Everything from Coastal Regular'),
-      ],
-      'reward': 'Free Airport Pickup (Cairo to compound)',
-    },
-    {
-      'number': 6,
-      'name': 'Elite Coaster',
-      'stars': 220,
-      'icon': Icons.landscape_outlined,
-      'perks': 'Free concierge + 3 cancel tokens',
-      'bgColor': Colors.white,
-      'textColor': AppColors.navy,
-      'iconColor': Color(0xFFBC9B43),
-      'detailedPerks': [
-        LevelPerk(
-            title: 'Free Concierge Service', subtitle: 'Unlimited bookings'),
-        LevelPerk(
-            title: '3 Cancellation tokens', subtitle: 'No penalties apply'),
-        LevelPerk(title: 'Dedicated Account Manager'),
-      ],
-      'reward': 'Gift: Luxury Beach Towel Set',
-    },
-    {
-      'number': 7,
-      'name': 'Sahely Ambassador',
-      'stars': 500,
-      'icon': Icons.workspace_premium,
-      'perks': 'Free weekend + season party invite',
-      'bgColor': AppColors.mawsemBg,
-      'textColor': Colors.white,
-      'iconColor': AppColors.navy,
-      'perksColor': AppColors.gold,
-      'iconBgColor': AppColors.gold,
-      'hasGoldBorder': true,
-      'detailedPerks': [
-        LevelPerk(
-            title: 'Free Weekend Stay', subtitle: 'Any unit of your choice'),
-        LevelPerk(title: 'Season Party Invite', subtitle: 'VIP access for two'),
-        LevelPerk(
-            title: 'Ambassador Level Support', subtitle: 'Instant 24/7 help'),
-      ],
-      'reward': 'Ambassador Membership Card',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final profile = context.watch<ProfileProvider>();
+    final levels = profile.levels;
+    if (levels.isEmpty) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section Header
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'The 7 Levels',
-              style: TextStyle(
+              'The ${levels.length} Levels',
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: AppColors.navy,
                 fontFamily: 'DM Sans',
               ),
             ),
-            Text(
-              'climb the levels for perks',
-              style: TextStyle(
-                fontSize: 12,
-                color: AppColors.secondary,
-                fontFamily: 'DM Sans',
+            const Flexible(
+              child: Text(
+                'climb the levels for perks',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.secondary,
+                  fontFamily: 'DM Sans',
+                ),
               ),
             ),
           ],
         ),
         const SizedBox(height: 16),
 
-        // Levels List
-        ..._levels.map((level) {
-          final isCurrent = level['number'] == currentLevel;
-          final isUnlocked = currentStars >= level['stars'];
+        // Levels
+        for (final level in levels)
+          Builder(builder: (context) {
+            final number = level['level'] as int;
+            final stars = level['stars'] as int;
+            final isCurrent = number == currentLevel;
+            final perks = isCurrent ? profile.perks : const <String>[];
 
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: MawsemLevelTile(
-              number: level['number'],
-              name: level['name'],
-              stars: level['stars'],
-              icon: level['icon'],
-              perks: level['perks'],
-              bgColor: level['bgColor'],
-              textColor: level['textColor'],
-              iconColor: level['iconColor'],
-              iconBgColor: level['iconBgColor'],
-              perksColor: level['perksColor'],
-              isCurrent: isCurrent,
-              isUnlocked: isUnlocked,
-              hasGoldBorder: level['hasGoldBorder'] ?? false,
-              onTap: () => _showLevelDetail(context, level),
-            ),
-          );
-        }),
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: MawsemLevelTile(
+                number: number,
+                name: '${level['name'] ?? ''}',
+                stars: stars,
+                icon: level['icon'] as IconData,
+                perks: perks.join(' · '),
+                bgColor: isCurrent ? AppColors.mawsemBg : Colors.white,
+                textColor: isCurrent ? Colors.white : AppColors.navy,
+                iconColor: level['color'] as Color,
+                perksColor: isCurrent ? Colors.white70 : AppColors.secondary,
+                isCurrent: isCurrent,
+                isUnlocked: currentStars >= stars,
+                hasGoldBorder: isCurrent,
+                onTap: () => _showLevelDetail(context, level, perks),
+              ),
+            );
+          }),
       ],
     );
   }

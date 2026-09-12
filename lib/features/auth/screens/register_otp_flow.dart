@@ -37,7 +37,7 @@ class _RegisterEmailOtpScreenState extends State<RegisterEmailOtpScreen> {
     if (_busy) return;
     final code = _otpKey.currentState?.code ?? '';
     if (code.length < 6) {
-      showAuthError(context, AuthApiException('Enter the 6-digit code'));
+      showAuthError(context, const AuthApiException('Enter the 6-digit code'));
       return;
     }
     setState(() => _busy = true);
@@ -98,8 +98,7 @@ class RegisterPhoneOtpScreen extends StatefulWidget {
   final Map<String, dynamic>? extra;
 
   @override
-  State<RegisterPhoneOtpScreen> createState() =>
-      _RegisterPhoneOtpScreenState();
+  State<RegisterPhoneOtpScreen> createState() => _RegisterPhoneOtpScreenState();
 }
 
 class _RegisterPhoneOtpScreenState extends State<RegisterPhoneOtpScreen> {
@@ -111,7 +110,7 @@ class _RegisterPhoneOtpScreenState extends State<RegisterPhoneOtpScreen> {
     if (_busy) return;
     final code = _otpKey.currentState?.code ?? '';
     if (code.length < 6) {
-      showAuthError(context, AuthApiException('Enter the 6-digit code'));
+      showAuthError(context, const AuthApiException('Enter the 6-digit code'));
       return;
     }
     setState(() => _busy = true);
@@ -119,18 +118,27 @@ class _RegisterPhoneOtpScreenState extends State<RegisterPhoneOtpScreen> {
       final sessionId = '${widget.extra?['sessionId'] ?? ''}';
       await _api.verifyPhoneOtp(sessionId, code);
 
-      // Phone verified → the account exists in all but name. Sign in with the
-      // credentials captured at step 2 so the session uses REAL tokens.
+      // Phone verified. The backend creates the real account only once
+      // identity verification is approved (the KYC endpoints run on the
+      // registration session, not a login token), so signing in here can be
+      // refused. Try once: if it works the session is real; if the
+      // credentials are rejected, carry on to identity verification instead
+      // of reporting a correct OTP as a failure.
       final email = '${widget.extra?['email'] ?? ''}';
       final password = '${widget.extra?['password'] ?? ''}';
       final roleStr = '${widget.extra?['role'] ?? 'Renter'}';
-      final resp = await _api.login(email, password);
-
-      if (!mounted) return;
-      await context.read<AuthProvider>().login(
-            token: resp.token,
-            role: resp.role,
-          );
+      var signedIn = false;
+      try {
+        final resp = await _api.login(email, password);
+        if (!mounted) return;
+        await context.read<AuthProvider>().login(
+              token: resp.token,
+              role: resp.role,
+            );
+        signedIn = true;
+      } on AuthApiException catch (e) {
+        if (!_isAccountNotActiveYet(e)) rethrow;
+      }
 
       if (!mounted) return;
       context.pushReplacement(
@@ -140,6 +148,13 @@ class _RegisterPhoneOtpScreenState extends State<RegisterPhoneOtpScreen> {
           'email': email,
           'phone': widget.extra?['phone'],
           'role': roleStr,
+          // Whether THIS registration got a real session. The completion step
+          // must not trust AuthProvider.isAuthenticated, which may still hold
+          // a previous account's session on a shared device.
+          'signedIn': signedIn,
+          // The completion step signs in with these once the account exists.
+          'sessionId': sessionId,
+          'password': password,
         },
       );
     } catch (e) {
@@ -148,6 +163,11 @@ class _RegisterPhoneOtpScreenState extends State<RegisterPhoneOtpScreen> {
       if (mounted) setState(() => _busy = false);
     }
   }
+
+  /// A 401 on login right after registration means the account is not
+  /// active yet, not that the user typed something wrong.
+  static bool _isAccountNotActiveYet(AuthApiException e) =>
+      e.code == 'ERR_UNAUTHORIZED' || e.code == 'ERR_AUTH_INVALID_CREDENTIALS';
 
   Future<void> _resend() async {
     try {

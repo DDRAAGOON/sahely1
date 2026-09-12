@@ -23,10 +23,10 @@ class SSLPinningServiceImpl implements SSLPinningService {
   @override
   bool validateCertificate(Uint8List serverCertificate) {
     if (_allowedCertificates.isEmpty) {
-      // If no certificates are pinned, we might want to default to true or false 
+      // If no certificates are pinned, we might want to default to true or false
       // based on whether pinning is "activated" or not.
       // Requirements say do not activate yet.
-      return true; 
+      return true;
     }
 
     for (final allowed in _allowedCertificates) {
@@ -38,7 +38,8 @@ class SSLPinningServiceImpl implements SSLPinningService {
   }
 
   @override
-  List<Uint8List> get allowedCertificates => List.unmodifiable(_allowedCertificates);
+  List<Uint8List> get allowedCertificates =>
+      List.unmodifiable(_allowedCertificates);
 
   bool _compareCertificates(Uint8List cert1, Uint8List cert2) {
     if (cert1.length != cert2.length) return false;

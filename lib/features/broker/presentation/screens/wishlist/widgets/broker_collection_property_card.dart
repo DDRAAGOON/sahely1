@@ -60,16 +60,18 @@ class BrokerCollectionPropertyCard extends StatelessWidget {
                 children: [
                   AspectRatio(
                     aspectRatio: 16 / 9,
-                    child: AppNetworkImage(url: imageUrl, errorWidget: (context, error, stackTrace) {
-                        return Container(
-                          color: AppColors.border,
-                          child: const Icon(
-                            Icons.image,
-                            color: AppColors.secondary,
-                            size: 48,
-                          ),
-                        );
-                      }),
+                    child: AppNetworkImage(
+                        url: imageUrl,
+                        errorWidget: (context, error, stackTrace) {
+                          return Container(
+                            color: AppColors.border,
+                            child: const Icon(
+                              Icons.image,
+                              color: AppColors.secondary,
+                              size: 48,
+                            ),
+                          );
+                        }),
                   ),
                   // Bottom fade
                   Positioned(
@@ -284,4 +286,3 @@ class BrokerCollectionPropertyCard extends StatelessWidget {
     );
   }
 }
-

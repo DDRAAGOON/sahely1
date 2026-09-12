@@ -11,13 +11,19 @@ import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/b
 import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_lock_icon_widget.dart';
 import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_lock_info_cards.dart';
 import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_lock_info_text.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/core/network/api_envelope.dart';
 import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_lock_status_badge.dart';
+import 'package:sahely/features/smart_lock/data/smart_lock_api_data_source.dart';
 import 'package:sahely/features/broker/presentation/screens/smart_lock/widgets/broker_passcode_display.dart';
 
 class BrokerSmartLockScreen extends StatefulWidget {
   final String propertyName;
   final String bookingRef;
-  final String passcode;
+
+  /// The stay whose door PIN this is (`GET /bookings/:id/lock/pin`).
+  final String bookingId;
+
   final DateTime checkIn;
   final DateTime checkOut;
   final double propertyLat;
@@ -27,7 +33,7 @@ class BrokerSmartLockScreen extends StatefulWidget {
     super.key,
     required this.propertyName,
     required this.bookingRef,
-    required this.passcode,
+    this.bookingId = '',
     required this.checkIn,
     required this.checkOut,
     required this.propertyLat,
@@ -39,6 +45,8 @@ class BrokerSmartLockScreen extends StatefulWidget {
 }
 
 class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
+  /// The door PIN, once the backend has issued it for this stay.
+  String _passcode = '';
   bool _isInRange = false;
   double _distance = 0.0;
   bool _isLoading = true;
@@ -50,6 +58,22 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
   void initState() {
     super.initState();
     _initLocation();
+    _loadPasscode();
+  }
+
+  /// The PIN comes from the backend and only inside the check-in window;
+  /// outside it the display stays blank rather than showing a made-up code.
+  Future<void> _loadPasscode() async {
+    if (widget.bookingId.isEmpty) return;
+    try {
+      final lock =
+          await sl<SmartLockApiDataSource>().bookingPin(widget.bookingId);
+      final pin =
+          '${pick(lock, 'pin') ?? pick(lock, 'passcode') ?? pick(lock, 'code') ?? ''}';
+      if (mounted && pin.isNotEmpty) setState(() => _passcode = pin);
+    } catch (_) {
+      // No PIN for this stay: the screen keeps its locked state.
+    }
   }
 
   @override
@@ -117,7 +141,7 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
   }
 
   Future<void> _copyPasscode() async {
-    await Clipboard.setData(ClipboardData(text: widget.passcode));
+    await Clipboard.setData(ClipboardData(text: _passcode));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -146,6 +170,9 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
   }
 
   bool get _isPast => DateTime.now().isAfter(widget.checkOut);
+
+  /// Whether the backend gave us a location for this listing.
+  bool get _hasLocation => widget.propertyLat != 0 || widget.propertyLng != 0;
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +229,9 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
                       ),
                       const SizedBox(height: 40),
                       BrokerPasscodeDisplay(
-                        passcode: isExpired ? '----' : widget.passcode,
+                        passcode: isExpired || _passcode.isEmpty
+                            ? '----'
+                            : _passcode,
                         isInRange: canUnlock,
                         onCopyTap: isExpired ? null : _copyPasscode,
                       ),
@@ -225,7 +254,9 @@ class _BrokerSmartLockScreenState extends State<BrokerSmartLockScreen> {
                       const SizedBox(height: 24),
                       if (!isExpired) BrokerLockInfoText(isInRange: canUnlock),
                       const SizedBox(height: 40),
-                      if (!canUnlock && !isExpired)
+                      // Directions need the listing's coordinates; without
+                      // them there is nowhere to send the guest.
+                      if (!canUnlock && !isExpired && _hasLocation)
                         BrokerGetDirectionsButton(onTap: _getDirections),
                       const SizedBox(height: 48),
                       BrokerCheckInOutFooter(

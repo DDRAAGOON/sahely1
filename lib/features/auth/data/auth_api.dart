@@ -1,135 +1,151 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sahely/core/network/api_client.dart';
-import 'package:sahely/core/network/api_envelope.dart';
-import 'package:sahely/core/network/api_endpoints.dart';
 import 'package:dio/dio.dart';
-import 'package:sahely/data/models.dart';
-import '../mock_auth_service.dart' show AuthResponse;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:sahely/core/auth/auth_token_keys.dart';
+import 'package:sahely/core/errors/exceptions.dart';
+import 'package:sahely/core/network/api_client.dart';
+import 'package:sahely/core/network/api_endpoints.dart';
+import 'package:sahely/core/network/api_envelope.dart';
+import 'package:sahely/data/models.dart';
+
+/// Result of a successful sign-in: the access token and the account role.
+class AuthResponse {
+  final String token;
+  final Role role;
+
+  AuthResponse({required this.token, required this.role});
+}
+
+/// Error raised by [AuthApiService], carrying the backend's machine-readable
+/// `error.code` and the offending `field` for inline form highlighting.
 class AuthApiException implements Exception {
   final String message;
   final String? code;
+  final String? field;
   final Map<String, dynamic>? data;
   final int? statusCode;
-  AuthApiException(this.message, {this.code, this.data, this.statusCode});
+
+  const AuthApiException(
+    this.message, {
+    this.code,
+    this.field,
+    this.data,
+    this.statusCode,
+  });
+
   @override
   String toString() => message;
 }
 
-/// Real authentication service driving login AND the multi-step registration.
+/// Full client for the `auth` module.
+///
+/// Covers login, the eight-step registration flow, OTP, password management,
+/// Google sign-in and the post-login verification submissions. The Google
+/// *callback* is a browser redirect handled by the backend and is never
+/// called from here.
 class AuthApiService {
-  final ApiClient _api = ApiClient();
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final ApiClient _api;
+  final FlutterSecureStorage _storage;
 
-  static String? _extractMessage(dynamic body) {
-    if (body is Map) {
-      final err = body['error'];
-      if (err is Map && err['message'] != null) return '${err['message']}';
-      if (body['message'] != null) return '${body['message']}';
-    }
-    return null;
-  }
+  AuthApiService({ApiClient? apiClient, FlutterSecureStorage? storage})
+      : _api = apiClient ?? ApiClient(),
+        _storage = storage ?? const FlutterSecureStorage();
 
-  AuthApiException _guard(Object e) {
-    if (e is AuthApiException) return e;
-    int? status;
-    String? code;
-    Map<String, dynamic>? data;
-    var msg = 'Something went wrong. Please try again.';
-    
-    if (e is DioException) {
-      status = e.response?.statusCode;
-      
-      if (e.type == DioExceptionType.connectionTimeout ||
-          e.type == DioExceptionType.receiveTimeout ||
-          e.type == DioExceptionType.sendTimeout ||
-          e.type == DioExceptionType.connectionError) {
-        msg = 'No internet connection — please check your network.';
-        code = 'ERR_NETWORK';
-      } else if (status == 401 || status == 403 || status == 404) {
-        msg = 'Incorrect email or password.';
-        code = 'ERR_AUTH_INVALID_CREDENTIALS';
-      } else if (status != null && status >= 500) {
-        msg = 'Something went wrong on our side. Please try again.';
-        code = 'ERR_INTERNAL';
-      }
-
-      final body = e.response?.data;
-      if (body is Map) {
-        final err = body['error'];
-        final serverMsg = (err is Map && err['message'] != null)
-            ? '${err['message']}'
-            : '${body['message'] ?? ''}';
-        if (serverMsg.isNotEmpty && serverMsg != 'null') {
-            msg = serverMsg;
-        }
-        
-        // Extract error code from response
-        if (err is Map) {
-          code = err['code'] as String? ?? code;
-          data = err['data'] as Map<String, dynamic>? ?? data;
-        } else if (body['code'] != null) {
-          code = body['code'] as String?;
-        }
-        
-        // Extract additional data for suspension/ban details
-        if (err is Map && err['data'] != null) {
-          data = err['data'] as Map<String, dynamic>;
-        }
-      }
-    }
-    return AuthApiException(msg, code: code, data: data, statusCode: status);
-  }
-
-  // ── Login ────────────────────────────────────────────────────────────────
+  // -- Login / session --------------------------------------------------------
 
   Future<AuthResponse> login(String email, String password) async {
+    final session = await loginDetailed(email, password);
+    return AuthResponse(
+      token: '${session['accessToken'] ?? session['access_token'] ?? ''}',
+      role: _role('${asMap(session['user'])['role'] ?? session['role'] ?? ''}'),
+    );
+  }
+
+  /// Same call as [login] but returns the whole session payload
+  /// (tokens **and** the user object), which the repository layer needs to
+  /// build a complete [AuthEntity]. Tokens are persisted either way.
+  Future<Map<String, dynamic>> loginDetailed(
+    String email,
+    String password,
+  ) async {
     try {
-      final res = await _api.post(ApiEndpoints.login, data: {
-        'email': email,
-        'password': password,
-      });
+      final res = await _api.post(
+        ApiEndpoints.login,
+        data: {'email': email, 'password': password},
+      );
       final data = asMap(unwrapData(res.data));
-      final accessToken = '${data['access_token'] ?? ''}';
-      final user = asMap(data['user']);
-
-      await _persistTokens(accessToken, '${data['refresh_token'] ?? ''}');
-
-      final backendRole = '${user['role'] ?? data['role'] ?? 'renter'}'
-          .toLowerCase();
-      final role = switch (backendRole) {
-        'owner' => Role.owner,
-        'broker' => Role.broker,
-        _ => Role.renter,
-      };
-      return AuthResponse(token: accessToken, role: role);
+      await _handleSession(data);
+      return data;
     } catch (e) {
       throw _guard(e);
     }
   }
 
-  Future<void> logout(String refreshToken) async {
+  /// Google sign-in for mobile: the ID token comes from the native SDK.
+  Future<AuthResponse> loginWithGoogle({
+    required String idToken,
+    required String platform,
+    String? sessionId,
+  }) async {
     try {
-      await _api.post(ApiEndpoints.logout, data: {'refresh_token': refreshToken});
-    } catch (_) {}
-    await clearTokens();
-  }
-
-  // ── Registration (session-based, 5 steps) ───────────────────────────────
-
-  /// Step 1 — pick a role, opens a registration session.
-  Future<String> registerStep1(Role role) async {
-    try {
-      final res =
-          await _api.post(ApiEndpoints.registerStep1, data: {'role': role.name});
-      final data = asMap(unwrapData(res.data));
-      return '${data['session_id']}';
+      final res = await _api.post(
+        ApiEndpoints.googleMobile,
+        data: {
+          'idToken': idToken,
+          'platform': platform,
+          if (sessionId != null) 'session_id': sessionId,
+        },
+      );
+      return _handleSession(asMap(unwrapData(res.data)));
     } catch (e) {
-      throw _stepError(e);
+      throw _guard(e);
     }
   }
 
-  /// Step 2 — account details; backend emails the verification OTP.
+  /// Ends this session. Tokens are cleared locally even if the call fails, so
+  /// the user is never left signed in against a revoked session.
+  Future<void> logout([String? refreshToken]) async {
+    try {
+      final token =
+          refreshToken ?? await _storage.read(key: AuthTokenKeys.refreshToken);
+      if (token != null && token.isNotEmpty) {
+        await _api.post(ApiEndpoints.logout, data: {'refresh_token': token});
+      }
+    } catch (_) {
+      // Already signed out server-side, or offline - fall through to clearing.
+    } finally {
+      await clearTokens();
+    }
+  }
+
+  /// Ends every session on every device.
+  Future<void> logoutAll() async {
+    try {
+      await _api.post(ApiEndpoints.logoutAll);
+    } catch (e) {
+      throw _guard(e);
+    } finally {
+      await clearTokens();
+    }
+  }
+
+  // -- Registration (session based, run in order) -----------------------------
+
+  /// Step 1 - pick a role; opens a registration session.
+  Future<String> registerStep1(Role role) async {
+    try {
+      final res = await _api.post(
+        ApiEndpoints.registerStep1,
+        data: {'role': role.name},
+      );
+      final data = asMap(unwrapData(res.data));
+      return '${data['session_id'] ?? data['sessionId'] ?? ''}';
+    } catch (e) {
+      throw _guard(e);
+    }
+  }
+
+  /// Step 2 - account details; the backend emails the verification OTP.
   Future<void> registerStep2({
     required String sessionId,
     required String fullName,
@@ -144,7 +160,7 @@ class AuthApiService {
     try {
       final res = await _api.post(
         ApiEndpoints.registerStep2,
-        queryParameters: {'sessionId': sessionId},
+        queryParameters: _session(sessionId),
         data: {
           'full_name': fullName,
           'email': email,
@@ -159,80 +175,242 @@ class AuthApiService {
       );
       unwrapData(res.data);
     } catch (e) {
-      throw _stepError(e);
+      throw _guard(e);
     }
   }
 
-  /// Step 3 — verify the emailed OTP.
+  /// Step 3 - verify the emailed OTP.
   Future<void> verifyEmailOtp(String sessionId, String otp) async {
     try {
       final res = await _api.post(
         ApiEndpoints.registerStep3Verify,
-        queryParameters: {'sessionId': sessionId},
+        queryParameters: _session(sessionId),
         data: {'otp': otp},
       );
       unwrapData(res.data);
     } catch (e) {
-      throw _stepError(e);
+      throw _guard(e);
     }
   }
 
-  /// Step 4a — send the phone OTP (Twilio; dev test-mode accepts 000000).
+  /// Step 4a - send the phone OTP. This step cannot be skipped.
   Future<String> sendPhoneOtp(String sessionId) async {
     try {
       final res = await _api.post(
         ApiEndpoints.registerStep4SendPhoneOtp,
-        queryParameters: {'sessionId': sessionId},
+        queryParameters: _session(sessionId),
       );
       final data = asMap(unwrapData(res.data));
       return '${data['test_hint'] ?? ''}';
     } catch (e) {
-      throw _stepError(e);
+      throw _guard(e);
     }
   }
 
-  /// Step 4b — verify the phone OTP.
+  /// Step 4b - verify the phone OTP.
   Future<void> verifyPhoneOtp(String sessionId, String otp) async {
     try {
       final res = await _api.post(
         ApiEndpoints.registerStep4VerifyPhone,
-        queryParameters: {'sessionId': sessionId},
+        queryParameters: _session(sessionId),
         data: {'otp': otp},
       );
       unwrapData(res.data);
     } catch (e) {
-      throw _stepError(e);
+      throw _guard(e);
     }
   }
 
-  // ── helpers ──────────────────────────────────────────────────────────────
+  // -- Standalone OTP ---------------------------------------------------------
 
-  AuthApiException _stepError(Object e) {
-    if (e is AuthApiException) return e;
-    final msg = _extractMessage(
-        (e as dynamic).response?.data ?? (e as dynamic).error?.data);
-    final status = (e as dynamic).response?.statusCode as int?;
-    return AuthApiException(
-      msg ?? 'Something went wrong — please try again',
-      statusCode: status,
+  /// Generic OTP for a signed-in user. [channel] is `sms` or `email`.
+  Future<void> sendOtp({required String channel, required String purpose}) =>
+      _call(
+        () => _api.post(
+          ApiEndpoints.otpSend,
+          data: {'channel': channel, 'purpose': purpose},
+        ),
+      );
+
+  Future<void> verifyOtp({required String code, required String purpose}) =>
+      _call(
+        () => _api.post(
+          ApiEndpoints.otpVerify,
+          data: {'code': code, 'purpose': purpose},
+        ),
+      );
+
+  /// Phone OTP addressed by number (used when changing a phone number).
+  Future<void> sendOtpToPhone(String phoneNumber) => _call(
+        () => _api.post(
+          ApiEndpoints.sendOtpOnPhoneNumber,
+          data: {'phoneNumber': phoneNumber},
+        ),
+      );
+
+  Future<void> verifyOtpOnPhone({
+    required String phoneNumber,
+    required String code,
+  }) =>
+      _call(
+        () => _api.post(
+          ApiEndpoints.verifyOtpOnPhoneNumber,
+          data: {'phoneNumber': phoneNumber, 'code': code},
+        ),
+      );
+
+  // -- Passwords --------------------------------------------------------------
+
+  /// Sends a reset code to the address, if an account exists.
+  Future<void> requestPasswordReset(String email) => _call(
+        () => _api.post(
+          ApiEndpoints.passwordResetRequest,
+          data: {'email': email},
+        ),
+      );
+
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) =>
+      _call(
+        () => _api.post(
+          ApiEndpoints.passwordReset,
+          data: {
+            'email': email,
+            'code': code,
+            'new_password': newPassword,
+          },
+        ),
+      );
+
+  /// Changing the password signs every other device out.
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) =>
+      _call(
+        () => _api.post(
+          ApiEndpoints.passwordChange,
+          data: {
+            'current_password': currentPassword,
+            'new_password': newPassword,
+          },
+        ),
+      );
+
+  // -- Token helpers ----------------------------------------------------------
+
+  Future<String?> readAccessToken() =>
+      _storage.read(key: AuthTokenKeys.accessToken);
+
+  Future<String?> readRefreshToken() =>
+      _storage.read(key: AuthTokenKeys.refreshToken);
+
+  Future<bool> get isSignedIn async {
+    final token = await readAccessToken();
+    return token != null && token.isNotEmpty;
+  }
+
+  Future<void> clearTokens() async {
+    try {
+      await Future.wait([
+        _storage.delete(key: AuthTokenKeys.accessToken),
+        _storage.delete(key: AuthTokenKeys.refreshToken),
+      ]);
+    } catch (_) {
+      // Keystore unavailable - nothing more we can do locally.
+    }
+  }
+
+  // -- Internals --------------------------------------------------------------
+
+  /// Persists the token pair and maps the payload onto [AuthResponse].
+  Future<AuthResponse> _handleSession(Map<String, dynamic> data) async {
+    final accessToken = '${data['accessToken'] ?? data['access_token'] ?? ''}';
+    final refreshToken =
+        '${data['refreshToken'] ?? data['refresh_token'] ?? ''}';
+
+    if (accessToken.isEmpty) {
+      throw const AuthApiException(
+        'Sign-in succeeded but no session token was returned.',
+        code: 'ERR_AUTH_NO_TOKEN',
+      );
+    }
+
+    await _persistTokens(accessToken, refreshToken);
+
+    final user = asMap(data['user']);
+    return AuthResponse(
+      token: accessToken,
+      role: _role('${user['role'] ?? data['role'] ?? ''}'),
     );
   }
 
   Future<void> _persistTokens(String access, String refresh) async {
     try {
       if (access.isNotEmpty) {
-        await _storage.write(key: 'auth_token', value: access);
+        await _storage.write(key: AuthTokenKeys.accessToken, value: access);
       }
       if (refresh.isNotEmpty) {
-        await _storage.write(key: 'refresh_token', value: refresh);
+        await _storage.write(key: AuthTokenKeys.refreshToken, value: refresh);
       }
-    } catch (_) {}
+    } catch (_) {
+      // Writing failed (locked keystore); the session lives for this run only.
+    }
   }
 
-  Future<void> clearTokens() async {
+  static Role _role(String backendRole) => switch (backendRole.toLowerCase()) {
+        'owner' => Role.owner,
+        'broker' => Role.broker,
+        _ => Role.renter,
+      };
+
+  /// The registration session id travels as a query parameter on every step,
+  /// which is how the backend correlates the eight-step flow.
+  static Map<String, dynamic> _session(String sessionId) =>
+      sessionId.isEmpty ? const {} : {'sessionId': sessionId};
+
+  Future<void> _call(Future<dynamic> Function() request) async {
     try {
-      await _storage.delete(key: 'auth_token');
-      await _storage.delete(key: 'refresh_token');
-    } catch (_) {}
+      final res = await request();
+      unwrapData(res.data);
+    } catch (e) {
+      throw _guard(e);
+    }
+  }
+
+  /// Normalises anything thrown into an [AuthApiException] with a message the
+  /// UI can show and a code it can branch on.
+  AuthApiException _guard(Object e) {
+    if (e is AuthApiException) return e;
+
+    if (e is AppException) {
+      final message = e is UnauthorizedException && e.code == null
+          ? 'Incorrect email or password.'
+          : e.message;
+      final code = e.code ??
+          (e is UnauthorizedException ? 'ERR_AUTH_INVALID_CREDENTIALS' : null);
+      return AuthApiException(
+        message,
+        code: code,
+        field: e.field,
+        statusCode: e is ServerException ? e.statusCode : null,
+      );
+    }
+
+    if (e is DioException) {
+      return AuthApiException(
+        e.message ?? 'Network error',
+        code: 'ERR_NETWORK',
+        statusCode: e.response?.statusCode,
+      );
+    }
+
+    return const AuthApiException(
+      'Something went wrong. Please try again.',
+      code: 'ERR_UNKNOWN',
+    );
   }
 }

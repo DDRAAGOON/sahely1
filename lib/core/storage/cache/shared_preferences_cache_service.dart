@@ -23,7 +23,7 @@ class SharedPreferencesCacheService implements CacheService {
       ttl: ttl,
       version: version,
     );
-    
+
     final jsonString = jsonEncode(entry.toJson(toJson));
     await _prefs.setString('$_prefix$key', jsonString);
   }

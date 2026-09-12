@@ -91,7 +91,8 @@ class ChatMessageBubble extends StatelessWidget {
                       ? AppColors.gold.withValues(alpha: 0.15)
                       : AppColors.white,
                   borderRadius: BorderRadius.circular(12),
-                  border: isAI ? null : Border.all(color: AppColors.borderDefault),
+                  border:
+                      isAI ? null : Border.all(color: AppColors.borderDefault),
                 ),
                 child: Text(
                   message,

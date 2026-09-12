@@ -5,14 +5,15 @@ import 'infinite_scroll_request.dart';
 import 'infinite_scroll_result.dart';
 import 'infinite_scroll_policy.dart';
 
-typedef InfiniteScrollTask<T> = Future<InfiniteScrollResult<T>> Function(InfiniteScrollRequest request);
+typedef InfiniteScrollTask<T> = Future<InfiniteScrollResult<T>> Function(
+    InfiniteScrollRequest request);
 
 class InfiniteScrollController<T> {
   final InfiniteScrollTask<T> _task;
   final int _pageSize;
   final InfiniteScrollPolicy _policy;
   final Map<String, dynamic>? _initialParams;
-  
+
   // Forwarded to Lazy Loading infrastructure if needed
   final Duration? _timeout;
   final int _maxRetries;
@@ -59,43 +60,43 @@ class InfiniteScrollController<T> {
 
   Future<void> loadInitial() async {
     if (_state.status.isLoading) return _activeFuture;
-    
+
     _updateState(_state.copyWith(
       status: InfiniteScrollStatus.loadingInitial,
       errorMessage: null,
     ));
-    
+
     _activeFuture = _fetchPage(1, forceRefresh: true);
     return _activeFuture;
   }
 
   Future<void> loadNextPage() async {
     if (_state.status.isLoading || !_state.hasNext) return _activeFuture;
-    
+
     _updateState(_state.copyWith(
       status: InfiniteScrollStatus.loadingNextPage,
       errorMessage: null,
     ));
-    
+
     _activeFuture = _fetchPage(_state.currentPage + 1);
     return _activeFuture;
   }
 
   Future<void> refresh() async {
     if (_state.status.isLoading) return _activeFuture;
-    
+
     _updateState(_state.copyWith(
       status: InfiniteScrollStatus.refreshing,
       errorMessage: null,
     ));
-    
+
     _activeFuture = _fetchPage(1, forceRefresh: true);
     return _activeFuture;
   }
 
   Future<void> retry() async {
     if (_state.status != InfiniteScrollStatus.error) return;
-    
+
     if (_state.currentPage == 0) {
       return loadInitial();
     } else {
@@ -110,18 +111,19 @@ class InfiniteScrollController<T> {
         pageSize: _pageSize,
         params: _initialParams,
       );
-      
+
       // We could use LazyLoadController here if we wanted to reuse its retry/timeout logic
       // But for infinite scroll, we often want specific control over the result merging.
-      
+
       final result = await _runWithRetry(() => _task(request));
-      
-      final List<T> newItems = forceRefresh 
-          ? result.items 
-          : [..._state.items, ...result.items];
-          
+
+      final List<T> newItems =
+          forceRefresh ? result.items : [..._state.items, ...result.items];
+
       _updateState(_state.copyWith(
-        status: newItems.isEmpty ? InfiniteScrollStatus.empty : InfiniteScrollStatus.success,
+        status: newItems.isEmpty
+            ? InfiniteScrollStatus.empty
+            : InfiniteScrollStatus.success,
         items: newItems,
         currentPage: result.page,
         totalItems: result.totalItems,
@@ -139,7 +141,8 @@ class InfiniteScrollController<T> {
     }
   }
 
-  Future<InfiniteScrollResult<T>> _runWithRetry(Future<InfiniteScrollResult<T>> Function() task) async {
+  Future<InfiniteScrollResult<T>> _runWithRetry(
+      Future<InfiniteScrollResult<T>> Function() task) async {
     int attempts = 0;
     while (true) {
       try {
@@ -177,7 +180,9 @@ class InfiniteScrollController<T> {
     _updateState(_state.copyWith(
       items: newItems,
       hasNext: hasNext,
-      status: newItems.isEmpty ? InfiniteScrollStatus.empty : InfiniteScrollStatus.success,
+      status: newItems.isEmpty
+          ? InfiniteScrollStatus.empty
+          : InfiniteScrollStatus.success,
     ));
   }
 
@@ -186,7 +191,9 @@ class InfiniteScrollController<T> {
       items: items,
       currentPage: 1,
       hasNext: hasNext,
-      status: items.isEmpty ? InfiniteScrollStatus.empty : InfiniteScrollStatus.success,
+      status: items.isEmpty
+          ? InfiniteScrollStatus.empty
+          : InfiniteScrollStatus.success,
     ));
   }
 

@@ -27,7 +27,8 @@ class DeepLinkParser {
   }
 
   Map<String, String>? _matchPath(String pattern, String path) {
-    final patternSegments = pattern.split('/').where((s) => s.isNotEmpty).toList();
+    final patternSegments =
+        pattern.split('/').where((s) => s.isNotEmpty).toList();
     final pathSegments = path.split('/').where((s) => s.isNotEmpty).toList();
 
     if (patternSegments.length != pathSegments.length) {

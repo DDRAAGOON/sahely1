@@ -163,7 +163,9 @@ class IconCircleButton extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           color: bg,
-          border: bg == AppColors.white ? Border.all(color: AppColors.border) : null,
+          border: bg == AppColors.white
+              ? Border.all(color: AppColors.border)
+              : null,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(icon, size: 18, color: fg),

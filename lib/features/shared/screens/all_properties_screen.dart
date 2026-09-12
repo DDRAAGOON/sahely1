@@ -4,12 +4,20 @@ import 'package:sahely/core/navigation/app_navigation.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
-import 'package:sahely/data/sample_data.dart';
 import 'package:sahely/features/shared/widgets/browse_empty_state.dart';
 import 'package:sahely/features/shared/widgets/hero_property_card.dart';
 import 'package:sahely/core/widgets/entrance_faded.dart';
 import 'package:sahely/core/widgets/smooth_transition.dart';
 import 'package:sahely/core/widgets/kit.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/features/renter/domain/repositories/renter_repository.dart';
+import 'package:sahely/features/shared/properties/domain/entities/property.dart';
+
+typedef _Feeds = ({
+  List<Property> trending,
+  List<Property> offers,
+  List<Property> all,
+});
 
 class AllPropertiesScreen extends StatefulWidget {
   const AllPropertiesScreen({super.key});
@@ -22,6 +30,15 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
   String _selectedFilter = 'All';
   final TextEditingController _searchController = TextEditingController();
   final String _query = '';
+  late Future<_Feeds> _feeds = _loadFeeds();
+
+  Future<_Feeds> _loadFeeds() async {
+    final repo = sl<RenterRepository>();
+    final trending = await repo.getTrending();
+    final offers = await repo.getOffers();
+    final all = await repo.getAllProperties();
+    return (trending: trending, offers: offers, all: all);
+  }
 
   @override
   void dispose() {
@@ -88,11 +105,34 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
 
               // 3. Properties List
               Expanded(
-                child: SmoothListTransition(
-                  transitionKey: '$_selectedFilter$_query',
-                  child: isSearching
-                      ? _buildFilteredResults()
-                      : _buildDiscoverySections(),
+                child: FutureBuilder<_Feeds>(
+                  future: _feeds,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const Center(
+                          child:
+                              CircularProgressIndicator(color: AppColors.gold));
+                    }
+                    final feeds = snapshot.data;
+                    if (feeds == null) {
+                      return Center(
+                        child: TextButton(
+                          onPressed: () =>
+                              setState(() => _feeds = _loadFeeds()),
+                          child: Text(
+                              'Could not load properties. Tap to retry.',
+                              style: AppTheme.dm(
+                                  size: 14, color: AppColors.muted)),
+                        ),
+                      );
+                    }
+                    return SmoothListTransition(
+                      transitionKey: '$_selectedFilter$_query',
+                      child: isSearching
+                          ? _buildFilteredResults(feeds)
+                          : _buildDiscoverySections(feeds),
+                    );
+                  },
                 ),
               ),
             ],
@@ -102,52 +142,36 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
     );
   }
 
-  Widget _buildFilteredResults() {
-    final results = Sample.allTrending.where((p) {
-      if (_query.isNotEmpty) {
-        final q = _query.toLowerCase();
-        if (!p.name.toLowerCase().contains(q) && !p.area.toLowerCase().contains(q)) {
-          return false;
-        }
-      }
-      if (_selectedFilter == 'Trending Now') {
-        // Trending items are usually high rated and popular
-        return p.rating >= 4.6;
-      } else if (_selectedFilter == 'Best Offers') {
-        // Offers are lower price or have specific value
-        return p.price < 5000;
-      } else if (_selectedFilter == 'Newly Added') {
-        // Mocking 'new' as guest favorites or specific IDs
-        return p.guestFavourite || int.parse(p.id) > 10;
-      }
-      return true;
-    }).toList();
+  Widget _buildFilteredResults(_Feeds feeds) {
+    final source = switch (_selectedFilter) {
+      'Trending Now' => feeds.trending,
+      'Best Offers' => feeds.offers,
+      _ => feeds.all,
+    };
+    final q = _query.toLowerCase();
+    final results = q.isEmpty
+        ? source
+        : source
+            .where((p) =>
+                p.name.toLowerCase().contains(q) ||
+                p.area.toLowerCase().contains(q))
+            .toList();
 
     if (results.isEmpty) {
       return const BrowseEmptyState();
     }
 
-    String badgeFor(dynamic p) {
-      String badge = 'Featured';
-      Color badgeColor = AppColors.gold;
-
+    (String, Color) badgeFor(Property p) {
       if (_selectedFilter == 'Trending Now') {
-        badge = 'Trending';
-        badgeColor = AppColors.error;
-      } else if (_selectedFilter == 'Best Offers') {
-        badge = '-15%';
-        badgeColor = AppColors.success;
-      } else if (_selectedFilter == 'Newly Added') {
-        badge = 'New';
-        badgeColor = AppColors.gold;
-      } else if (p.rating >= 4.8) {
-        badge = 'Top Rated';
-        badgeColor = AppColors.error;
+        return ('Trending', AppColors.error);
       }
-      return '$badge\u0000$badgeColor';
+      if (_selectedFilter == 'Best Offers') return ('Offer', AppColors.success);
+      if (_selectedFilter == 'Newly Added') return ('New', AppColors.gold);
+      if (p.rating >= 4.8) return ('Top Rated', AppColors.error);
+      return ('Featured', AppColors.gold);
     }
 
-    // Responsive: single-column cards on phones; 2–3 column grid on tablets.
+    // Responsive: single-column cards on phones; 2-3 column grid on tablets.
     return LayoutBuilder(builder: (context, constraints) {
       final cols = Responsive.gridColumns(constraints.maxWidth);
       if (cols == 1) {
@@ -156,14 +180,11 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
           itemCount: results.length,
           itemBuilder: (context, index) {
             final p = results[index];
-            final parts = badgeFor(p).split('\u0000');
+            final (badge, color) = badgeFor(p);
             return Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: HeroPropertyCard(
-                property: p,
-                badge: parts[0],
-                badgeColor: Color(int.parse(parts[1])),
-              ),
+                  property: p, badge: badge, badgeColor: color),
             );
           },
         );
@@ -180,54 +201,53 @@ class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
         itemCount: results.length,
         itemBuilder: (context, index) {
           final p = results[index];
-          final parts = badgeFor(p).split('\u0000');
-          return HeroPropertyCard(
-            property: p,
-            badge: parts[0],
-            badgeColor: Color(int.parse(parts[1])),
-          );
+          final (badge, color) = badgeFor(p);
+          return HeroPropertyCard(property: p, badge: badge, badgeColor: color);
         },
       );
     });
   }
 
-  Widget _buildDiscoverySections() {
+  Widget _buildDiscoverySections(_Feeds feeds) {
+    final offer = feeds.offers.isEmpty ? null : feeds.offers.first;
+    if (feeds.trending.isEmpty && offer == null && feeds.all.isEmpty) {
+      return const BrowseEmptyState();
+    }
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 40),
       children: [
-        _sectionHeader('🔥 TRENDING NOW'),
-        ...Sample.allTrending.take(2).map((p) => Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: HeroPropertyCard(
-            property: p,
-            badge: 'Trending',
-            badgeColor: AppColors.error,
+        if (feeds.trending.isNotEmpty) ...[
+          _sectionHeader('🔥 TRENDING NOW'),
+          ...feeds.trending.take(2).map((p) => Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: HeroPropertyCard(
+                  property: p,
+                  badge: 'Trending',
+                  badgeColor: AppColors.error,
+                ),
+              )),
+          const SizedBox(height: 8),
+        ],
+        if (offer != null) ...[
+          _sectionHeader('💰 BEST OFFERS'),
+          HeroPropertyCard(
+            property: offer,
+            badge: 'Offer',
+            badgeColor: AppColors.success,
           ),
-        )),
-        const SizedBox(height: 8),
-
-        _sectionHeader('💰 BEST OFFERS'),
-        const HeroPropertyCard(
-          property: Sample.dunes,
-          badge: '-15%',
-          badgeColor: AppColors.success,
-        ),
-        const SizedBox(height: 24),
-
-        _sectionHeader('✨ NEWLY ADDED'),
-        const HeroPropertyCard(
-          property: Sample.lagoon,
-          badge: 'New',
-          badgeColor: AppColors.gold,
-          nameOverride: 'Marina Loft',
-        ),
-        const SizedBox(height: 16),
-        const HeroPropertyCard(
-          property: Sample.azure,
-          badge: 'New',
-          badgeColor: AppColors.gold,
-          nameOverride: 'Palm Chalet',
-        ),
+          const SizedBox(height: 24),
+        ],
+        if (feeds.all.isNotEmpty) ...[
+          _sectionHeader('✨ NEWLY ADDED'),
+          for (final p in feeds.all.take(2)) ...[
+            HeroPropertyCard(
+              property: p,
+              badge: 'New',
+              badgeColor: AppColors.gold,
+            ),
+            const SizedBox(height: 16),
+          ],
+        ],
       ],
     );
   }

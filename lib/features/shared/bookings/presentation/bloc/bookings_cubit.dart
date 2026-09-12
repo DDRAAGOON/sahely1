@@ -6,6 +6,7 @@ import '../../domain/use_cases/get_active_bookings_use_case.dart';
 import '../../domain/use_cases/get_past_bookings_use_case.dart';
 import '../../domain/use_cases/book_property_use_case.dart';
 import '../../domain/use_cases/update_checklist_use_case.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
 enum BookingsStatus { initial, loading, loaded, error }
 
@@ -41,10 +42,11 @@ class BookingsState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [upcomingBookings, activeBookings, pastBookings, status, errorMessage];
+  List<Object?> get props =>
+      [upcomingBookings, activeBookings, pastBookings, status, errorMessage];
 }
 
-class BookingsCubit extends Cubit<BookingsState> {
+class BookingsCubit extends Cubit<BookingsState> with SafeEmit<BookingsState> {
   final GetUpcomingBookingsUseCase _getUpcomingBookingsUseCase;
   final GetActiveBookingsUseCase _getActiveBookingsUseCase;
   final GetPastBookingsUseCase _getPastBookingsUseCase;
@@ -70,7 +72,7 @@ class BookingsCubit extends Cubit<BookingsState> {
       final upcoming = await _getUpcomingBookingsUseCase.execute();
       final active = await _getActiveBookingsUseCase.execute();
       final past = await _getPastBookingsUseCase.execute();
-      
+
       emit(state.copyWith(
         upcomingBookings: upcoming,
         activeBookings: active,
@@ -78,7 +80,8 @@ class BookingsCubit extends Cubit<BookingsState> {
         status: BookingsStatus.loaded,
       ));
     } catch (e) {
-      emit(state.copyWith(status: BookingsStatus.error, errorMessage: e.toString()));
+      emit(state.copyWith(
+          status: BookingsStatus.error, errorMessage: e.toString()));
     }
   }
 
@@ -87,16 +90,19 @@ class BookingsCubit extends Cubit<BookingsState> {
       await _bookPropertyUseCase.execute(booking);
       await loadBookings();
     } catch (e) {
-      emit(state.copyWith(status: BookingsStatus.error, errorMessage: e.toString()));
+      emit(state.copyWith(
+          status: BookingsStatus.error, errorMessage: e.toString()));
     }
   }
 
-  Future<void> updateChecklist(String bookingId, List<Map<String, dynamic>> newChecklist) async {
+  Future<void> updateChecklist(
+      String bookingId, List<Map<String, dynamic>> newChecklist) async {
     try {
       await _updateChecklistUseCase.execute(bookingId, newChecklist);
       await loadBookings();
     } catch (e) {
-      emit(state.copyWith(status: BookingsStatus.error, errorMessage: e.toString()));
+      emit(state.copyWith(
+          status: BookingsStatus.error, errorMessage: e.toString()));
     }
   }
 }

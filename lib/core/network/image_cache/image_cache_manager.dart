@@ -7,7 +7,8 @@ class ImageCacheManager {
 
   ImageCacheManager(this._service);
 
-  ImageProvider getProvider(String url, {ImageCachePolicy policy = ImageCachePolicy.standard}) {
+  ImageProvider getProvider(String url,
+      {ImageCachePolicy policy = ImageCachePolicy.standard}) {
     return _service.getProvider(url, policy: policy);
   }
 

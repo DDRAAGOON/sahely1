@@ -38,7 +38,8 @@ class LevelDetailSheet extends StatelessWidget {
           top: Radius.circular(32),
         ),
       ),
-      child: Column(
+      child: SingleChildScrollView(
+          child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -93,7 +94,7 @@ class LevelDetailSheet extends StatelessWidget {
           // Done Button
           LevelDoneButton(onTap: onClose),
         ],
-      ),
+      )),
     );
   }
 }

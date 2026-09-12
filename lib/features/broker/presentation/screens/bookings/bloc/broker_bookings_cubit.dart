@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sahely/features/broker/domain/entities/broker_booking.dart';
 import 'package:sahely/features/broker/domain/use_cases/get_broker_bookings_use_case.dart';
 import 'package:sahely/features/broker/domain/use_cases/filter_broker_bookings_use_case.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
 enum BrokerBookingsStatus { initial, loading, loaded, error }
 
@@ -29,7 +30,8 @@ class BrokerBookingsState {
   }
 }
 
-class BrokerBookingsCubit extends Cubit<BrokerBookingsState> {
+class BrokerBookingsCubit extends Cubit<BrokerBookingsState>
+    with SafeEmit<BrokerBookingsState> {
   final GetBrokerBookingsUseCase _getBrokerBookingsUseCase;
 
   BrokerBookingsCubit({

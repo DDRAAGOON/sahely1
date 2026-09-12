@@ -64,9 +64,11 @@ class ReviewReceivedCard extends StatelessWidget {
                 ),
                 child: hostAvatar != null
                     ? ClipOval(
-                        child: AppNetworkImage(url: hostAvatar!, errorWidget: (context, error, stackTrace) =>
-                              const Icon(Icons.person,
-                                  color: Colors.white, size: 24)),
+                        child: AppNetworkImage(
+                            url: hostAvatar!,
+                            errorWidget: (context, error, stackTrace) =>
+                                const Icon(Icons.person,
+                                    color: Colors.white, size: 24)),
                       )
                     : const Icon(Icons.person, color: Colors.white, size: 24),
               ),
@@ -144,4 +146,3 @@ class ReviewReceivedCard extends StatelessWidget {
     );
   }
 }
-

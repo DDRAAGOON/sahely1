@@ -7,6 +7,9 @@ import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/bouncy_button.dart';
 import 'package:sahely/features/owner/widgets/approved_request_sheet.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/features/owner/domain/entities/owner_booking_request.dart';
+import 'package:sahely/features/owner/domain/repositories/owner_repository.dart';
 
 class OwnerRequestsScreen extends StatefulWidget {
   const OwnerRequestsScreen({super.key});
@@ -17,70 +20,93 @@ class OwnerRequestsScreen extends StatefulWidget {
 
 class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
   int _activeTab = 0; // 0: Pending, 1: Approved, 2: Declined
+  late Future<List<OwnerBookingRequest>> _requests = _load();
 
-  void _showDeclineBottomSheet(String name) {
+  Future<List<OwnerBookingRequest>> _load() =>
+      sl<OwnerRepository>().getBookingRequests();
+
+  void _reload() {
+    if (mounted) setState(() => _requests = _load());
+  }
+
+  void _showDeclineBottomSheet(OwnerBookingRequest request) {
     final controller = TextEditingController();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useRootNavigator: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        decoration: const BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        padding: EdgeInsets.fromLTRB(
-            24, 16, 24, MediaQuery.of(ctx).viewInsets.bottom + 32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                    color: AppColors.borderDefault,
-                    borderRadius: BorderRadius.circular(2)),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Text(AppLocalizations.of(context).declineRequest,
-                style: AppTheme.dm(
-                    size: 20, weight: FontWeight.w700, color: AppColors.navy)),
-            const SizedBox(height: 8),
-            Text('Please provide a reason for declining $name\'s request.',
-                style: AppTheme.dm(size: 14, color: AppColors.muted)),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.cream,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.borderDefault),
-              ),
-              child: TextField(
-                controller: controller,
-                maxLines: 3,
-                decoration: const InputDecoration(
-                  hintText: 'e.g. Unit is undergoing maintenance...',
-                  border: InputBorder.none,
+      builder: (ctx) => SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: EdgeInsets.fromLTRB(
+              24, 16, 24, MediaQuery.of(ctx).viewInsets.bottom + 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                      color: AppColors.borderDefault,
+                      borderRadius: BorderRadius.circular(2)),
                 ),
-                style: AppTheme.dm(size: 14),
               ),
-            ),
-            const SizedBox(height: 24),
-            NavyButton(
-              label: AppLocalizations.of(context).confirmDecline,
-              onTap: () {
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Request for $name declined')),
-                );
-              },
-            ),
-          ],
+              const SizedBox(height: 24),
+              Text(AppLocalizations.of(context).declineRequest,
+                  style: AppTheme.dm(
+                      size: 20,
+                      weight: FontWeight.w700,
+                      color: AppColors.navy)),
+              const SizedBox(height: 8),
+              Text(
+                  'Please provide a reason for declining ${request.guestName}\'s request.',
+                  style: AppTheme.dm(size: 14, color: AppColors.muted)),
+              const SizedBox(height: 20),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.cream,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.borderDefault),
+                ),
+                child: TextField(
+                  controller: controller,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                    hintText: 'e.g. Unit is undergoing maintenance...',
+                    border: InputBorder.none,
+                  ),
+                  style: AppTheme.dm(size: 14),
+                ),
+              ),
+              const SizedBox(height: 24),
+              NavyButton(
+                label: AppLocalizations.of(context).confirmDecline,
+                onTap: () async {
+                  Navigator.pop(ctx);
+                  final messenger = ScaffoldMessenger.of(context);
+                  try {
+                    await sl<OwnerRepository>().declineRequest(request.id);
+                    messenger.showSnackBar(SnackBar(
+                        content:
+                            Text('Request for ${request.guestName} declined')));
+                    _reload();
+                  } catch (_) {
+                    messenger.showSnackBar(const SnackBar(
+                        content: Text(
+                            'Could not decline the request. Please try again.')));
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -108,9 +134,8 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('$name has been blocked')),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Blocking guests is not available yet.')));
             },
             child: Text(AppLocalizations.of(context).blockLabel,
                 style: AppTheme.dm(
@@ -133,7 +158,8 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
               onBack: () => Navigator.pop(context),
             ),
           ),
-          Padding(
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
@@ -161,10 +187,13 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
                   ),
                 );
               },
-              child: ListView(
+              child: FutureBuilder<List<OwnerBookingRequest>>(
                 key: ValueKey<int>(_activeTab),
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
-                children: _buildContent(),
+                future: _requests,
+                builder: (context, snapshot) => ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
+                  children: _buildContent(snapshot),
+                ),
               ),
             ),
           ),
@@ -193,202 +222,242 @@ class _OwnerRequestsScreenState extends State<OwnerRequestsScreen> {
     );
   }
 
-  List<Widget> _buildContent() {
-    if (_activeTab == 0) return _buildPending();
-    if (_activeTab == 1) return _buildApproved();
-    return _buildDeclined();
-  }
-
-  Widget _pendingItem(String name, String rating, bool verified, String unit,
-      String stays, String dates, String guests, String price,
-      {String? aiInsight}) {
-    return BouncyButton(
-      onTap: () => AppNavigation.goToOwnerRequestDetail(context, extra: {
-        'guestName': name,
-        'rating': rating,
-        'verified': verified,
-        'propertyName': unit,
-        'stays': stays,
-        'dates': dates,
-        'total': price,
-        'guests': guests,
-        'aiInsight': aiInsight,
-        'status': 'Pending',
-      }),
-      child: _PendingRequestCard(
-        name: name,
-        rating: rating,
-        verified: verified,
-        unit: unit,
-        stays: stays,
-        dates: dates,
-        guests: guests,
-        price: price,
-        aiInsight: aiInsight,
-        onApprove: () => showApprovedRequestSheet(
-          context,
-          guestName: name,
-          propertyName: unit,
-          dates: dates,
+  List<Widget> _buildContent(
+      AsyncSnapshot<List<OwnerBookingRequest>> snapshot) {
+    if (snapshot.connectionState != ConnectionState.done) {
+      return const [
+        Padding(
+          padding: EdgeInsets.only(top: 40),
+          child:
+              Center(child: CircularProgressIndicator(color: AppColors.gold)),
         ),
-        onDecline: () => _showDeclineBottomSheet(name),
-        onBlock: () => _showBlockConfirmation(name),
-      ),
-    );
-  }
+      ];
+    }
+    if (snapshot.hasError) {
+      return [
+        Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Column(children: [
+            Text('Could not load your requests.',
+                style: AppTheme.dm(size: 14, color: AppColors.muted)),
+            TextButton(
+              onPressed: _reload,
+              child: Text(AppLocalizations.of(context).retry,
+                  style: AppTheme.dm(
+                      size: 14,
+                      weight: FontWeight.w600,
+                      color: AppColors.gold)),
+            ),
+          ]),
+        ),
+      ];
+    }
 
-  List<Widget> _buildPending() {
+    final state = RequestState.values[_activeTab];
+    final requests = snapshot.data!.where((r) => r.state == state).toList();
+    if (requests.isEmpty) {
+      return [
+        Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Center(
+            child: Text(
+                switch (state) {
+                  RequestState.pending => 'No pending requests right now.',
+                  RequestState.approved => 'No approved requests yet.',
+                  RequestState.declined => 'No declined requests.',
+                },
+                style: AppTheme.dm(size: 14, color: AppColors.muted)),
+          ),
+        ),
+      ];
+    }
     return [
-      _pendingItem(
-        'Omar Khalil',
-        '4.9',
-        true,
-        'Azure Beach Villa',
-        '12 stays',
-        'Jun 21–25',
-        '4 guests · 2A 2C',
-        '18,000',
-        aiInsight: 'Strong guest — 5★ history, no violations. Low risk.',
-      ),
-      const SizedBox(height: 16),
-      _pendingItem(
-        'Sara Mansour',
-        '4.6',
-        false,
-        'Golden Dunes',
-        '3 stays',
-        'Jul 2–6',
-        '2 guests',
-        '15,200',
-      ),
+      for (final request in requests) ...[
+        switch (state) {
+          RequestState.pending => _pendingItem(request),
+          RequestState.approved => _approvedItem(request),
+          RequestState.declined => _declinedItem(request),
+        },
+        const SizedBox(height: 16),
+      ],
     ];
   }
 
-  Widget _approvedItem(String name, String rating, bool verified, String unit,
-      String dates, String guests, String price, String status,
-      {String? statusNote}) {
-    return BouncyButton(
-      onTap: () => AppNavigation.goToOwnerRequestDetail(context, extra: {
-        'guestName': name,
-        'rating': rating,
-        'verified': verified,
-        'propertyName': unit,
-        'dates': dates,
-        'total': price,
-        'guests': guests,
+  String _unit(OwnerBookingRequest r) =>
+      r.property?.name ?? 'Listing unavailable';
+
+  String _guests(OwnerBookingRequest r) =>
+      r.guests == 1 ? '1 guest' : '${r.guests} guests';
+
+  String _nights(OwnerBookingRequest r) =>
+      '${r.nights} ${r.nights == 1 ? 'night' : 'nights'}';
+
+  String _price(OwnerBookingRequest r) => _grouped(r.payoutEgp.round());
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  /// `Jun 21–25`, or `Jun 29 – Jul 3` across months.
+  String _dates(OwnerBookingRequest r) {
+    final start = '${_months[r.checkIn.month - 1]} ${r.checkIn.day}';
+    if (r.checkIn.month == r.checkOut.month) return '$start–${r.checkOut.day}';
+    return '$start – ${_months[r.checkOut.month - 1]} ${r.checkOut.day}';
+  }
+
+  /// `18000` -> `18,000`.
+  static String _grouped(int value) {
+    final digits = value.toString();
+    final buffer = StringBuffer();
+    for (var i = 0; i < digits.length; i++) {
+      if (i > 0 && (digits.length - i) % 3 == 0) buffer.write(',');
+      buffer.write(digits[i]);
+    }
+    return buffer.toString();
+  }
+
+  /// What the detail screen shows; `onChanged` refreshes this list after an
+  /// approve / decline made there.
+  Map<String, dynamic> _detail(OwnerBookingRequest r, String status,
+          {String? statusNote, String? reason}) =>
+      {
+        'id': r.id,
+        'reference': r.reference,
+        'guestName': r.guestName,
+        'rating': '—',
+        'verified': false,
+        'propertyName': _unit(r),
+        'stays': _nights(r),
+        'dates': _dates(r),
+        'total': _price(r),
+        'guests': _guests(r),
         'status': status,
         'statusNote': statusNote,
-      }),
-      child: _ApprovedRequestCard(
-        name: name,
-        rating: rating,
-        verified: verified,
-        unit: unit,
-        dates: dates,
-        guests: guests,
-        price: price,
-        status: status,
-        statusNote: statusNote,
+        'reason': reason,
+        'onChanged': _reload,
+      };
+
+  Future<void> _approve(OwnerBookingRequest r) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await sl<OwnerRepository>().approveRequest(r.id);
+      if (!mounted) return;
+      _reload();
+      await showApprovedRequestSheet(
+        context,
+        guestName: r.guestName,
+        propertyName: _unit(r),
+        dates: _dates(r),
+        payoutDisplay: 'EGP ${_price(r)}',
+      );
+    } catch (_) {
+      messenger.showSnackBar(const SnackBar(
+          content: Text('Could not approve the request. Please try again.')));
+    }
+  }
+
+  Widget _pendingItem(OwnerBookingRequest r) {
+    return BouncyButton(
+      onTap: () => AppNavigation.goToOwnerRequestDetail(context,
+          extra: _detail(r, 'Pending')),
+      child: _PendingRequestCard(
+        name: r.guestName,
+        aiInsight: null,
+        verified: false,
+        rating: '—',
+        unit: _unit(r),
+        stays: _nights(r),
+        dates: _dates(r),
+        guests: _guests(r),
+        price: _price(r),
+        onApprove: () => _approve(r),
+        onDecline: () => _showDeclineBottomSheet(r),
+        onBlock: () => _showBlockConfirmation(r.guestName),
       ),
     );
   }
 
-  List<Widget> _buildApproved() {
-    return [
-      _approvedItem(
-        'Nour Adel',
-        '5.0',
-        true,
-        'Azure Villa',
-        'Jun 14–18',
-        '4 guests · 2A 2C',
-        '22,400',
-        'Active',
-        statusNote: 'Checked in',
+  Widget _approvedItem(OwnerBookingRequest r) {
+    final inHouse = r.checkedIn && !r.isPast;
+    final status = inHouse ? 'Active' : (r.isPast ? 'Done' : 'Upcoming');
+    final note = inHouse ? 'Checked in' : null;
+    return BouncyButton(
+      onTap: () => AppNavigation.goToOwnerRequestDetail(context,
+          extra: _detail(r, status, statusNote: note)),
+      child: _ApprovedRequestCard(
+        name: r.guestName,
+        verified: false,
+        rating: '—',
+        unit: _unit(r),
+        dates: _dates(r),
+        guests: _guests(r),
+        price: _price(r),
+        status: status,
+        statusNote: note,
       ),
-      const SizedBox(height: 16),
-      _approvedItem(
-        'Omar Khalil',
-        '4.9',
-        true,
-        'Golden Dunes',
-        'Jun 21–25',
-        '2 guests',
-        '18,000',
-        'Upcoming',
-        statusNote: 'Pays on check-in',
-      ),
-      const SizedBox(height: 16),
-      _approvedItem(
-        'Hana Tarek',
-        '4.8',
-        true,
-        'Golden Dunes',
-        'Jun 8–11',
-        '2 guests',
-        '11,400',
-        'Done',
-      ),
-    ];
+    );
   }
 
-  Widget _declinedItem(String name, String? rating, bool verified, String unit,
-      String dates, String guests, String price, String reason) {
+  Widget _declinedItem(OwnerBookingRequest r) {
+    final reason = 'Reason: ${r.reason ?? 'Declined.'}';
     return BouncyButton(
-      onTap: () => AppNavigation.goToOwnerRequestDetail(context, extra: {
-        'guestName': name,
-        'rating': rating,
-        'verified': verified,
-        'propertyName': unit,
-        'dates': dates,
-        'total': price,
-        'guests': guests,
-        'status': 'Declined',
-        'reason': reason,
-      }),
+      onTap: () => AppNavigation.goToOwnerRequestDetail(context,
+          extra: _detail(r, 'Declined', reason: reason)),
       child: _DeclinedRequestCard(
-        name: name,
-        rating: rating,
-        verified: verified,
-        unit: unit,
-        dates: dates,
-        guests: guests,
-        price: price,
+        name: r.guestName,
+        rating: null,
+        verified: false,
+        unit: _unit(r),
+        dates: _dates(r),
+        guests: _guests(r),
+        price: _price(r),
         reason: reason,
       ),
     );
-  }
-
-  List<Widget> _buildDeclined() {
-    return [
-      _declinedItem(
-        'Tarek Sami',
-        '3.4',
-        true,
-        'Azure Villa',
-        'Jul 2–6',
-        '6 guests',
-        '27,000',
-        'Reason: exceeded max guests & low guest rating.',
-      ),
-      const SizedBox(height: 16),
-      _declinedItem(
-        'Mariam Saad',
-        null,
-        true,
-        'Golden Dunes',
-        'Aug 1–3',
-        '2 guests',
-        '9,600',
-        'Reason: dates no longer available.',
-      ),
-    ];
   }
 }
 
 class OwnerRequestDetailScreen extends StatelessWidget {
   final Map<String, dynamic>? data;
   const OwnerRequestDetailScreen({super.key, this.data});
+
+  /// Approves or declines the request shown, then refreshes the list it was
+  /// opened from (`onChanged`) and closes.
+  Future<void> _act(BuildContext context, Map<String, dynamic> data,
+      {required bool approve}) async {
+    final id = '${data['id'] ?? ''}';
+    if (id.isEmpty) {
+      Navigator.pop(context);
+      return;
+    }
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final repository = sl<OwnerRepository>();
+      await (approve
+          ? repository.approveRequest(id)
+          : repository.declineRequest(id));
+      (data['onChanged'] as VoidCallback?)?.call();
+      messenger.showSnackBar(SnackBar(
+          content: Text(approve ? 'Request approved' : 'Request declined')));
+      if (context.mounted) Navigator.pop(context);
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(
+          content: Text(approve
+              ? 'Could not approve the request. Please try again.'
+              : 'Could not decline the request. Please try again.')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -405,22 +474,7 @@ class OwnerRequestDetailScreen extends StatelessWidget {
       } catch (_) {}
     }
 
-    // 2. Fallback to mock data ONLY if everything is empty
-    final bool isEmpty = rawData.isEmpty;
-    final Map<String, dynamic> effectiveData = isEmpty
-        ? {
-            'guestName': 'Omar Khalil',
-            'rating': '4.9',
-            'verified': true,
-            'propertyName': 'Azure Beach Villa',
-            'stays': '12 stays',
-            'dates': 'Jun 21–25',
-            'total': '18,000',
-            'guests': '4 guests · 2A 2C',
-            'status': 'Pending',
-            'aiInsight': 'Strong guest — 5★ history, no violations. Low risk.',
-          }
-        : rawData;
+    final Map<String, dynamic> effectiveData = rawData;
 
     final name = effectiveData['guestName'] ?? 'Guest';
     final property = effectiveData['propertyName'] ?? 'Property';
@@ -483,7 +537,9 @@ class OwnerRequestDetailScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(6)),
                               child: Row(
                                 children: [
-                                  Text(AppLocalizations.of(context).verifiedBadge,
+                                  Text(
+                                      AppLocalizations.of(context)
+                                          .verifiedBadge,
                                       style: AppTheme.dm(
                                           size: 10,
                                           weight: FontWeight.w900,
@@ -536,7 +592,8 @@ class OwnerRequestDetailScreen extends StatelessWidget {
                       color: const Color(0xFFFBF3DE),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                          color: const Color(0xFFE4C56A).withValues(alpha: 0.3)),
+                          color:
+                              const Color(0xFFE4C56A).withValues(alpha: 0.3)),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -572,16 +629,19 @@ class OwnerRequestDetailScreen extends StatelessWidget {
                 if (status == 'Pending') ...[
                   NavyButton(
                       label: AppLocalizations.of(context).approveRequest,
-                      onTap: () => Navigator.pop(context)),
+                      onTap: () => _act(context, effectiveData, approve: true)),
                   const SizedBox(height: 12),
                   NavyButton(
                     label: AppLocalizations.of(context).declineRequest,
                     outline: true,
-                    onTap: () => Navigator.pop(context),
+                    onTap: () => _act(context, effectiveData, approve: false),
                   ),
                   const SizedBox(height: 24),
                   BouncyButton(
-                    onTap: () {},
+                    onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content:
+                                Text('Blocking guests is not available yet.'))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -693,11 +753,15 @@ class _PendingRequestCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(name,
-                            style: AppTheme.dm(
-                                size: 15,
-                                weight: FontWeight.w700,
-                                color: AppColors.navy)),
+                        Flexible(
+                          child: Text(name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTheme.dm(
+                                  size: 15,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy)),
+                        ),
                         const SizedBox(width: 6),
                         const Icon(Icons.star, size: 12, color: AppColors.gold),
                         Text(' $rating',
@@ -737,12 +801,12 @@ class _PendingRequestCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
               _pill(dates),
-              const SizedBox(width: 8),
               _pill(guests),
-              const SizedBox(width: 8),
               _pill('EGP $price'),
             ],
           ),
@@ -960,7 +1024,9 @@ class _ApprovedRequestCard extends StatelessWidget {
           children: [
             Text('ID',
                 style: AppTheme.dm(
-                    size: 10, weight: FontWeight.bold, color: AppColors.success)),
+                    size: 10,
+                    weight: FontWeight.bold,
+                    color: AppColors.success)),
             const SizedBox(width: 2),
             const Icon(Icons.check, size: 10, color: AppColors.success),
           ],
@@ -1022,14 +1088,19 @@ class _DeclinedRequestCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(name,
-                            style: AppTheme.dm(
-                                size: 15,
-                                weight: FontWeight.w700,
-                                color: AppColors.navy)),
+                        Flexible(
+                          child: Text(name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTheme.dm(
+                                  size: 15,
+                                  weight: FontWeight.w700,
+                                  color: AppColors.navy)),
+                        ),
                         const SizedBox(width: 6),
                         if (rating != null) ...[
-                          const Icon(Icons.star, size: 12, color: AppColors.gold),
+                          const Icon(Icons.star,
+                              size: 12, color: AppColors.gold),
                           Text(' $rating',
                               style: AppTheme.dm(
                                   size: 13,
@@ -1074,7 +1145,9 @@ class _DeclinedRequestCard extends StatelessWidget {
             child: Text(
               reason,
               style: AppTheme.dm(
-                  size: 12, color: const Color(0xFFB3261E), weight: FontWeight.w500),
+                  size: 12,
+                  color: const Color(0xFFB3261E),
+                  weight: FontWeight.w500),
             ),
           ),
         ],
@@ -1091,7 +1164,9 @@ class _DeclinedRequestCard extends StatelessWidget {
           children: [
             Text('ID',
                 style: AppTheme.dm(
-                    size: 10, weight: FontWeight.bold, color: AppColors.success)),
+                    size: 10,
+                    weight: FontWeight.bold,
+                    color: AppColors.success)),
             const SizedBox(width: 2),
             const Icon(Icons.check, size: 10, color: AppColors.success),
           ],

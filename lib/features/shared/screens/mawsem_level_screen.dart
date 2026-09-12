@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/sheet_handle.dart';
+import 'package:sahely/core/widgets/fill_viewport.dart';
 
 class MawsemLevelScreen extends StatelessWidget {
   const MawsemLevelScreen({super.key});
@@ -23,9 +24,10 @@ class MawsemLevelScreen extends StatelessWidget {
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(20))),
               padding: const EdgeInsets.fromLTRB(22, 0, 22, 22),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              child: FillViewport(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                     const SheetHandle(),
                     const SizedBox(height: 8),
                     Row(children: [
@@ -111,7 +113,7 @@ class MawsemLevelScreen extends StatelessWidget {
                                     color: Colors.white)),
                           ]),
                     ),
-                  ]),
+                  ])),
             ),
           ),
         ),

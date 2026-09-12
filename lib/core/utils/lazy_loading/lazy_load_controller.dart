@@ -68,12 +68,12 @@ class LazyLoadController<T> {
     }
 
     final isRefresh = _state.isLoaded || _state.isRefreshing;
-    _updateState(isRefresh 
-        ? LazyLoadState<T>.refreshing(_state.data) 
+    _updateState(isRefresh
+        ? LazyLoadState<T>.refreshing(_state.data)
         : LazyLoadState<T>.loading());
 
     _activeFuture = _runTask();
-    
+
     try {
       final result = await _activeFuture!;
       _retryCount = 0;
@@ -93,15 +93,18 @@ class LazyLoadController<T> {
   void _scheduleRetry() {
     _retryTimer?.cancel();
     _retryCount++;
-    
+
     // Exponential backoff
     final backoff = Duration(
-      milliseconds: (_retryInterval.inMilliseconds * math.pow(2, _retryCount - 1)).toInt(),
+      milliseconds:
+          (_retryInterval.inMilliseconds * math.pow(2, _retryCount - 1))
+              .toInt(),
     );
-    
+
     _retryTimer = Timer(backoff, () {
       if (!_isDisposed) {
-        load().catchError((_) => null); // Silently handle background retry errors
+        load()
+            .catchError((_) => null); // Silently handle background retry errors
       }
     });
   }

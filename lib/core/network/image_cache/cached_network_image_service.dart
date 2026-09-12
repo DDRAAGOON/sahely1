@@ -8,16 +8,18 @@ class CachedNetworkImageService implements ImageCacheService {
   final BaseCacheManager _serviceManager;
 
   CachedNetworkImageService({BaseCacheManager? cacheManager})
-      : _serviceManager = cacheManager ?? CacheManager(
-          Config(
-            'sahely_image_cache',
-            stalePeriod: const Duration(days: 7),
-            maxNrOfCacheObjects: 200,
-          ),
-        );
+      : _serviceManager = cacheManager ??
+            CacheManager(
+              Config(
+                'sahely_image_cache',
+                stalePeriod: const Duration(days: 7),
+                maxNrOfCacheObjects: 200,
+              ),
+            );
 
   @override
-  ImageProvider getProvider(String url, {ImageCachePolicy policy = ImageCachePolicy.standard}) {
+  ImageProvider getProvider(String url,
+      {ImageCachePolicy policy = ImageCachePolicy.standard}) {
     return CachedNetworkImageProvider(
       url,
       cacheManager: _serviceManager,

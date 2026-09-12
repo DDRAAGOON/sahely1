@@ -37,5 +37,6 @@ class SecurityLogEntry extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, timestamp, eventType, level, message, metadata, userId];
+  List<Object?> get props =>
+      [id, timestamp, eventType, level, message, metadata, userId];
 }

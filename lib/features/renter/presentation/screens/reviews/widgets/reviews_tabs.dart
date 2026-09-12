@@ -29,7 +29,7 @@ class ReviewsTabs extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: selectedTab == 0 ? AppColors.navy : AppColors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border : null,
+                  border: null,
                 ),
                 child: Center(
                   child: Text(
@@ -57,7 +57,7 @@ class ReviewsTabs extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: selectedTab == 1 ? AppColors.navy : AppColors.white,
                   borderRadius: BorderRadius.circular(30),
-                  border : null,
+                  border: null,
                 ),
                 child: Center(
                   child: Text(

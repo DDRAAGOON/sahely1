@@ -7,6 +7,7 @@ import 'package:sahely/core/widgets/cream_background.dart';
 import 'package:sahely/core/widgets/ui.dart';
 import 'package:sahely/l10n/app_localizations.dart';
 import 'package:sahely/features/auth/widgets/auth_success_badge.dart';
+import 'package:sahely/core/widgets/fill_viewport.dart';
 
 // ========================================================= 08 · Forgot Password
 class ForgotPasswordScreen extends StatefulWidget {
@@ -23,7 +24,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   bool _hasAttemptedSubmit = false;
   String? _emailError;
   bool _submitting = false;
-  
+
   static final RegExp _emailRegex =
       RegExp(r'^[\w\.\-+]+@([\w\-]+\.)+[a-zA-Z]{2,}$');
 
@@ -120,45 +121,54 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               hintText: 'mariam.hassan@gmail.com',
                               height: 50,
                               radius: 999,
-                              borderColor: _emailError != null ? AppColors.error : null,
-                              onChanged: _hasAttemptedSubmit ? (value) {
-                                _clearEmailError();
-                              } : null,
+                              borderColor:
+                                  _emailError != null ? AppColors.error : null,
+                              onChanged: _hasAttemptedSubmit
+                                  ? (value) {
+                                      _clearEmailError();
+                                    }
+                                  : null,
                             ),
                             if (_emailError != null)
                               Padding(
                                 padding: const EdgeInsets.only(top: 6, left: 4),
                                 child: Text(_emailError!,
-                                    style: AppTheme.dm(size: 12, color: AppColors.error)),
+                                    style: AppTheme.dm(
+                                        size: 12, color: AppColors.error)),
                               ),
                           ],
                         )),
                     const SizedBox(height: 24),
                     NavyButton(
-                        label: _submitting ? AppLocalizations.of(context).loading : AppLocalizations.of(context).sendOtp,
+                        label: _submitting
+                            ? AppLocalizations.of(context).loading
+                            : AppLocalizations.of(context).sendOtp,
                         radius: 999,
-                        onTap: _submitting ? null : () async {
-                          setState(() => _hasAttemptedSubmit = true);
-                          
-                          final email = _emailController.text.trim();
-                          final emailError = _validateEmail(email);
-                          
-                          if (emailError != null) {
-                            setState(() => _emailError = emailError);
-                            return;
-                          }
-                          
-                          setState(() => _submitting = true);
-                          
-                          // Simulate API call
-                          await Future.delayed(const Duration(seconds: 1));
-                          
-                          if (!mounted) return;
-                          setState(() => _submitting = false);
-                          if (context.mounted) {
-                            AppNavigation.goToResetOtp(context);
-                          }
-                        }),
+                        onTap: _submitting
+                            ? null
+                            : () async {
+                                setState(() => _hasAttemptedSubmit = true);
+
+                                final email = _emailController.text.trim();
+                                final emailError = _validateEmail(email);
+
+                                if (emailError != null) {
+                                  setState(() => _emailError = emailError);
+                                  return;
+                                }
+
+                                setState(() => _submitting = true);
+
+                                // Simulate API call
+                                await Future.delayed(
+                                    const Duration(seconds: 1));
+
+                                if (!mounted) return;
+                                setState(() => _submitting = false);
+                                if (context.mounted) {
+                                  AppNavigation.goToResetOtp(context);
+                                }
+                              }),
                     const SizedBox(height: 16),
                     Center(
                       child: GestureDetector(
@@ -187,8 +197,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     const Spacer(),
                     Center(
                       child: GestureDetector(
-                        onTap: () =>
-                            AppNavigation.safeGo(context, '/signin'),
+                        onTap: () => AppNavigation.safeGo(context, '/signin'),
                         behavior: HitTestBehavior.opaque,
                         child: Text(AppLocalizations.of(context).backToSignIn,
                             style: AppTheme.dm(
@@ -238,8 +247,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     if (value.isEmpty) {
       return l.passwordRequired;
     }
-    if (value.length < 8 || 
-        !value.contains(RegExp(r'[a-zA-Z]')) || 
+    if (value.length < 8 ||
+        !value.contains(RegExp(r'[a-zA-Z]')) ||
         !value.contains(RegExp(r'[0-9]'))) {
       return l.passwordMinChars;
     }
@@ -311,7 +320,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     fontSize: 18,
                     letterSpacing: 3,
                     obscureText: _obscure1,
-                    borderColor: _passwordError != null ? AppColors.error : null,
+                    borderColor:
+                        _passwordError != null ? AppColors.error : null,
                     trailing: GestureDetector(
                       onTap: () => setState(() => _obscure1 = !_obscure1),
                       child: Icon(
@@ -321,10 +331,12 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                           size: 20,
                           color: AppColors.muted),
                     ),
-                    onChanged: _hasAttemptedSubmit ? (value) {
-                      _clearPasswordError();
-                      _clearConfirmError();
-                    } : null,
+                    onChanged: _hasAttemptedSubmit
+                        ? (value) {
+                            _clearPasswordError();
+                            _clearConfirmError();
+                          }
+                        : null,
                   ),
                   if (_passwordError != null)
                     Padding(
@@ -359,9 +371,11 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                           size: 20,
                           color: AppColors.muted),
                     ),
-                    onChanged: _hasAttemptedSubmit ? (value) {
-                      _clearConfirmError();
-                    } : null,
+                    onChanged: _hasAttemptedSubmit
+                        ? (value) {
+                            _clearConfirmError();
+                          }
+                        : null,
                   ),
                   if (_confirmError != null)
                     Padding(
@@ -392,36 +406,40 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     color: AppColors.success)),
             const SizedBox(height: 30),
             NavyButton(
-                label: _submitting ? AppLocalizations.of(context).loading : AppLocalizations.of(context).updatePassword,
+                label: _submitting
+                    ? AppLocalizations.of(context).loading
+                    : AppLocalizations.of(context).updatePassword,
                 radius: 999,
-                onTap: _submitting ? null : () async {
-                  setState(() => _hasAttemptedSubmit = true);
-                  
-                  final password = _passController.text;
-                  final confirm = _confirmController.text;
-                  
-                  final passwordError = _validatePassword(password);
-                  final confirmError = _validateConfirmPassword(confirm);
-                  
-                  if (passwordError != null || confirmError != null) {
-                    setState(() {
-                      _passwordError = passwordError;
-                      _confirmError = confirmError;
-                    });
-                    return;
-                  }
-                  
-                  setState(() => _submitting = true);
-                  
-                  // Simulate API call
-                  await Future.delayed(const Duration(seconds: 1));
-                  
-                  if (!mounted) return;
-                  setState(() => _submitting = false);
-                  if (context.mounted) {
-                    AppNavigation.goToPasswordUpdated(context);
-                  }
-                }),
+                onTap: _submitting
+                    ? null
+                    : () async {
+                        setState(() => _hasAttemptedSubmit = true);
+
+                        final password = _passController.text;
+                        final confirm = _confirmController.text;
+
+                        final passwordError = _validatePassword(password);
+                        final confirmError = _validateConfirmPassword(confirm);
+
+                        if (passwordError != null || confirmError != null) {
+                          setState(() {
+                            _passwordError = passwordError;
+                            _confirmError = confirmError;
+                          });
+                          return;
+                        }
+
+                        setState(() => _submitting = true);
+
+                        // Simulate API call
+                        await Future.delayed(const Duration(seconds: 1));
+
+                        if (!mounted) return;
+                        setState(() => _submitting = false);
+                        if (context.mounted) {
+                          AppNavigation.goToPasswordUpdated(context);
+                        }
+                      }),
           ],
         ),
       ),
@@ -451,7 +469,7 @@ class PasswordUpdatedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PhoneScaffold(
-      child: Padding(
+      child: FillViewport(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

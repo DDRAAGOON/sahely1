@@ -32,7 +32,7 @@ class WideButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveBgColor = bgColor ?? (outline ? AppColors.white : color);
-    
+
     return BouncyButton(
       onTap: enabled ? onTap : null,
       child: Opacity(
@@ -45,20 +45,22 @@ class WideButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(radius),
           ),
           alignment: Alignment.center,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 18, color: outline ? color : textColor),
-                const SizedBox(width: 8)
-              ],
-              Text(label,
-                  style: AppTheme.dm(
-                      size: 15,
-                      weight: FontWeight.w700,
-                      color: outline ? color : textColor)),
-            ],
-          ),
+          child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null) ...[
+                    Icon(icon, size: 18, color: outline ? color : textColor),
+                    const SizedBox(width: 8)
+                  ],
+                  Text(label,
+                      style: AppTheme.dm(
+                          size: 15,
+                          weight: FontWeight.w700,
+                          color: outline ? color : textColor)),
+                ],
+              )),
         ),
       ),
     );

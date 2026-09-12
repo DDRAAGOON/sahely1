@@ -39,7 +39,8 @@ class RequestCacheManager {
 
       case RequestCachePolicy.networkFirst:
         try {
-          return await _fetchRemoteAndSave(key, remoteCall, toJson, ttl, version);
+          return await _fetchRemoteAndSave(
+              key, remoteCall, toJson, ttl, version);
         } catch (e) {
           return _readFromCache(key, fromJson);
         }
@@ -48,7 +49,7 @@ class RequestCacheManager {
         final cached = await _readFromCache(key, fromJson);
         // Trigger background update
         _fetchRemoteAndSave(key, remoteCall, toJson, ttl, version).ignore();
-        
+
         if (cached.isSuccess) return cached;
         return _fetchRemoteAndSave(key, remoteCall, toJson, ttl, version);
     }
@@ -91,7 +92,8 @@ class RequestCacheManager {
     }
   }
 
-  Future<CacheResult<T>> _fetchRemoteOnly<T>(Future<T> Function() remoteCall) async {
+  Future<CacheResult<T>> _fetchRemoteOnly<T>(
+      Future<T> Function() remoteCall) async {
     try {
       final data = await remoteCall();
       return CacheResult.success(data);
@@ -101,6 +103,6 @@ class RequestCacheManager {
   }
 
   Future<void> clearAll() => _cacheService.clearAll();
-  
+
   Future<void> invalidate(String key) => _cacheService.remove(key);
 }

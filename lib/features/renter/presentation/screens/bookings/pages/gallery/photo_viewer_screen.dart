@@ -61,47 +61,51 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
 
   void _showDownloadOptions() {
     showModalBottomSheet(
-      useRootNavigator: true, context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text(
-                'Download Photos',
-                style: AppTheme.dm(
-                  size: 18,
-                  weight: FontWeight.w700,
-                  color: AppColors.navy,
+      builder: (context) => SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  'Download Photos',
+                  style: AppTheme.dm(
+                    size: 18,
+                    weight: FontWeight.w700,
+                    color: AppColors.navy,
+                  ),
                 ),
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.image_outlined, color: AppColors.navy),
-              title: Text('Download current photo',
-                  style: AppTheme.dm()),
-              onTap: () {
-                Navigator.pop(context);
-                _downloadImage(widget.photos[_currentIndex]);
-              },
-            ),
-            ListTile(
-              leading:
-                  const Icon(Icons.copy_all_outlined, color: AppColors.navy),
-              title: Text('Download all photos (${widget.photos.length})',
-                  style: AppTheme.dm()),
-              onTap: () {
-                Navigator.pop(context);
-                _downloadAllImages();
-              },
-            ),
-            const SizedBox(height: 8),
-          ],
+              ListTile(
+                leading:
+                    const Icon(Icons.image_outlined, color: AppColors.navy),
+                title: Text('Download current photo', style: AppTheme.dm()),
+                onTap: () {
+                  Navigator.pop(context);
+                  _downloadImage(widget.photos[_currentIndex]);
+                },
+              ),
+              ListTile(
+                leading:
+                    const Icon(Icons.copy_all_outlined, color: AppColors.navy),
+                title: Text('Download all photos (${widget.photos.length})',
+                    style: AppTheme.dm()),
+                onTap: () {
+                  Navigator.pop(context);
+                  _downloadAllImages();
+                },
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
         ),
       ),
     );
@@ -243,8 +247,7 @@ class _PhotoViewerScreenState extends State<PhotoViewerScreen> {
                       imageUrl: widget.photos[index],
                       fit: BoxFit.contain,
                       placeholder: (context, url) => const Center(
-                        child:
-                            CircularProgressIndicator(color: AppColors.navy),
+                        child: CircularProgressIndicator(color: AppColors.navy),
                       ),
                       errorWidget: (context, url, error) => const Icon(
                         Icons.broken_image,

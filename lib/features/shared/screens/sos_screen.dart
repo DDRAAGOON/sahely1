@@ -1,111 +1,156 @@
-﻿import 'dart:io';
+import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/core/network/api_envelope.dart';
+import 'package:sahely/core/network/upload/file_upload_api.dart';
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
+import 'package:sahely/features/shared/chat/data/chat_api_data_source.dart';
 
 enum UserRole { renter, owner, broker }
 
+/// Live support, backed by the real support inbox (`/chat/*`).
+///
+/// With a stay in progress the conversation is opened as an SOS
+/// (`POST /chat/sos`), which the backend flags as urgent; otherwise it is an
+/// ordinary support conversation. Nothing on this screen is simulated: a
+/// reply appears only when Sahely support actually sends one.
 class SosScreen extends StatefulWidget {
-  const SosScreen({super.key, this.role = UserRole.renter});
+  const SosScreen({super.key, this.role = UserRole.renter, this.bookingId});
 
   final UserRole role;
+
+  /// The stay this SOS is about, when it is raised from a booking.
+  final String? bookingId;
 
   @override
   State<SosScreen> createState() => _SosScreenState();
 }
 
 class _SosScreenState extends State<SosScreen> {
-  late final List<Map<String, dynamic>> _messages;
   final TextEditingController _controller = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  bool _isTyping = false;
+
+  List<_SosMessage> _messages = const [];
+  String _conversationId = '';
+  String _status = '';
+  bool _busy = false;
+  Timer? _poll;
+
+  ChatApiDataSource get _chat => sl<ChatApiDataSource>();
 
   @override
   void initState() {
     super.initState();
-    _messages = [
-      {
-        'role': 'agent',
-        'text': _initialAgentMessage(),
-      },
-    ];
-  }
-
-  String _initialAgentMessage() {
-    switch (widget.role) {
-      case UserRole.owner:
-        return 'Hi Layla, this is Sahely Support. We see you flagged an urgent issue at Azure Beach Villa. How can we help?';
-      case UserRole.broker:
-        return 'Hi, this is Sahely Broker Support. We see you flagged an issue for your client. How can we assist you today?';
-      case UserRole.renter:
-        return 'Hi! This is Mona from Sahely Support. I can see your active stay at Lagoon Retreat. How can I help?';
-    }
+    _open();
   }
 
   @override
   void dispose() {
+    _poll?.cancel();
     _controller.dispose();
     super.dispose();
   }
 
-  void _pickImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _messages.add({'role': 'user', 'imagePath': image.path});
-        _isTyping = true;
-      });
-
-      await Future.delayed(const Duration(milliseconds: 1500));
-
-      setState(() {
-        _isTyping = false;
-        _messages.add({
-          'role': 'agent',
-          'text': _imageReceivedMessage(),
-        });
-      });
+  /// Opens (or re-opens) the support conversation and starts listening.
+  Future<void> _open() async {
+    setState(() => _status = 'Connecting…');
+    Map<String, dynamic> conversation = const {};
+    try {
+      final bookingId = widget.bookingId;
+      if (bookingId != null && bookingId.isNotEmpty) {
+        conversation = await _chat.raiseSos(bookingId);
+      }
+    } catch (_) {
+      // SOS is only accepted around an active stay; fall back to support.
     }
-  }
-
-  String _imageReceivedMessage() {
-    switch (widget.role) {
-      case UserRole.broker:
-        return "We've received the photo from your end. Our team is looking into it. We'll update you shortly.";
-      default:
-        return "I've received the photo. Our team is reviewing the issue now. ETA for a technician is still under 60 min.";
+    if (conversation.isEmpty) {
+      try {
+        conversation = await _chat.createConversation();
+      } catch (_) {
+        if (mounted) setState(() => _status = 'Support is unreachable');
+        return;
+      }
     }
-  }
-
-  void _send(String text) async {
-    if (text.trim().isEmpty) return;
+    if (!mounted) return;
     setState(() {
-      _messages.add({'role': 'user', 'text': text});
-      _isTyping = true;
+      _conversationId = '${conversation['id'] ?? ''}';
+      _status = _statusLabel(conversation);
     });
+    await _refresh();
+    _poll = Timer.periodic(const Duration(seconds: 5), (_) => _refresh());
+  }
+
+  static String _statusLabel(Map<String, dynamic> conversation) {
+    final status = '${conversation['status'] ?? ''}'.toUpperCase();
+    if (status == 'RESOLVED' || status == 'CLOSED') {
+      return 'Conversation closed';
+    }
+    return pick(conversation, 'assigned_admin') != null
+        ? 'Agent connected'
+        : 'Waiting for an agent';
+  }
+
+  Future<void> _refresh() async {
+    if (_conversationId.isEmpty) return;
+    try {
+      final rows = await _chat.fetchMessages(_conversationId);
+      if (!mounted) return;
+      setState(() {
+        // The API returns newest first; the thread reads oldest first.
+        _messages = rows.reversed.map(_SosMessage.fromJson).toList();
+      });
+      await _chat.markAsRead(_conversationId);
+    } catch (_) {
+      // Keep what is on screen; the next tick tries again.
+    }
+  }
+
+  Future<void> _send(String text) async {
+    final body = text.trim();
+    if (body.isEmpty || _conversationId.isEmpty || _busy) return;
     _controller.clear();
-
-    await Future.delayed(const Duration(milliseconds: 1500));
-
-    setState(() {
-      _isTyping = false;
-      _messages.add({'role': 'agent', 'text': _responseMessage()});
-    });
-  }
-
-  String _responseMessage() {
-    switch (widget.role) {
-      case UserRole.owner:
-        return "Understood — we're dispatching a technician now and notifying the guest. ETA under 90 min. Can you confirm the unit/floor?";
-      case UserRole.broker:
-        return "Understood. We are dispatching a technician to the unit. We will notify you once they arrive.";
-      case UserRole.renter:
-        return "Thanks for flagging — I'm dispatching a technician now. They'll arrive within 60 minutes. I'll stay on this chat until it's resolved. Check mark";
+    setState(() => _busy = true);
+    try {
+      await _chat.sendMessage(conversationId: _conversationId, message: body);
+      await _refresh();
+    } catch (_) {
+      if (mounted) _notify('Could not send. Check your connection.');
+    } finally {
+      if (mounted) setState(() => _busy = false);
     }
   }
+
+  /// Attaches a photo: uploaded to storage first, then sent as a message.
+  Future<void> _pickImage() async {
+    final image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image == null || _conversationId.isEmpty) return;
+    setState(() => _busy = true);
+    try {
+      final objectKey = await sl<FileUploadApi>().uploadFile(
+        filePath: image.path,
+        uploadType: UploadTypes.chatAttachment,
+      );
+      await _chat.sendMessage(
+        conversationId: _conversationId,
+        message: '',
+        attachmentUrl: objectKey,
+        attachmentType: 'image',
+      );
+      await _refresh();
+    } catch (_) {
+      if (mounted) _notify('Could not send the photo.');
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  void _notify(String message) => ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(message)));
 
   String _getTitle() {
     switch (widget.role) {
@@ -118,27 +163,16 @@ class _SosScreenState extends State<SosScreen> {
     }
   }
 
-  String _getStatusText() {
-    switch (widget.role) {
-      case UserRole.owner:
-        return 'Agent connected — priority';
-      case UserRole.broker:
-        return 'Agent connected — Priority';
-      case UserRole.renter:
-        return 'Agent connected — live now';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final isBroker = widget.role == UserRole.broker;
     return Scaffold(
-      backgroundColor: widget.role == UserRole.broker
-          ? const Color(0xFFEFEAE1)
-          : const Color(0xFFF5F0E8),
+      backgroundColor:
+          isBroker ? const Color(0xFFEFEAE1) : const Color(0xFFF5F0E8),
       body: SafeArea(
         child: Column(children: [
           Container(
-            padding: widget.role == UserRole.broker
+            padding: isBroker
                 ? const EdgeInsets.fromLTRB(12, 10, 12, 12)
                 : const EdgeInsets.fromLTRB(16, 12, 16, 16),
             decoration: const BoxDecoration(
@@ -147,7 +181,7 @@ class _SosScreenState extends State<SosScreen> {
             child: Row(children: [
               GestureDetector(
                 onTap: () => Navigator.maybePop(context),
-                child: widget.role == UserRole.broker
+                child: isBroker
                     ? const Icon(Icons.chevron_left, color: Colors.white)
                     : Container(
                         width: 36,
@@ -167,63 +201,63 @@ class _SosScreenState extends State<SosScreen> {
                       children: [
                     Text(_getTitle(),
                         style: AppTheme.dm(
-                            size: widget.role == UserRole.broker ? 15 : 16,
+                            size: isBroker ? 15 : 16,
                             weight: FontWeight.w700,
                             color: Colors.white)),
                     Row(children: [
                       Container(
                           width: 7,
                           height: 7,
-                          decoration: const BoxDecoration(
-                              color: Color(0xFF7BE0A0),
+                          decoration: BoxDecoration(
+                              color: _status == 'Agent connected'
+                                  ? const Color(0xFF7BE0A0)
+                                  : Colors.white54,
                               shape: BoxShape.circle)),
                       const SizedBox(width: 6),
-                      Text(_getStatusText(),
-                          style: AppTheme.dm(size: 12, color: Colors.white70)),
+                      Flexible(
+                        child: Text(_status,
+                            overflow: TextOverflow.ellipsis,
+                            style:
+                                AppTheme.dm(size: 12, color: Colors.white70)),
+                      ),
                     ]),
                   ])),
             ]),
           ),
           Expanded(
             child: ListView.builder(
-              padding: widget.role == UserRole.broker
-                  ? const EdgeInsets.all(14)
-                  : const EdgeInsets.all(16),
-              itemCount: _messages.length +
-                  (_isTyping ? 1 : (widget.role != UserRole.broker ? 1 : 1)),
+              padding: EdgeInsets.all(isBroker ? 14 : 16),
+              itemCount: _messages.length + (_busy ? 2 : 1),
               itemBuilder: (context, i) {
-                if (widget.role != UserRole.broker) {
-                  if (i == 0) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 24, top: 8),
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 7),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFE8E1D5),
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Text(
-                            'Today — Emergency chat started',
-                            style: AppTheme.dm(
-                                size: 12,
-                                weight: FontWeight.w600,
-                                color: AppColors.muted),
-                          ),
+                if (i == 0) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 24, top: 8),
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 7),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE8E1D5),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Text(
+                          _messages.isEmpty
+                              ? 'Tell us what is wrong — support will reply here'
+                              : 'Emergency chat',
+                          textAlign: TextAlign.center,
+                          style: AppTheme.dm(
+                              size: 12,
+                              weight: FontWeight.w600,
+                              color: AppColors.muted),
                         ),
                       ),
-                    );
-                  }
-                  final msgIndex = i - 1;
-                  if (msgIndex == _messages.length) return _typingIndicator();
-                  final m = _messages[msgIndex];
-                  return m['role'] == 'agent' ? _agent(m['text']) : _user(m);
-                } else {
-                  if (i == _messages.length) return _typingIndicator();
-                  final m = _messages[i];
-                  return m['role'] == 'agent' ? _agent(m['text']) : _user(m);
+                    ),
+                  );
                 }
+                final index = i - 1;
+                if (index == _messages.length) return _sendingIndicator();
+                final message = _messages[index];
+                return message.fromSupport ? _agent(message) : _user(message);
               },
             ),
           ),
@@ -275,7 +309,7 @@ class _SosScreenState extends State<SosScreen> {
     );
   }
 
-  Widget _agent(String text) => Padding(
+  Widget _agent(_SosMessage message) => Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
@@ -292,53 +326,76 @@ class _SosScreenState extends State<SosScreen> {
                   decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: BorderRadius.circular(14)),
-                  child: Text(text,
-                      style: AppTheme.dm(
-                          size: 13, color: AppColors.ink, height: 1.4)))),
+                  child: _body(message, color: AppColors.ink))),
         ]),
       );
 
-  Widget _user(Map<String, dynamic> msg) => Padding(
+  Widget _user(_SosMessage message) => Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
           Flexible(
               child: Container(
-                  padding: EdgeInsets.all(msg['imagePath'] != null ? 4 : 11),
+                  padding: EdgeInsets.all(message.hasAttachment ? 4 : 11),
                   decoration: BoxDecoration(
-                    color: msg['imagePath'] != null
+                    color: message.hasAttachment
                         ? AppColors.white
                         : AppColors.navy,
                     borderRadius: BorderRadius.circular(14),
-                    border: msg['imagePath'] != null
-                        ? Border.all(color: AppColors.border) : null,
+                    border: message.hasAttachment
+                        ? Border.all(color: AppColors.border)
+                        : null,
                   ),
-                  child: msg['imagePath'] != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.file(File(msg['imagePath']),
-                              width: 200, fit: BoxFit.cover),
-                        )
-                      : Text(msg['text'] ?? '',
-                          style: AppTheme.dm(
-                              size: 13, color: Colors.white, height: 1.4)))),
+                  child: _body(message, color: Colors.white))),
         ]),
       );
 
-  Widget _typingIndicator() => Padding(
+  Widget _body(_SosMessage message, {required Color color}) {
+    if (message.hasAttachment) {
+      final url = message.attachmentUrl!;
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: url.startsWith('http')
+            ? Image.network(url, width: 200, fit: BoxFit.cover)
+            : Image.file(File(url), width: 200, fit: BoxFit.cover),
+      );
+    }
+    return Text(message.text,
+        style: AppTheme.dm(size: 13, color: color, height: 1.4));
+  }
+
+  Widget _sendingIndicator() => Padding(
         padding: const EdgeInsets.only(bottom: 12),
-        child: Row(children: [
-          Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                  color: const Color(0xFFB22222).withValues(alpha: 0.2),
-                  shape: BoxShape.circle),
-              child: const Icon(Icons.headset_mic_outlined,
-                  size: 16, color: Color(0xFFB22222))),
-          const SizedBox(width: 8),
-          Text('Agent is typing...',
+        child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+          Text('Sending…',
               style:
                   AppTheme.dm(size: 12, color: AppColors.muted, italic: true)),
         ]),
       );
+}
+
+/// One message in the support thread.
+class _SosMessage {
+  const _SosMessage({
+    required this.text,
+    required this.fromSupport,
+    this.attachmentUrl,
+  });
+
+  final String text;
+
+  /// True for anything written by Sahely support, false for the user's own.
+  final bool fromSupport;
+  final String? attachmentUrl;
+
+  bool get hasAttachment => (attachmentUrl ?? '').isNotEmpty;
+
+  factory _SosMessage.fromJson(Map<String, dynamic> json) {
+    final role =
+        '${pick(json, 'sender_role') ?? json['role'] ?? ''}'.toUpperCase();
+    return _SosMessage(
+      text: '${json['message'] ?? ''}',
+      fromSupport: role == 'ADMIN' || role == 'SUPPORT' || role == 'AGENT',
+      attachmentUrl: pick(json, 'attachment_url') as String?,
+    );
+  }
 }

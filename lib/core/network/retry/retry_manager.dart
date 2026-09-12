@@ -4,7 +4,8 @@ import 'retry_decision.dart';
 import 'retry_failure.dart';
 
 typedef RetryCallback<T> = Future<T> Function();
-typedef OnRetryListener = void Function(int attempt, dynamic error, Duration delay);
+typedef OnRetryListener = void Function(
+    int attempt, dynamic error, Duration delay);
 
 class RetryCancellationToken {
   bool _isCancelled = false;
@@ -63,7 +64,8 @@ class RetryManager {
         }
 
         if (decision == RetryDecision.cancel) {
-          throw RetryException('Retry task was cancelled by policy', originalError: e);
+          throw RetryException('Retry task was cancelled by policy',
+              originalError: e);
         }
 
         final delay = policy.strategy.getDelay(attempt);

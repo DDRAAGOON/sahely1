@@ -121,7 +121,7 @@ class WishlistCollectionCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '$count places',
+                    count == 1 ? '1 place' : '$count places',
                     style: const TextStyle(
                       fontSize: 11,
                       color: Colors.white70,

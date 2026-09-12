@@ -55,11 +55,13 @@ final List<GoRoute> ownerGoRoutes = [
   GoRoute(
       path: AppRoutes.ownerEdit,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (context, state) => const OwnerEditPropertyScreen()),
+      builder: (context, state) => OwnerEditPropertyScreen(
+          property: state.extra is Property ? state.extra as Property : null)),
   GoRoute(
       path: AppRoutes.ownerPreview,
       parentNavigatorKey: rootNavigatorKey,
-      builder: (context, state) => const OwnerPreviewListingScreen()),
+      builder: (context, state) => OwnerPreviewListingScreen(
+          property: state.extra is Property ? state.extra as Property : null)),
   GoRoute(
       path: AppRoutes.ownerSmartLock,
       parentNavigatorKey: rootNavigatorKey,

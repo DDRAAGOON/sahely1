@@ -8,15 +8,13 @@ import 'package:sahely/l10n/app_localizations.dart';
 Widget _wrap(Widget child) => MaterialApp(
       locale: const Locale('en'),
       localizationsDelegates: const [AppLocalizations.delegate],
-      supportedLocales:
-          AppLocalizations.supportedLanguages.map((c) => Locale(c)).toList(),
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: child),
     );
 
 void main() {
   group('Create Account screen', () {
-    testWidgets('empty submit shows required-field errors',
-        (tester) async {
+    testWidgets('empty submit shows required-field errors', (tester) async {
       await tester.pumpWidget(_wrap(const CreateAccountScreen(role: 'Renter')));
       await tester.pumpAndSettle();
 
@@ -83,7 +81,8 @@ void main() {
     testWidgets('SuccessCheck gold radial (screen 20) scrubs clean',
         (tester) => pumpThrough(tester, const SuccessCheck(gold: true)));
 
-    testWidgets('SuccessCheck gold linear+glow+navy (screen 27) scrubs clean',
+    testWidgets(
+        'SuccessCheck gold linear+glow+navy (screen 27) scrubs clean',
         (tester) => pumpThrough(
             tester,
             const SuccessCheck(
@@ -91,11 +90,9 @@ void main() {
                 size: 118,
                 linearGradient: true,
                 glow: true,
-                checkColor:
-                    Color(0xFF1B2744))));
+                checkColor: Color(0xFF1B2744))));
 
     testWidgets('AuthSuccessBadge navy (screen 12) scrubs clean',
-        (tester) =>
-            pumpThrough(tester, const AuthSuccessBadge(navy: true)));
+        (tester) => pumpThrough(tester, const AuthSuccessBadge(navy: true)));
   });
 }

@@ -74,9 +74,12 @@ class OwnerPropertyCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.add_a_photo_outlined, color: Color(0xFF94A3B8), size: 32),
+                    const Icon(Icons.add_a_photo_outlined,
+                        color: Color(0xFF94A3B8), size: 32),
                     const SizedBox(height: 8),
-                    Text('No photos added', style: AppTheme.dm(size: 12, color: const Color(0xFF94A3B8))),
+                    Text('No photos added',
+                        style: AppTheme.dm(
+                            size: 12, color: const Color(0xFF94A3B8))),
                   ],
                 ),
               ),
@@ -93,7 +96,9 @@ class OwnerPropertyCard extends StatelessWidget {
       extraInfo: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (meta.isNotEmpty && !meta.contains('0 beds') && !meta.endsWith(' ·  · '))
+          if (meta.isNotEmpty &&
+              !meta.contains('0 beds') &&
+              !meta.endsWith(' ·  · '))
             Text(
               meta,
               style: AppTheme.dm(size: 13, color: const Color(0xFF5B5B5B)),

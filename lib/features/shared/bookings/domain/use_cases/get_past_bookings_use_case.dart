@@ -11,7 +11,8 @@ class GetPastBookingsUseCase {
   Future<List<Booking>> execute() async {
     final all = await repository.getAllBookings();
     return all.where((b) {
-      return statusService.calculateStatus(b.checkIn, b.checkOut) == BookingStatus.past;
+      return statusService.calculateStatus(b.checkIn, b.checkOut) ==
+          BookingStatus.past;
     }).toList();
   }
 }

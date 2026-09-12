@@ -76,13 +76,13 @@ class SecureStorageManager {
     final all = await _service.readAll();
     final result = <String, String>{};
     final prefix = '$_namespace:$_version:';
-    
+
     all.forEach((key, value) {
       if (key.startsWith(prefix)) {
         result[key.replaceFirst(prefix, '')] = value;
       }
     });
-    
+
     return result;
   }
 }

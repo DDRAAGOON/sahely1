@@ -7,6 +7,7 @@ import 'package:sahely/features/renter/domain/use_cases/verify_phone_use_case.da
 import 'package:sahely/features/renter/domain/use_cases/verify_identity_use_case.dart';
 import 'package:sahely/features/renter/domain/use_cases/add_payment_card_use_case.dart';
 import 'package:sahely/features/renter/presentation/verification/domain/models/verification_state.dart';
+import 'package:sahely/core/bloc/safe_emit.dart';
 
 // UI States
 abstract class VerificationCubitState {}
@@ -28,7 +29,8 @@ class VerificationError extends VerificationCubitState {
 }
 
 // Cubit
-class VerificationCubit extends Cubit<VerificationCubitState> {
+class VerificationCubit extends Cubit<VerificationCubitState>
+    with SafeEmit<VerificationCubitState> {
   final GetVerificationStatusUseCase _getStatusUseCase;
   final VerifyEmailUseCase _verifyEmailUseCase;
   final VerifyPhoneUseCase _verifyPhoneUseCase;

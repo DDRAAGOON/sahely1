@@ -18,6 +18,19 @@ class BookingsFilterTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    String tabLabel(String tab) {
+      switch (tab.toLowerCase()) {
+        case 'upcoming':
+          return l.upcomingLabel;
+        case 'active':
+          return l.activeLabel;
+        case 'past':
+          return l.pastLabel;
+        default:
+          return tab;
+      }
+    }
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -28,14 +41,15 @@ class BookingsFilterTabs extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(right: 12),
             child: ChoiceChipPill(
-              AppLocalizations.tabLabel(l, tab),
+              tabLabel(tab),
               selected: isSelected,
               onTap: () => onTabSelected(tab),
               height: 44,
               fontSize: 14,
               horizontalPadding: 24,
               borderRadius: 22,
-              borderColor: isSelected ? AppColors.navy : AppColors.borderDefault,
+              borderColor:
+                  isSelected ? AppColors.navy : AppColors.borderDefault,
             ),
           );
         }).toList(),

@@ -10,18 +10,114 @@ import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/common.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/core/widgets/ui.dart';
-import 'package:sahely/data/sample_data.dart';
 
 import '../../../core/utils/currency_formatter.dart';
+import 'package:sahely/core/di/service_locator.dart' show sl;
+import 'package:sahely/core/network/api_client.dart';
+import 'package:sahely/core/network/api_endpoints.dart';
+import 'package:sahely/core/network/api_envelope.dart';
+import 'package:sahely/core/network/upload/file_upload_api.dart';
+import 'package:sahely/features/owner/domain/entities/owner_booking_request.dart';
+import 'package:sahely/features/owner/domain/entities/owner_guest_booking.dart';
+import 'package:sahely/features/owner/domain/repositories/owner_repository.dart';
+import 'package:sahely/features/properties/data/datasources/property_remote_data_source.dart';
+import 'package:sahely/features/shared/reviews/domain/models/review.dart';
+import 'package:sahely/features/shared/reviews/domain/repositories/review_repository.dart';
+import 'package:sahely/features/smart_lock/data/smart_lock_api_data_source.dart';
 
-class OwnerPropertyInsightsScreen extends StatelessWidget {
+class OwnerPropertyInsightsScreen extends StatefulWidget {
   final Property? property;
 
   const OwnerPropertyInsightsScreen({super.key, this.property});
 
   @override
+  State<OwnerPropertyInsightsScreen> createState() =>
+      _OwnerPropertyInsightsScreenState();
+}
+
+/// One listing's dashboard. Everything comes from the API: the listing, the
+/// owner's bookings and requests for it, its reviews, the smart lock and the
+/// blocked days. Views, saves and occupancy are not in the mobile API and
+/// show "—".
+class _OwnerPropertyInsightsScreenState
+    extends State<OwnerPropertyInsightsScreen> {
+  List<OwnerGuestBooking> _bookings = const [];
+  int _pendingRequests = 0;
+  List<Review> _reviews = const [];
+  Map<String, dynamic>? _lock;
+  List<Map<String, dynamic>> _accessLog = const [];
+  List<int> _blockedDays = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    final id = widget.property?.id ?? '';
+    if (id.isNotEmpty) _load(id);
+  }
+
+  Future<void> _load(String id) async {
+    final owner = sl<OwnerRepository>();
+    await Future.wait([
+      _quietly(() async {
+        final all = await owner.getGuestBookings();
+        _bookings = all.where((b) => b.property?.id == id).toList();
+      }),
+      _quietly(() async {
+        final requests = await owner.getBookingRequests();
+        _pendingRequests = requests
+            .where(
+                (r) => r.property?.id == id && r.state == RequestState.pending)
+            .length;
+      }),
+      _quietly(() async {
+        _reviews = await sl<ReviewRepository>().getPropertyReviews(id);
+      }),
+      _quietly(() async {
+        final lock = sl<SmartLockApiDataSource>();
+        _lock = await lock.onlineStatus(id);
+        _accessLog = await lock.accessLog(id);
+      }),
+      _quietly(() async {
+        _blockedDays = await _blockedDaysThisMonth(id);
+      }),
+    ]);
+    if (mounted) setState(() {});
+  }
+
+  /// Each section loads on its own; one failing leaves the others intact.
+  static Future<void> _quietly(Future<void> Function() load) async {
+    try {
+      await load();
+    } catch (_) {}
+  }
+
+  bool get _lockOnline {
+    final lock = _lock;
+    if (lock == null) return false;
+    final flag = lock['online'] ?? lock['is_online'] ?? lock['isOnline'];
+    if (flag is bool) return flag;
+    return '${lock['status'] ?? ''}'.toLowerCase() == 'online';
+  }
+
+  static String _statusLabel(PropertyStatus status) => switch (status) {
+        PropertyStatus.active => 'Active',
+        PropertyStatus.underReview => 'In review',
+        PropertyStatus.draft => 'Draft',
+        _ => 'Not listed',
+      };
+
+  @override
   Widget build(BuildContext context) {
-    final prop = property ?? Sample.azure;
+    final prop = widget.property;
+    if (prop == null) {
+      return Scaffold(
+        backgroundColor: AppColors.cream,
+        body: Center(
+          child: Text('Open a listing from My Properties.',
+              style: AppTheme.dm(color: AppColors.muted)),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -54,7 +150,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.chevron_left, color: AppColors.navy),
+                    child:
+                        const Icon(Icons.chevron_left, color: AppColors.navy),
                   ),
                 ),
               ),
@@ -65,7 +162,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () => AppNavigation.goToSosOwner(context),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: const Color(0xFFB22222),
                       borderRadius: BorderRadius.circular(10),
@@ -108,7 +206,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${prop.area} · Active',
+                      '${prop.area} · ${_statusLabel(prop.status)}',
                       style: AppTheme.dm(
                         size: 13,
                         weight: FontWeight.w500,
@@ -136,7 +234,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                         color: AppColors.navy,
                         height: 48,
                         radius: 12,
-                        onTap: () => AppNavigation.goToOwnerEdit(context),
+                        onTap: () =>
+                            AppNavigation.goToOwnerEdit(context, extra: prop),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -147,7 +246,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                         outline: true,
                         height: 48,
                         radius: 12,
-                        onTap: () => AppNavigation.goToOwnerPreview(context),
+                        onTap: () => AppNavigation.goToOwnerPreview(context,
+                            extra: prop),
                       ),
                     ),
                   ],
@@ -168,7 +268,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                             color: const Color(0xFFFDF5E8),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(Icons.notes, color: Color(0xFFD2760A)),
+                          child:
+                              const Icon(Icons.notes, color: Color(0xFFD2760A)),
                         ),
                         const SizedBox(width: 14),
                         Expanded(
@@ -184,7 +285,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '1 pending · tap to review',
+                                '$_pendingRequests pending · tap to review',
                                 style: AppTheme.dm(
                                   size: 12,
                                   color: AppColors.muted,
@@ -202,7 +303,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // 4. Stats Grid (3x2)
-                _buildStatsGrid(),
+                _buildStatsGrid(prop),
                 const SizedBox(height: 24),
 
                 // 5. Views Chart
@@ -226,26 +327,26 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('1,284',
+                              Text('—',
                                   style: AppTheme.dm(
                                       size: 20, weight: FontWeight.w800)),
-                              Text('▲ 18% vs last week',
+                              Text('Views are not tracked yet',
                                   style: AppTheme.dm(
                                       size: 12,
                                       weight: FontWeight.w600,
-                                      color: AppColors.success)),
+                                      color: AppColors.muted)),
                             ],
                           ),
-                          Text('Peak Sat',
-                              style:
-                                  AppTheme.dm(size: 12, color: AppColors.muted)),
+                          Text('',
+                              style: AppTheme.dm(
+                                  size: 12, color: AppColors.muted)),
                         ],
                       ),
                       const SizedBox(height: 20),
-                      SizedBox(
+                      const SizedBox(
                         height: 100,
                         child: CustomPaint(
-                          size: const Size(double.infinity, 100),
+                          size: Size(double.infinity, 100),
                           painter: _SparklinePainter(),
                         ),
                       ),
@@ -298,7 +399,9 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Door · Locked',
+                              _lock == null
+                                  ? 'Smart lock not connected'
+                                  : 'Smart lock · ${_lockOnline ? 'Online' : 'Offline'}',
                               style: AppTheme.dm(
                                 size: 14,
                                 weight: FontWeight.w700,
@@ -306,7 +409,10 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Passcode active for current guest',
+                              _bookings.any(
+                                      (b) => b.phase == GuestStayPhase.active)
+                                  ? 'Passcode active for current guest'
+                                  : 'No guest staying right now',
                               style: AppTheme.dm(
                                 size: 11,
                                 color: Colors.white.withValues(alpha: 0.6),
@@ -316,21 +422,35 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2E7D32).withValues(alpha: 0.3),
+                          color: (_lockOnline
+                                  ? const Color(0xFF2E7D32)
+                                  : AppColors.muted)
+                              .withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: const Color(0xFF4CAF50), width: 0.5),
+                          border: Border.all(
+                              color: _lockOnline
+                                  ? const Color(0xFF4CAF50)
+                                  : AppColors.muted,
+                              width: 0.5),
                         ),
                         child: Row(
                           children: [
-                            const CircleAvatar(radius: 3, backgroundColor: Color(0xFF4CAF50)),
+                            CircleAvatar(
+                                radius: 3,
+                                backgroundColor: _lockOnline
+                                    ? const Color(0xFF4CAF50)
+                                    : AppColors.muted),
                             const SizedBox(width: 6),
-                            Text('Online',
+                            Text(_lockOnline ? 'Online' : 'Offline',
                                 style: AppTheme.dm(
                                     size: 10,
                                     weight: FontWeight.w700,
-                                    color: const Color(0xFF4CAF50))),
+                                    color: _lockOnline
+                                        ? const Color(0xFF4CAF50)
+                                        : AppColors.muted)),
                           ],
                         ),
                       ),
@@ -350,18 +470,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 WhiteCard(
-                  child: Column(
-                    children: [
-                      _accessItem(Icons.login_rounded, const Color(0xFF2E7D32),
-                          'Guest entry', 'Nour A.', 'Today 3:12 PM'),
-                      const Divider(height: 1, indent: 44, endIndent: 16, color: AppColors.border),
-                      _accessItem(Icons.logout_rounded, AppColors.muted,
-                          'Guest exit', 'Nour A.', 'Today 9:40 AM'),
-                      const Divider(height: 1, indent: 44, endIndent: 16, color: AppColors.border),
-                      _accessItem(Icons.edit_outlined, const Color(0xFFD2760A),
-                          'Passcode set', 'by you', 'Jun 14'),
-                    ],
-                  ),
+                  child: Column(children: _accessRows()),
                 ),
                 const SizedBox(height: 12),
                 WideButton(
@@ -407,17 +516,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-                _reviewItem(
-                    'Nour A.',
-                    'Stunning villa, the pool was the highlight. Will return!',
-                    5.0,
-                    const Color(0xFF457B9D)),
-                const SizedBox(height: 12),
-                _reviewItem(
-                    'Omar K.',
-                    'Exactly as pictured and spotless. Smooth check-in.',
-                    5.0,
-                    const Color(0xFFB39264)),
+                ..._recentReviews(),
                 const SizedBox(height: 28),
 
                 // 8. Availability
@@ -430,12 +529,16 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                const AvailabilityCalendar(
-                  blocked: [4, 5, 6],
-                  ongoing: [14, 15, 16, 17, 18],
-                  upcoming: [21, 22, 23, 24, 25],
-                  ownerOff: [28, 29],
-                  legend: ['Ongoing', 'Upcoming', 'Owner days-off', 'Blocked'],
+                AvailabilityCalendar(
+                  blocked: _blockedDays,
+                  ongoing: _stayDays(GuestStayPhase.active),
+                  upcoming: _stayDays(GuestStayPhase.upcoming),
+                  legend: const [
+                    'Ongoing',
+                    'Upcoming',
+                    'Owner days-off',
+                    'Blocked'
+                  ],
                 ),
                 const SizedBox(height: 16),
                 // Owner days-off card
@@ -443,7 +546,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFDF9F4),
-                    border: Border.all(color: const Color(0xFFEAD9A8), width: 1),
+                    border:
+                        Border.all(color: const Color(0xFFEAD9A8), width: 1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
@@ -462,7 +566,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '2 personal days/month — block them for yourself or keep renting. 2 left this month.',
+                              '2 personal days/month — block them for yourself or keep renting.',
                               style: AppTheme.dm(
                                 size: 11,
                                 weight: FontWeight.w500,
@@ -477,7 +581,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                       GestureDetector(
                         onTap: () {},
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 10),
                           decoration: BoxDecoration(
                             color: const Color(0xFFC9A84C),
                             borderRadius: BorderRadius.circular(12),
@@ -512,19 +617,19 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       _checklistRow(
-                        icon: Icons.check_circle_rounded,
-                        iconColor: const Color(0xFF2E7D32),
+                        icon: Icons.fact_check_outlined,
+                        iconColor: AppColors.navy,
                         title: 'Pre check-in',
                         sub: 'Clean & verify before guest',
-                        actionLabel: 'Done',
-                        isActionCompleted: true,
+                        actionLabel: 'Start',
+                        isActionCompleted: false,
                       ),
                       const Divider(height: 32, color: AppColors.border),
                       _checklistRow(
                         icon: Icons.watch_later_rounded,
                         iconColor: const Color(0xFFD2760A),
                         title: 'Post check-out',
-                        sub: 'Window closes in 21h',
+                        sub: 'Within 24h of departure',
                         actionLabel: 'Start',
                         isActionCompleted: false,
                         onActionTap: () {},
@@ -535,7 +640,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   'Pre check-in opens up to 2 days & at least 4h before arrival. Post check-out must be done within 24h of departure.',
-                  style: AppTheme.dm(size: 11, color: AppColors.muted, height: 1.4),
+                  style: AppTheme.dm(
+                      size: 11, color: AppColors.muted, height: 1.4),
                 ),
                 const SizedBox(height: 16),
                 WideButton(
@@ -559,8 +665,7 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                _upcomingBookingItem(
-                    'Omar K.', 'Jun 21–25', '4 guests', CurrencyFormatter.format(18000), const Color(0xFF457B9D)),
+                ..._upcomingBookings(),
                 const SizedBox(height: 120),
               ],
             ),
@@ -570,26 +675,162 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsGrid() {
+  static const _avatarColors = [Color(0xFF457B9D), Color(0xFFB39264)];
+
+  static const _months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  static String _stayDates(DateTime checkIn, DateTime checkOut) {
+    final start = '${_months[checkIn.month - 1]} ${checkIn.day}';
+    if (checkIn.month == checkOut.month) return '$start–${checkOut.day}';
+    return '$start – ${_months[checkOut.month - 1]} ${checkOut.day}';
+  }
+
+  /// `guest_entry` -> `Guest entry`.
+  static String _humanize(String event) {
+    final text = event.replaceAll('_', ' ').trim();
+    return text.isEmpty ? 'Access' : text[0].toUpperCase() + text.substring(1);
+  }
+
+  double get _revenue => _bookings.fold(0, (sum, b) => sum + b.payoutEgp);
+
+  static String _compact(double egp) => egp >= 1000
+      ? '${(egp / 1000).toStringAsFixed(1)}k'
+      : egp.round().toString();
+
+  /// Days of this month covered by stays in [phase].
+  List<int> _stayDays(GuestStayPhase phase) {
+    final now = DateTime.now();
+    final days = <int>{};
+    for (final b in _bookings.where((b) => b.phase == phase)) {
+      for (var d = b.checkIn;
+          d.isBefore(b.checkOut);
+          d = d.add(const Duration(days: 1))) {
+        if (d.year == now.year && d.month == now.month) days.add(d.day);
+      }
+    }
+    return days.toList()..sort();
+  }
+
+  List<Widget> _accessRows() {
+    if (_accessLog.isEmpty) {
+      return [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text('No lock activity yet.',
+              style: AppTheme.dm(size: 12, color: AppColors.muted)),
+        ),
+      ];
+    }
+    final rows = <Widget>[];
+    for (final entry in _accessLog.take(3)) {
+      if (rows.isNotEmpty) {
+        rows.add(const Divider(
+            height: 1, indent: 44, endIndent: 16, color: AppColors.border));
+      }
+      final event =
+          '${entry['event'] ?? entry['type'] ?? entry['action'] ?? ''}';
+      final lower = event.toLowerCase();
+      final (icon, color) = lower.contains('exit') || lower.contains('out')
+          ? (Icons.logout_rounded, AppColors.muted)
+          : lower.contains('code') || lower.contains('pass')
+              ? (Icons.edit_outlined, const Color(0xFFD2760A))
+              : (Icons.login_rounded, const Color(0xFF2E7D32));
+      final who =
+          '${entry['actor_name'] ?? entry['user_name'] ?? entry['by'] ?? ''}';
+      final when =
+          asDate(entry['created_at'] ?? entry['timestamp'] ?? entry['time']);
+      rows.add(_accessItem(icon, color, _humanize(event), who,
+          when == null ? '' : '${_months[when.month - 1]} ${when.day}'));
+    }
+    return rows;
+  }
+
+  List<Widget> _recentReviews() {
+    if (_reviews.isEmpty) {
+      return [
+        Text('No reviews yet.',
+            style: AppTheme.dm(size: 12, color: AppColors.muted)),
+      ];
+    }
+    final recent = _reviews.take(2).toList();
+    return [
+      for (var i = 0; i < recent.length; i++) ...[
+        if (i > 0) const SizedBox(height: 12),
+        _reviewItem(recent[i].userName, recent[i].comment, recent[i].rating,
+            _avatarColors[i % 2]),
+      ],
+    ];
+  }
+
+  List<Widget> _upcomingBookings() {
+    final upcoming = _bookings
+        .where((b) => b.phase == GuestStayPhase.upcoming)
+        .toList()
+      ..sort((a, b) => a.checkIn.compareTo(b.checkIn));
+    if (upcoming.isEmpty) {
+      return [
+        Text('No upcoming bookings.',
+            style: AppTheme.dm(size: 12, color: AppColors.muted)),
+      ];
+    }
+    return [
+      for (var i = 0; i < upcoming.length && i < 3; i++) ...[
+        if (i > 0) const SizedBox(height: 10),
+        _upcomingBookingItem(
+            upcoming[i].guestName,
+            _stayDates(upcoming[i].checkIn, upcoming[i].checkOut),
+            upcoming[i].guests == 1
+                ? '1 guest'
+                : '${upcoming[i].guests} guests',
+            CurrencyFormatter.format(upcoming[i].payoutEgp.round()),
+            _avatarColors[i % 2]),
+      ],
+    ];
+  }
+
+  Widget _buildStatsGrid(Property prop) {
     return Column(
       children: [
         Row(
           children: [
-            Expanded(child: _statCard('1,284', 'Views', trend: '▲ 18% this wk')),
+            Expanded(child: _statCard('—', 'Views')),
             const SizedBox(width: 12),
-            Expanded(child: _statCard('96', 'Saved', trend: 'in wishlists')),
+            Expanded(child: _statCard('—', 'Saved', trend: 'in wishlists')),
             const SizedBox(width: 12),
-            Expanded(child: _statCard('12', 'Bookings', trend: 'this season', trendColor: const Color(0xFF2E7D32))),
+            Expanded(
+                child: _statCard('${_bookings.length}', 'Bookings',
+                    trend: 'confirmed', trendColor: const Color(0xFF2E7D32))),
           ],
         ),
         const SizedBox(height: 12),
         Row(
           children: [
-            Expanded(child: _statCard('88%', 'Occupancy')),
+            Expanded(child: _statCard('—', 'Occupancy')),
             const SizedBox(width: 12),
-            Expanded(child: _statCard('★ 4.8', 'Rating', trend: '124 reviews')),
+            Expanded(
+                child: _statCard(
+                    prop.reviews == 0
+                        ? '—'
+                        : '★ ${prop.rating.toStringAsFixed(1)}',
+                    'Rating',
+                    trend: '${prop.reviews} reviews')),
             const SizedBox(width: 12),
-            Expanded(child: _statCard('68.4k', 'Revenue', trend: '${CurrencyFormatter.defaultSymbol} / mo')),
+            Expanded(
+                child: _statCard(_compact(_revenue), 'Revenue',
+                    trend: '${CurrencyFormatter.defaultSymbol} total')),
           ],
         ),
       ],
@@ -622,7 +863,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
         ),
       );
 
-  Widget _accessItem(IconData icon, Color color, String type, String user, String time) =>
+  Widget _accessItem(
+          IconData icon, Color color, String type, String user, String time) =>
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
@@ -632,10 +874,14 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
             Expanded(
               child: RichText(
                 text: TextSpan(
-                  style: AppTheme.dm(size: 13, color: AppColors.navy, weight: FontWeight.w700),
+                  style: AppTheme.dm(
+                      size: 13, color: AppColors.navy, weight: FontWeight.w700),
                   children: [
                     TextSpan(text: '$type · '),
-                    TextSpan(text: user, style: AppTheme.dm(weight: FontWeight.w500, color: AppColors.muted)),
+                    TextSpan(
+                        text: user,
+                        style: AppTheme.dm(
+                            weight: FontWeight.w500, color: AppColors.muted)),
                   ],
                 ),
               ),
@@ -645,7 +891,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
         ),
       );
 
-  Widget _reviewItem(String name, String text, double rating, Color avatarColor) =>
+  Widget _reviewItem(
+          String name, String text, double rating, Color avatarColor) =>
       WhiteCard(
         padding: const EdgeInsets.all(14),
         child: Column(
@@ -664,7 +911,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                       5,
                       (i) => Icon(Icons.star,
                           size: 12,
-                          color: i < rating ? AppColors.gold : AppColors.border)),
+                          color:
+                              i < rating ? AppColors.gold : AppColors.border)),
                 ),
               ],
             ),
@@ -704,7 +952,15 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
               children: [
                 Text(title,
                     style: AppTheme.dm(size: 14, weight: FontWeight.w700)),
-                Text(sub, style: AppTheme.dm(size: 11, color: (title == 'Post check-out') ? const Color(0xFFD2760A) : AppColors.muted, weight: (title == 'Post check-out') ? FontWeight.w700 : FontWeight.w500)),
+                Text(sub,
+                    style: AppTheme.dm(
+                        size: 11,
+                        color: (title == 'Post check-out')
+                            ? const Color(0xFFD2760A)
+                            : AppColors.muted,
+                        weight: (title == 'Post check-out')
+                            ? FontWeight.w700
+                            : FontWeight.w500)),
               ],
             ),
           ),
@@ -728,7 +984,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
             GestureDetector(
               onTap: onActionTap,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                 decoration: BoxDecoration(
                   color: AppColors.navy,
                   borderRadius: BorderRadius.circular(10),
@@ -746,7 +1003,8 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
         ],
       );
 
-  Widget _upcomingBookingItem(String name, String date, String guests, String price, Color avatarColor) =>
+  Widget _upcomingBookingItem(String name, String date, String guests,
+          String price, Color avatarColor) =>
       WhiteCard(
         padding: const EdgeInsets.all(12),
         child: Row(
@@ -759,15 +1017,23 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
                 children: [
                   RichText(
                     text: TextSpan(
-                      style: AppTheme.dm(size: 14, weight: FontWeight.w700, color: AppColors.navy),
+                      style: AppTheme.dm(
+                          size: 14,
+                          weight: FontWeight.w700,
+                          color: AppColors.navy),
                       children: [
                         TextSpan(text: '$name · '),
-                        TextSpan(text: date, style: AppTheme.dm(weight: FontWeight.w500, color: AppColors.muted)),
+                        TextSpan(
+                            text: date,
+                            style: AppTheme.dm(
+                                weight: FontWeight.w500,
+                                color: AppColors.muted)),
                       ],
                     ),
                   ),
                   const SizedBox(height: 2),
-                  Text('$guests · $price', style: AppTheme.dm(size: 12, color: AppColors.muted)),
+                  Text('$guests · $price',
+                      style: AppTheme.dm(size: 12, color: AppColors.muted)),
                 ],
               ),
             ),
@@ -792,49 +1058,22 @@ class OwnerPropertyInsightsScreen extends StatelessWidget {
 }
 
 class _SparklinePainter extends CustomPainter {
+  /// Daily views would be drawn here. The API has no view counts yet, so the
+  /// chart stays empty rather than showing an invented curve.
+  const _SparklinePainter();
+
   @override
-  void paint(Canvas canvas, Size size) {
-    final pts = [0.5, 0.4, 0.55, 0.35, 0.6, 0.25, 0.1];
-    final path = Path();
-    for (var i = 0; i < pts.length; i++) {
-      final x = size.width * i / (pts.length - 1);
-      final y = size.height * pts[i];
-      if (i == 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
-    }
-    final fill = Path.from(path)
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height)
-      ..close();
-    canvas.drawPath(
-        fill,
-        Paint()
-          ..shader = const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0x55C9A84C), Color(0x00C9A84C)])
-              .createShader(Offset.zero & size));
-    canvas.drawPath(
-        path,
-        Paint()
-          ..color = AppColors.gold
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.5
-          ..strokeJoin = StrokeJoin.round
-          ..strokeCap = StrokeCap.round);
-    final last = Offset(size.width, size.height * pts.last);
-    canvas.drawCircle(last, 4, Paint()..color = AppColors.navy);
-  }
+  void paint(Canvas canvas, Size size) {}
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class OwnerEditPropertyScreen extends StatefulWidget {
-  const OwnerEditPropertyScreen({super.key});
+  const OwnerEditPropertyScreen({super.key, this.property});
+
+  /// The listing being edited.
+  final Property? property;
 
   @override
   State<OwnerEditPropertyScreen> createState() =>
@@ -842,18 +1081,85 @@ class OwnerEditPropertyScreen extends StatefulWidget {
 }
 
 class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
-  int _price = 4500;
-  final TextEditingController _priceController =
-      TextEditingController(text: '4500');
-  final TextEditingController _descController = TextEditingController(
-      text:
-          'A stunning beachfront villa with private pool, panoramic sea views and direct beach access. Sleeps 6 across 4 bedrooms.');
-  final List<String> _photos = [
-    Sample.azure.image,
-    Sample.lagoon.image,
-    Sample.dunes.image
+  late int _price = widget.property?.price ?? 0;
+  late final TextEditingController _priceController =
+      TextEditingController(text: '$_price');
+  final TextEditingController _descController = TextEditingController();
+
+  /// Photo URLs already on the listing, then local files picked here.
+  late final List<String> _photos = [
+    if ((widget.property?.image ?? '').isNotEmpty) widget.property!.image,
   ];
-  final List<String> _amenities = ['Pool', 'Wi-Fi', 'AC', 'Smart Lock'];
+  final List<String> _amenities = [];
+  bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final id = widget.property?.id ?? '';
+    if (id.isNotEmpty) _loadDetails(id);
+  }
+
+  /// Description, amenities and the full photo set come from
+  /// `GET /properties/:id`.
+  Future<void> _loadDetails(String id) async {
+    final result = await sl<PropertyRemoteDataSource>().getPropertyDetails(id);
+    if (!mounted) return;
+    result.fold((_) {}, (details) {
+      setState(() {
+        _descController.text = details.description;
+        _amenities
+          ..clear()
+          ..addAll(details.amenities);
+        final urls = details.images
+            .map((image) => image.url)
+            .where((url) => url.isNotEmpty)
+            .toList();
+        if (urls.isNotEmpty) {
+          _photos
+            ..removeWhere((p) => p.startsWith('http'))
+            ..insertAll(0, urls);
+        }
+      });
+    });
+  }
+
+  /// Saves the price and description (`PATCH /properties/:id`) and uploads
+  /// the photos added here. Amenity changes go through Sahely's review and
+  /// have no mobile endpoint, so they are not sent.
+  Future<void> _save() async {
+    final id = widget.property?.id ?? '';
+    if (id.isEmpty || _saving) return;
+    setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final result = await sl<PropertyRemoteDataSource>().updateProperty(id, {
+      'base_price_per_night': _price.toStringAsFixed(2),
+      'description': _descController.text.trim(),
+    });
+    var failed = result.isLeft();
+    if (!failed) {
+      try {
+        for (final path in _photos.where((p) => !p.startsWith('http'))) {
+          await sl<FileUploadApi>().uploadFile(
+            filePath: path,
+            uploadType: UploadTypes.propertyImage,
+            propertyId: id,
+          );
+        }
+      } catch (_) {
+        failed = true;
+      }
+    }
+    if (!mounted) return;
+    setState(() => _saving = false);
+    messenger.showSnackBar(SnackBar(
+        content: Text(failed
+            ? 'Could not save your changes. Please try again.'
+            : 'Changes saved.')));
+    if (!failed) navigator.pop(true);
+  }
+
   final ImagePicker _picker = ImagePicker();
 
   void _updatePrice(int delta) {
@@ -923,8 +1229,6 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return PhoneScaffold(
       child: Column(
         children: [
@@ -959,7 +1263,11 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                                   size: 22,
                                   weight: FontWeight.w700,
                                   color: AppColors.navy)),
-                          Text('Azure Beach Villa · Hacienda Bay',
+                          Text(
+                              [
+                                widget.property?.name ?? '',
+                                widget.property?.area ?? '',
+                              ].where((s) => s.isNotEmpty).join(' · '),
                               style: AppTheme.dm(
                                   size: 13, color: AppColors.muted)),
                         ],
@@ -967,7 +1275,10 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                     ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: AppNetworkImage(url: Sample.azure.image, width: 52, height: 52),
+                      child: AppNetworkImage(
+                          url: widget.property?.image ?? '',
+                          width: 52,
+                          height: 52),
                     ),
                   ],
                 ),
@@ -1004,7 +1315,8 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                               height: 54,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.borderDefault),
+                                border:
+                                    Border.all(color: AppColors.borderDefault),
                               ),
                               child: const Icon(Icons.remove,
                                   color: AppColors.navy, size: 24),
@@ -1149,11 +1461,12 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                                     TextSpan(
                                       text: "Request removal from support →",
                                       style: AppTheme.dm(
-                                          weight: FontWeight.w700,
-                                          size: 11,
-                                          color: const Color(0xFF8A6D1E))
-                                      .copyWith(
-                                          decoration: TextDecoration.underline),
+                                              weight: FontWeight.w700,
+                                              size: 11,
+                                              color: const Color(0xFF8A6D1E))
+                                          .copyWith(
+                                              decoration:
+                                                  TextDecoration.underline),
                                     ),
                                   ],
                                 ),
@@ -1208,7 +1521,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                       const SizedBox(height: 16),
                       TextField(
                         controller: _descController,
-                        maxLines : null,
+                        maxLines: null,
                         style: AppTheme.dm(
                             size: 14, color: AppColors.navy, height: 1.5),
                         decoration: const InputDecoration(
@@ -1220,8 +1533,8 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: Text('${_descController.text.length} / 400',
-                            style: AppTheme.dm(
-                                size: 11, color: AppColors.muted)),
+                            style:
+                                AppTheme.dm(size: 11, color: AppColors.muted)),
                       ),
                     ],
                   ),
@@ -1305,7 +1618,7 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
-                        border : null,
+                        border: null,
                       ),
                       child: Text('Discard',
                           style: AppTheme.dm(
@@ -1319,10 +1632,10 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
                 Expanded(
                   flex: 2,
                   child: NavyButton(
-                    label: 'Save changes',
+                    label: _saving ? 'Saving…' : 'Save changes',
                     height: 54,
                     radius: 16,
-                    onTap: () => Navigator.pop(context),
+                    onTap: _save,
                   ),
                 ),
               ],
@@ -1402,19 +1715,33 @@ class _OwnerEditPropertyScreenState extends State<OwnerEditPropertyScreen> {
 }
 
 class OwnerPreviewListingScreen extends StatelessWidget {
-  const OwnerPreviewListingScreen({super.key});
+  const OwnerPreviewListingScreen({super.key, this.property});
+
+  /// The listing previewed as guests see it.
+  final Property? property;
 
   @override
   Widget build(BuildContext context) {
+    final p = property;
+    if (p == null) {
+      return Scaffold(
+        backgroundColor: AppColors.cream,
+        body: Center(
+          child: Text('Open a listing from My Properties.',
+              style: AppTheme.dm(color: AppColors.muted)),
+        ),
+      );
+    }
+    final isLive = p.status == PropertyStatus.active;
     return PhoneScaffold(
       child: Column(children: [
         Expanded(
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
             children: [
-              const TopBar(
+              TopBar(
                   title: 'Listing status',
-                  subtitle: 'How guests see Azure Beach Villa'),
+                  subtitle: 'How guests see ${p.name}'),
               const SizedBox(height: 16),
               WhiteCard(
                 padding: EdgeInsets.zero,
@@ -1428,30 +1755,37 @@ class OwnerPreviewListingScreen extends StatelessWidget {
                             height: 170,
                             width: double.infinity,
                             child: Stack(fit: StackFit.expand, children: [
-                              AppNetworkImage(url: Sample.azure.image, errorWidget: (_, __, ___) =>
-                                      const ColoredBox(
-                                          color: AppColors.cardWarm)),
-                              const Positioned(
+                              AppNetworkImage(
+                                  url: p.image,
+                                  errorWidget: (_, __, ___) => const ColoredBox(
+                                      color: AppColors.cardWarm)),
+                              Positioned(
                                   top: 10,
                                   left: 10,
-                                  child: StatusBadge('Live · Bookable',
-                                      kind: BadgeKind.green, dot: true)),
-                              const Positioned(
+                                  child: StatusBadge(
+                                      isLive
+                                          ? 'Live · Bookable'
+                                          : 'Not bookable',
+                                      kind: isLive
+                                          ? BadgeKind.green
+                                          : BadgeKind.gray,
+                                      dot: isLive)),
+                              Positioned(
                                   top: 10,
                                   right: 10,
-                                  child: SaveHeart(property: Sample.azure)),
+                                  child: SaveHeart(property: p)),
                             ])),
                         Padding(
                             padding: const EdgeInsets.all(14),
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Azure Beach Villa',
+                                  Text(p.name,
                                       style: AppTheme.dm(
                                           size: 16,
                                           weight: FontWeight.w700,
                                           color: AppColors.navy)),
-                                  Text('Hacienda Bay · North Coast',
+                                  Text(p.area,
                                       style: AppTheme.dm(
                                           size: 12, color: AppColors.muted)),
                                   const SizedBox(height: 8),
@@ -1461,7 +1795,9 @@ class OwnerPreviewListingScreen extends StatelessWidget {
                                       children: [
                                         Expanded(
                                           child: Text(
-                                              '★ 4.8 · 124 reviews · 88% occupancy',
+                                              p.reviews == 0
+                                                  ? 'No reviews yet'
+                                                  : '★ ${p.rating.toStringAsFixed(1)} · ${p.reviews} reviews',
                                               style: AppTheme.dm(
                                                   size: 12,
                                                   color: AppColors.muted),
@@ -1469,21 +1805,21 @@ class OwnerPreviewListingScreen extends StatelessWidget {
                                               overflow: TextOverflow.ellipsis),
                                         ),
                                         const SizedBox(width: 8),
-                                        const PriceTag(price: 4500, size: 15),
+                                        PriceTag(price: p.price, size: 15),
                                       ]),
                                   const SizedBox(height: 10),
-                                  const Wrap(
-                                      spacing: 7,
-                                      runSpacing: 7,
-                                      children: [
-                                        Pill('Villa', border: AppColors.navy),
-                                        Pill('6 Guests',
-                                            border: AppColors.navy),
-                                        Pill('Pool', border: AppColors.navy),
-                                        Pill('🐾 Pets',
-                                            bg: Color(0xFFD7EEDD),
-                                            fg: AppColors.success)
-                                      ]),
+                                  Wrap(spacing: 7, runSpacing: 7, children: [
+                                    Pill(p.type, border: AppColors.navy),
+                                    if (p.guests > 0)
+                                      Pill('${p.guests} Guests',
+                                          border: AppColors.navy),
+                                    for (final tag in p.tags)
+                                      Pill(tag, border: AppColors.navy),
+                                    if (p.petsOk)
+                                      const Pill('🐾 Pets',
+                                          bg: Color(0xFFD7EEDD),
+                                          fg: AppColors.success),
+                                  ]),
                                 ])),
                       ]),
                 ),
@@ -1504,12 +1840,15 @@ class OwnerPreviewListingScreen extends StatelessWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Text('Listed',
+                        Text(isLive ? 'Listed' : 'Not listed',
                             style: AppTheme.dm(
                                 size: 14,
                                 weight: FontWeight.w700,
                                 color: AppColors.navy)),
-                        Text('Visible & accepting bookings',
+                        Text(
+                            isLive
+                                ? 'Visible & accepting bookings'
+                                : 'Guests cannot see or book it yet',
                             style:
                                 AppTheme.dm(size: 11, color: AppColors.muted)),
                       ])),
@@ -1517,11 +1856,13 @@ class OwnerPreviewListingScreen extends StatelessWidget {
                       width: 42,
                       height: 24,
                       decoration: BoxDecoration(
-                          color: AppColors.success,
+                          color: isLive ? AppColors.success : AppColors.border,
                           borderRadius: BorderRadius.circular(12)),
-                      child: const Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
+                      child: Align(
+                          alignment: isLive
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
+                          child: const Padding(
                               padding: EdgeInsets.all(2),
                               child: CircleAvatar(
                                   radius: 10, backgroundColor: Colors.white)))),
@@ -1554,7 +1895,7 @@ class OwnerPreviewListingScreen extends StatelessWidget {
                                 weight: FontWeight.w700,
                                 color: AppColors.navy)),
                         Text(
-                            'New listings stay live for their first month — unlisting unlocks Jul 14. Part of our T&Cs.',
+                            'New listings stay live for their first month. Part of our T&Cs.',
                             style: AppTheme.dm(
                                 size: 11,
                                 color: const Color(0xFF3A3320),
@@ -1568,7 +1909,7 @@ class OwnerPreviewListingScreen extends StatelessWidget {
         const Padding(
             padding: EdgeInsets.all(16),
             child: WideButton(
-                label: 'Unlisting locked until Jul 14',
+                label: 'Unlisting locked during the first month',
                 icon: Icons.lock,
                 color: Color(0xFFE7DFD2),
                 textColor: AppColors.muted,
@@ -1576,4 +1917,22 @@ class OwnerPreviewListingScreen extends StatelessWidget {
       ]),
     );
   }
+}
+
+/// Days of the current month a listing is blocked
+/// (`/properties/:id/availability` -> `blocked_dates`).
+Future<List<int>> _blockedDaysThisMonth(String propertyId) async {
+  final response =
+      await sl<ApiClient>().get(ApiEndpoints.propertyAvailability(propertyId));
+  final data = asMap(unwrapData(response.data));
+  final dates = (pick(data, 'blocked_dates') as List?) ?? const [];
+  final now = DateTime.now();
+  return dates
+      .map((d) => DateTime.tryParse('$d'))
+      .whereType<DateTime>()
+      .where((d) => d.year == now.year && d.month == now.month)
+      .map((d) => d.day)
+      .toSet()
+      .toList()
+    ..sort();
 }

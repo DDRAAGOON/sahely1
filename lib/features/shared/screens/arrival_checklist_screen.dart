@@ -4,6 +4,7 @@ import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
 import 'package:sahely/core/widgets/kit.dart';
 import 'package:sahely/l10n/app_localizations.dart';
+import 'package:sahely/l10n/app_localizations_ext.dart';
 
 class ArrivalChecklistScreen extends StatefulWidget {
   final String? bookingId;
@@ -51,15 +52,15 @@ class _ArrivalChecklistScreenState extends State<ArrivalChecklistScreen> {
                   subtitle: AppLocalizations.of(context).confirmEverything),
               const SizedBox(height: 16),
               InfoNote(
-                  text:
-                      AppLocalizations.of(context).checklistNote,
+                  text: AppLocalizations.of(context).checklistNote,
                   icon: Icons.info_outline),
               const SizedBox(height: 16),
               WhiteCard(
                 child: Column(children: [
                   for (var i = 0; i < _items.length; i++) ...[
                     _CheckItem(
-                      label: AppLocalizations.of(context).t(_items[i]['label']!),
+                      label:
+                          AppLocalizations.of(context).t(_items[i]['label']!),
                       done: _items[i]['done'],
                       issue: _items[i]['issue'],
                       onToggle: () => setState(
@@ -112,10 +113,11 @@ class _CheckItem extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                     color: done ? AppColors.success : Colors.transparent,
-                    border : null,
+                    border: null,
                     borderRadius: BorderRadius.circular(6)),
                 child: done
-                    ? const Icon(Icons.check, size: 16, color: Colors.white) : null,
+                    ? const Icon(Icons.check, size: 16, color: Colors.white)
+                    : null,
               ),
             ),
             const SizedBox(width: 12),

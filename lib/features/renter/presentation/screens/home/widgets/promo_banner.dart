@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import 'package:sahely/core/theme/app_colors.dart';
 import 'package:sahely/core/theme/app_theme.dart';
@@ -73,60 +73,60 @@ class _PromoBannerState extends State<PromoBanner> {
             ),
             child: Stack(
               children: [
-              // Decorative circle
-              Positioned(
-                right: -20,
-                top: -20,
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.promoCircleGold,
+                // Decorative circle
+                Positioned(
+                  right: -20,
+                  top: -20,
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.promoCircleGold,
+                    ),
                   ),
                 ),
-              ),
 
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: _slides.length,
-                  onPageChanged: (index) =>
-                      setState(() => _currentPage = index),
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          _slides[index]['title']!,
-                          style: AppTheme.dm(
-                            size: 17,
-                            weight: FontWeight.w700,
-                            color: AppColors.navy,
+                // Content
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _slides.length,
+                    onPageChanged: (index) =>
+                        setState(() => _currentPage = index),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _slides[index]['title']!,
+                            style: AppTheme.dm(
+                              size: 17,
+                              weight: FontWeight.w700,
+                              color: AppColors.navy,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _slides[index]['subtitle']!,
-                          style: AppTheme.dm(
-                            size: 13,
-                            color: AppColors.navy,
+                          const SizedBox(height: 4),
+                          Text(
+                            _slides[index]['subtitle']!,
+                            style: AppTheme.dm(
+                              size: 13,
+                              color: AppColors.navy,
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
 
-      const SizedBox(height: 12),
+        const SizedBox(height: 12),
 
         // Pagination Dots - Now Outside the Container
         Row(
